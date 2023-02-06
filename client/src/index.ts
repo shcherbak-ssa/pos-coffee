@@ -1,3 +1,3 @@
-import { renderApp } from 'view/main';
+import { renderApp, renderLoader } from 'view/main';
 
-renderApp();
+renderLoader();
