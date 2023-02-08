@@ -8,14 +8,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.digitazon.poscoffee.shared.constants.DatabaseConstants;
+import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.UsersConstants;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = DatabaseConstants.Table.USER_TYPES)
+@Table(name = AppConstants.DatabaseTable.USER_TYPES)
 @Data
 @NoArgsConstructor
 public class UserType {

@@ -13,7 +13,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import com.digitazon.poscoffee.shared.constants.DatabaseConstants;
+import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.UsersConstants;
 
 import lombok.Data;
@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(
-  name = DatabaseConstants.Table.USERS,
+  name = AppConstants.DatabaseTable.USERS,
   uniqueConstraints = {
     @UniqueConstraint(columnNames = { "email" }),
     @UniqueConstraint(columnNames = { "username" })
@@ -55,7 +55,7 @@ public class User {
 
   @ManyToOne
   @JoinTable(
-    name = DatabaseConstants.Table.USER_TYPE_JOIN,
+    name = AppConstants.DatabaseTable.USER_TYPE_JOIN,
     joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "type_id")
   )

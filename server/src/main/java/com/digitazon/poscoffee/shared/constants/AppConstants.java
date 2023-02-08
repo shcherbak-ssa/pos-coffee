@@ -15,4 +15,10 @@ public class AppConstants {
     public static final String AUTH_LOGIN = "/api/auth/login";
   }
 
+  public static class DatabaseTable {
+    public static final String USERS = "users";
+    public static final String USER_TYPES = "user_types";
+    public static final String USER_TYPE_JOIN = "user_type_join";
+  }
+
 }
