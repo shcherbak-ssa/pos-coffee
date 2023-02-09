@@ -35,22 +35,22 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NotBlank
+  @NotBlank(message = UsersConstants.NAME_EMPTY_MESSAGE)
   private String name;
 
-  @NotBlank
+  @NotBlank(message = UsersConstants.SURNAME_EMPTY_MESSAGE)
   private String surname;
 
-  @NotBlank
-  @Size(min = UsersConstants.MIN_USERNAME_LENGTH)
-  private String username;
-
-  @NotBlank
-  @Email
+  @NotBlank(message = UsersConstants.EMAIL_EMPTY_MESSAGE)
+  @Email(message = UsersConstants.EMAIL_INVALID_MESSAGE)
   private String email;
 
-  @NotBlank
-  @Size(min = UsersConstants.MIN_PASSWORD_LENGTH)
+  @NotBlank(message = UsersConstants.USERNAME_EMPTY_MESSAGE)
+  @Size(min = UsersConstants.MIN_USERNAME_LENGTH, message = UsersConstants.USERNAME_LENGTH_MESSAGE)
+  private String username;
+
+  @NotBlank(message = UsersConstants.PASSWORD_EMPTY_MESSAGE)
+  @Size(min = UsersConstants.MIN_PASSWORD_LENGTH, message = UsersConstants.PASSWORD_LENGTH_MESSAGE)
   private String password;
 
   @ManyToOne

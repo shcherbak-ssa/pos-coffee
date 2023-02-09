@@ -17,6 +17,10 @@
     "jsx": "react-jsx",
     "importsNotUsedAsValues": "error",
     "paths": {
+      "controllers/*": ["./src/controllers/*"],
+      "models/*": ["./src/models/*"],
+      "services/*": ["./src/services/*"],
+      "shared/*": ["./src/shared/*"],
       "view/*": ["./src/view/*"]
     }
   },

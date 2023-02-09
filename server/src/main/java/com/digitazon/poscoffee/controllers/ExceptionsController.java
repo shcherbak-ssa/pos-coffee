@@ -5,11 +5,13 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.digitazon.poscoffee.models.helpers.ErrorResponse;
+import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
 
 @ControllerAdvice
@@ -34,8 +36,18 @@ public class ExceptionsController {
     });
 
     final ErrorResponse errorResponse = new ErrorResponse(); // @TODO: add context
+    errorResponse.setType(AppConstants.ErrorType.VALIDATION);
     errorResponse.setMessage(ExceptionsController.VALIDATION_ERROR_MESSAGE);
     errorResponse.setErrors(errors);
+
+    return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(value = BadCredentialsException.class)
+  public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException exception) {
+    final ErrorResponse errorResponse = new ErrorResponse(); // @TODO: add context
+    errorResponse.setType(AppConstants.ErrorType.CLIENT);
+    errorResponse.setMessage(AppConstants.BAD_CREDENTIALS_MESSAGE);
 
     return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
   }

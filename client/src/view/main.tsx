@@ -15,16 +15,28 @@ export async function renderLoader(): Promise<void> {
   render(<AppLoader />);
 }
 
-export function renderApp(): void {
-  PrimeReact.ripple = true;
+export async function renderLogin(): Promise<void> {
+  setupPrimeReact();
 
-  render(<div>Hello world!</div>);
+  const { LoginContainer } = await import('view/containers/LoginContainer');
+
+  render(<LoginContainer />);
+}
+
+export function renderApp(): void {
+  setupPrimeReact();
+
+  render(<h1>POS`Coffee</h1>);
 }
 
 function render(component: React.ReactNode): void {
   root.render(
     <React.StrictMode>
       { component }
-    </React.StrictMode>,
+    </React.StrictMode>
   );
+}
+
+function setupPrimeReact(): void {
+  PrimeReact.ripple = true;
 }
