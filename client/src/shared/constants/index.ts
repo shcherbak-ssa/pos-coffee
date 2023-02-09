@@ -11,6 +11,7 @@ export enum ControllerName {
 
 export enum PagePath {
   ROOT = '/',
+  LOGIN = '/login',
 }
 
 export enum ErrorName {
@@ -30,6 +31,7 @@ export enum ValidationSchemaName {
 
 export enum LocalStorageKey {
   USER_TOKEN = 'user-token',
+  LAST_URL = 'last-url',
 }
 
 export enum ApiEndpoint {

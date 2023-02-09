@@ -20,10 +20,17 @@ export class LoginController extends BaseController implements BaseLoginControll
 
       LocalStorage.set(LocalStorageKey.USER_TOKEN, token);
 
-      replaceLocation(PagePath.ROOT);
+      this.redirectToLastUrl();
     } catch (e: any) {
       this.parseError(e);
     }
+  }
+
+  private redirectToLastUrl(): void {
+    const lastUrl: string | null = LocalStorage.get(LocalStorageKey.LAST_URL);
+    LocalStorage.remove(LocalStorageKey.LAST_URL);
+
+    replaceLocation(lastUrl || PagePath.ROOT);
   }
 
 }

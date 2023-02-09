@@ -18,4 +18,8 @@ export class LocalStorage {
     localStorage.setItem(key, jsonValue);
   }
 
+  public static remove(key: LocalStorageKey): void {
+    localStorage.removeItem(key);
+  }
+
 }

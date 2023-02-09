@@ -1,4 +1,4 @@
-import { LocalStorageKey } from 'shared/constants';
+import { LocalStorageKey, PagePath } from 'shared/constants';
 import { LocalStorage } from 'shared/utils';
 import { renderLogin, renderLoader, renderApp } from 'view/main';
 
@@ -14,6 +14,12 @@ function checkUserToken(): boolean {
 function renderNext(isTokenExist: boolean): void {
   if (isTokenExist) {
     return renderApp();
+  }
+
+  const { pathname } = location;
+
+  if (pathname.trim() !== PagePath.LOGIN) {
+    LocalStorage.set(LocalStorageKey.LAST_URL, pathname);
   }
 
   renderLogin();

@@ -8,7 +8,7 @@ import { Message } from 'primereact/message';
 import { ScrollPanel } from 'primereact/scrollpanel';
 
 import type { LoginController, LoginSchema } from 'shared/types';
-import { ControllerName, EMPTY_STRING, ErrorType } from 'shared/constants';
+import { ControllerName, EMPTY_STRING, ErrorType, PagePath } from 'shared/constants';
 import { replaceUrl, updatePageTitle } from 'shared/utils';
 import { useController } from 'view/hooks/controller';
 import { useError } from 'view/hooks/error';
@@ -17,7 +17,6 @@ import loginImage from 'view/assets/images/login-image.jpg';
 import { InputWrapper } from 'view/components/InputWrapper';
 import { AppLogo } from 'view/components/AppLogo';
 
-const LOGIN_URL: string = '/login';
 const LOGIN_PAGE_TITLE: string = 'Login';
 
 export function LoginContainer() {
@@ -32,7 +31,7 @@ export function LoginContainer() {
   const loginController = useController<LoginController>(ControllerName.LOGIN);
 
   useEffect(() => {
-    replaceUrl(LOGIN_URL);
+    replaceUrl(PagePath.LOGIN);
     updatePageTitle(LOGIN_PAGE_TITLE);
   }, []);
 
