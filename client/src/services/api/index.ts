@@ -1,8 +1,12 @@
-import type { ErrorObject, ApiRequest, ApiService as BaseApiService } from 'shared/types';
-import { ApiMethod, ApiEndpoint, ApiResponseCode, QUERY_URL_SEPARATOR } from 'shared/constants';
+import type { ErrorObject, ApiService as BaseApiService } from 'shared/types';
+import { ApiMethod, ApiEndpoint, ApiResponseCode, QUERY_URL_SEPARATOR, EMPTY_STRING } from 'shared/constants';
 import { ApiError } from 'shared/errors';
 
 export class ApiService implements BaseApiService {
+
+  private params: { [key: string]: string } = {};
+  private query: string = EMPTY_STRING;
+  private body: string = EMPTY_STRING;
 
   private constructor() {}
 
@@ -10,33 +14,46 @@ export class ApiService implements BaseApiService {
     return new ApiService();
   }
 
-  public async get<P, Q, B, R>(apiRequest: ApiRequest<P, Q, B>): Promise<R> {
-    return this.sendRequest<P, Q, B, R>(ApiMethod.GET, apiRequest);
-  }
-
-  public async post<P, Q, B, R>(apiRequest: ApiRequest<P, Q, B>): Promise<R> {
-    return this.sendRequest<P, Q, B, R>(ApiMethod.POST, apiRequest);
-  }
-
-  public async put<P, Q, B>(apiRequest: ApiRequest<P, Q, B>): Promise<void> {
-    return this.sendRequest<P, Q, B>(ApiMethod.PUT, apiRequest);
-  }
-
-  public async delete<P, Q, B>(apiRequest: ApiRequest<P, Q, B>): Promise<void> {
-    return this.sendRequest<P, Q, B>(ApiMethod.DELETE, apiRequest);
-  }
-
-  private async sendRequest<P, Q, B, R = void>(
-    method: ApiMethod,
-    { endpoint, params, query, body }: ApiRequest<P, Q, B>,
-  ): Promise<R> {
-    let apiEndpoint: string = ApiService.setParamsToUrl(endpoint, params || {});
-
-    if (query) {
-      // @ts-ignore
-      const queryString: string = new URLSearchParams(query).toString();
-      apiEndpoint += QUERY_URL_SEPARATOR + queryString;
+  public addParams<T>(params: T): BaseApiService {
+    for (const [key, value] of Object.entries(params || {})) {
+      this.params[key] = `${value}`;
     }
+
+    return this;
+  }
+
+  public addQuery<T>(query: T): BaseApiService {
+    // @ts-ignore
+    this.query = new URLSearchParams(query).toString();
+
+    return this;
+  }
+
+  public addBody<T>(body: T): BaseApiService {
+    this.body = JSON.stringify(body);
+
+    return this;
+  }
+
+  public async get<T>(endpoint: ApiEndpoint): Promise<T> {
+    return this.sendRequest<T>(ApiMethod.GET, endpoint);
+  }
+
+  public async post<T>(endpoint: ApiEndpoint): Promise<T> {
+    return this.sendRequest<T>(ApiMethod.POST, endpoint);
+  }
+
+  public async put(endpoint: ApiEndpoint): Promise<void> {
+    return this.sendRequest(ApiMethod.PUT, endpoint);
+  }
+
+  public async delete(endpoint: ApiEndpoint): Promise<void> {
+    return this.sendRequest(ApiMethod.DELETE, endpoint);
+  }
+
+  private async sendRequest<T = void>(method: ApiMethod, endpoint: ApiEndpoint): Promise<T> {
+    let apiEndpoint: string = this.setParamsToUrl(endpoint);
+    apiEndpoint += QUERY_URL_SEPARATOR + this.query;
 
     const response = await fetch(location.origin + apiEndpoint, {
       method,
@@ -44,26 +61,26 @@ export class ApiService implements BaseApiService {
         'Content-Type': 'application/json',
         'Accept-Type': 'application/json',
       },
-      body: ApiService.isGetMethod(method) ? null : JSON.stringify(body || {}),
+      body: ApiService.isGetMethod(method) ? null : this.body,
     });
 
     if (response.ok) {
       if (ApiService.isNoContentCode(response.status)) {
-        return {} as R;
+        return {} as T;
       }
 
-      return await response.json() as R;
+      return await response.json() as T;
     }
 
-    const error = await response.json() as ErrorObject<B>;
+    const error = await response.json() as ErrorObject<{}>;
 
     throw new ApiError(error);
   }
 
-  private static setParamsToUrl<P extends object>(endpoint: ApiEndpoint, params: P): string {
+  private setParamsToUrl(endpoint: ApiEndpoint): string {
     let apiEndpoint: string = endpoint;
 
-    for (const [key, value] of Object.entries(params)) {
+    for (const [key, value] of Object.entries(this.params)) {
       const paramRegExp = new RegExp(`:${key}`, 'g');
 
       apiEndpoint = apiEndpoint.replace(paramRegExp, value);

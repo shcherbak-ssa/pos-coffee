@@ -14,10 +14,9 @@ export class LoginController extends BaseController implements BaseLoginControll
     try {
       await this.validation.validateToCreate(ValidationSchemaName.LOGIN, schema);
 
-      const token: Token = await this.api.post({
-        endpoint: ApiEndpoint.LOGIN,
-        body: schema,
-      });
+      const token: Token = await this.api
+        .addBody(schema)
+        .post(ApiEndpoint.LOGIN);
 
       LocalStorage.set(LocalStorageKey.USER_TOKEN, token);
 

@@ -15,10 +15,13 @@ export interface LoaderService {
 }
 
 export interface ApiService {
-  get<P, Q, B, R>(apiRequest: ApiRequest<P, Q, B>): Promise<R>;
-  post<P, Q, B, R>(apiRequest: ApiRequest<P, Q, B>): Promise<R>;
-  put<P, Q, B>(apiRequest: ApiRequest<P, Q, B>): Promise<void>;
-  delete<P, Q, B>(apiRequest: ApiRequest<P, Q, B>): Promise<void>;
+  addParams<T>(params: T): ApiService;
+  addQuery<T>(query: T): ApiService;
+  addBody<T>(body: T): ApiService;
+  get<T>(endpoint: ApiEndpoint): Promise<T>;
+  post<T>(endpoint: ApiEndpoint): Promise<T>;
+  put(endpoint: ApiEndpoint): Promise<void>;
+  delete(endpoint: ApiEndpoint): Promise<void>;
 }
 
 export interface ErrorService {
@@ -42,11 +45,4 @@ export type ErrorObject<T> = {
   type: ErrorType;
   message: string;
   errors: Errors<T>;
-}
-
-export type ApiRequest<P, Q, B> = {
-  endpoint: ApiEndpoint;
-  params?: P;
-  query?: Q;
-  body?: B;
 }
