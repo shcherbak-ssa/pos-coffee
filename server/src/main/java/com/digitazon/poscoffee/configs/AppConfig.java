@@ -38,6 +38,7 @@ public class AppConfig {
     clientUser.setName(user.getName());
     clientUser.setSurname(user.getSurname());
     clientUser.setEmail(user.getEmail());
+    clientUser.setUsername(user.getUsername());
     clientUser.setType(user.getType().getName().name());
 
     return clientUser;
