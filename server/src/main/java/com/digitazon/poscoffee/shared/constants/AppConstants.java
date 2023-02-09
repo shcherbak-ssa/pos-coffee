@@ -10,11 +10,14 @@ public class AppConstants {
   public static final String AUTHORIZATION_HEADER = "Authorization";
   public static final String AUTHORIZATION_TYPE = "Bearer";
   public static final String AUTHORIZATION_DIVIDER = " ";
+  public static final String UNAUTHORIZED_ERROR_MESSAGE = "Unauthorized";
+  public static final String ANONYMOUS_USER = "anonymousUser";
 
   public static final String BAD_CREDENTIALS_MESSAGE = "Invalid username or password";
 
   public static final class ApiEndpoint {
     public static final String AUTH_LOGIN = "/api/auth/login";
+    public static final String USERS = "/api/users";
   }
 
   public static class DatabaseTable {
@@ -23,10 +26,11 @@ public class AppConstants {
     public static final String USER_TYPE_JOIN = "user_type_join";
   }
 
-  public static class ErrorType {
-    public static final String SERVER = "server";
-    public static final String CLIENT = "client";
-    public static final String VALIDATION = "validation";
+  public static enum ErrorType {
+    AUTH,
+    SERVER,
+    CLIENT,
+    VALIDATION
   }
 
 }

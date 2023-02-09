@@ -28,7 +28,7 @@ public class AuthUserDetails implements UserDetails {
   private Collection<? extends GrantedAuthority> authorities;
 
   public static AuthUserDetails build(User user) {
-    List<GrantedAuthority> authorities = new ArrayList<>();
+    final List<GrantedAuthority> authorities = new ArrayList<>();
     authorities.add(new SimpleGrantedAuthority(user.getType().getName().toString()));
 
     return new AuthUserDetails(

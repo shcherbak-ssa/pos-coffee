@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.digitazon.poscoffee.models.helpers.ErrorResponse;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
+import com.digitazon.poscoffee.shared.exceptions.UnauthorizedUserException;
 
 @ControllerAdvice
 public class ExceptionsController {
@@ -36,7 +37,7 @@ public class ExceptionsController {
     });
 
     final ErrorResponse errorResponse = new ErrorResponse(); // @TODO: add context
-    errorResponse.setType(AppConstants.ErrorType.VALIDATION);
+    errorResponse.setType(AppConstants.ErrorType.VALIDATION.name());
     errorResponse.setMessage(ExceptionsController.VALIDATION_ERROR_MESSAGE);
     errorResponse.setErrors(errors);
 
@@ -46,10 +47,19 @@ public class ExceptionsController {
   @ExceptionHandler(value = BadCredentialsException.class)
   public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException exception) {
     final ErrorResponse errorResponse = new ErrorResponse(); // @TODO: add context
-    errorResponse.setType(AppConstants.ErrorType.CLIENT);
+    errorResponse.setType(AppConstants.ErrorType.CLIENT.name());
     errorResponse.setMessage(AppConstants.BAD_CREDENTIALS_MESSAGE);
 
     return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(value = UnauthorizedUserException.class)
+  public ResponseEntity<ErrorResponse> handleUnauthorizedUserException(UnauthorizedUserException exception) {
+    final ErrorResponse errorResponse = new ErrorResponse(); // @TODO: add context
+    errorResponse.setType(AppConstants.ErrorType.AUTH.name());
+    errorResponse.setMessage(exception.getMessage());
+
+    return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.UNAUTHORIZED);
   }
 
   @ExceptionHandler(value = Exception.class)

@@ -11,12 +11,8 @@ import org.springframework.stereotype.Component;
 
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
@@ -69,16 +65,8 @@ public class AuthJwtUtils {
         .parseClaimsJws(authToken);
 
       return true;
-    } catch (SignatureException e) {
-      AuthJwtUtils.log.error("Invalid JWT signature: {}", e.getMessage());
-    } catch (MalformedJwtException e) {
-      AuthJwtUtils.log.error("Invalid JWT token: {}", e.getMessage());
-    } catch (ExpiredJwtException e) {
-      AuthJwtUtils.log.error("JWT token is expired: {}", e.getMessage());
-    } catch (UnsupportedJwtException e) {
-      AuthJwtUtils.log.error("JWT token is unsupported: {}", e.getMessage());
-    } catch (IllegalArgumentException e) {
-      AuthJwtUtils.log.error("JWT claims string is empty: {}", e.getMessage());
+    } catch (Exception e) {
+      log.error(e.getMessage());
     }
 
     return false;

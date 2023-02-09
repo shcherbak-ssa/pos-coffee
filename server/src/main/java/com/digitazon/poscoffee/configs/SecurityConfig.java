@@ -3,6 +3,7 @@ package com.digitazon.poscoffee.configs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -14,7 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.digitazon.poscoffee.modules.auth.AuthEnityPoint;
+import com.digitazon.poscoffee.modules.auth.AuthEntryPoint;
 import com.digitazon.poscoffee.modules.auth.AuthTokenFilter;
 import com.digitazon.poscoffee.modules.auth.AuthUserDetailsService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
@@ -28,7 +29,7 @@ public class SecurityConfig {
   private AuthUserDetailsService authUserDetailsService;
 
   @Autowired
-  private AuthEnityPoint authEnityPoint;
+  private AuthEntryPoint authEnityPoint;
 
   @Bean
   public AuthTokenFilter authTokenFilter() {
@@ -60,6 +61,7 @@ public class SecurityConfig {
       .and()
       .authorizeRequests()
         .antMatchers(AppConstants.ApiEndpoint.AUTH_LOGIN).permitAll()
+        .antMatchers(HttpMethod.GET, AppConstants.ApiEndpoint.USERS).permitAll()
         .anyRequest().authenticated();
 
     return httpSecurity

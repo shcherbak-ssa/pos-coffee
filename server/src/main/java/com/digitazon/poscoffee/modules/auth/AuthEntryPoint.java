@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
-public class AuthEnityPoint implements AuthenticationEntryPoint {
+public class AuthEntryPoint implements AuthenticationEntryPoint {
 
   @Override
   public void commence(
@@ -30,7 +30,7 @@ public class AuthEnityPoint implements AuthenticationEntryPoint {
     throws IOException, ServletException
   {
     final String errorMessage = authException.getMessage();
-    AuthEnityPoint.log.error("Unauthorized error: {}", errorMessage);
+    log.error("Unauthorized error: {}", errorMessage);
 
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ErrorResponse {
 
-  private String type = AppConstants.ErrorType.SERVER;
+  private String type = AppConstants.ErrorType.SERVER.name();
   private String message;
   private Map<String, String> errors;
 

@@ -26,7 +26,17 @@ public class UsersService {
       return foundUser.get();
     }
 
-    throw new ResourceNotFoundException(String.format("User with username {} not found", username));
+    throw new ResourceNotFoundException(String.format("User with username %s not found", username));
+  }
+
+  public User findUserById(Long id) throws ResourceNotFoundException {
+    Optional<User> foundUser = this.repository.findById(id);
+
+    if (foundUser.isPresent()) {
+      return foundUser.get();
+    }
+
+    throw new ResourceNotFoundException("User not found");
   }
 
   public User createUser(User userToCreate) {

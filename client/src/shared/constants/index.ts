@@ -20,9 +20,10 @@ export enum ErrorName {
 }
 
 export enum ErrorType {
-  SERVER = 'server',
-  CLIENT = 'client',
-  VALIDATION = 'validation',
+  AUTH = 'AUTH',
+  SERVER = 'SERVER',
+  CLIENT = 'CLIENT',
+  VALIDATION = 'VALIDATION',
 }
 
 export enum ValidationSchemaName {
