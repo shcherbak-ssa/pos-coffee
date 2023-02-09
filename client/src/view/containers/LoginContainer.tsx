@@ -7,10 +7,10 @@ import { Button } from 'primereact/button';
 import { Message } from 'primereact/message';
 import { ScrollPanel } from 'primereact/scrollpanel';
 
-import type { LoginController as BaseLoginController, LoginSchema } from 'shared/types';
-import { EMPTY_STRING, ErrorType } from 'shared/constants';
+import type { LoginController, LoginSchema } from 'shared/types';
+import { ControllerName, EMPTY_STRING, ErrorType } from 'shared/constants';
 import { replaceUrl, updatePageTitle } from 'shared/utils';
-import { LoginController } from 'controllers/login';
+import { useController } from 'view/hooks/controller';
 import { useError } from 'view/hooks/error';
 
 import loginImage from 'view/assets/images/login-image.jpg';
@@ -22,12 +22,14 @@ const LOGIN_PAGE_TITLE: string = 'Login';
 
 export function LoginContainer() {
 
-  const [ isLoginProcessing, setLoginProcessing ] = useState(false);
-  const [ username, setUsername ] = useState(EMPTY_STRING);
-  const [ password, setPassword ] = useState(EMPTY_STRING);
+  const [ isLoginProcessing, setLoginProcessing ] = useState<boolean>(false);
+  const [ username, setUsername ] = useState<string>(EMPTY_STRING);
+  const [ password, setPassword ] = useState<string>(EMPTY_STRING);
 
   const [ validationError, cleanValidationError ] = useError<LoginSchema>(ErrorType.VALIDATION);
-  const [ clientError, cleanClientError ] = useError(ErrorType.CLIENT);
+  const [ clientError, cleanClientError ] = useError<{}>(ErrorType.CLIENT);
+
+  const loginController = useController<LoginController>(ControllerName.LOGIN);
 
   useEffect(() => {
     replaceUrl(LOGIN_URL);
@@ -40,8 +42,9 @@ export function LoginContainer() {
     cleanValidationError();
     cleanClientError();
 
-    const controller: BaseLoginController = LoginController.create();
-    await controller.login({ username, password });
+    if (loginController) {
+      await loginController.login({ username, password });
+    }
 
     setLoginProcessing(false);
   }

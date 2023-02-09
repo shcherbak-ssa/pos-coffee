@@ -4,6 +4,7 @@ import type { Errors, ValidationService as BaseValidationService } from 'shared/
 import { ValidationSchemaName } from 'shared/constants';
 import { ValidationError } from 'shared/errors';
 import { firstToUpperCase } from 'shared/utils';
+
 import type { Schema } from './types';
 
 export class ValidationService implements BaseValidationService {
@@ -38,7 +39,7 @@ export class ValidationService implements BaseValidationService {
   private async loadSchema<T>(schemaName: ValidationSchemaName): Promise<Schema<T>> {
     switch (schemaName) {
       case ValidationSchemaName.LOGIN: {
-        const { schema } = await import('services/validation/schemas/login');
+        const { schema } = await import('services/validation/login-schema');
 
         return schema as Schema<T>;
       }

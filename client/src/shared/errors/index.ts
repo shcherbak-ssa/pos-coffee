@@ -9,7 +9,6 @@ export class ApiError<T> extends Error {
     super(error.message);
     this.error = error;
   }
-
 }
 
 export class ValidationError<T> extends Error {

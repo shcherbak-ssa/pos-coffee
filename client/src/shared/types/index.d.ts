@@ -1,6 +1,17 @@
-import type { ApiEndpoint, ErrorType, LocalStorageKey, ValidationSchemaName } from 'shared/constants';
+import type { ApiEndpoint, ControllerName, ErrorType, ValidationSchemaName } from 'shared/constants';
+import type { LoginController } from './login';
+import type { UsersController } from './users';
 
 export * from './login';
+export * from './users';
+
+export type Controller =
+  | LoginController
+  | UsersController;
+
+export interface LoaderService {
+  loadController(name: ControllerName): Promise<Controller>;
+}
 
 export interface ApiService {
   get<P, Q, B, R>(apiRequest: ApiRequest<P, Q, B>): Promise<R>;

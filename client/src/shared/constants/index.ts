@@ -4,6 +4,11 @@ export const EMPTY_STRING: string = '';
 export const PAGE_TITLE_DIVIDER: string = ' | ';
 export const QUERY_URL_SEPARATOR: string = '?';
 
+export enum ControllerName {
+  LOGIN = 'login',
+  USERS = 'users',
+}
+
 export enum PagePath {
   ROOT = '/',
 }

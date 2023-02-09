@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import type { LoginSchema } from 'shared/types';
-import type { Schema } from '../types';
+import type { Schema } from './types';
 
 const loginSchema: Joi.ObjectSchema<LoginSchema> = Joi.object({
   username: Joi.string().min(8).required().messages({
