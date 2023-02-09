@@ -1,5 +1,5 @@
-import type { ErrorType } from 'shared/constants';
 import type { ErrorHandler, ErrorObject, ErrorService as BaseErrorService } from 'shared/types';
+import type { ErrorType } from 'shared/constants';
 
 export class ErrorService implements BaseErrorService {
 

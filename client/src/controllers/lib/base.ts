@@ -3,7 +3,6 @@ import type {
   ErrorService as BaseErrorService,
   ValidationService as BaseValidationService,
 } from 'shared/types';
-
 import { ErrorType } from 'shared/constants';
 import { ApiError, ValidationError } from 'shared/errors';
 import { ApiService } from 'services/api';

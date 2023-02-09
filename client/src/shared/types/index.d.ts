@@ -1,4 +1,5 @@
 import type { ApiEndpoint, ControllerName, ErrorType, ValidationSchemaName } from 'shared/constants';
+
 import type { LoginController } from './login';
 import type { UsersController } from './users';
 
