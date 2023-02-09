@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .flex-center {
+    @apply flex justify-center items-center;
+  }
+
+  .full {
+    @apply w-full h-full;
+  }
+}
+
+@import "./primereact.scss";
+@import "./styles.scss";

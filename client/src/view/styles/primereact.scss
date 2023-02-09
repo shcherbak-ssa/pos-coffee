@@ -1,0 +1,47 @@
+.app-loader {
+  .p-progress-spinner-circle {
+    animation: p-progress-spinner-dash 1.5s ease-in-out infinite;
+    stroke: var(--primary-color);
+  }
+}
+
+.p-password {
+  .p-inputtext {
+    @apply w-full;
+  }
+}
+
+.p-invalid {
+  color: var(--red-500);
+
+  &.p-float-label label {
+    margin-top: -1.25rem;
+  }
+
+  &.p-float-label {
+    input:focus ~ label,
+    input:-webkit-autofill ~ label,
+    input.p-filled ~ label,
+    textarea:focus ~ label,
+    textarea.p-filled ~ label,
+    .p-inputwrapper-focus ~ label,
+    .p-inputwrapper-filled ~ label {
+      top: 0.25rem;
+    }
+  }
+}
+
+.p-scrollpanel {
+  &-bar-y {
+    width: 6px;
+  }
+
+  &-content {
+    padding: 0;
+  }
+
+  &:hover &-bar,
+  &:active &-bar {
+    @apply opacity-75;
+  }
+}

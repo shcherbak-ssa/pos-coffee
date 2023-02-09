@@ -5,27 +5,53 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import com.digitazon.poscoffee.models.helpers.Config;
+import com.digitazon.poscoffee.shared.constants.AppConstants;
+import com.digitazon.poscoffee.shared.utils.DatabaseDataLoader;
+import com.digitazon.poscoffee.shared.utils.LocalResourceLoader;
+
 @Component
 public class ApplicationStartupRunner implements CommandLineRunner {
 
   @Autowired
   private Environment env;
 
+  @Autowired
+  private DatabaseDataLoader dataLoader;
+
+  @Autowired
+  private LocalResourceLoader localResourceLoader;
+
   @Override
   public void run(String... args) throws Exception {
     this.addConsoleSpace();
     this.logStartedMessage();
+
+    this.dataLoader.loadConstants();
+    this.log("# Constants loaded");
+
+    Config config = this.localResourceLoader
+      .loadJSONResource(AppConstants.POSCOFFEE_CONFIG_FILENAME, Config.class);
+    this.log("# Config Loaded");
+
+    this.dataLoader.loadAdmin(config.getAdmin());
+    this.log("# Admin user loaded");
+
+    this.log("\n");
   }
 
   private void addConsoleSpace() {
-    System.out.println();
-    System.out.println("##########################################################");
-    System.out.println();
+    this.log("\n");
+    this.log("########################################################################################");
+    this.log("\n");
   }
 
   private void logStartedMessage() {
-    System.out.println(String.format("Application started on port %s", this.env.getProperty("server.port")));
-    System.out.println();
+    this.log(String.format("# Application started on port %s", this.env.getProperty("server.port")));
+  }
+
+  private void log(String message) {
+    System.out.println(message);
   }
 
 }
