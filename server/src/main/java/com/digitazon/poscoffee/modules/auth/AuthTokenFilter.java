@@ -35,7 +35,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
   {
     try {
       final String authToken = this.authJwtUtils.getAuthToken(request);
-      System.out.println("authentication filter");
 
       if (authToken != null && this.authJwtUtils.validateAuthToken(authToken)) {
         final String username = this.authJwtUtils.getUsernameFromAuthToken(authToken);

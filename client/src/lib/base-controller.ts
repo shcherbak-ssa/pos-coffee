@@ -1,4 +1,5 @@
 import type {
+  Controller,
   ApiService as BaseApiService,
   ErrorService as BaseErrorService,
   ValidationService as BaseValidationService,
@@ -9,7 +10,7 @@ import { ApiService } from 'services/api';
 import { ErrorService } from 'services/error';
 import { ValidationService } from 'services/validation';
 
-export class BaseController {
+export class BaseController implements Controller {
 
   protected api: BaseApiService;
   protected validation: BaseValidationService;

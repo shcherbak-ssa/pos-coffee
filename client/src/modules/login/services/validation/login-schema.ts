@@ -1,10 +1,11 @@
 import Joi from 'joi';
 
-import type { LoginSchema } from 'shared/types';
+import type { LoginSchema } from 'modules/login/types';
+import type { ValidationSchema } from 'shared/types';
 
-import type { Schema } from './types';
+type Schema = Joi.ObjectSchema<LoginSchema>;
 
-const loginSchema: Joi.ObjectSchema<LoginSchema> = Joi.object({
+const loginSchema: Schema = Joi.object({
   username: Joi.string().min(8).required().messages({
     'string.min': 'Username must be at least 8 characters',
     'string.empty': 'Username cannot be empty',
@@ -15,7 +16,7 @@ const loginSchema: Joi.ObjectSchema<LoginSchema> = Joi.object({
   }),
 });
 
-export const schema: Schema<LoginSchema> = {
+export const schema: ValidationSchema<Schema> = {
   schemaToCreate: loginSchema,
   schemaToUpdate: loginSchema,
 };

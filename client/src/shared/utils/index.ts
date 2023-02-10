@@ -1,7 +1,5 @@
 import { APP_NAME, EMPTY_STRING, PAGE_TITLE_DIVIDER } from 'shared/constants';
 
-export * from './local-storage';
-
 export function replaceUrl(to: string): void {
   history.replaceState({}, EMPTY_STRING, to);
 }

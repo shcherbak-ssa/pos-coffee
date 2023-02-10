@@ -1,8 +1,8 @@
-import type { LoginController as BaseLoginController, LoginSchema, Token } from 'shared/types';
+import type { LoginController as BaseLoginController, LoginSchema, Token } from 'modules/login/types';
 import { ApiEndpoint, LocalStorageKey, PagePath, ValidationSchemaName } from 'shared/constants';
-import { LocalStorage, replaceLocation } from 'shared/utils';
-
-import { BaseController } from './lib/base';
+import { LocalStorage } from 'shared/utils/local-storage';
+import { replaceLocation } from 'shared/utils';
+import { BaseController } from 'lib/base-controller';
 
 export class LoginController extends BaseController implements BaseLoginController {
 

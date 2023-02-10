@@ -1,8 +1,7 @@
 import classnames from 'classnames';
 
+import logo from 'assets/poscoffee-logo.svg';
 import { APP_NAME } from 'shared/constants';
-
-import poscoffeeLogo from 'view/assets/icons/poscoffee-logo.svg';
 
 export type Props = {
   type?: 'block' | 'inline';
@@ -24,7 +23,7 @@ export function AppLogo({ size = 'normal', type = 'inline' }: Props) {
     <div className="app-logo">
       <img
         className={iconClassnames}
-        src={poscoffeeLogo}
+        src={logo}
         alt={APP_NAME}
       />
 

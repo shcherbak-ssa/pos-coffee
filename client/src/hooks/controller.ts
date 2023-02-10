@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react';
 
-import type { Controller, LoaderService as BaseLoaderService } from 'shared/types';
+import type { Controller } from 'shared/types';
 import type { ControllerName } from 'shared/constants';
-import { LoaderService } from 'services/loader';
+import { Context } from 'shared/context';
 
 export function useController<T extends Controller>(name: ControllerName): T | undefined {
   const [ controller, setController ] = useState<Controller>();
 
   useEffect(() => {
-    const loader: BaseLoaderService = LoaderService.create();
-
-    loader.loadController(name)
+    Context.getLoader().loadController(name)
       .then((loadedController) => {
         setController(loadedController);
       });

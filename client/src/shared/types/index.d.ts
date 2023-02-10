@@ -1,17 +1,24 @@
 import type { ApiEndpoint, ControllerName, ErrorType, ValidationSchemaName } from 'shared/constants';
 
-import type { LoginController } from './login';
-import type { UsersController } from './users';
-
-export * from './login';
 export * from './users';
 
-export type Controller =
-  | LoginController
-  | UsersController;
+export interface Controller {}
 
-export interface LoaderService {
-  loadController(name: ControllerName): Promise<Controller>;
+export type ValidationSchema<T> = {
+  schemaToCreate: T;
+  schemaToUpdate: T;
+}
+
+export type ErrorHandler<T> = (error: ErrorObject<T>) => void;
+
+export type Errors<T> = {
+  [key in keyof T]?: string;
+}
+
+export type ErrorObject<T> = {
+  type: ErrorType;
+  message: string;
+  errors: Errors<T>;
 }
 
 export interface ApiService {
@@ -30,19 +37,14 @@ export interface ErrorService {
   unsubscribe<T>(errorType: ErrorType, handler: ErrorHandler<T>): void;
 }
 
+export interface LoaderService {
+  loadController(name: ControllerName): Promise<Controller>;
+  loadValidationSchema<T>(schemaName: ValidationSchemaName): Promise<ValidationSchema<T>>;
+}
+
+export interface StoreService {}
+
 export interface ValidationService {
   validateToCreate<T>(schemaName: ValidationSchemaName, object: T): Promise<void>;
   validateToUpdate<T>(schemaName: ValidationSchemaName, object: T): Promise<void>;
-}
-
-export type ErrorHandler<T> = (error: ErrorObject<T>) => void;
-
-export type Errors<T> = {
-  [key in keyof T]?: string;
-}
-
-export type ErrorObject<T> = {
-  type: ErrorType;
-  message: string;
-  errors: Errors<T>;
 }

@@ -13,8 +13,8 @@ export enum UserType {
 }
 
 export enum ControllerName {
-  LOGIN = 'login',
-  USERS = 'users',
+  LOGIN = 'LOGIN',
+  USERS = 'USERS',
 }
 
 export enum PagePath {
@@ -25,6 +25,7 @@ export enum PagePath {
 export enum ErrorName {
   API_ERROR = 'ApiError',
   VALIDATION_ERROR = 'ValidationError',
+  PROGER_ERROR = 'ProgerError',
 }
 
 export enum ErrorType {
@@ -35,7 +36,8 @@ export enum ErrorType {
 }
 
 export enum ValidationSchemaName {
-  LOGIN = 'login',
+  LOGIN = 'LOGIN',
+  USERS = 'USERS',
 }
 
 export enum LocalStorageKey {

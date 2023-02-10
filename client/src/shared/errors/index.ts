@@ -20,3 +20,11 @@ export class ValidationError<T> extends Error {
     this.errors = errors;
   }
 }
+
+export class ProgerError extends Error {
+  public name: string = ErrorName.PROGER_ERROR;
+
+  public constructor(message: string) {
+    super(message);
+  }
+}

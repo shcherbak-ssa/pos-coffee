@@ -78,7 +78,7 @@ export class User implements BaseUser {
   }
 
   get hasUpdates(): boolean {
-    if (!this.schema) return true;
+    if (this.schema === null) return true;
 
     for (const [ key, value ] of Object.entries(this.schema)) {
       if (this.draft[key as keyof UserSchema] !== value) {
