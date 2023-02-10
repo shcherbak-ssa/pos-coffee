@@ -1,3 +1,5 @@
+import './styles/login.scss';
+
 import { LoaderService } from 'modules/login/services/loader';
 
 import { LocalStorageKey, PagePath } from 'shared/constants';

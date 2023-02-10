@@ -9,6 +9,11 @@ export type ValidationSchema<T> = {
   schemaToUpdate: T;
 }
 
+export type Token = {
+  token: string;
+  type: string;
+}
+
 export type ErrorHandler<T> = (error: ErrorObject<T>) => void;
 
 export type Errors<T> = {

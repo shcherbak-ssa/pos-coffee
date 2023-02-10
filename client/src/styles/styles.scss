@@ -9,15 +9,3 @@
     font-family: 'Comic Neue', cursive;
   }
 }
-
-.login {
-  @media screen and (min-width: 475px) {
-    max-width: 360px;
-  }
-
-  &-image {
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-  }
-}

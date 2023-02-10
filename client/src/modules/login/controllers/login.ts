@@ -1,4 +1,6 @@
-import type { LoginController as BaseLoginController, LoginSchema, Token } from 'modules/login/types';
+import type { LoginController as BaseLoginController, LoginSchema } from 'modules/login/types';
+
+import type { Token } from 'shared/types';
 import { ApiEndpoint, LocalStorageKey, PagePath, ValidationSchemaName } from 'shared/constants';
 import { LocalStorage } from 'shared/utils/local-storage';
 import { replaceLocation } from 'shared/utils';
