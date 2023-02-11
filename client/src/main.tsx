@@ -1,11 +1,11 @@
 import 'primereact/resources/themes/mira/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
-import './styles/main.scss';
+import 'view/styles/main.scss';
 
 import { LocalStorageKey } from 'shared/constants';
-import { LocalStorage } from 'shared/utils/local-storage';
-import { render } from 'shared/utils/setup-view';
+import { LocalStorage } from 'shared/helpers/local-storage';
+import { render } from 'shared/helpers/setup-view';
 
 renderLoader()
   .then(checkUserToken)
@@ -13,7 +13,7 @@ renderLoader()
   .catch(console.error);
 
 async function renderLoader(): Promise<void> {
-  const { AppLoader } = await import('components/AppLoader');
+  const { AppLoader } = await import('view/components/AppLoader');
 
   render(<AppLoader />);
 }

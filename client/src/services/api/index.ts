@@ -1,6 +1,16 @@
-import type { ErrorObject, ApiService as BaseApiService } from 'shared/types';
-import { ApiMethod, ApiEndpoint, ApiResponseCode, QUERY_URL_SEPARATOR, EMPTY_STRING } from 'shared/constants';
+import type { ErrorObject, ApiService as BaseApiService, Token } from 'shared/types';
+import {
+  ApiMethod,
+  ApiEndpoint,
+  ApiResponseCode,
+  QUERY_URL_SEPARATOR,
+  EMPTY_STRING,
+  LocalStorageKey,
+} from 'shared/constants';
 import { ApiError } from 'shared/errors';
+import { LocalStorage } from 'shared/helpers/local-storage';
+
+type Headers = { [key: string]: string };
 
 export class ApiService implements BaseApiService {
 
@@ -12,6 +22,29 @@ export class ApiService implements BaseApiService {
 
   public static create(): ApiService {
     return new ApiService();
+  }
+
+  private static isGetMethod(method: ApiMethod): boolean {
+    return method === ApiMethod.GET;
+  }
+
+  private static isNoContentCode(code: number): boolean {
+    return code === ApiResponseCode.NO_CONTENT;
+  }
+
+  private static getHeaders(): Headers {
+    const headers: Headers = {
+      'Content-Type': 'application/json',
+      'Accept-Type': 'application/json',
+    };
+
+    const token: Token | null = LocalStorage.get(LocalStorageKey.USER_TOKEN);
+
+    if (token) {
+      headers['Authorization'] = `${token.type} ${token.token}`;
+    }
+
+    return headers;
   }
 
   public addParams<T>(params: T): BaseApiService {
@@ -57,10 +90,7 @@ export class ApiService implements BaseApiService {
 
     const response = await fetch(location.origin + apiEndpoint, {
       method,
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept-Type': 'application/json',
-      },
+      headers: ApiService.getHeaders(),
       body: ApiService.isGetMethod(method) ? null : this.body,
     });
 
@@ -87,14 +117,6 @@ export class ApiService implements BaseApiService {
     }
 
     return apiEndpoint;
-  }
-
-  private static isGetMethod(method: ApiMethod): boolean {
-    return method === ApiMethod.GET;
-  }
-
-  private static isNoContentCode(code: number): boolean {
-    return code === ApiResponseCode.NO_CONTENT;
   }
 
 }

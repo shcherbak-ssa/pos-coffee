@@ -1,4 +1,4 @@
-import loginImage from 'modules/login/assets/login-image.jpg';
+import loginImage from 'modules/login/view/assets/login-image.jpg';
 
 export function LoginImage() {
 

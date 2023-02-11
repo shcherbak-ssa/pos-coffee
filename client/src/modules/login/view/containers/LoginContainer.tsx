@@ -1,29 +1,26 @@
 import { useEffect, useState } from 'react';
 import classnames from 'classnames';
-
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
+
+import { ControllerName, ErrorType, PagePath, StoreName } from 'shared/constants';
+import { Context } from 'shared/context';
+import { replaceUrl, updatePageTitle } from 'shared/utils';
+import { loadContext } from 'shared/helpers/load-context';
+import { useError } from 'view/hooks/error';
+import { useStore } from 'view/hooks/store';
+import { InputWrapper } from 'view/components/InputWrapper';
 
 import type {
   Login as BaseLogin,
   LoginStore as BaseLoginStore,
   LoginController,
   LoginSchema,
-} from 'modules/login/types';
-import { LOGIN_PAGE_TITLE } from 'modules/login/constants';
-
-import { LoginWrapper } from 'modules/login/components/LoginWrapper';
-import { LoginErrorMessage } from 'modules/login/components/LoginErrorMessage';
-
-import { ControllerName, ErrorType, PagePath, StoreName } from 'shared/constants';
-import { Context } from 'shared/context';
-import { loadContext } from 'shared/utils/load-context';
-import { replaceUrl, updatePageTitle } from 'shared/utils';
-import { useError } from 'hooks/error';
-import { useStore } from 'hooks/store';
-
-import { InputWrapper } from 'components/InputWrapper';
+} from 'modules/login/shared/types';
+import { LOGIN_PAGE_TITLE } from 'modules/login/shared/constants';
+import { LoginWrapper } from 'modules/login/view/components/LoginWrapper';
+import { LoginErrorMessage } from 'modules/login/view/components/LoginErrorMessage';
 
 export const LoginContainer = loadContext(Container, {
   stores: [ StoreName.LOGIN ],

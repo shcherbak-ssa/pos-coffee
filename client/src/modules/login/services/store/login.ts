@@ -1,7 +1,7 @@
-import type { Login as BaseLogin, LoginState, LoginStore as BaseLoginStore } from 'modules/login/types';
-import { Login } from 'modules/login/models/login';
-
 import type { Store } from 'shared/types';
+
+import type { Login as BaseLogin, LoginState, LoginStore as BaseLoginStore } from 'modules/login/shared/types';
+import { Login } from 'modules/login/models/login';
 
 export class LoginStore implements Store, BaseLoginStore {
 

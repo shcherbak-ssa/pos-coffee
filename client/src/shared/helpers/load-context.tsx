@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import type { ControllerName, StoreName } from 'shared/constants';
 import { Context } from 'shared/context';
 
-import { AppLoader } from 'components/AppLoader';
+import { AppLoader } from 'view/components/AppLoader';
 
 export type Props = {
   stores?: StoreName[];
@@ -12,7 +12,7 @@ export type Props = {
 
 export function loadContext<T>(Container: React.ComponentType<T>, { stores = [], controllers = [] }: Props) {
 
-  return function (props: typeof Container.propTypes) {
+  return function (props: typeof Container.propTypes = {}) {
 
     const [ isStoresLoaded, setIsStoresLoaded ] = useState<boolean>(false);
     const [ isControllersLoaded, setIsControllersLoaded ] = useState<boolean>(false);

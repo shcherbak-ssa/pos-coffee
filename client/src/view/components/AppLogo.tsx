@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 
-import logo from 'assets/poscoffee-logo.svg';
 import { APP_NAME } from 'shared/constants';
+import logo from 'view/assets/poscoffee-logo.svg';
 
 export type Props = {
   type?: 'block' | 'inline';

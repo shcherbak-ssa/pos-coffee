@@ -19,11 +19,11 @@ export default defineConfig({
       containers: path.join(__dirname, 'src', 'containers'),
       controllers: path.join(__dirname, 'src', 'controllers'),
       hooks: path.join(__dirname, 'src', 'hooks'),
-      lib: path.join(__dirname, 'src', 'lib'),
       models: path.join(__dirname, 'src', 'models'),
       modules: path.join(__dirname, 'src', 'modules'),
       services: path.join(__dirname, 'src', 'services'),
       shared: path.join(__dirname, 'src', 'shared'),
+      view: path.join(__dirname, 'src', 'view'),
     },
   },
 });

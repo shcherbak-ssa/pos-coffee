@@ -1,7 +1,8 @@
-import type { Controllers } from 'modules/login/types';
 import type { LoaderService as BaseLoaderService, Store, ValidationSchema } from 'shared/types';
 import { ControllerName, StoreName, ValidationName } from 'shared/constants';
 import { ProgerError } from 'shared/errors';
+
+import type { Controllers } from 'modules/login/shared/types';
 
 export class LoaderService implements BaseLoaderService {
 

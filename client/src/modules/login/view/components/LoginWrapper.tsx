@@ -1,8 +1,8 @@
 import { ScrollPanel } from 'primereact/scrollpanel';
 
-import { LoginImage } from 'modules/login/components/LoginImage';
+import { AppLogo } from 'view/components/AppLogo';
 
-import { AppLogo } from 'components/AppLogo';
+import { LoginImage } from 'modules/login/view/components/LoginImage';
 
 export type Props = {
   children: React.ReactNode;
