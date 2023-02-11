@@ -19,6 +19,7 @@
     "paths": {
       "assets/*": ["./src/assets/*"],
       "components/*": ["./src/components/*"],
+      "containers/*": ["./src/containers/*"],
       "controllers/*": ["./src/controllers/*"],
       "hooks/*": ["./src/hooks/*"],
       "lib/*": ["./src/lib/*"],

@@ -17,6 +17,16 @@ export enum ControllerName {
   USERS = 'USERS',
 }
 
+export enum StoreName {
+  LOGIN = 'LOGIN',
+  USERS = 'USERS',
+}
+
+export enum ValidationName {
+  LOGIN = 'LOGIN',
+  USERS = 'USERS',
+}
+
 export enum PagePath {
   ROOT = '/',
   LOGIN = '/login',
@@ -33,11 +43,6 @@ export enum ErrorType {
   SERVER = 'SERVER',
   CLIENT = 'CLIENT',
   VALIDATION = 'VALIDATION',
-}
-
-export enum ValidationSchemaName {
-  LOGIN = 'LOGIN',
-  USERS = 'USERS',
 }
 
 export enum LocalStorageKey {

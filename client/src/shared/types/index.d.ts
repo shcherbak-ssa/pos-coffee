@@ -1,8 +1,12 @@
-import type { ApiEndpoint, ControllerName, ErrorType, ValidationSchemaName } from 'shared/constants';
+import type { ApiEndpoint, ControllerName, ErrorType, StoreName, ValidationName } from 'shared/constants';
 
 export * from './users';
 
 export interface Controller {}
+export type ControllerList = Map<ControllerName, Controller>;
+
+export interface Store {}
+export type StoreList = Map<StoreName, Store>;
 
 export type ValidationSchema<T> = {
   schemaToCreate: T;
@@ -44,12 +48,13 @@ export interface ErrorService {
 
 export interface LoaderService {
   loadController(name: ControllerName): Promise<Controller>;
-  loadValidationSchema<T>(schemaName: ValidationSchemaName): Promise<ValidationSchema<T>>;
+  loadStore(name: StoreName): Promise<Store>;
+  loadValidationSchema<T>(schemaName: ValidationName): Promise<ValidationSchema<T>>;
 }
 
 export interface StoreService {}
 
 export interface ValidationService {
-  validateToCreate<T>(schemaName: ValidationSchemaName, object: T): Promise<void>;
-  validateToUpdate<T>(schemaName: ValidationSchemaName, object: T): Promise<void>;
+  validateToCreate<T>(schemaName: ValidationName, object: T): Promise<void>;
+  validateToUpdate<T>(schemaName: ValidationName, object: T): Promise<void>;
 }

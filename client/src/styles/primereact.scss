@@ -37,7 +37,8 @@
   }
 
   &-content {
-    padding: 0;
+    @apply p-0;
+    padding-right: 6px;
   }
 
   &:hover &-bar,

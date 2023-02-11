@@ -5,7 +5,7 @@ import type { ErrorType } from 'shared/constants';
 import { ErrorService } from 'services/error';
 
 export function useError<T>(errorType: ErrorType): [ErrorObject<T> | undefined, () => void] {
-  const [error, setError] = useState<ErrorObject<T>>();
+  const [ error, setError ] = useState<ErrorObject<T>>();
 
   useEffect(() => {
     const errorService: BaseErrorService = ErrorService.create();
@@ -24,5 +24,5 @@ export function useError<T>(errorType: ErrorType): [ErrorObject<T> | undefined, 
     setError(undefined);
   }
 
-  return [error, cleanError];
+  return [ error, cleanError ];
 }

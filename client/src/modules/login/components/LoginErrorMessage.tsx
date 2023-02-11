@@ -1,6 +1,7 @@
 import { Message } from 'primereact/message';
 
 import type { ErrorObject } from 'shared/types';
+import { EmptyComponent } from 'components/EmptyComponent';
 
 export type Props = {
   clientError: ErrorObject<{}> | undefined;
@@ -18,6 +19,6 @@ export function LoginErrorMessage({ clientError }: Props) {
     );
   }
 
-  return (<></>);
+  return <EmptyComponent />;
 
 }

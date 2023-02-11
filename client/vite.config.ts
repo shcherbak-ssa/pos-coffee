@@ -16,6 +16,7 @@ export default defineConfig({
     alias: {
       assets: path.join(__dirname, 'src', 'assets'),
       components: path.join(__dirname, 'src', 'components'),
+      containers: path.join(__dirname, 'src', 'containers'),
       controllers: path.join(__dirname, 'src', 'controllers'),
       hooks: path.join(__dirname, 'src', 'hooks'),
       lib: path.join(__dirname, 'src', 'lib'),

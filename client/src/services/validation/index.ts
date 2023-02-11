@@ -2,7 +2,7 @@ import type Joi from 'joi';
 import type { ValidationError as JoiValidationError } from 'joi';
 
 import type { Errors, ValidationSchema, ValidationService as BaseValidationService } from 'shared/types';
-import type { ValidationSchemaName } from 'shared/constants';
+import type { ValidationName } from 'shared/constants';
 import { ValidationError } from 'shared/errors';
 import { Context } from 'shared/context';
 
@@ -19,17 +19,17 @@ export class ValidationService implements BaseValidationService {
     return new ValidationService();
   }
 
-  public async validateToCreate<T>(schemaName: ValidationSchemaName, object: T): Promise<void> {
+  public async validateToCreate<T>(schemaName: ValidationName, object: T): Promise<void> {
     await this.validate('schemaToCreate', schemaName, object);
   }
 
-  public async validateToUpdate<T>(schemaName: ValidationSchemaName, object: T): Promise<void> {
+  public async validateToUpdate<T>(schemaName: ValidationName, object: T): Promise<void> {
     await this.validate('schemaToUpdate', schemaName, object);
   }
 
   private async validate<T, R extends keyof Schema<T>>(
     type: R,
-    schemaName: ValidationSchemaName,
+    schemaName: ValidationName,
     object: T,
   ): Promise<void> {
     try {
@@ -40,13 +40,13 @@ export class ValidationService implements BaseValidationService {
     }
   }
 
-  public async loadSchema<T>(schemaName: ValidationSchemaName): Promise<Schema<T>> {
+  public async loadSchema<T>(schemaName: ValidationName): Promise<Schema<T>> {
     const schema: ValidationSchema<T> = await Context.getLoader().loadValidationSchema(schemaName);
 
     return schema as Schema<T>;
   }
 
-  private parseValidationError<T>({ details }: JoiValidationError, schemaName: ValidationSchemaName): void {
+  private parseValidationError<T>({ details }: JoiValidationError, schemaName: ValidationName): void {
     const message: string = this.getErrorMessage(schemaName);
     const errors: Errors<T> = {};
 
@@ -59,7 +59,7 @@ export class ValidationService implements BaseValidationService {
     throw new ValidationError(message, errors);
   }
 
-  private getErrorMessage(schemaName: ValidationSchemaName): string {
+  private getErrorMessage(schemaName: ValidationName): string {
     return `${schemaName} schema validation error`;
   }
 

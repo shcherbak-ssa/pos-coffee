@@ -1,4 +1,5 @@
 import type { LoginSchema as BaseLoginSchema, Login as BaseLogin } from 'modules/login/types';
+
 import { EMPTY_STRING } from 'shared/constants';
 
 class LoginSchema implements BaseLoginSchema {

@@ -5,46 +5,54 @@ import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
 
-import type { LoginController, LoginSchema } from 'modules/login/types';
+import type {
+  Login as BaseLogin,
+  LoginStore as BaseLoginStore,
+  LoginController,
+  LoginSchema,
+} from 'modules/login/types';
 import { LOGIN_PAGE_TITLE } from 'modules/login/constants';
 
 import { LoginWrapper } from 'modules/login/components/LoginWrapper';
 import { LoginErrorMessage } from 'modules/login/components/LoginErrorMessage';
 
-import { ControllerName, EMPTY_STRING, ErrorType, PagePath } from 'shared/constants';
+import { ControllerName, ErrorType, PagePath, StoreName } from 'shared/constants';
+import { Context } from 'shared/context';
+import { loadContext } from 'shared/utils/load-context';
 import { replaceUrl, updatePageTitle } from 'shared/utils';
-import { useController } from 'hooks/controller';
 import { useError } from 'hooks/error';
+import { useStore } from 'hooks/store';
 
 import { InputWrapper } from 'components/InputWrapper';
 
-export function LoginContainer() {
+export const LoginContainer = loadContext(Container, {
+  stores: [ StoreName.LOGIN ],
+  controllers: [ ControllerName.LOGIN ],
+});
 
-  const [ isLoginProcessing, setLoginProcessing ] = useState<boolean>(false);
-  const [ username, setUsername ] = useState<string>(EMPTY_STRING);
-  const [ password, setPassword ] = useState<string>(EMPTY_STRING);
+function Container() {
 
+  const [ isLoginProcessing, setIsLoginProcessing ] = useState<boolean>(false);
   const [ validationError, cleanValidationError ] = useError<LoginSchema>(ErrorType.VALIDATION);
   const [ clientError, cleanClientError ] = useError<{}>(ErrorType.CLIENT);
 
-  const loginController = useController<LoginController>(ControllerName.LOGIN);
+  const login: BaseLogin = useStore<BaseLoginStore>(StoreName.LOGIN, 'login');
+  const loginController = Context.getController(ControllerName.LOGIN) as LoginController;
 
   useEffect(() => {
     replaceUrl(PagePath.LOGIN);
     updatePageTitle(LOGIN_PAGE_TITLE);
   }, []);
 
-  async function login(): Promise<void> {
-    setLoginProcessing(true);
+  async function processLogin(): Promise<void> {
+    setIsLoginProcessing(true);
 
     cleanValidationError();
     cleanClientError();
 
-    if (loginController) {
-      await loginController.login({ username, password });
-    }
+    await loginController.processLogin(login);
 
-    setLoginProcessing(false);
+    setIsLoginProcessing(false);
   }
 
   return (
@@ -62,8 +70,8 @@ export function LoginContainer() {
               'p-invalid': validationError && validationError.errors.username,
             })}
             type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={login.username}
+            onChange={(e) => login.username = e.target.value}
           />
         </InputWrapper>
 
@@ -76,8 +84,8 @@ export function LoginContainer() {
             className={classnames('w-full', {
               'p-invalid': validationError && validationError.errors.password,
             })}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={login.password}
+            onChange={(e) => login.password = e.target.value}
             feedback={false}
             toggleMask
           />
@@ -87,7 +95,7 @@ export function LoginContainer() {
           className="w-full"
           label="Login"
           loading={isLoginProcessing}
-          onClick={login}
+          onClick={processLogin}
         />
       </div>
     </LoginWrapper>

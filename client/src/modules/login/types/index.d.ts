@@ -5,14 +5,22 @@ export type LoginSchema = {
   password: string;
 }
 
+export type LoginState = {
+  login: LoginSchema;
+}
+
 export interface Login {
   get username(): string;
   set username(username: string);
   get password(): string;
   set password(password: string);
-  get schema(): LoginSchema;
+}
+
+export interface LoginStore {
+  get login(): Login;
+  set login(login: Login);
 }
 
 export interface LoginController {
-  login(schema: LoginSchema): Promise<void>;
+  processLogin(model: Login): Promise<void>;
 }
