@@ -1,12 +1,15 @@
 import type { ErrorService as BaseErrorService } from 'shared/types';
 import { ErrorType } from 'shared/constants';
 import { ApiError, AuthError, ValidationError } from 'shared/errors';
-import { toLogin } from 'shared/helpers/to-login';
 import { ErrorService } from 'services/error';
 
 export function parseError(e: Error): void {
   if (e instanceof AuthError) {
-    toLogin();
+    import('shared/helpers/to-login')
+      .then(({ toLogin }) => {
+        toLogin();
+      });
+
     return;
   }
 

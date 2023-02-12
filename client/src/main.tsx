@@ -3,10 +3,11 @@ import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import 'view/styles/main.scss';
 
-import { LocalStorageKey } from 'shared/constants';
+import type { CurrentUserSchema } from 'shared/types';
+import { LocalStorageKey, UserType } from 'shared/constants';
 import { LocalStorage } from 'shared/helpers/local-storage';
 import { render } from 'shared/helpers/setup-view';
-import { toLogin } from 'shared/helpers/to-login';
+import { parseError } from 'shared/helpers/parse-error';
 
 renderLoader()
   .then(checkUserToken)
@@ -25,8 +26,27 @@ function checkUserToken(): boolean {
 
 async function renderNext(isTokenExist: boolean): Promise<void> {
   if (isTokenExist) {
-    return; // @TODO: add
+    try {
+      const { loadCurrentUser } = await import('shared/helpers/current-user');
+      const currentUser: CurrentUserSchema = await loadCurrentUser();
+
+      if (currentUser.type === UserType.ADMIN) {
+        const { renderAdmin } = await import('modules/admin/main');
+
+        return await renderAdmin(currentUser);
+      } else {
+        const { renderApp } = await import('modules/app/main');
+
+        return await renderApp(currentUser);
+      }
+    } catch (e: any) {
+      parseError(e);
+    }
+
+    return;
   }
+
+  const { toLogin } = await import('shared/helpers/to-login');
 
   toLogin();
 }

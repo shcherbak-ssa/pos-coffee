@@ -1,6 +1,13 @@
-import type { ApiEndpoint, ControllerName, ErrorType, StoreName, ValidationName } from 'shared/constants';
+import type { ApiEndpoint, ControllerName, ErrorType, StoreName, ValidationName, UserType } from 'shared/constants';
 
-export * from './users';
+export type CurrentUserSchema = {
+  id: number;
+  name: string;
+  surname: string;
+  email: string;
+  username: string;
+  type: UserType;
+}
 
 export type AnyType = {
   [key: string]: string | number | boolean | AnyType | AnyType[];
