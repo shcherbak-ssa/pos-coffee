@@ -6,31 +6,13 @@ export const EMPTY_STRING: string = '';
 export const PAGE_TITLE_DIVIDER: string = ' | ';
 export const QUERY_URL_SEPARATOR: string = '?';
 export const AUTHORIZATION_HEADER: string = 'Authorization';
+export const ROOT_PAGE_PATH: string = '/';
+export const CURRENT_USER_API_ENDPOINT: string = '/api/users';
 
 export enum UserType {
   ADMIN = 'ADMIN',
   MANAGER = 'MANAGER',
   WAITER = 'WAITER',
-}
-
-export enum ControllerName {
-  LOGIN = 'LOGIN',
-  USERS = 'USERS',
-}
-
-export enum StoreName {
-  LOGIN = 'LOGIN',
-  USERS = 'USERS',
-}
-
-export enum ValidationName {
-  LOGIN = 'LOGIN',
-  USERS = 'USERS',
-}
-
-export enum PagePath {
-  ROOT = '/',
-  LOGIN = '/login',
 }
 
 export enum ErrorName {
@@ -48,13 +30,8 @@ export enum ErrorType {
 }
 
 export enum LocalStorageKey {
-  USER_TOKEN = 'user-token',
-  LAST_URL = 'last-url',
-}
-
-export enum ApiEndpoint {
-  LOGIN = '/api/auth/login',
-  USERS = '/api/users',
+  USER_TOKEN = 'USER_TOKEN',
+  LAST_URL = 'LAST_URL',
 }
 
 export enum ApiMethod {

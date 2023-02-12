@@ -1,7 +1,7 @@
 import type { CurrentUserSchema } from 'shared/types';
-import { ApiEndpoint } from 'shared/constants';
+import { CURRENT_USER_API_ENDPOINT } from 'shared/constants';
 import { ApiService } from 'services/api';
 
 export async function loadCurrentUser(): Promise<CurrentUserSchema> {
-  return await ApiService.create().get(ApiEndpoint.USERS);
+  return await ApiService.create().get(CURRENT_USER_API_ENDPOINT);
 }

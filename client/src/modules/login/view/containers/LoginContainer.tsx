@@ -4,22 +4,22 @@ import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
 
-import { ControllerName, ErrorType, PagePath, StoreName } from 'shared/constants';
-import { Context } from 'shared/context';
+import { ErrorType } from 'shared/constants';
 import { replaceUrl, updatePageTitle } from 'shared/utils';
 import { loadContext } from 'shared/helpers/load-context';
 import { useError } from 'view/hooks/error';
 import { useStore } from 'view/hooks/store';
+import { useController } from 'view/hooks/controller';
 import { InputWrapper } from 'view/components/InputWrapper';
 
 import type { LoginStore, LoginController, LoginSchema, LoginState } from 'modules/login/shared/types';
-import { LOGIN_PAGE_TITLE } from 'modules/login/shared/constants';
+import { LOGIN_CONTROLLER, LOGIN_PAGE_PATH, LOGIN_PAGE_TITLE, LOGIN_STORE } from 'modules/login/shared/constants';
 import { LoginWrapper } from 'modules/login/view/components/LoginWrapper';
 import { LoginErrorMessage } from 'modules/login/view/components/LoginErrorMessage';
 
 export const LoginContainer = loadContext(Container, {
-  stores: [ StoreName.LOGIN ],
-  controllers: [ ControllerName.LOGIN ],
+  stores: [ LOGIN_STORE ],
+  controllers: [ LOGIN_CONTROLLER ],
 });
 
 function Container() {
@@ -28,11 +28,11 @@ function Container() {
   const [ validationError, cleanValidationError ] = useError<LoginSchema>(ErrorType.VALIDATION);
   const [ clientError, cleanClientError ] = useError<{}>(ErrorType.CLIENT);
 
-  const { state, login } = useStore<LoginState>(StoreName.LOGIN) as LoginStore;
-  const loginController = Context.getController(ControllerName.LOGIN) as LoginController;
+  const { state, login } = useStore<LoginState>(LOGIN_STORE) as LoginStore;
+  const loginController = useController(LOGIN_CONTROLLER) as LoginController;
 
   useEffect(() => {
-    replaceUrl(PagePath.LOGIN);
+    replaceUrl(LOGIN_PAGE_PATH);
     updatePageTitle(LOGIN_PAGE_TITLE);
   }, []);
 

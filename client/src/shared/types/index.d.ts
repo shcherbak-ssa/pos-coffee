@@ -1,4 +1,4 @@
-import type { ApiEndpoint, ControllerName, ErrorType, StoreName, ValidationName, UserType } from 'shared/constants';
+import type { ErrorType, UserType } from 'shared/constants';
 
 export type CurrentUserSchema = {
   id: number;
@@ -14,10 +14,10 @@ export type AnyType = {
 }
 
 export type Controller = {}
-export type ControllerList = Map<ControllerName, Controller>
+export type ControllerList = Map<string, Controller>
 
 export type Store<T = AnyType> = { readonly state: T }
-export type StoreList = Map<StoreName, Store>;
+export type StoreList = Map<string, Store>;
 
 export type ValidationSchema<T> = {
   schemaToCreate: T;
@@ -45,10 +45,10 @@ export interface ApiService {
   addParams<T>(params: T): ApiService;
   addQuery<T>(query: T): ApiService;
   addBody<T>(body: T): ApiService;
-  get<T>(endpoint: ApiEndpoint): Promise<T>;
-  post<T>(endpoint: ApiEndpoint): Promise<T>;
-  put(endpoint: ApiEndpoint): Promise<void>;
-  delete(endpoint: ApiEndpoint): Promise<void>;
+  get<T>(endpoint: string): Promise<T>;
+  post<T>(endpoint: string): Promise<T>;
+  put(endpoint: string): Promise<void>;
+  delete(endpoint: string): Promise<void>;
 }
 
 export interface ErrorService {
@@ -58,14 +58,14 @@ export interface ErrorService {
 }
 
 export interface LoaderService {
-  loadController(name: ControllerName): Promise<Controller>;
-  loadStore(name: StoreName): Promise<Store>;
-  loadValidationSchema<T>(schemaName: ValidationName): Promise<ValidationSchema<T>>;
+  loadController(name: string): Promise<Controller>;
+  loadStore(name: string): Promise<Store>;
+  loadValidationSchema<T>(schemaName: string): Promise<ValidationSchema<T>>;
 }
 
 export interface StoreService {}
 
 export interface ValidationService {
-  validateToCreate<T>(schemaName: ValidationName, object: T): Promise<void>;
-  validateToUpdate<T>(schemaName: ValidationName, object: T): Promise<void>;
+  validateToCreate<T>(schemaName: string, object: T): Promise<void>;
+  validateToUpdate<T>(schemaName: string, object: T): Promise<void>;
 }

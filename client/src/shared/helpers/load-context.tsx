@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 
-import type { ControllerName, StoreName } from 'shared/constants';
 import { Context } from 'shared/context';
-
 import { AppLoader } from 'view/components/AppLoader';
 
 export type Props = {
-  stores?: StoreName[];
-  controllers?: ControllerName[];
+  stores?: string[];
+  controllers?: string[];
 }
 
 export function loadContext<T>(Container: React.ComponentType<T>, { stores = [], controllers = [] }: Props) {

@@ -2,7 +2,6 @@ import type Joi from 'joi';
 import type { ValidationError as JoiValidationError } from 'joi';
 
 import type { Errors, ValidationSchema, ValidationService as BaseValidationService } from 'shared/types';
-import type { ValidationName } from 'shared/constants';
 import { ValidationError } from 'shared/errors';
 import { Context } from 'shared/context';
 
@@ -19,19 +18,15 @@ export class ValidationService implements BaseValidationService {
     return new ValidationService();
   }
 
-  public async validateToCreate<T>(schemaName: ValidationName, object: T): Promise<void> {
+  public async validateToCreate<T>(schemaName: string, object: T): Promise<void> {
     await this.validate('schemaToCreate', schemaName, object);
   }
 
-  public async validateToUpdate<T>(schemaName: ValidationName, object: T): Promise<void> {
+  public async validateToUpdate<T>(schemaName: string, object: T): Promise<void> {
     await this.validate('schemaToUpdate', schemaName, object);
   }
 
-  private async validate<T, R extends keyof Schema<T>>(
-    type: R,
-    schemaName: ValidationName,
-    object: T,
-  ): Promise<void> {
+  private async validate<T, R extends keyof Schema<T>>(type: R, schemaName: string, object: T): Promise<void> {
     try {
       const schema: Schema<T> = await this.loadSchema(schemaName);
       await schema[type].validateAsync(object, { abortEarly: false });
@@ -40,13 +35,13 @@ export class ValidationService implements BaseValidationService {
     }
   }
 
-  public async loadSchema<T>(schemaName: ValidationName): Promise<Schema<T>> {
+  public async loadSchema<T>(schemaName: string): Promise<Schema<T>> {
     const schema: ValidationSchema<T> = await Context.getLoader().loadValidationSchema(schemaName);
 
     return schema as Schema<T>;
   }
 
-  private parseValidationError<T>({ details }: JoiValidationError, schemaName: ValidationName): void {
+  private parseValidationError<T>({ details }: JoiValidationError, schemaName: string): void {
     const message: string = this.getErrorMessage(schemaName);
     const errors: Errors<T> = {};
 
@@ -59,7 +54,7 @@ export class ValidationService implements BaseValidationService {
     throw new ValidationError(message, errors);
   }
 
-  private getErrorMessage(schemaName: ValidationName): string {
+  private getErrorMessage(schemaName: string): string {
     return `${schemaName} schema validation error`;
   }
 

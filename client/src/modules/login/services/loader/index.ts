@@ -1,8 +1,8 @@
 import type { LoaderService as BaseLoaderService, Store, ValidationSchema } from 'shared/types';
-import { ControllerName, StoreName, ValidationName } from 'shared/constants';
 import { ProgerError } from 'shared/errors';
 
 import type { Controllers } from 'modules/login/shared/types';
+import { LOGIN_CONTROLLER, LOGIN_STORE, LOGIN_VALIDATION } from 'modules/login/shared/constants';
 
 export class LoaderService implements BaseLoaderService {
 
@@ -12,9 +12,9 @@ export class LoaderService implements BaseLoaderService {
     return new LoaderService();
   }
 
-  public async loadController(name: ControllerName): Promise<Controllers> {
+  public async loadController(name: string): Promise<Controllers> {
     switch (name) {
-      case ControllerName.LOGIN: {
+      case LOGIN_CONTROLLER: {
         const { LoginController } = await import('modules/login/controllers/login');
 
         return LoginController.create();
@@ -24,9 +24,9 @@ export class LoaderService implements BaseLoaderService {
     throw new ProgerError(`Controller ${name} does not exist`);
   }
 
-  public async loadStore(name: StoreName): Promise<Store> {
+  public async loadStore(name: string): Promise<Store> {
     switch (name) {
-      case StoreName.LOGIN: {
+      case LOGIN_STORE: {
         const { loginStore } = await import('modules/login/services/store/login');
 
         return loginStore;
@@ -36,9 +36,9 @@ export class LoaderService implements BaseLoaderService {
     throw new ProgerError(`Store ${name} does not exist`);
   }
 
-  public async loadValidationSchema<T>(name: ValidationName): Promise<ValidationSchema<T>> {
+  public async loadValidationSchema<T>(name: string): Promise<ValidationSchema<T>> {
     switch (name) {
-      case ValidationName.LOGIN: {
+      case LOGIN_VALIDATION: {
         const { schema } = await import('modules/login/services/validation/login-schema');
 
         return schema as ValidationSchema<T>;

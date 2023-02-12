@@ -1,7 +1,6 @@
 import type { ErrorObject, ApiService as BaseApiService, Token } from 'shared/types';
 import {
   ApiMethod,
-  ApiEndpoint,
   ApiResponseCode,
   QUERY_URL_SEPARATOR,
   EMPTY_STRING,
@@ -69,23 +68,23 @@ export class ApiService implements BaseApiService {
     return this;
   }
 
-  public async get<T>(endpoint: ApiEndpoint): Promise<T> {
+  public async get<T>(endpoint: string): Promise<T> {
     return this.sendRequest<T>(ApiMethod.GET, endpoint);
   }
 
-  public async post<T>(endpoint: ApiEndpoint): Promise<T> {
+  public async post<T>(endpoint: string): Promise<T> {
     return this.sendRequest<T>(ApiMethod.POST, endpoint);
   }
 
-  public async put(endpoint: ApiEndpoint): Promise<void> {
+  public async put(endpoint: string): Promise<void> {
     return this.sendRequest(ApiMethod.PUT, endpoint);
   }
 
-  public async delete(endpoint: ApiEndpoint): Promise<void> {
+  public async delete(endpoint: string): Promise<void> {
     return this.sendRequest(ApiMethod.DELETE, endpoint);
   }
 
-  private async sendRequest<T = void>(method: ApiMethod, endpoint: ApiEndpoint): Promise<T> {
+  private async sendRequest<T = void>(method: ApiMethod, endpoint: string): Promise<T> {
     let apiEndpoint: string = this.setParamsToUrl(endpoint);
     apiEndpoint += QUERY_URL_SEPARATOR + this.query;
 
@@ -112,7 +111,7 @@ export class ApiService implements BaseApiService {
     throw new ApiError(error);
   }
 
-  private setParamsToUrl(endpoint: ApiEndpoint): string {
+  private setParamsToUrl(endpoint: string): string {
     let apiEndpoint: string = endpoint;
 
     for (const [key, value] of Object.entries(this.params)) {
