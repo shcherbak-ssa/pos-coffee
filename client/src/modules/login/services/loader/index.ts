@@ -6,16 +6,10 @@ import type { Controllers } from 'modules/login/shared/types';
 
 export class LoaderService implements BaseLoaderService {
 
-  private static service: LoaderService;
-
   private constructor() {}
 
   public static create(): LoaderService {
-    if (!LoaderService.service) {
-      LoaderService.service = new LoaderService();
-    }
-
-    return LoaderService.service;
+    return new LoaderService();
   }
 
   public async loadController(name: ControllerName): Promise<Controllers> {
@@ -33,9 +27,9 @@ export class LoaderService implements BaseLoaderService {
   public async loadStore(name: StoreName): Promise<Store> {
     switch (name) {
       case StoreName.LOGIN: {
-        const { LoginStore } = await import('modules/login/services/store/login');
+        const { loginStore } = await import('modules/login/services/store/login');
 
-        return LoginStore.create();
+        return loginStore;
       }
     }
 

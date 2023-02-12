@@ -12,12 +12,7 @@ import { useError } from 'view/hooks/error';
 import { useStore } from 'view/hooks/store';
 import { InputWrapper } from 'view/components/InputWrapper';
 
-import type {
-  Login as BaseLogin,
-  LoginStore as BaseLoginStore,
-  LoginController,
-  LoginSchema,
-} from 'modules/login/shared/types';
+import type { LoginStore, LoginController, LoginSchema, LoginState } from 'modules/login/shared/types';
 import { LOGIN_PAGE_TITLE } from 'modules/login/shared/constants';
 import { LoginWrapper } from 'modules/login/view/components/LoginWrapper';
 import { LoginErrorMessage } from 'modules/login/view/components/LoginErrorMessage';
@@ -33,7 +28,7 @@ function Container() {
   const [ validationError, cleanValidationError ] = useError<LoginSchema>(ErrorType.VALIDATION);
   const [ clientError, cleanClientError ] = useError<{}>(ErrorType.CLIENT);
 
-  const login: BaseLogin = useStore<BaseLoginStore>(StoreName.LOGIN, 'login');
+  const { state, login } = useStore<LoginState>(StoreName.LOGIN) as LoginStore;
   const loginController = Context.getController(ControllerName.LOGIN) as LoginController;
 
   useEffect(() => {
@@ -47,7 +42,7 @@ function Container() {
     cleanValidationError();
     cleanClientError();
 
-    await loginController.processLogin(login);
+    await loginController.processLogin(state.login);
 
     setIsLoginProcessing(false);
   }
@@ -67,7 +62,7 @@ function Container() {
               'p-invalid': validationError && validationError.errors.username,
             })}
             type="text"
-            value={login.username}
+            value={state.login.username}
             onChange={(e) => login.username = e.target.value}
           />
         </InputWrapper>
@@ -81,7 +76,7 @@ function Container() {
             className={classnames('w-full', {
               'p-invalid': validationError && validationError.errors.password,
             })}
-            value={login.password}
+            value={state.login.password}
             onChange={(e) => login.password = e.target.value}
             feedback={false}
             toggleMask

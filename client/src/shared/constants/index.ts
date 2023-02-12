@@ -5,6 +5,7 @@ export const ZERO: number = 0;
 export const EMPTY_STRING: string = '';
 export const PAGE_TITLE_DIVIDER: string = ' | ';
 export const QUERY_URL_SEPARATOR: string = '?';
+export const AUTHORIZATION_HEADER: string = 'Authorization';
 
 export enum UserType {
   ADMIN = 'ADMIN',
@@ -33,6 +34,7 @@ export enum PagePath {
 }
 
 export enum ErrorName {
+  AUTH_ERROR = 'AuthError',
   API_ERROR = 'ApiError',
   VALIDATION_ERROR = 'ValidationError',
   PROGER_ERROR = 'ProgerError',
@@ -52,6 +54,7 @@ export enum LocalStorageKey {
 
 export enum ApiEndpoint {
   LOGIN = '/api/auth/login',
+  USERS = '/api/users',
 }
 
 export enum ApiMethod {
@@ -66,4 +69,5 @@ export enum ApiResponseCode {
   CREATED = 201,
   NO_CONTENT = 204,
   BAD_REQUEST = 400,
+  UNAUTHORIZED = 401,
 }

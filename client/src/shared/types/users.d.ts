@@ -9,6 +9,10 @@ export type UserSchema = {
   type: UserType;
 }
 
+export type UsersState = {
+  user: UserSchema;
+}
+
 export interface User {
   get id(): number;
   get fullName(): string;
@@ -23,6 +27,11 @@ export interface User {
   get hasUpdates(): boolean;
 }
 
+export interface UserStore {
+  readonly state: UsersState;
+  user: User;
+}
+
 export interface UsersController {
-  getUser(): Promise<UserSchema>;
+  getCurrentUser(): Promise<User>;
 }

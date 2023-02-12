@@ -1,24 +1,30 @@
-import type { Store } from 'shared/types';
+import { proxy } from 'valtio';
 
-import type { Login as BaseLogin, LoginState, LoginStore as BaseLoginStore } from 'modules/login/shared/types';
-import { Login } from 'modules/login/models/login';
+import type { LoginState, LoginStore as BaseLoginStore } from 'modules/login/shared/types';
+import { LoginSchema } from 'modules/login/models/login';
 
-export class LoginStore implements Store, BaseLoginStore {
+export const loginStore: BaseLoginStore = {
 
-  private state: Partial<LoginState> = {};
+  state: proxy<LoginState>({
+    login: LoginSchema.create(),
+  }),
 
-  public static create(): LoginStore {
-    return new LoginStore();
-  }
+  login: {
+    get username(): string {
+      return loginStore.state.login.username;
+    },
 
-  public get login(): BaseLogin {
-    return Login.create(this.state.login);
-  }
+    set username(username: string) {
+      loginStore.state.login.username = username;
+    },
 
-  public set login(login: BaseLogin) {
-    const { username, password } = login;
+    get password(): string {
+      return loginStore.state.login.password;
+    },
 
-    this.state.login = { username, password };
-  }
+    set password(password: string) {
+      loginStore.state.login.password = password;
+    },
+  },
 
-}
+};

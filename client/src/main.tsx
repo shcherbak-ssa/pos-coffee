@@ -6,6 +6,7 @@ import 'view/styles/main.scss';
 import { LocalStorageKey } from 'shared/constants';
 import { LocalStorage } from 'shared/helpers/local-storage';
 import { render } from 'shared/helpers/setup-view';
+import { toLogin } from 'shared/helpers/to-login';
 
 renderLoader()
   .then(checkUserToken)
@@ -27,7 +28,5 @@ async function renderNext(isTokenExist: boolean): Promise<void> {
     return; // @TODO: add
   }
 
-  const { renderLogin } = await import('modules/login/main');
-  renderLogin();
+  toLogin();
 }
-

@@ -1,22 +1,11 @@
-import { useState } from 'react';
+import { useSnapshot } from 'valtio';
 
+import type { Store } from 'shared/types';
 import type { StoreName } from 'shared/constants';
 import { Context } from 'shared/context';
 
-export function useStore<T, R extends keyof T = keyof T>(name: StoreName, key: R): T[R] {
-  const store = Context.getStore(name) as T;
-  const [ state, setState ] = useState<T[R]>(store[key]);
+export function useStore<T extends object>(name: StoreName): Store<T> {
+  const { state, ...rest } = Context.getStore(name) as Store<T>;
 
-  // @ts-ignore
-  return new Proxy<T[R]>(state, {
-    set(target, p, newValue) {
-      target[p as keyof T[R]] = newValue;
-      store[key] = target;
-
-      setState(store[key]);
-
-      return true;
-    },
-  }) as T[R];
-
+  return { state: useSnapshot(state), ...rest } as Store<T>;
 }

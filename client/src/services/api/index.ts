@@ -6,8 +6,9 @@ import {
   QUERY_URL_SEPARATOR,
   EMPTY_STRING,
   LocalStorageKey,
+  AUTHORIZATION_HEADER,
 } from 'shared/constants';
-import { ApiError } from 'shared/errors';
+import { ApiError, AuthError } from 'shared/errors';
 import { LocalStorage } from 'shared/helpers/local-storage';
 
 type Headers = { [key: string]: string };
@@ -41,7 +42,7 @@ export class ApiService implements BaseApiService {
     const token: Token | null = LocalStorage.get(LocalStorageKey.USER_TOKEN);
 
     if (token) {
-      headers['Authorization'] = `${token.type} ${token.token}`;
+      headers[AUTHORIZATION_HEADER] = `${token.type} ${token.token}`;
     }
 
     return headers;
@@ -103,6 +104,10 @@ export class ApiService implements BaseApiService {
     }
 
     const error = await response.json() as ErrorObject<{}>;
+
+    if (response.status === ApiResponseCode.UNAUTHORIZED) {
+      throw new AuthError(error.message);
+    }
 
     throw new ApiError(error);
   }

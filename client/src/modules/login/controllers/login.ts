@@ -2,10 +2,10 @@ import type { Token } from 'shared/types';
 import { ApiEndpoint, LocalStorageKey, PagePath, ValidationName } from 'shared/constants';
 import { replaceLocation } from 'shared/utils';
 import { LocalStorage } from 'shared/helpers/local-storage';
+import { parseError } from 'shared/helpers/parse-error';
 import { BaseController } from 'controllers/base-controller';
 
-import type { LoginController as BaseLoginController } from 'modules/login/shared/types';
-import type { Login } from 'modules/login/models/login';
+import type { LoginController as BaseLoginController, LoginSchema } from 'modules/login/shared/types';
 
 export class LoginController extends BaseController implements BaseLoginController {
 
@@ -13,19 +13,19 @@ export class LoginController extends BaseController implements BaseLoginControll
     return new LoginController();
   }
 
-  public async processLogin(model: Login): Promise<void> {
+  public async processLogin(schema: LoginSchema): Promise<void> {
     try {
-      await this.validation.validateToCreate(ValidationName.LOGIN, model.schema);
+      await this.validation.validateToCreate(ValidationName.LOGIN, schema);
 
       const token: Token = await this.api
-        .addBody(model.schema)
+        .addBody(schema)
         .post(ApiEndpoint.LOGIN);
 
       LocalStorage.set(LocalStorageKey.USER_TOKEN, token);
 
       this.redirectToLastUrl();
     } catch (e: any) {
-      this.parseError(e);
+      parseError(e);
     }
   }
 

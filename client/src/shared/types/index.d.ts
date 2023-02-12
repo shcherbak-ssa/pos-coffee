@@ -2,10 +2,14 @@ import type { ApiEndpoint, ControllerName, ErrorType, StoreName, ValidationName 
 
 export * from './users';
 
-export interface Controller {}
-export type ControllerList = Map<ControllerName, Controller>;
+export type AnyType = {
+  [key: string]: string | number | boolean | AnyType | AnyType[];
+}
 
-export interface Store {}
+export type Controller = {}
+export type ControllerList = Map<ControllerName, Controller>
+
+export type Store<T = AnyType> = { readonly state: T }
 export type StoreList = Map<StoreName, Store>;
 
 export type ValidationSchema<T> = {
