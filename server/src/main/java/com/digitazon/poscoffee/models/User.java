@@ -45,6 +45,9 @@ public class User {
   @Email(message = UsersConstants.EMAIL_INVALID_MESSAGE)
   private String email;
 
+  @NotBlank(message = UsersConstants.PHONE_EMPTY_MESSAGE)
+  private String phone;
+
   @NotBlank(message = UsersConstants.USERNAME_EMPTY_MESSAGE)
   @Size(min = UsersConstants.MIN_USERNAME_LENGTH, message = UsersConstants.USERNAME_LENGTH_MESSAGE)
   private String username;

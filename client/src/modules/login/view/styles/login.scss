@@ -3,6 +3,10 @@
     max-width: 360px;
   }
 
+  &-container {
+    background-color: var(--bluegray-50);
+  }
+
   &-image {
     background-repeat: no-repeat;
     background-size: cover;

@@ -13,6 +13,7 @@ public class ClientUser {
   private String name;
   private String surname;
   private String email;
+  private String phone;
   private String username;
   private String type;
 

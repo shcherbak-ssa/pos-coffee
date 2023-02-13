@@ -4,6 +4,7 @@ public class UsersConstants {
 
   public static final String NAME_EMPTY_MESSAGE = "Name cannot be empty";
   public static final String SURNAME_EMPTY_MESSAGE = "Surname cannot be empty";
+  public static final String PHONE_EMPTY_MESSAGE = "Phone cannot be empty";
 
   public static final String EMAIL_EMPTY_MESSAGE = "Email cannot be empty";
   public static final String EMAIL_INVALID_MESSAGE = "Email is invalid";

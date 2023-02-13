@@ -1,3 +1,4 @@
+import type { CurrentUserSchema } from 'shared/types';
 import { APP_NAME, EMPTY_STRING, PAGE_TITLE_DIVIDER } from 'shared/constants';
 
 export function replaceUrl(to: string): void {
@@ -16,4 +17,8 @@ export function firstToUpperCase(str: string): string {
   const [ firstLetter, ...restLetters ]: string[] = str.split(EMPTY_STRING);
 
   return [ firstLetter.toUpperCase(), ...restLetters ].join(EMPTY_STRING);
+}
+
+export function getUserInitials({ name, surname }: CurrentUserSchema): string {
+  return (name[0] + surname[0]).toUpperCase();
 }

@@ -2,8 +2,9 @@
   "admin": {
     "name": "Stanislav",
     "surname": "Shcherbakov",
-    "username": "shcherbak",
     "email": "shcherbak.ssa@gmail.com",
+    "phone": "+375333081037",
+    "username": "shcherbak",
     "password": "qwerty1234"
   }
 }
