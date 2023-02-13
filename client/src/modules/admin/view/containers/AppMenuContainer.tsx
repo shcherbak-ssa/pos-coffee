@@ -1,17 +1,20 @@
+import classnames from 'classnames';
 import { PrimeIcons } from 'primereact/api';
 import { ScrollPanel } from 'primereact/scrollpanel';
-import { Button } from 'primereact/button';
 
+import { APP_NAME } from 'shared/constants';
+import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
-import { AppLogo } from 'view/components/AppLogo';
+import { IconButton } from 'view/components/IconButton';
 
-import type { AppController } from 'modules/admin/shared/types';
-import { ControllerName } from 'modules/admin/shared/constants';
-import { mainMenuItems } from 'modules/admin/shared/configs/main-menu';
+import type { AppController, AppStore } from 'modules/admin/shared/types';
+import { appMenuItems } from 'modules/admin/shared/configs/app-menu';
+import { ControllerName, StoreName } from 'modules/admin/shared/constants';
 import { AppMenuItemContainer } from 'modules/admin/view/containers/AppMenuItemContainer';
 
 export function AppMenuContainer() {
 
+  const { state: { isAppMenuOpen } } = useStore(StoreName.APP) as AppStore;
   const appController = useController(ControllerName.APP) as AppController;
 
   function closeMenu(): void {
@@ -19,29 +22,47 @@ export function AppMenuContainer() {
   }
 
   return (
-    <div className="main-menu pb-4 full">
-      <div className="p-4 mb-6 flex items-center justify-between">
-        <AppLogo
-          className="text-white"
-          type="inline"
-          onDark={true}
-        />
+    <>
+      <div className="border-r-2 full">
+        <div
+          className={classnames('border-b-2 flex items-center h-24', {
+            'pl-6': isAppMenuOpen,
+            'pl-8': !isAppMenuOpen,
+          })}
+        >
+          <div className="flex items-center">
+            <IconButton
+              className="mr-6"
+              icon={PrimeIcons.TIMES}
+              click={closeMenu}
+            />
 
-        <Button
-          className="main-menu-toggle  p-button-text p-button-sm"
-          icon={PrimeIcons.ANGLE_DOUBLE_LEFT}
-          onClick={closeMenu}
-        />
+            <h1 className="app-name text-2xl">{ APP_NAME }</h1>
+          </div>
+        </div>
+
+        <ScrollPanel style={{ width: '100%', height: 'calc(100% - 6rem)' }}>
+          <div
+            className={classnames('flex flex-col gap-3 py-12 duration-200', {
+              'px-4': isAppMenuOpen,
+              'px-6': !isAppMenuOpen,
+            })}
+          >
+            {
+              appMenuItems.map((item, index) => {
+                return (
+                  <AppMenuItemContainer
+                    key={index}
+                    item={item}
+                    closeMenu={closeMenu}
+                  />
+                );
+              })
+            }
+          </div>
+        </ScrollPanel>
       </div>
-
-      <ScrollPanel style={{ width: '100%', height: 'calc(100% - 100px)' }}>
-        {
-          mainMenuItems.map((item, index) => {
-            return <AppMenuItemContainer key={index} item={item} />;
-          })
-        }
-      </ScrollPanel>
-    </div>
+    </>
   );
 
 }

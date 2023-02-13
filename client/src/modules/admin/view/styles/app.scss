@@ -1,0 +1,38 @@
+.app {
+  &-container {
+    background-color: var(--bluegray-50);
+  }
+
+  &-header {
+    background-color: var(--bluegray-50);
+  }
+
+  &-menu {
+    &-container {
+      @apply bg-white lg:bg-transparent;
+      background-color: var(--bluegray-50);
+
+      &.is-open {
+        @apply w-60;
+      }
+
+      &.is-close {
+        @apply -ml-60 w-60 lg:ml-0 lg:w-24 ;
+      }
+    }
+
+    &-item {
+      &:hover, &.is-active {
+        background-color: rgba(94, 129, 172, 0.12);
+      }
+
+      &.is-close {
+        @apply bg-transparent;
+      }
+    }
+
+    &-overlay {
+      background-color: rgba(112, 120, 136, 0.5);
+    }
+  }
+}

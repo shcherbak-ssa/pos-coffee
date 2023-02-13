@@ -50,3 +50,7 @@
 .p-divider.p-divider-horizontal {
   margin: 0;
 }
+
+.p-tooltip .p-tooltip-text {
+  @apply shadow-none;
+}

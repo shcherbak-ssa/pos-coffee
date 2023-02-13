@@ -5,7 +5,7 @@ import type { AppPageSchema, AppState, AppStore, AppStoreActions } from 'modules
 export const appStore: AppStore & AppStoreActions = {
 
   state: proxy<AppState>({
-    isAppMenuOpen: true,
+    isAppMenuOpen: false,
     currentPage: null,
   }),
 

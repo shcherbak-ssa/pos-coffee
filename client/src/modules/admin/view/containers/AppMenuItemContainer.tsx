@@ -1,34 +1,25 @@
-import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Location, NavigateFunction, useLocation, useNavigate } from 'react-router-dom';
 import classnames from 'classnames';
-import { PrimeIcons } from 'primereact/api';
-import { Ripple } from 'primereact/ripple';
+import { Tooltip } from 'primereact/tooltip';
 
 import { EMPTY_STRING } from 'shared/constants';
+import { useStore } from 'view/hooks/store';
+import { IconButton } from 'view/components/IconButton';
 
-import type { MenuItem as MenuItemType } from 'modules/admin/shared/types';
-import { MENU_ITEM_HEIGHT } from 'modules/admin/shared/constants';
+import type { AppStore, MenuItem as MenuItemType } from 'modules/admin/shared/types';
+import { StoreName } from 'modules/admin/shared/constants';
 
 export type Props = {
   item: MenuItemType;
+  closeMenu: () => void
 }
 
-export function AppMenuItemContainer({ item }: Props) {
+export function AppMenuItemContainer({ item, closeMenu }: Props) {
 
-  const location = useLocation();
-  const navigate = useNavigate();
+  const location: Location = useLocation();
+  const navigate: NavigateFunction = useNavigate();
 
-  const [ isSubmenuOpen, setIsSubmenuOpen ] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (item.items && item.items.length) {
-      for (const it of item.items) {
-        if (it.to === location.pathname) {
-          setIsSubmenuOpen(true);
-        }
-      }
-    }
-  }, []);
+  const { state: { isAppMenuOpen } } = useStore(StoreName.APP) as AppStore;
 
   function isActive(): boolean {
     return item.to === location.pathname;
@@ -37,79 +28,45 @@ export function AppMenuItemContainer({ item }: Props) {
   function navigateTo(e: MouseEvent): void {
     e.preventDefault();
 
-    if (item.items && item.items.length) {
-      const newState: boolean = !isSubmenuOpen;
+    navigate(item.to);
 
-      setIsSubmenuOpen(newState);
-
-      if (newState) {
-        const firstItemTo: string | undefined = item.items[0].to;
-
-        if (firstItemTo) {
-          navigate(firstItemTo);
-        }
-      }
-
-      return;
+    if (isAppMenuOpen) {
+      closeMenu();
     }
-
-    if (item.to) {
-      navigate(item.to);
-    }
-  }
-
-  function calculateSubmenuHeight(itemsCount: number): number {
-    return itemsCount * MENU_ITEM_HEIGHT;
   }
 
   return (
-    <>
-      <div
-        className={classnames('menu-item flex items-start justify-between py-3 px-4 w-full select-none p-ripple', {
-          'is-active': isActive(),
-          'click': !isActive(),
+    <div
+      className={classnames('app-menu-item rounded flex items-center py-2 duration-200 select-none', {
+        'is-active': isActive() && isAppMenuOpen,
+        'click px-2 gap-2': isAppMenuOpen,
+        'is-close px-0': !isAppMenuOpen,
+      })}
+      // @ts-ignore
+      onClick={navigateTo}
+      data-pr-tooltip={item.label}
+      data-pr-position="right"
+      data-pr-at="right+5 center"
+    >
+      <IconButton
+        className={classnames({
+          'is-active': isActive() && !isAppMenuOpen,
         })}
-        // @ts-ignore
-        onClick={navigateTo}
+        icon={item.icon}
+        click={() => {}}
+      />
+
+      <div
+        className={classnames('font-semibold overflow-hidden duration-200', {
+          'w-32': isAppMenuOpen,
+          'w-0': !isAppMenuOpen,
+        })}
       >
-        <div className="flex items-center gap-2">
-          { item.icon ? <span className={item.icon} /> : EMPTY_STRING }
-
-          <span>{ item.label }</span>
-        </div>
-
-        {
-          item.items && item.items.length
-            ? <div>
-                <span className={PrimeIcons.ANGLE_DOWN} />
-              </div>
-            : EMPTY_STRING
-        }
-
-        <Ripple />
+        { item.label }
       </div>
 
-      {
-        item.items && item.items.length
-          ? <div
-              className={classnames('submenu-items opacity-0 duration-200', {
-                'opacity-100': isSubmenuOpen,
-              })}
-              style={{
-                height: isSubmenuOpen ? `${calculateSubmenuHeight(item.items.length)}px` : '0',
-              }}
-            >
-              {
-                isSubmenuOpen
-                  ? item.items.map((item, index) => {
-                      return <AppMenuItemContainer key={index} item={item} />;
-                    })
-                  : EMPTY_STRING
-              }
-            </div>
-          : EMPTY_STRING
-      }
-    </>
+      { isAppMenuOpen ? EMPTY_STRING : <Tooltip target=".app-menu-item" /> }
+    </div>
   );
 
 }

@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import classnames from 'classnames';
+import { ScrollPanel } from 'primereact/scrollpanel';
 
 import { updatePageTitle } from 'shared/utils';
 import { useStore } from 'view/hooks/store';
@@ -8,8 +9,7 @@ import { useController } from 'view/hooks/controller';
 import type { AppController, AppStore } from 'modules/admin/shared/types';
 import { ControllerName, PageTitle, StoreName } from 'modules/admin/shared/constants';
 import { AppMenuContainer } from 'modules/admin/view/containers/AppMenuContainer';
-import { PageHeaderContainer } from 'modules/admin/view/containers/PageHeaderContainer';
-import { ScrollPanel } from 'primereact/scrollpanel';
+import { AppHeaderContainer } from 'modules/admin/view/containers/AppHeaderContainer';
 
 export type Props = {
   pageTitle: PageTitle;
@@ -18,7 +18,7 @@ export type Props = {
 
 export function PageLayout({ pageTitle, children }: Props) {
 
-  const appStore = useStore(StoreName.APP) as AppStore;
+  const { state: { isAppMenuOpen } } = useStore(StoreName.APP) as AppStore;
   const appController = useController(ControllerName.APP) as AppController;
 
   useEffect(() => {
@@ -29,31 +29,41 @@ export function PageLayout({ pageTitle, children }: Props) {
     });
   }, [pageTitle]);
 
+  function closeMenu(): void {
+    appController.setIsAppMenuOpen(false);
+  }
 
   return (
-    <div className="full relative">
+    <div className="app-container full relative">
+      <AppHeaderContainer />
+
       <div
-        className={classnames('w-60 h-full duration-200 relative z-10', {
-          '-translate-x-60': !appStore.state.isAppMenuOpen,
+        className={classnames('app-menu-container duration-200 h-full absolute top-0 z-30 lg:z-10', {
+          'is-open': isAppMenuOpen,
+          'is-close': !isAppMenuOpen,
         })}
       >
         <AppMenuContainer />
       </div>
 
-      <div
-        className={classnames('page-container full duration-200 absolute left-0 top-0', {
-          'pl-60': appStore.state.isAppMenuOpen,
-          'pl-0': !appStore.state.isAppMenuOpen,
-        })}
-      >
-        <ScrollPanel style={{ width: '100%', height: '100%' }}>
-          <PageHeaderContainer />
+      <ScrollPanel style={{ width: '100%', height: '100%' }}>
+        <div
+          className={classnames('p-12 duration-200', {
+            'lg:pl-72': isAppMenuOpen,
+            'lg:pl-36': !isAppMenuOpen,
+          })}
+        >
+          { children }
+        </div>
+      </ScrollPanel>
 
-          <div className="p-4">
-            { children }
-          </div>
-        </ScrollPanel>
-      </div>
+      <div
+        className={classnames('app-menu-overlay fixed top-0 left-0 z-10 full', {
+          'block lg:hidden': isAppMenuOpen,
+          'hidden': !isAppMenuOpen,
+        })}
+        onClick={closeMenu}
+      />
     </div>
   );
 

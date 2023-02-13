@@ -3,7 +3,7 @@ import { PrimeIcons } from 'primereact/api';
 import type { MenuItem } from 'modules/admin/shared/types';
 import { PagePath } from 'modules/admin/shared/constants';
 
-export const mainMenuItems: MenuItem[] = [
+export const appMenuItems: MenuItem[] = [
   {
     label: 'Home',
     icon: PrimeIcons.HOME,
@@ -22,24 +22,19 @@ export const mainMenuItems: MenuItem[] = [
   {
     label: 'Products',
     icon: PrimeIcons.BOX,
-    items: [
-      {
-        label: 'List',
-        icon: PrimeIcons.LIST,
-        to: PagePath.PRODUCTS,
-      },
-      {
-        label: 'Categories',
-        icon: PrimeIcons.TAGS,
-        to: PagePath.CATEGORIES,
-      },
-      {
-        label: 'Stock',
-        icon: PrimeIcons.SHOPPING_CART,
-        to: PagePath.STOCK,
-      },
-    ],
+    to: PagePath.PRODUCTS,
   },
+  // @TODO: move to another place
+  // {
+  //   label: 'Categories',
+  //   icon: PrimeIcons.TAGS,
+  //   to: PagePath.CATEGORIES,
+  // },
+  // {
+  //   label: 'Stock',
+  //   icon: PrimeIcons.SHOPPING_CART,
+  //   to: PagePath.STOCK,
+  // },
   {
     label: 'Orders',
     icon: PrimeIcons.SHOPPING_BAG,

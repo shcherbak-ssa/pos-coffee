@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import type { MenuItem } from 'primereact/menuitem';
 import { PrimeIcons } from 'primereact/api';
 import { Divider } from 'primereact/divider';
 import { Avatar } from 'primereact/avatar';
@@ -8,7 +9,7 @@ import { Menu } from 'primereact/menu';
 import { getUserInitials } from 'shared/utils';
 import { useStore } from 'view/hooks/store';
 
-import type { MenuItem, UsersStore } from 'modules/admin/shared/types';
+import type { UsersStore } from 'modules/admin/shared/types';
 import { StoreName } from 'modules/admin/shared/constants';
 import { PageElementWrapper } from "modules/admin/view/components/PageElementWrapper";
 import { UserDataDisplay } from 'modules/admin/view/components/UserDataDisplay';
@@ -21,6 +22,8 @@ export function CurrentUserInfoContainer() {
   const menuItems: MenuItem[] = [
     {
       label: 'Edit',
+      icon: PrimeIcons.PENCIL,
+      command: () => {},
     },
   ];
 

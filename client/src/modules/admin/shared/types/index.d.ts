@@ -12,8 +12,6 @@ export type Controllers =
 
 export type MenuItem = {
   label: string;
-  icon?: string;
-  to?: PagePath;
-  isActive?: boolean;
-  items?: MenuItem[];
+  icon: string;
+  to: PagePath;
 }

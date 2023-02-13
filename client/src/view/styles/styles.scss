@@ -13,3 +13,14 @@
     font-family: 'Comic Neue', cursive;
   }
 }
+
+.icon-button.p-button {
+  &.p-button-raised {
+    @apply bg-white shadow;
+    color: var(--primary-color);
+  }
+
+  &.is-active {
+    background-color: rgba(94, 129, 172, 0.12);
+  }
+}

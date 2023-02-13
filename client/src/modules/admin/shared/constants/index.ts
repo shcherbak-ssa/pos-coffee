@@ -1,5 +1,3 @@
-export const MENU_ITEM_HEIGHT: number = 48;
-
 export enum ControllerName {
   APP = 'APP',
   USERS = 'USERS',
