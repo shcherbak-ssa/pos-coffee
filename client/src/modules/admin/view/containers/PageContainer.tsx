@@ -1,19 +1,21 @@
 import classnames from 'classnames';
 import { Button, type ButtonProps } from 'primereact/button';
 
-import type { AppPageSchema } from 'modules/admin/shared/types';
 import { EMPTY_STRING } from 'shared/constants';
+
+import type { AppPageSchema } from 'modules/admin/shared/types';
 
 export type Props = {
   page: AppPageSchema;
   addButtonProps?: ButtonProps;
-  children: React.ReactNode;
+  content: React.ReactNode;
+  subsection?: React.ReactNode;
 }
 
-export function PageContainer({ page, addButtonProps, children }: Props) {
+export function PageContainer({ page, addButtonProps, content, subsection }: Props) {
 
   return (
-    <div className="bg-white rounded-t-xl shadow overflow-hidden">
+    <div className="bg-white rounded-xl shadow overflow-hidden">
       <div className="page border-b-2 flex items-center justify-between p-6">
         <div className="flex items-center gap-6">
           <i className={classnames('text-xl', page.icon)} />
@@ -26,11 +28,9 @@ export function PageContainer({ page, addButtonProps, children }: Props) {
         { addButtonProps ? <Button { ...addButtonProps } /> : EMPTY_STRING }
       </div>
 
-      <div className="border-b-2 px-6 py-4"></div>
+      { subsection ? <div>{ subsection }</div> : EMPTY_STRING }
 
-      <div>
-        { children }
-      </div>
+      <div>{ content }</div>
     </div>
   );
 

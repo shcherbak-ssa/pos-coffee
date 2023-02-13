@@ -4,17 +4,65 @@
       "name": "Stanislav",
       "surname": "Shcherbakov",
       "email": "shcherbak.ssa@gmail.com",
-      "phone": "+375 33 308 10 37",
+      "phone": "+375333081037",
       "password": "qwerty1234",
       "type": "ADMIN"
     },
     {
-      "name": "Silvia",
-      "surname": "Kris",
-      "email": "Johnny88@hotmail.com",
-      "phone": "+233 95 187 53 92",
-      "password": "BI6Ndl6GOQ",
+      "name": "Tami",
+      "surname": "Ritchie",
+      "email": "Gabriel.Predovic@yahoo.com",
+      "phone": "+255753177587",
+      "password": "ynixqih7Ru",
       "type": "ADMIN"
+    },
+    {
+      "name": "Julie",
+      "surname": "Hand",
+      "email": "Forest_Murphy18@hotmail.com",
+      "phone": "+105391792934",
+      "password": "8wENV5OcFH",
+      "type": "MANAGER"
+    },
+    {
+      "name": "Wilfred",
+      "surname": "MacGyver",
+      "email": "Michelle.Goodwin@hotmail.com",
+      "phone": "+813792352116",
+      "password": "JqufAxFOC0",
+      "type": "MANAGER"
+    },
+    {
+      "name": "Rita",
+      "surname": "Schoen",
+      "email": "Frances.Goyette@yahoo.com",
+      "phone": "+050409848230",
+      "password": "M8HDmQh6Tv",
+      "type": "WAITER"
+    },
+    {
+      "name": "Fernando",
+      "surname": "Hudson",
+      "email": "Darrick.Zulauf@hotmail.com",
+      "phone": "+798082690614",
+      "password": "iGB4enwS2R",
+      "type": "WAITER"
+    },
+    {
+      "name": "Betty",
+      "surname": "Reichel",
+      "email": "Electa.Johnson49@yahoo.com",
+      "phone": "+111048317634",
+      "password": "Tuk58AG5ob",
+      "type": "WAITER"
+    },
+    {
+      "name": "Enrique",
+      "surname": "Bahringer",
+      "email": "Melyna.Mertz26@hotmail.com",
+      "phone": "+140858527033",
+      "password": "d8XOJqRLoB",
+      "type": "WAITER"
     }
   ]
 }

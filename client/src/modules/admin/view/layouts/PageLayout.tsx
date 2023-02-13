@@ -42,7 +42,7 @@ export function PageLayout({ page, children }: Props) {
         <AppMenuContainer />
       </div>
 
-      <ScrollPanel style={{ width: '100%', height: '100%' }}>
+      <ScrollPanel style={{ width: '100%', height: 'calc(100% - 6rem)' }}>
         <div
           className={classnames('p-12 duration-200', {
             'lg:pl-72': isAppMenuOpen,

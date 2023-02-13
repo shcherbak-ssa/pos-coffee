@@ -40,6 +40,55 @@ const fileContent: Config = {
       password: faker.internet.password(10),
       type: UserType.ADMIN,
     },
+    {
+      name: faker.name.firstName('female'),
+      surname: faker.name.lastName('female'),
+      email: faker.internet.email(),
+      phone: faker.phone.number('+############'),
+      password: faker.internet.password(10),
+      type: UserType.MANAGER,
+    },
+    {
+      name: faker.name.firstName('male'),
+      surname: faker.name.lastName('male'),
+      email: faker.internet.email(),
+      phone: faker.phone.number('+############'),
+      password: faker.internet.password(10),
+      type: UserType.MANAGER,
+    },
+
+    {
+      name: faker.name.firstName('female'),
+      surname: faker.name.lastName('female'),
+      email: faker.internet.email(),
+      phone: faker.phone.number('+############'),
+      password: faker.internet.password(10),
+      type: UserType.WAITER,
+    },
+    {
+      name: faker.name.firstName('male'),
+      surname: faker.name.lastName('male'),
+      email: faker.internet.email(),
+      phone: faker.phone.number('+############'),
+      password: faker.internet.password(10),
+      type: UserType.WAITER,
+    },
+    {
+      name: faker.name.firstName('female'),
+      surname: faker.name.lastName('female'),
+      email: faker.internet.email(),
+      phone: faker.phone.number('+############'),
+      password: faker.internet.password(10),
+      type: UserType.WAITER,
+    },
+    {
+      name: faker.name.firstName('male'),
+      surname: faker.name.lastName('male'),
+      email: faker.internet.email(),
+      phone: faker.phone.number('+############'),
+      password: faker.internet.password(10),
+      type: UserType.WAITER,
+    },
   ]
 };
 
