@@ -14,7 +14,6 @@ type Config = {
     surname: string;
     email: string;
     phone: string;
-    username: string;
     password: string;
     type: UserType;
   }[];
@@ -29,8 +28,7 @@ const fileContent: Config = {
       name: 'Stanislav',
       surname: 'Shcherbakov',
       email: 'shcherbak.ssa@gmail.com',
-      phone: '+375 33 308 10 37',
-      username: '',
+      phone: '+375333081037',
       password: 'qwerty1234',
       type: UserType.ADMIN,
     },
@@ -38,8 +36,7 @@ const fileContent: Config = {
       name: faker.name.firstName('female'),
       surname: faker.name.lastName('female'),
       email: faker.internet.email(),
-      phone: faker.phone.number('+### ## ### ## ##'),
-      username: '',
+      phone: faker.phone.number('+############'),
       password: faker.internet.password(10),
       type: UserType.ADMIN,
     },

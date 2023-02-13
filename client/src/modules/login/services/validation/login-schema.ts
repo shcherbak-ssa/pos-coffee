@@ -7,9 +7,9 @@ import type { LoginSchema } from 'modules/login/shared/types';
 type Schema = Joi.ObjectSchema<LoginSchema>;
 
 const loginSchema: Schema = Joi.object({
-  username: Joi.string().min(8).required().messages({
-    'string.min': 'Username must be at least 8 characters',
-    'string.empty': 'Username cannot be empty',
+  email: Joi.string().min(8).required().messages({
+    'string.min': 'Email must be at least 8 characters',
+    'string.empty': 'Email cannot be empty',
   }),
   password: Joi.string().min(8).required().messages({
     'string.min': 'Password must be at least 8 characters',

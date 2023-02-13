@@ -4,9 +4,16 @@
       "name": "Stanislav",
       "surname": "Shcherbakov",
       "email": "shcherbak.ssa@gmail.com",
-      "phone": "+375333081037",
-      "username": "shcherbak",
+      "phone": "+375 33 308 10 37",
       "password": "qwerty1234",
+      "type": "ADMIN"
+    },
+    {
+      "name": "Silvia",
+      "surname": "Kris",
+      "email": "Johnny88@hotmail.com",
+      "phone": "+233 95 187 53 92",
+      "password": "BI6Ndl6GOQ",
       "type": "ADMIN"
     }
   ]

@@ -8,6 +8,6 @@ import com.digitazon.poscoffee.models.User;
 
 public interface UsersRepository extends JpaRepository<User, Long> {
 
-  public Optional<User> findByUsername(String username);
+  public Optional<User> findByEmail(String email);
 
 }

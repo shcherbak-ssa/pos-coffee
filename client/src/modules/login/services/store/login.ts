@@ -10,8 +10,8 @@ export const loginStore: LoginStore = {
   }),
 
   login: {
-    set username(username: string) {
-      loginStore.state.login.username = username;
+    set email(email: string) {
+      loginStore.state.login.email = email;
     },
 
     set password(password: string) {

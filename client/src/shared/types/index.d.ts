@@ -6,7 +6,6 @@ export type CurrentUserSchema = {
   surname: string;
   email: string;
   phone: string;
-  username: string;
   type: UserType;
 }
 

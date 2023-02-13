@@ -21,11 +21,8 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(
-  name = AppConstants.DatabaseTable.USERS
-  // uniqueConstraints = {
-  //   @UniqueConstraint(columnNames = { "email" }),
-  //   @UniqueConstraint(columnNames = { "username" })
-  // }
+  name = AppConstants.DatabaseTable.USERS,
+  uniqueConstraints = { @UniqueConstraint(columnNames = { "email" }) }
 )
 @Data
 @NoArgsConstructor
@@ -47,10 +44,6 @@ public class User {
 
   @NotBlank(message = UsersConstants.PHONE_EMPTY_MESSAGE)
   private String phone;
-
-  @NotBlank(message = UsersConstants.USERNAME_EMPTY_MESSAGE)
-  @Size(min = UsersConstants.MIN_USERNAME_LENGTH, message = UsersConstants.USERNAME_LENGTH_MESSAGE)
-  private String username;
 
   @NotBlank(message = UsersConstants.PASSWORD_EMPTY_MESSAGE)
   @Size(min = UsersConstants.MIN_PASSWORD_LENGTH, message = UsersConstants.PASSWORD_LENGTH_MESSAGE)

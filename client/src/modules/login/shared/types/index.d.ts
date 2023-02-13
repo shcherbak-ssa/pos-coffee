@@ -3,7 +3,7 @@ import type { Store } from 'shared/types';
 export type Controllers = LoginController;
 
 export type LoginSchema = {
-  username: string;
+  email: string;
   password: string;
 }
 

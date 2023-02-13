@@ -9,7 +9,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.digitazon.poscoffee.models.User;
+import com.digitazon.poscoffee.models.UserType;
 import com.digitazon.poscoffee.models.helpers.ClientUser;
+import com.digitazon.poscoffee.models.helpers.ConfigUser;
 import com.digitazon.poscoffee.models.helpers.ErrorResponse;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 
@@ -39,10 +41,23 @@ public class AppConfig {
     clientUser.setSurname(user.getSurname());
     clientUser.setEmail(user.getEmail());
     clientUser.setPhone(user.getPhone());
-    clientUser.setUsername(user.getUsername());
     clientUser.setType(user.getType().getName().name());
 
     return clientUser;
+  }
+
+  @Bean
+  @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+  public User userFromConfigUser(ConfigUser configUser) {
+    final User user = new User();
+
+    user.setName(configUser.getName());
+    user.setSurname(configUser.getSurname());
+    user.setPhone(configUser.getPhone());
+    user.setEmail(configUser.getEmail());
+    user.setPassword(configUser.getPassword());
+
+    return user;
   }
 
 }

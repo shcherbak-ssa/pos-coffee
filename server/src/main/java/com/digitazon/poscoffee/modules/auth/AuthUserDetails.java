@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.digitazon.poscoffee.models.User;
+import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -19,7 +20,6 @@ import lombok.Data;
 public class AuthUserDetails implements UserDetails {
 
   private Long id;
-  private String username;
   private String email;
 
   @JsonIgnore
@@ -33,11 +33,14 @@ public class AuthUserDetails implements UserDetails {
 
     return new AuthUserDetails(
       user.getId(),
-      user.getUsername(),
       user.getEmail(),
       user.getPassword(),
       authorities
     );
+  }
+
+  public String getUsername() {
+    return this.email;
   }
 
   @Override

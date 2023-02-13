@@ -6,7 +6,6 @@ export class UserSchema implements BaseUserSchema {
   public name: string;
   public surname: string;
   public email: string;
-  public username: string;
   public phone: string;
   public type: UserType;
 
@@ -16,7 +15,6 @@ export class UserSchema implements BaseUserSchema {
     this.surname = schema?.surname || EMPTY_STRING;
     this.email = schema?.email || EMPTY_STRING;
     this.phone = schema?.phone || EMPTY_STRING;
-    this.username = schema?.username || EMPTY_STRING;
     this.type = schema?.type || UserType.ADMIN;
   }
 

@@ -13,10 +13,6 @@ public class UsersConstants {
   public static final String PASSWORD_LENGTH_MESSAGE = "Password must be at least 8 characters";
   public static final String PASSWORD_EMPTY_MESSAGE = "Password cannot be empty";
 
-  public static final int MIN_USERNAME_LENGTH = 8;
-  public static final String USERNAME_LENGTH_MESSAGE = "Username must be at least 8 characters";
-  public static final String USERNAME_EMPTY_MESSAGE = "Username cannot be empty";
-
   public static enum UserType {
     ADMIN,
     MANAGER,

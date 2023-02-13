@@ -53,17 +53,17 @@ function Container() {
 
       <div>
         <InputWrapper
-          label="Username"
-          errorMessage={validationError && validationError.errors.username}
+          label="Email"
+          errorMessage={validationError && validationError.errors.email}
         >
           <InputText
-            id="username"
+            id="email"
             className={classnames('w-full', {
-              'p-invalid': validationError && validationError.errors.username,
+              'p-invalid': validationError && validationError.errors.email,
             })}
             type="text"
-            value={state.login.username}
-            onChange={(e) => login.username = e.target.value}
+            value={state.login.email}
+            onChange={(e) => login.email = e.target.value}
           />
         </InputWrapper>
 

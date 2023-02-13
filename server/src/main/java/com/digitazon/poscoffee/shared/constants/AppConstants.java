@@ -13,7 +13,7 @@ public class AppConstants {
   public static final String UNAUTHORIZED_ERROR_MESSAGE = "Unauthorized";
   public static final String ANONYMOUS_USER = "anonymousUser";
 
-  public static final String BAD_CREDENTIALS_MESSAGE = "Invalid username or password";
+  public static final String BAD_CREDENTIALS_MESSAGE = "Invalid email or password";
 
   public static final class ApiEndpoint {
     public static final String AUTH_LOGIN = "/api/auth/login";
@@ -28,6 +28,12 @@ public class AppConstants {
     public static final String USERS = "users";
     public static final String USER_TYPES = "user_types";
     public static final String USER_TYPE_JOIN = "user_type_join";
+  }
+
+  public static final class ConfigUserType {
+    public static final String ADMIN = "ADMIN";
+    public static final String MANAGER = "MANAGER";
+    public static final String WAITER = "WAITER";
   }
 
   public static enum ErrorType {

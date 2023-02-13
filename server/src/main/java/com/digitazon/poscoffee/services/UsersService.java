@@ -28,14 +28,14 @@ public class UsersService {
   @Autowired
   private PasswordEncoder encoder;
 
-  public User findByUsername(String username) throws ResourceNotFoundException {
-    final Optional<User> foundUser = this.repository.findByUsername(username);
+  public User findByEmail(String email) throws ResourceNotFoundException {
+    final Optional<User> foundUser = this.repository.findByEmail(email);
 
     if (foundUser.isPresent()) {
       return foundUser.get();
     }
 
-    throw new ResourceNotFoundException(String.format("User with username %s not found", username));
+    throw new ResourceNotFoundException(String.format("User with email %s not found", email));
   }
 
   public ClientUser findUserById(Long id) throws ResourceNotFoundException {
