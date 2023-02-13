@@ -1,4 +1,4 @@
-import { Location, NavigateFunction, useLocation, useNavigate } from 'react-router-dom';
+import { type Location, type NavigateFunction, useLocation, useNavigate } from 'react-router-dom';
 import classnames from 'classnames';
 import { Tooltip } from 'primereact/tooltip';
 

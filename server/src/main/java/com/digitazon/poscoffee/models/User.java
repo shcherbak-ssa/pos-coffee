@@ -21,11 +21,11 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(
-  name = AppConstants.DatabaseTable.USERS,
-  uniqueConstraints = {
-    @UniqueConstraint(columnNames = { "email" }),
-    @UniqueConstraint(columnNames = { "username" })
-  }
+  name = AppConstants.DatabaseTable.USERS
+  // uniqueConstraints = {
+  //   @UniqueConstraint(columnNames = { "email" }),
+  //   @UniqueConstraint(columnNames = { "username" })
+  // }
 )
 @Data
 @NoArgsConstructor

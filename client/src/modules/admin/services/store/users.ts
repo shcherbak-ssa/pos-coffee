@@ -7,10 +7,15 @@ export const usersStore: UsersStore & UsersStoreWithActions = {
 
   state: proxy<UsersState>({
     currentUser: UserSchema.create(),
+    users: [],
   }),
 
-  setCurrentUser(user): void {
-    usersStore.state.currentUser = user;
+  setCurrentUser(user: UserSchema): void {
+    usersStore.state.currentUser =  UserSchema.create(user);
+  },
+
+  setUsers(users: UserSchema[]): void {
+    usersStore.state.users = users.map(UserSchema.create);
   },
 
 };

@@ -18,6 +18,10 @@ public class AppConstants {
   public static final class ApiEndpoint {
     public static final String AUTH_LOGIN = "/api/auth/login";
     public static final String USERS = "/api/users";
+
+    public static final class Admin {
+      public static final String USERS = "/api/admin/users";
+    }
   }
 
   public static class DatabaseTable {

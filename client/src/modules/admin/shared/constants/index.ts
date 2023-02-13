@@ -1,3 +1,7 @@
+export enum ApiEndpoint {
+  USERS = '/api/admin/users',
+}
+
 export enum ControllerName {
   APP = 'APP',
   USERS = 'USERS',
@@ -34,4 +38,9 @@ export enum PageTitle {
   ORDERS = 'Orders',
   USERS = 'Users',
   SETTINGS = 'Settings',
+}
+
+export enum TableCheckboxEvent {
+  ALL = 'all',
+
 }

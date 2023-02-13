@@ -1,10 +1,12 @@
 {
-  "admin": {
-    "name": "Stanislav",
-    "surname": "Shcherbakov",
-    "email": "shcherbak.ssa@gmail.com",
-    "phone": "+375333081037",
-    "username": "shcherbak",
-    "password": "qwerty1234"
-  }
+  "users": [
+    {
+      "name": "Stanislav",
+      "surname": "Shcherbakov",
+      "email": "shcherbak.ssa@gmail.com",
+      "phone": "+375333081037",
+      "username": "shcherbak",
+      "password": "qwerty1234"
+    }
+  ]
 }

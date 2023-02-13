@@ -2,7 +2,6 @@ import { Context } from 'shared/context';
 
 import type {
   AppController as BaseAppController,
-  AppPageSchema,
   AppStore,
   AppStoreActions,
 } from 'modules/admin/shared/types';
@@ -12,11 +11,6 @@ export class AppController implements BaseAppController {
 
   public static create(): AppController {
     return new AppController();
-  }
-
-  public async setCurrentPage(page: AppPageSchema): Promise<void> {
-    const store = await this.getStore() as AppStoreActions;
-    store.setCurrentPage(page);
   }
 
   public async setIsAppMenuOpen(isOpen: boolean): Promise<void> {

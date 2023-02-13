@@ -1,5 +1,7 @@
 package com.digitazon.poscoffee.shared.utils;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,11 +24,10 @@ public class DatabaseDataLoader {
     this.userTypesService.loadTypes();
   }
 
-  public void loadAdmin(User adminUser) {
-    UserType adminType = this.userTypesService.getByName(UsersConstants.UserType.ADMIN);
-    adminUser.setType(adminType);
-
-    this.usersService.createUser(adminUser);
+  public void loadUsers(List<User> users) {
+    for (User user : users) {
+      this.usersService.createUser(user);
+    }
   }
 
 }

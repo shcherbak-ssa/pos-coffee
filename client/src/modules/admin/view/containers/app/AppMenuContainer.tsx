@@ -8,9 +8,9 @@ import { useController } from 'view/hooks/controller';
 import { IconButton } from 'view/components/IconButton';
 
 import type { AppController, AppStore } from 'modules/admin/shared/types';
-import { appMenuItems } from 'modules/admin/shared/configs/app-menu';
+import { appMenuItems } from 'modules/admin/shared/configs';
 import { ControllerName, StoreName } from 'modules/admin/shared/constants';
-import { AppMenuItemContainer } from 'modules/admin/view/containers/AppMenuItemContainer';
+import { AppMenuItemContainer } from 'modules/admin/view/containers/app/AppMenuItemContainer';
 
 export function AppMenuContainer() {
 
@@ -43,7 +43,7 @@ export function AppMenuContainer() {
 
         <ScrollPanel style={{ width: '100%', height: 'calc(100% - 6rem)' }}>
           <div
-            className={classnames('flex flex-col gap-3 py-12 duration-200', {
+            className={classnames('flex flex-col gap-3 py-10 duration-200', {
               'px-4': isAppMenuOpen,
               'px-6': !isAppMenuOpen,
             })}

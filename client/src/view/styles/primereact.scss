@@ -54,3 +54,7 @@
 .p-tooltip .p-tooltip-text {
   @apply shadow-none;
 }
+
+.p-datatable .p-datatable-thead > tr > th {
+  @apply bg-transparent font-light;
+}

@@ -10,18 +10,18 @@ export class UserSchema implements BaseUserSchema {
   public phone: string;
   public type: UserType;
 
-  private constructor() {
-    this.id = ZERO;
-    this.name = EMPTY_STRING;
-    this.surname = EMPTY_STRING;
-    this.email = EMPTY_STRING;
-    this.phone = EMPTY_STRING;
-    this.username = EMPTY_STRING;
-    this.type = UserType.ADMIN;
+  private constructor(schema?: BaseUserSchema) {
+    this.id = schema?.id || ZERO;
+    this.name = schema?.name || EMPTY_STRING;
+    this.surname = schema?.surname || EMPTY_STRING;
+    this.email = schema?.email || EMPTY_STRING;
+    this.phone = schema?.phone || EMPTY_STRING;
+    this.username = schema?.username || EMPTY_STRING;
+    this.type = schema?.type || UserType.ADMIN;
   }
 
-  public static create(): UserSchema {
-    return new UserSchema();
+  public static create(schema?: BaseUserSchema): UserSchema {
+    return new UserSchema(schema);
   }
 
 }

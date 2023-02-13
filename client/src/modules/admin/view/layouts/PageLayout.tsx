@@ -6,28 +6,24 @@ import { updatePageTitle } from 'shared/utils';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 
-import type { AppController, AppStore } from 'modules/admin/shared/types';
-import { ControllerName, PageTitle, StoreName } from 'modules/admin/shared/constants';
-import { AppMenuContainer } from 'modules/admin/view/containers/AppMenuContainer';
-import { AppHeaderContainer } from 'modules/admin/view/containers/AppHeaderContainer';
+import type { AppController, AppPageSchema, AppStore } from 'modules/admin/shared/types';
+import { ControllerName, StoreName } from 'modules/admin/shared/constants';
+import { AppMenuContainer } from 'modules/admin/view/containers/app/AppMenuContainer';
+import { AppHeaderContainer } from 'modules/admin/view/containers/app/AppHeaderContainer';
 
 export type Props = {
-  pageTitle: PageTitle;
+  page: AppPageSchema;
   children: React.ReactNode;
 }
 
-export function PageLayout({ pageTitle, children }: Props) {
+export function PageLayout({ page, children }: Props) {
 
   const { state: { isAppMenuOpen } } = useStore(StoreName.APP) as AppStore;
   const appController = useController(ControllerName.APP) as AppController;
 
   useEffect(() => {
-    updatePageTitle(pageTitle);
-
-    appController.setCurrentPage({
-      title: pageTitle,
-    });
-  }, [pageTitle]);
+    updatePageTitle(page.title);
+  }, [page]);
 
   function closeMenu(): void {
     appController.setIsAppMenuOpen(false);
