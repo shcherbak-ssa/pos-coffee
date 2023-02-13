@@ -1,0 +1,28 @@
+.main-menu {
+  background-color: var(--text-color);
+
+  &-toggle {
+    &.p-button.p-button-text {
+      @apply text-white;
+    }
+
+    &.p-button.p-button-text:enabled:hover,
+    &.p-button.p-button-text:not(button):not(a):not(.p-disabled):hover {
+      @apply text-white;
+    }
+  }
+}
+
+.menu-item {
+  @apply text-white;
+
+  &.is-active, &:hover {
+    background-color: var(--surface-600);
+  }
+}
+
+.submenu-items {
+  .menu-item {
+    @apply pl-10;
+  }
+}

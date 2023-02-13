@@ -1,5 +1,9 @@
 .app {
   &-logo {
+    .normal {
+      width: 32px;
+    }
+
     .large {
       width: 64px;
     }

@@ -10,7 +10,7 @@ export type CurrentUserSchema = {
 }
 
 export type AnyType = {
-  [key: string]: string | number | boolean | AnyType | AnyType[];
+  [key: string]: string | number | boolean | AnyType | AnyType[] | null | undefined;
 }
 
 export type Controller = {}

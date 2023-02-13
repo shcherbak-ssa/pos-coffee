@@ -5,8 +5,8 @@ import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
 
 import { ErrorType } from 'shared/constants';
-import { replaceUrl, updatePageTitle } from 'shared/utils';
 import { loadContext } from 'shared/helpers/load-context';
+import { replaceUrl, updatePageTitle } from 'shared/utils';
 import { useError } from 'view/hooks/error';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
