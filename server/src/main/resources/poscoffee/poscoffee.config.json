@@ -6,7 +6,8 @@
       "email": "shcherbak.ssa@gmail.com",
       "phone": "+375333081037",
       "username": "shcherbak",
-      "password": "qwerty1234"
+      "password": "qwerty1234",
+      "type": "ADMIN"
     }
   ]
 }
