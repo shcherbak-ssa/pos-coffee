@@ -19,7 +19,12 @@ export function IconButton({ className = EMPTY_STRING, icon, click }: Props) {
 
   return (
     <Button
-      className={classnames('icon-button p-button-raised p-button-rounded p-button-text', className)}
+      className={
+        classnames(
+          'icon-button p-button-raised p-button-rounded p-button-text duration-200',
+          className,
+        )
+      }
       icon={icon}
       // @ts-ignore
       onClick={handleClick}
