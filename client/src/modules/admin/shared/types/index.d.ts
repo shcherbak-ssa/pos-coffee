@@ -15,3 +15,9 @@ export type MenuItem = {
   icon: string;
   to: PagePath;
 }
+
+export type OptionItem = {
+  value: string;
+  icon: string;
+  label?: string;
+}

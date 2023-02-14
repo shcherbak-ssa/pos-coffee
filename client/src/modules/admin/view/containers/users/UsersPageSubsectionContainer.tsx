@@ -1,38 +1,50 @@
-import { PrimeIcons } from 'primereact/api';
-import { Button, type ButtonProps } from 'primereact/button';
+import { SelectButton, type SelectButtonChangeEvent } from 'primereact/selectbutton';
 
+import { useStore } from 'view/hooks/store';
+import { useController } from 'view/hooks/controller';
+import { SimpleIcon } from 'view/components/SimpleIcon';
+
+import type { UsersStore, UsersController } from '@admin/shared/types';
+import { StoreName, ControllerName } from '@admin/shared/constants';
+import { listActionOptions, listViewOptions } from '@admin/shared/configs';
 import { PageSubSectionWrapper } from '@admin/view/components/PageSubSectionWrapper';
+import { ListActionTemplate } from '@admin/view/components/ListActionTemplate';
 
 export function UsersPageSubsectionContainer() {
 
-  const buttonSetProps: ButtonProps[] = [
-    {
-      icon: PrimeIcons.LIST,
-    },
-    {
-      icon: PrimeIcons.TH_LARGE,
-    },
-  ];
+  const { state: { view } } = useStore(StoreName.USERS) as UsersStore;
+  const usersController = useController(ControllerName.USERS) as UsersController;
+
+  function selectListView(event: SelectButtonChangeEvent): void {
+    if (event.value !== null) {
+      usersController.updateViewState('listView', event.value);
+    }
+  }
+
+  function selectListAction(event: SelectButtonChangeEvent): void {
+    usersController.updateViewState('listAction', event.value);
+  }
 
   return (
     <PageSubSectionWrapper>
-      <div></div>
-      <div></div>
+      <div>
+        <SelectButton
+          value={view.listAction}
+          options={listActionOptions}
+          itemTemplate={ListActionTemplate}
+          onChange={selectListAction}
+          multiple
+        />
+      </div>
 
       <div>
-        <div className="p-buttonset">
-          {
-            buttonSetProps.map((props, index) => {
-              return (
-                <Button
-                  className="p-button-text p-button-sm"
-                  key={index}
-                  {...props}
-                />
-              )
-            })
-          }
-        </div>
+        <SelectButton
+          value={view.listView}
+          optionLabel="value"
+          options={listViewOptions}
+          itemTemplate={SimpleIcon}
+          onChange={selectListView}
+        />
       </div>
     </PageSubSectionWrapper>
   );

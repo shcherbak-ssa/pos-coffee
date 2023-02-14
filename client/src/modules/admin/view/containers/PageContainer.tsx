@@ -1,7 +1,7 @@
-import classnames from 'classnames';
 import { Button, type ButtonProps } from 'primereact/button';
 
 import { EMPTY_STRING } from 'shared/constants';
+import { SimpleIcon } from 'view/components/SimpleIcon';
 
 import type { AppPageSchema } from '@admin/shared/types';
 
@@ -18,7 +18,7 @@ export function PageContainer({ page, addButtonProps, content, subsection }: Pro
     <div className="bg-white rounded-xl shadow overflow-hidden">
       <div className="page border-b-2 flex items-center justify-between p-6">
         <div className="flex items-center gap-6">
-          <i className={classnames('text-xl', page.icon)} />
+          <SimpleIcon className="text-xl" icon={page.icon} />
 
           <h2 className="font-semibold text-xl">{ page.title }</h2>
         </div>

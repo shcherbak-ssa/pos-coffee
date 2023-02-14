@@ -55,8 +55,30 @@
   @apply shadow-none;
 }
 
-.p-datatable .p-datatable-thead > tr > th {
-  @apply bg-transparent font-light;
-  font-family: 'Montserrat', sans-serif;
-  border-bottom: 1px solid #ECEFF4;
+.p-datatable {
+  .p-datatable-thead > tr > th {
+    @apply bg-transparent font-light;
+    font-family: 'Montserrat', sans-serif;
+    border-bottom: 1px solid #ECEFF4;
+  }
+
+  .p-datatable-thead > tr,
+  .p-datatable-tbody > tr {
+    td, th {
+      &:first-child {
+        @apply pl-6;
+      }
+
+      &:last-child {
+        @apply pr-6;
+      }
+    }
+  }
+
+  &.select-none .p-datatable-tbody > tr > td:first-child {
+    @apply p-0 pl-2;
+  }
+
 }
+
+

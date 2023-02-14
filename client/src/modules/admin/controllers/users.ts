@@ -7,6 +7,7 @@ import type {
   UsersController as BaseUsersController,
   UsersStore,
   UsersStoreWithActions,
+  UsersViewState,
 } from '@admin/shared/types';
 import { ApiEndpoint, StoreName } from '@admin/shared/constants';
 
@@ -14,12 +15,6 @@ export class UsersController extends BaseController implements BaseUsersControll
 
   public static create(): UsersController {
     return new UsersController();
-  }
-
-  public async setCurrentUser(user: UserSchema): Promise<void> {
-    const store = await this.getStore() as UsersStoreWithActions;
-
-    store.setCurrentUser(user);
   }
 
   public async loadUsers(): Promise<boolean> {
@@ -34,6 +29,18 @@ export class UsersController extends BaseController implements BaseUsersControll
       parseError(e);
       return false;
     }
+  }
+
+  public async setCurrentUser(user: UserSchema): Promise<void> {
+    const store = await this.getStore() as UsersStoreWithActions;
+
+    store.setCurrentUser(user);
+  }
+
+  public async updateViewState<T extends keyof UsersViewState>(state: T, value: UsersViewState[T]): Promise<void> {
+    const store = await this.getStore() as UsersStoreWithActions;
+
+    store.updateViewState(state, value);
   }
 
   private async getStore(): Promise<UsersStore> {

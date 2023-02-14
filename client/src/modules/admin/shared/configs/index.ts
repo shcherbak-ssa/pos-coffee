@@ -1,7 +1,7 @@
 import { PrimeIcons } from 'primereact/api';
 
-import type { AppPageSchema, MenuItem } from '@admin/shared/types';
-import { PagePath, PageTitle } from '@admin/shared/constants';
+import type { AppPageSchema, MenuItem, OptionItem } from '@admin/shared/types';
+import { ListAction, ListView, PagePath, PageTitle } from '@admin/shared/constants';
 
 export const appMenuItems: MenuItem[] = [
   {
@@ -90,3 +90,27 @@ export const pages: { [key in PageTitle]: AppPageSchema } = {
     icon: PrimeIcons.COG,
   },
 };
+
+export const listViewOptions: OptionItem[] = [
+  {
+    icon: PrimeIcons.LIST,
+    value: ListView.LIST,
+  },
+  {
+    icon: PrimeIcons.TH_LARGE,
+    value: ListView.CARD,
+  },
+];
+
+export const listActionOptions: OptionItem[] = [
+  {
+    icon: PrimeIcons.CHECK_SQUARE,
+    value: ListAction.SELECT,
+    label: 'Select',
+  },
+  {
+    icon: PrimeIcons.FILTER,
+    value: ListAction.FILTER,
+    label: 'Filter',
+  },
+];

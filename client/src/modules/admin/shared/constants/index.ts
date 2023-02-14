@@ -40,7 +40,12 @@ export enum PageTitle {
   SETTINGS = 'Settings',
 }
 
-export enum TableCheckboxEvent {
-  ALL = 'all',
+export enum ListView {
+  LIST = 'LIST',
+  CARD = 'CARD',
+}
 
+export enum ListAction {
+  SELECT = 'SELECT',
+  FILTER = 'FILTER',
 }

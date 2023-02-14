@@ -13,6 +13,8 @@ export type AnyType = {
   [key: string]: string | number | boolean | AnyType | AnyType[] | null | undefined;
 }
 
+export type ViewSeverity = 'success' | 'info' | 'warning' | 'danger' | null | undefined;
+
 export type Controller = {}
 export type ControllerList = Map<string, Controller>
 
