@@ -12,7 +12,7 @@ export function InputWrapper({ label, errorMessage, children }: Props) {
 
   const { props: childrenProps } = children;
 
-  const wrapperClassnames: string = classnames('p-float-label flex flex-col w-full mb-8', {
+  const wrapperClassnames: string = classnames('p-float-label flex flex-col w-full', {
     'p-invalid': !!errorMessage,
   });
 

@@ -8,6 +8,7 @@ import {
   AUTHORIZATION_HEADER,
 } from 'shared/constants';
 import { ApiError, AuthError } from 'shared/errors';
+import { setParamsToUrl } from 'shared/utils';
 import { LocalStorage } from 'shared/helpers/local-storage';
 
 type Headers = { [key: string]: string };
@@ -85,7 +86,7 @@ export class ApiService implements BaseApiService {
   }
 
   private async sendRequest<T = void>(method: ApiMethod, endpoint: string): Promise<T> {
-    let apiEndpoint: string = this.setParamsToUrl(endpoint);
+    let apiEndpoint: string = setParamsToUrl(endpoint, this.params);
     apiEndpoint += QUERY_URL_SEPARATOR + this.query;
 
     const response = await fetch(location.origin + apiEndpoint, {
@@ -109,18 +110,6 @@ export class ApiService implements BaseApiService {
     }
 
     throw new ApiError(error);
-  }
-
-  private setParamsToUrl(endpoint: string): string {
-    let apiEndpoint: string = endpoint;
-
-    for (const [key, value] of Object.entries(this.params)) {
-      const paramRegExp = new RegExp(`:${key}`, 'g');
-
-      apiEndpoint = apiEndpoint.replace(paramRegExp, value);
-    }
-
-    return apiEndpoint;
   }
 
 }

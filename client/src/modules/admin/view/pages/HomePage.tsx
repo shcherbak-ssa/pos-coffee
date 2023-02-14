@@ -2,7 +2,7 @@ import type { AppPageSchema } from '@admin/shared/types';
 import { PageTitle } from '@admin/shared/constants';
 import { pages } from '@admin/shared/configs';
 import { PageLayout } from '@admin/view/layouts/PageLayout';
-import { PageContainer } from '@admin/view/containers/PageContainer';
+import { PageWrapper } from '@admin/view/components/page/PageWrapper';
 
 export function HomePage() {
 
@@ -10,7 +10,7 @@ export function HomePage() {
 
   return (
     <PageLayout page={homePage}>
-      <PageContainer
+      <PageWrapper
         page={homePage}
         content={<div>@TODO: implement HOME</div>}
       />

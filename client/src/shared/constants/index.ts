@@ -1,6 +1,7 @@
 export const APP_NAME: string = 'POS`Coffee';
 
 export const ZERO: number = 0;
+export const NOTIFICATION_LIFE: number = 10000;
 
 export const EMPTY_STRING: string = '';
 export const PAGE_TITLE_DIVIDER: string = ' | ';
@@ -16,6 +17,7 @@ export enum UserType {
 }
 
 export enum ErrorName {
+  APP_ERROR = 'AppError',
   AUTH_ERROR = 'AuthError',
   API_ERROR = 'ApiError',
   VALIDATION_ERROR = 'ValidationError',
@@ -47,4 +49,5 @@ export enum ApiResponseCode {
   NO_CONTENT = 204,
   BAD_REQUEST = 400,
   UNAUTHORIZED = 401,
+  FORBIDDEN = 403,
 }

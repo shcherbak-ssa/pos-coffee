@@ -20,8 +20,6 @@ export function UserTypeLabel({ type }: Props) {
     }
   }
 
-  return (
-    <Badge value={type} severity={getSeverity()} />
-  );
+  return <Badge value={type} severity={getSeverity()} />;
 
 }

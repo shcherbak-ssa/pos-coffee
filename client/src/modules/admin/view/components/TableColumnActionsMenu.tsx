@@ -5,14 +5,26 @@ import { PrimeIcons } from 'primereact/api';
 
 import { IconButton } from 'view/components/IconButton';
 
+import type { ActionPayload } from '@admin/shared/types';
+
 export type Props = {
   items: MenuItem[];
+  handleAction: (payload: ActionPayload) => void;
 }
 
-export function TableColumnActionsMenu({ items }: Props) {
+export function TableColumnActionsMenu({ items, handleAction }: Props) {
 
-  return function() {
+  return function({ id }: { id: number }) {
     const menu = useRef(null);
+
+    const menuItems: MenuItem[] = items.map((item) => {
+      return {
+        ...item,
+        command: () => {
+          handleAction({ id, action: item.data.action });
+        },
+      };
+    });
 
     function toggleMenu(e: MouseEvent): void {
       // @ts-ignore
@@ -27,7 +39,11 @@ export function TableColumnActionsMenu({ items }: Props) {
           click={toggleMenu}
         />
 
-        <Menu model={items} ref={menu} popup />
+        <Menu
+          model={menuItems}
+          ref={menu}
+          popup
+        />
       </div>
     );
   }

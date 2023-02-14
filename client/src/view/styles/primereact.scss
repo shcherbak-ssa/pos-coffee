@@ -5,6 +5,12 @@
   }
 }
 
+.p-inputtext {
+  &.p-disabled {
+    @apply opacity-90;
+  }
+}
+
 .p-password {
   .p-inputtext {
     @apply w-full;
@@ -81,4 +87,25 @@
 
 }
 
+.p-toast .p-toast-message .p-toast-message-content {
+  @apply border-none;
+}
 
+.p-message {
+  @apply m-0;
+}
+
+.p-breadcrumb {
+  &-home {
+    @apply relative;
+
+    &::after {
+      @apply block absolute top-0 right-0 bottom-0 left-0;
+      content: '';
+    }
+  }
+
+  .p-disabled {
+    @apply opacity-100;
+  }
+}

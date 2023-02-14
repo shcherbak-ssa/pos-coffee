@@ -8,6 +8,7 @@ import { SitesPage } from '@admin/view/pages/SitesPage';
 import { DashboardPage } from '@admin/view/pages/DashboardPage';
 import { OrdersPage } from '@admin/view/pages/OrdersPage';
 import { SettingsPage } from '@admin/view/pages/SettingsPage';
+import { UsersInfoPage } from '@admin/view/pages/UsersInfoPage';
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
   {
     path: PagePath.USERS,
     element: <UsersPage />,
+  },
+  {
+    path: PagePath.USERS_INFO,
+    element: <UsersInfoPage />,
   },
   {
     path: PagePath.SETTINGS,

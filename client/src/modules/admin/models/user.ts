@@ -1,6 +1,9 @@
 import { EMPTY_STRING, UserType, ZERO } from 'shared/constants';
 
-import type { UserSchema as BaseUserSchema } from '@admin/shared/types';
+import type {
+  UserSchema as BaseUserSchema,
+  UserDraftSchema as BaseUserDraftSchema,
+} from '@admin/shared/types';
 
 export class UserSchema implements BaseUserSchema {
   public id: number;
@@ -22,4 +25,34 @@ export class UserSchema implements BaseUserSchema {
   public static create(schema?: BaseUserSchema): UserSchema {
     return new UserSchema(schema);
   }
+}
+
+export function createUserDraftSchema(schema: BaseUserSchema = UserSchema.create()): BaseUserDraftSchema {
+
+  return {
+    get fullname(): string {
+      return `${schema.name} ${schema.surname}`;
+    },
+
+    set name(name: string) {
+      schema.name = name;
+    },
+
+    set surname(surname: string) {
+      schema.surname = surname;
+    },
+
+    set email(email: string) {
+      schema.email = email;
+    },
+
+    set phone(phone: string) {
+      schema.phone = phone;
+    },
+
+    set type(type: UserType) {
+      schema.type = type;
+    },
+  };
+
 }

@@ -13,7 +13,10 @@ public class AppConstants {
   public static final String UNAUTHORIZED_ERROR_MESSAGE = "Unauthorized";
   public static final String ANONYMOUS_USER = "anonymousUser";
 
+  public static final String VALIDATION_ERROR_MESSAGE = "Validation error";
   public static final String BAD_CREDENTIALS_MESSAGE = "Invalid email or password";
+  public static final String ACCESS_DENY_MESSAGE = "Access denied";
+  public static final String ACCESS_DENIED_ERROR = "AccessDeniedException";
 
   public static final class ApiEndpoint {
     public static final String AUTH_LOGIN = "/api/auth/login";
@@ -21,6 +24,7 @@ public class AppConstants {
 
     public static final class Admin {
       public static final String USERS = "/api/admin/users";
+      public static final String USERS_ID = "/api/admin/users/{id}";
     }
   }
 

@@ -1,10 +1,12 @@
 import type { Store } from 'shared/types';
 
-import type { PageTitle } from '@admin/shared/constants';
+import type { PagePath } from '@admin/shared/constants';
 
 export type AppPageSchema = {
-  icon: string;
-  title: PageTitle;
+  title: string;
+  icon?: string;
+  to?: PagePath;
+  child?: AppPageSchema;
 }
 
 export type AppState = {

@@ -10,7 +10,7 @@ export type CurrentUserSchema = {
 }
 
 export type AnyType = {
-  [key: string]: string | number | boolean | AnyType | AnyType[] | null | undefined;
+  [key: string]: string | number | boolean | object | AnyType | AnyType[] | null | undefined;
 }
 
 export type ViewSeverity = 'success' | 'info' | 'warning' | 'danger' | null | undefined;

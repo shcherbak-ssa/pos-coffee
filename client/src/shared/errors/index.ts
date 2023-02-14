@@ -1,6 +1,14 @@
 import type { ErrorObject, Errors } from 'shared/types';
 import { ErrorName } from 'shared/constants';
 
+export class AppError extends Error {
+  public name: string = ErrorName.APP_ERROR;
+
+  public constructor(message: string) {
+    super(message);
+  }
+}
+
 export class AuthError extends Error {
   public name: string = ErrorName.AUTH_ERROR;
 

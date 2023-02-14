@@ -33,7 +33,7 @@ public class AuthEntryPoint implements AuthenticationEntryPoint {
     log.error("Unauthorized error: {}", errorMessage);
 
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 
     final ErrorResponse errorResponse = new ErrorResponse(); // @TODO: add context
     errorResponse.setMessage(errorMessage);

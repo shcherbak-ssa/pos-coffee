@@ -40,7 +40,7 @@ export function AppMenuItemContainer({ item, closeMenu }: Props) {
       className={classnames('app-menu-item rounded flex items-center py-2 duration-200 select-none', {
         'is-active': isActive() && isAppMenuOpen,
         'click px-2 gap-2': isAppMenuOpen,
-        'is-close px-0': !isAppMenuOpen,
+        'is-close px-0 gap-0': !isAppMenuOpen,
       })}
       // @ts-ignore
       onClick={navigateTo}

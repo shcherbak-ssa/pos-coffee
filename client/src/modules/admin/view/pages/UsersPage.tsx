@@ -1,15 +1,21 @@
+import { useState, useEffect } from 'react';
 import type { ButtonProps } from 'primereact/button';
 import { PrimeIcons } from 'primereact/api';
 
-import type { AppPageSchema } from '@admin/shared/types';
-import { PageTitle } from '@admin/shared/constants';
+import { useController } from 'view/hooks/controller';
+
+import type { AppPageSchema, UsersController } from '@admin/shared/types';
+import { ControllerName, PageTitle } from '@admin/shared/constants';
 import { pages } from '@admin/shared/configs';
 import { PageLayout } from '@admin/view/layouts/PageLayout';
-import { PageContainer } from '@admin/view/containers/PageContainer';
-import { UsersPageContentContainer } from '@admin/view/containers/users/UsersPageContentContainer';
+import { PageWrapper } from '@admin/view/components/page/PageWrapper';
+import { UsersPageListContainer } from '@admin/view/containers/users/UsersPageListContainer';
 import { UsersPageSubsectionContainer } from '@admin/view/containers/users/UsersPageSubsectionContainer';
 
 export function UsersPage() {
+
+  const [ isUsersLoaded, setIsUsersLoaded ] = useState<boolean>(false);
+  const usersController = useController(ControllerName.USERS) as UsersController;
 
   const usersPage: AppPageSchema = pages[PageTitle.USERS];
 
@@ -18,13 +24,23 @@ export function UsersPage() {
     label: 'Add new user',
   };
 
+  useEffect(() => {
+    usersController.loadUsers()
+      .then((success: boolean) => {
+        if (success) {
+          setIsUsersLoaded(true);
+        }
+      });
+  }, []);
+
   return (
     <PageLayout page={usersPage}>
-      <PageContainer
+      <PageWrapper
         page={usersPage}
         addButtonProps={addUserButtonProps}
-        content={<UsersPageContentContainer />}
+        content={<UsersPageListContainer />}
         subsection={<UsersPageSubsectionContainer />}
+        isLoading={!isUsersLoaded}
       />
     </PageLayout>
   );

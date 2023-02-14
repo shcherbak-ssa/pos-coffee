@@ -51,7 +51,7 @@ function Container() {
     <LoginWrapper>
       <LoginErrorMessage clientError={clientError} />
 
-      <div>
+      <div className="flex flex-col gap-8">
         <InputWrapper
           label="Email"
           errorMessage={validationError && validationError.errors.email}

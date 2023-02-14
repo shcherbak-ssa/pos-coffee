@@ -15,11 +15,6 @@ export function parseError(e: Error): void {
 
   const errorService: BaseErrorService = ErrorService.create();
 
-  if (e instanceof ApiError) {
-    errorService.addError(e.error);
-    return;
-  }
-
   if (e instanceof ValidationError) {
     errorService.addError({
       type: ErrorType.VALIDATION,
@@ -30,5 +25,10 @@ export function parseError(e: Error): void {
     return;
   }
 
-  console.log(e);
+  if (e instanceof ApiError) {
+    errorService.addError(e.error);
+    return;
+  }
+
+  console.error(e);
 }

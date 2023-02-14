@@ -1,5 +1,8 @@
+export const DEFAULT_ERROR_MESSAGE: string = 'Something went wrong!';
+
 export enum ApiEndpoint {
   USERS = '/api/admin/users',
+  USERS_ID = '/api/admin/users/:id',
 }
 
 export enum ControllerName {
@@ -25,6 +28,7 @@ export enum PagePath {
   STOCK = '/admin/products/stock',
   ORDERS = '/admin/orders',
   USERS = '/admin/users',
+  USERS_INFO = '/admin/users/:id',
   SETTINGS = '/admin/settings',
 }
 
@@ -48,4 +52,12 @@ export enum ListView {
 export enum ListAction {
   SELECT = 'SELECT',
   FILTER = 'FILTER',
+}
+
+export enum Action {
+  VIEW = 'VIEW',
+  CREATE = 'CREATE',
+  EDIT = 'EDIT',
+  UPDATE = 'UPDATE',
+  DELETE = 'DELETE',
 }

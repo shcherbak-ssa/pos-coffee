@@ -3,18 +3,21 @@ package com.digitazon.poscoffee.controllers.api.admin;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digitazon.poscoffee.models.helpers.ClientUser;
 import com.digitazon.poscoffee.services.UsersService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
+import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
 
 @RestController
+@CrossOrigin
 public class UsersAdminController {
 
   @Autowired
@@ -22,8 +25,16 @@ public class UsersAdminController {
 
   @GetMapping(path = AppConstants.ApiEndpoint.Admin.USERS)
   @ResponseStatus(HttpStatus.OK)
-  public List<ClientUser> getUsers(Authentication authentication) {
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public List<ClientUser> getUsers() {
     return this.service.getUsers();
+  }
+
+  @GetMapping(path = AppConstants.ApiEndpoint.Admin.USERS_ID)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public ClientUser getUserById(@PathVariable Long id) throws ResourceNotFoundException {
+    return this.service.findUserById(id);
   }
 
 }

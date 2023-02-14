@@ -1,4 +1,4 @@
-import type { PagePath } from '@admin/shared/constants';
+import type { Action, PagePath } from '@admin/shared/constants';
 
 import type { AppController } from './app';
 import type { UsersController } from './users';
@@ -20,4 +20,9 @@ export type OptionItem = {
   value: string;
   icon: string;
   label?: string;
+}
+
+export type ActionPayload = {
+  id: number;
+  action: Action;
 }
