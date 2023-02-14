@@ -1,5 +1,6 @@
-import type { UserSchema as BaseUserSchema } from 'modules/admin/shared/types';
 import { EMPTY_STRING, UserType, ZERO } from 'shared/constants';
+
+import type { UserSchema as BaseUserSchema } from '@admin/shared/types';
 
 export class UserSchema implements BaseUserSchema {
   public id: number;
@@ -21,5 +22,4 @@ export class UserSchema implements BaseUserSchema {
   public static create(schema?: BaseUserSchema): UserSchema {
     return new UserSchema(schema);
   }
-
 }

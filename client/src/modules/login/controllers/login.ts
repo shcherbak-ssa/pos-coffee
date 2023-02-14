@@ -5,8 +5,8 @@ import { LocalStorage } from 'shared/helpers/local-storage';
 import { parseError } from 'shared/helpers/parse-error';
 import { BaseController } from 'controllers/base-controller';
 
-import type { LoginController as BaseLoginController, LoginSchema } from 'modules/login/shared/types';
-import { LOGIN_API_ENDPOINT, LOGIN_VALIDATION } from 'modules/login/shared/constants';
+import type { LoginController as BaseLoginController, LoginSchema } from '@login/shared/types';
+import { LOGIN_API_ENDPOINT, LOGIN_VALIDATION } from '@login/shared/constants';
 
 export class LoginController extends BaseController implements BaseLoginController {
 

@@ -1,8 +1,8 @@
 import type { LoaderService as BaseLoaderService, Store, ValidationSchema } from 'shared/types';
 import { ProgerError } from 'shared/errors';
 
-import type { Controllers } from 'modules/admin/shared/types';
-import { ControllerName, StoreName, ValidationName } from 'modules/admin/shared/constants';
+import type { Controllers } from '@admin/shared/types';
+import { ControllerName, StoreName, ValidationName } from '@admin/shared/constants';
 
 export class LoaderService implements BaseLoaderService {
 
@@ -15,12 +15,12 @@ export class LoaderService implements BaseLoaderService {
   public async loadController(name: ControllerName): Promise<Controllers> {
     switch (name) {
       case ControllerName.APP: {
-        const { AppController } = await import('modules/admin/controllers/app');
+        const { AppController } = await import('@admin/controllers/app');
 
         return AppController.create();
       }
       case ControllerName.USERS: {
-        const { UsersController } = await import('modules/admin/controllers/users');
+        const { UsersController } = await import('@admin/controllers/users');
 
         return UsersController.create();
       }
@@ -32,12 +32,12 @@ export class LoaderService implements BaseLoaderService {
   public async loadStore(name: StoreName): Promise<Store> {
     switch (name) {
       case StoreName.APP: {
-        const { appStore } = await import('modules/admin/services/store/app');
+        const { appStore } = await import('@admin/services/store/app');
 
         return appStore;
       }
       case StoreName.USERS: {
-        const { usersStore } = await import('modules/admin/services/store/users');
+        const { usersStore } = await import('@admin/services/store/users');
 
         return usersStore;
       }
@@ -49,7 +49,7 @@ export class LoaderService implements BaseLoaderService {
   public async loadValidationSchema<T>(name: ValidationName): Promise<ValidationSchema<T>> {
     switch (name) {
       case ValidationName.USERS: {
-        const { schema } = await import('modules/admin/services/validation/users-schema');
+        const { schema } = await import('@admin/services/validation/users-schema');
 
         return schema as ValidationSchema<T>;
       }

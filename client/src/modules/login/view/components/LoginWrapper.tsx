@@ -2,7 +2,7 @@ import { ScrollPanel } from 'primereact/scrollpanel';
 
 import { AppLogo } from 'view/components/AppLogo';
 
-import { LoginImage } from 'modules/login/view/components/LoginImage';
+import loginImage from '@login/view/assets/login-image.jpg';
 
 export type Props = {
   children: React.ReactNode;
@@ -24,7 +24,10 @@ export function LoginWrapper({ children }: Props) {
             </div>
           </div>
 
-          <LoginImage />
+          <div
+            className="login-image full hidden lg:block"
+            style={{ backgroundImage: `url(${loginImage})` }}
+          />
         </div>
       </ScrollPanel>
     </div>

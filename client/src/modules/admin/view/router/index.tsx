@@ -1,13 +1,13 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import { PagePath } from 'modules/admin/shared/constants';
-import { HomePage } from 'modules/admin/view/pages/HomePage';
-import { UsersPage } from 'modules/admin/view/pages/UsersPage';
-import { ProductsPage } from 'modules/admin/view/pages/ProductsPage';
-import { SitesPage } from 'modules/admin/view/pages/SitesPage';
-import { DashboardPage } from 'modules/admin/view/pages/DashboardPage';
-import { OrdersPage } from 'modules/admin/view/pages/OrdersPage';
-import { SettingsPage } from 'modules/admin/view/pages/SettingsPage';
+import { PagePath } from '@admin/shared/constants';
+import { HomePage } from '@admin/view/pages/HomePage';
+import { UsersPage } from '@admin/view/pages/UsersPage';
+import { ProductsPage } from '@admin/view/pages/ProductsPage';
+import { SitesPage } from '@admin/view/pages/SitesPage';
+import { DashboardPage } from '@admin/view/pages/DashboardPage';
+import { OrdersPage } from '@admin/view/pages/OrdersPage';
+import { SettingsPage } from '@admin/view/pages/SettingsPage';
 
 export const router = createBrowserRouter([
   {

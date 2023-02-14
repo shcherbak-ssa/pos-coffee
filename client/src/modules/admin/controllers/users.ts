@@ -7,8 +7,8 @@ import type {
   UsersController as BaseUsersController,
   UsersStore,
   UsersStoreWithActions,
-} from 'modules/admin/shared/types';
-import { ApiEndpoint, StoreName } from 'modules/admin/shared/constants';
+} from '@admin/shared/types';
+import { ApiEndpoint, StoreName } from '@admin/shared/constants';
 
 export class UsersController extends BaseController implements BaseUsersController {
 

@@ -1,14 +1,14 @@
-import 'modules/admin/view/styles/admin.scss';
+import '@admin/view/styles/admin.scss';
 
 import type { CurrentUserSchema } from 'shared/types';
 import { Context } from 'shared/context';
 import { replaceUrl } from 'shared/utils';
 import { setupPrimeReact, render } from 'shared/helpers/setup-view';
 
-import type { UsersController } from 'modules/admin/shared/types';
-import { ControllerName, PagePath, StoreName } from 'modules/admin/shared/constants';
-import { LoaderService } from 'modules/admin/services/loader';
-import { EntryLayout } from 'modules/admin/view/layouts/EntryLayout';
+import type { UsersController } from '@admin/shared/types';
+import { ControllerName, PagePath, StoreName } from '@admin/shared/constants';
+import { LoaderService } from '@admin/services/loader';
+import { EntryLayout } from '@admin/view/layouts/EntryLayout';
 
 export async function renderAdmin(currentUser: CurrentUserSchema): Promise<void> {
   await setup(currentUser);

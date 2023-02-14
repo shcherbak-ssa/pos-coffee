@@ -1,6 +1,6 @@
 import type { Store } from 'shared/types';
 
-import type { PageTitle } from 'modules/admin/shared/constants';
+import type { PageTitle } from '@admin/shared/constants';
 
 export type AppPageSchema = {
   icon: string;

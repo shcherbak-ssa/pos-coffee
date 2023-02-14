@@ -1,7 +1,7 @@
+import { PrimeIcons } from 'primereact/api';
 import { Button, type ButtonProps } from 'primereact/button';
 
-import { PageSubSectionWrapper } from 'modules/admin/view/components/PageSubSectionWrapper';
-import { PrimeIcons } from 'primereact/api';
+import { PageSubSectionWrapper } from '@admin/view/components/PageSubSectionWrapper';
 
 export function UsersPageSubsectionContainer() {
 

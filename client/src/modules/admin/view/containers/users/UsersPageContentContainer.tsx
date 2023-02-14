@@ -9,9 +9,9 @@ import { ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 
-import type { UserSchema, UsersController, UsersStore } from 'modules/admin/shared/types';
-import { ControllerName, StoreName } from 'modules/admin/shared/constants';
-import { TableColumnActionsMenu } from 'modules/admin/view/components/TableColumnActionsMenu';
+import type { UserSchema, UsersController, UsersStore } from '@admin/shared/types';
+import { ControllerName, StoreName } from '@admin/shared/constants';
+import { TableColumnActionsMenu } from '@admin/view/components/TableColumnActionsMenu';
 
 export function UsersPageContentContainer() {
 

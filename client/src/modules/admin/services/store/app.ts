@@ -1,6 +1,6 @@
 import { proxy } from 'valtio';
 
-import type { AppState, AppStore, AppStoreActions } from 'modules/admin/shared/types';
+import type { AppState, AppStore, AppStoreActions } from '@admin/shared/types';
 
 export const appStore: AppStore & AppStoreActions = {
 

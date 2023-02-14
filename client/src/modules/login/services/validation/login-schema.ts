@@ -2,7 +2,7 @@ import Joi from 'joi';
 
 import type { ValidationSchema } from 'shared/types';
 
-import type { LoginSchema } from 'modules/login/shared/types';
+import type { LoginSchema } from '@login/shared/types';
 
 type Schema = Joi.ObjectSchema<LoginSchema>;
 

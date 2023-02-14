@@ -1,17 +1,17 @@
-import 'modules/login/view/styles/login.scss';
+import '@login/view/styles/login.scss';
 
 import { LocalStorageKey } from 'shared/constants';
 import { Context } from 'shared/context';
 import { LocalStorage } from 'shared/helpers/local-storage';
 import { setupPrimeReact, render } from 'shared/helpers/setup-view';
 
-import { LOGIN_PAGE_PATH } from 'modules/login/shared/constants';
-import { LoaderService } from 'modules/login/services/loader';
+import { LOGIN_PAGE_PATH } from '@login/shared/constants';
+import { LoaderService } from '@login/services/loader';
 
 export async function renderLogin(): Promise<void> {
   setup();
 
-  const { LoginContainer } = await import('modules/login/view/containers/LoginContainer');
+  const { LoginContainer } = await import('@login/view/containers/LoginContainer');
 
   render(<LoginContainer />);
 }

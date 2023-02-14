@@ -6,8 +6,8 @@ import { EMPTY_STRING } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { IconButton } from 'view/components/IconButton';
 
-import type { AppStore, MenuItem as MenuItemType } from 'modules/admin/shared/types';
-import { StoreName } from 'modules/admin/shared/constants';
+import type { AppStore, MenuItem as MenuItemType } from '@admin/shared/types';
+import { StoreName } from '@admin/shared/constants';
 
 export type Props = {
   item: MenuItemType;

@@ -2,7 +2,7 @@ import { RouterProvider } from 'react-router-dom';
 
 import { AppLoader } from 'view/components/AppLoader';
 
-import { router } from 'modules/admin/view/router';
+import { router } from '@admin/view/router';
 
 export function EntryLayout() {
 

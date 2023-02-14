@@ -12,10 +12,10 @@ import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 import { InputWrapper } from 'view/components/InputWrapper';
 
-import type { LoginStore, LoginController, LoginSchema, LoginState } from 'modules/login/shared/types';
-import { LOGIN_CONTROLLER, LOGIN_PAGE_PATH, LOGIN_PAGE_TITLE, LOGIN_STORE } from 'modules/login/shared/constants';
-import { LoginWrapper } from 'modules/login/view/components/LoginWrapper';
-import { LoginErrorMessage } from 'modules/login/view/components/LoginErrorMessage';
+import type { LoginStore, LoginController, LoginSchema, LoginState } from '@login/shared/types';
+import { LOGIN_CONTROLLER, LOGIN_PAGE_PATH, LOGIN_PAGE_TITLE, LOGIN_STORE } from '@login/shared/constants';
+import { LoginWrapper } from '@login/view/components/LoginWrapper';
+import { LoginErrorMessage } from '@login/view/components/LoginErrorMessage';
 
 export const LoginContainer = loadContext(Container, {
   stores: [ LOGIN_STORE ],

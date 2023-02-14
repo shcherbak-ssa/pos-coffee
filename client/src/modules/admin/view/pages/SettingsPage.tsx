@@ -1,7 +1,7 @@
-import type { AppPageSchema } from 'modules/admin/shared/types';
-import { PageTitle } from 'modules/admin/shared/constants';
-import { pages } from 'modules/admin/shared/configs';
-import { PageLayout } from 'modules/admin/view/layouts/PageLayout';
+import type { AppPageSchema } from '@admin/shared/types';
+import { PageTitle } from '@admin/shared/constants';
+import { pages } from '@admin/shared/configs';
+import { PageLayout } from '@admin/view/layouts/PageLayout';
 
 export function SettingsPage() {
 

@@ -1,10 +1,8 @@
-import { PrimeIcons } from 'primereact/api';
-
-import type { AppPageSchema } from 'modules/admin/shared/types';
-import { PageTitle } from 'modules/admin/shared/constants';
-import { PageLayout } from 'modules/admin/view/layouts/PageLayout';
-import { PageContainer } from 'modules/admin/view/containers/PageContainer';
-import { pages } from 'modules/admin/shared/configs';
+import type { AppPageSchema } from '@admin/shared/types';
+import { PageTitle } from '@admin/shared/constants';
+import { pages } from '@admin/shared/configs';
+import { PageLayout } from '@admin/view/layouts/PageLayout';
+import { PageContainer } from '@admin/view/containers/PageContainer';
 
 export function HomePage() {
 
@@ -12,9 +10,10 @@ export function HomePage() {
 
   return (
     <PageLayout page={homePage}>
-      <PageContainer page={homePage} />
-
-      <div>@TODO: implement HOME</div>
+      <PageContainer
+        page={homePage}
+        content={<div>@TODO: implement HOME</div>}
+      />
     </PageLayout>
   );
 

@@ -1,8 +1,9 @@
 import { useRef } from 'react';
 import type { MenuItem } from 'primereact/menuitem';
 import { Menu } from 'primereact/menu';
-import { IconButton } from 'view/components/IconButton';
 import { PrimeIcons } from 'primereact/api';
+
+import { IconButton } from 'view/components/IconButton';
 
 export type Props = {
   items: MenuItem[];

@@ -7,10 +7,10 @@ import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 import { IconButton } from 'view/components/IconButton';
 
-import type { AppController, AppStore } from 'modules/admin/shared/types';
-import { appMenuItems } from 'modules/admin/shared/configs';
-import { ControllerName, StoreName } from 'modules/admin/shared/constants';
-import { AppMenuItemContainer } from 'modules/admin/view/containers/app/AppMenuItemContainer';
+import type { AppController, AppStore } from '@admin/shared/types';
+import { ControllerName, StoreName } from '@admin/shared/constants';
+import { appMenuItems } from '@admin/shared/configs';
+import { AppMenuItemContainer } from '@admin/view/containers/app/AppMenuItemContainer';
 
 export function AppMenuContainer() {
 

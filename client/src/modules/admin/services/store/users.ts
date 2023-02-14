@@ -1,7 +1,7 @@
 import { proxy } from 'valtio';
 
-import type { UsersState, UsersStore, UsersStoreWithActions } from 'modules/admin/shared/types';
-import { UserSchema } from 'modules/admin/models/user';
+import type { UsersState, UsersStore, UsersStoreWithActions } from '@admin/shared/types';
+import { UserSchema } from '@admin/models/user';
 
 export const usersStore: UsersStore & UsersStoreWithActions = {
 

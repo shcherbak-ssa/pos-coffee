@@ -1,4 +1,4 @@
-import type { PagePath } from 'modules/admin/shared/constants';
+import type { PagePath } from '@admin/shared/constants';
 
 import type { AppController } from './app';
 import type { UsersController } from './users';

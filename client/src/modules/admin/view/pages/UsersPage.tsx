@@ -1,13 +1,13 @@
 import type { ButtonProps } from 'primereact/button';
 import { PrimeIcons } from 'primereact/api';
 
-import type { AppPageSchema } from 'modules/admin/shared/types';
-import { PageTitle } from 'modules/admin/shared/constants';
-import { pages } from 'modules/admin/shared/configs';
-import { PageLayout } from 'modules/admin/view/layouts/PageLayout';
-import { PageContainer } from 'modules/admin/view/containers/PageContainer';
-import { UsersPageContentContainer } from 'modules/admin/view/containers/users/UsersPageContentContainer';
-import { UsersPageSubsectionContainer } from '../containers/users/UsersPageSubsectionContainer';
+import type { AppPageSchema } from '@admin/shared/types';
+import { PageTitle } from '@admin/shared/constants';
+import { pages } from '@admin/shared/configs';
+import { PageLayout } from '@admin/view/layouts/PageLayout';
+import { PageContainer } from '@admin/view/containers/PageContainer';
+import { UsersPageContentContainer } from '@admin/view/containers/users/UsersPageContentContainer';
+import { UsersPageSubsectionContainer } from '@admin/view/containers/users/UsersPageSubsectionContainer';
 
 export function UsersPage() {
 

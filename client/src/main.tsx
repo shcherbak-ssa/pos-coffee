@@ -31,11 +31,11 @@ async function renderNext(isTokenExist: boolean): Promise<void> {
       const currentUser: CurrentUserSchema = await loadCurrentUser();
 
       if (currentUser.type === UserType.ADMIN) {
-        const { renderAdmin } = await import('modules/admin/main');
+        const { renderAdmin } = await import('@admin/main');
 
         return await renderAdmin(currentUser);
       } else {
-        const { renderApp } = await import('modules/app/main');
+        const { renderApp } = await import('@app/main');
 
         return await renderApp(currentUser);
       }

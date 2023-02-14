@@ -1,11 +1,7 @@
 import { Context } from 'shared/context';
 
-import type {
-  AppController as BaseAppController,
-  AppStore,
-  AppStoreActions,
-} from 'modules/admin/shared/types';
-import { StoreName } from 'modules/admin/shared/constants';
+import type { AppController as BaseAppController, AppStore, AppStoreActions } from '@admin/shared/types';
+import { StoreName } from '@admin/shared/constants';
 
 export class AppController implements BaseAppController {
 

@@ -1,7 +1,7 @@
 import { PrimeIcons } from 'primereact/api';
 
-import type { AppPageSchema, MenuItem } from 'modules/admin/shared/types';
-import { PagePath, PageTitle } from 'modules/admin/shared/constants';
+import type { AppPageSchema, MenuItem } from '@admin/shared/types';
+import { PagePath, PageTitle } from '@admin/shared/constants';
 
 export const appMenuItems: MenuItem[] = [
   {

@@ -6,10 +6,10 @@ import { updatePageTitle } from 'shared/utils';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 
-import type { AppController, AppPageSchema, AppStore } from 'modules/admin/shared/types';
-import { ControllerName, StoreName } from 'modules/admin/shared/constants';
-import { AppMenuContainer } from 'modules/admin/view/containers/app/AppMenuContainer';
-import { AppHeaderContainer } from 'modules/admin/view/containers/app/AppHeaderContainer';
+import type { AppController, AppPageSchema, AppStore } from '@admin/shared/types';
+import { ControllerName, StoreName } from '@admin/shared/constants';
+import { AppMenuContainer } from '@admin/view/containers/app/AppMenuContainer';
+import { AppHeaderContainer } from '@admin/view/containers/app/AppHeaderContainer';
 
 export type Props = {
   page: AppPageSchema;

@@ -3,7 +3,7 @@ import { Button, type ButtonProps } from 'primereact/button';
 
 import { EMPTY_STRING } from 'shared/constants';
 
-import type { AppPageSchema } from 'modules/admin/shared/types';
+import type { AppPageSchema } from '@admin/shared/types';
 
 export type Props = {
   page: AppPageSchema;

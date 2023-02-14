@@ -1,7 +1,7 @@
 import { proxy } from 'valtio';
 
-import type { LoginState, LoginStore } from 'modules/login/shared/types';
-import { LoginSchema } from 'modules/login/models/login';
+import type { LoginState, LoginStore } from '@login/shared/types';
+import { LoginSchema } from '@login/models/login';
 
 export const loginStore: LoginStore = {
 

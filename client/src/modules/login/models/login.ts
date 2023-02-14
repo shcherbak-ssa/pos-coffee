@@ -1,6 +1,6 @@
 import { EMPTY_STRING } from 'shared/constants';
 
-import type { LoginSchema as BaseLoginSchema } from 'modules/login/shared/types';
+import type { LoginSchema as BaseLoginSchema } from '@login/shared/types';
 
 export class LoginSchema implements BaseLoginSchema {
   public email: string;

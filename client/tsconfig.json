@@ -19,10 +19,12 @@
     "paths": {
       "controllers/*": ["./src/controllers/*"],
       "models/*": ["./src/models/*"],
-      "modules/*": ["./src/modules/*"],
       "services/*": ["./src/services/*"],
       "shared/*": ["./src/shared/*"],
       "view/*": ["./src/view/*"],
+      "@admin/*": ["./src/modules/admin/*"],
+      "@app/*": ["./src/modules/app/*"],
+      "@login/*": ["./src/modules/login/*"],
     }
   },
   "include": ["src"],
