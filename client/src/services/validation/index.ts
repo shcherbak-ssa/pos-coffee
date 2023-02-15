@@ -55,7 +55,7 @@ export class ValidationService implements BaseValidationService {
   }
 
   private getErrorMessage(schemaName: string): string {
-    return `${schemaName} schema validation error`;
+    return `Invalid ${schemaName.toLowerCase()} schema`;
   }
 
 }

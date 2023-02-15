@@ -5,10 +5,13 @@ import type { Notification, NotificationService as BaseNotificationService } fro
 import { EMPTY_STRING, ErrorType, NOTIFICATION_LIFE } from 'shared/constants';
 import { NotificationService } from 'services/notification';
 import { useError } from 'view/hooks/error';
+import { NotificationTemplate } from 'view/components/NotificationTemplate';
 
 export function NotificationContainer() {
 
-  const toast = useRef(null);
+  const toastResult = useRef(null);
+  const toastProgress = useRef(null);
+
   const [ serverError, cleanServerError ] = useError<{}>(ErrorType.SERVER);
   const [ validationError, cleanValidationError ] = useError<{}>(ErrorType.VALIDATION);
 
@@ -52,21 +55,39 @@ export function NotificationContainer() {
     showNotification(notification);
   }
 
-  function showNotification(notification: Notification): void {
-    // @ts-ignore
-    toast.current.show({
-      ...notification,
-      summary: notification.heading,
-      detail: notification.message,
-      life: NOTIFICATION_LIFE,
-    });
+  function showNotification({ type, ...notification }: Notification): void {
+    if (!type || type === 'result') {
+      // @ts-ignore
+      toastResult.current.show({
+        ...notification,
+        summary: notification.heading,
+        detail: notification.message,
+        life: NOTIFICATION_LIFE,
+        content: <NotificationTemplate type="result" notification={notification} />,
+      });
+
+      // @ts-ignore
+      toastProgress.current.clear();
+      return;
+    }
+
+    if (type === 'process') {
+      // @ts-ignore
+      toastProgress.current.show({
+        ...notification,
+        summary: notification.heading,
+        detail: notification.message,
+        life: NOTIFICATION_LIFE,
+        content: <NotificationTemplate type="process" notification={notification} />,
+      });
+    }
   }
 
   return (
-    <Toast
-      position="bottom-left"
-      ref={toast}
-    />
+    <>
+      <Toast position="bottom-left" ref={toastResult} />
+      <Toast position="bottom-left" ref={toastProgress} />
+    </>
   );
 
 }

@@ -135,4 +135,22 @@ export const notifications: {
     heading: 'Deleted',
     message: `${entity} deleted successfully`,
   }),
+  createProcess: (entity: Entity) => ({
+    type: 'process',
+    severity: 'info',
+    heading: 'Creating...',
+    message: `A new ${entity.toLowerCase()} is being created`,
+  }),
+  updateProcess: (entity: Entity) => ({
+    type: 'process',
+    severity: 'info',
+    heading: 'Updating...',
+    message: `A new ${entity.toLowerCase()} is being updated`,
+  }),
+  deleteProcess: (entity: Entity) => ({
+    type: 'process',
+    severity: 'info',
+    heading: 'Deleting...',
+    message: `A new ${entity.toLowerCase()} is being deleted`,
+  }),
 };

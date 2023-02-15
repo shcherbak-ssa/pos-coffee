@@ -13,8 +13,8 @@ import type {
   UserUpdates,
 } from '@admin/shared/types';
 import { ApiEndpoint, Entity, StoreName, ValidationName } from '@admin/shared/constants';
-import { UserSchema } from '@admin/models/user';
 import { notifications } from '@admin/shared/configs';
+import { UserSchema } from '@admin/models/user';
 
 export class UsersController extends BaseController implements BaseUsersController {
 
@@ -63,6 +63,14 @@ export class UsersController extends BaseController implements BaseUsersControll
       }
 
       const isNewSchema: boolean = user.isNewSchema();
+
+      const notificationService: NotificationService = await this.getNotificationService();
+      notificationService.addNotification(
+        isNewSchema
+          ? notifications.createProcess(Entity.USER)
+          : notifications.updateProcess(Entity.USER)
+      );
+
       const updates: UserUpdates = store.getSelectedUserUpdates();
       let savedUser: BaseUserSchema = UserSchema.create(user);
 
@@ -75,9 +83,10 @@ export class UsersController extends BaseController implements BaseUsersControll
       store.addUser(savedUser);
       store.selectUser(savedUser.id);
 
-      const notificationService: NotificationService = await this.getNotificationService();
       notificationService.addNotification(
-        (isNewSchema ? notifications.created : notifications.updated)(Entity.USER)
+        isNewSchema
+          ? notifications.created(Entity.USER)
+          : notifications.updated(Entity.USER)
       );
 
       return true;
@@ -89,6 +98,9 @@ export class UsersController extends BaseController implements BaseUsersControll
 
   public async deleteUser(userId: number): Promise<boolean> {
     try {
+      const notificationService: NotificationService = await this.getNotificationService();
+      notificationService.addNotification(notifications.deleteProcess(Entity.USER));
+
       const apiService: ApiService = await this.getApiService();
       await apiService
         .addParams({ id: userId })
@@ -97,7 +109,6 @@ export class UsersController extends BaseController implements BaseUsersControll
       const store = await this.getStore() as UsersStoreWithActions;
       store.removeUser(userId);
 
-      const notificationService: NotificationService = await this.getNotificationService();
       notificationService.addNotification(notifications.deleted(Entity.USER));
 
       return true;

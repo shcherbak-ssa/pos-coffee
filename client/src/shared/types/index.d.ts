@@ -15,6 +15,7 @@ export type AnyType = {
 }
 
 export type Notification = {
+  type?: 'result' | 'process',
   severity?: 'success' | 'info' | 'warn' | 'error';
   heading?: React.ReactNode;
   message?: React.ReactNode;
