@@ -25,7 +25,7 @@ export function UsersPageListContainer() {
   const [ currentPage, setCurrentPage ] = useState<number>(ZERO);
 
   // @TODO: add toggle columns settings
-  const { state: { users, view } } = useStore(StoreName.USERS) as UsersStore;
+  const { state: { currentUser, users, view } } = useStore(StoreName.USERS) as UsersStore;
   const usersController = useController(ControllerName.USERS) as UsersController;
   const navigateToUsersInfoPage: NavigateFunctionHook = useNavigateWithParams(PagePath.USERS_INFO);
 
@@ -57,6 +57,14 @@ export function UsersPageListContainer() {
     }
 
   }, [view.listAction]);
+
+  function isActionItemVisible(id: number, item: MenuItem): boolean {
+    if (item.data.action === Action.DELETE && id === currentUser.id) {
+      return false;
+    }
+
+    return true;
+  }
 
   function selectUsers({ value }: DataTableSelectionChangeEvent<UserSchema[]>): void {
     // @ts-ignore
@@ -129,7 +137,11 @@ export function UsersPageListContainer() {
         <Column
           field="actions"
           header="Actions"
-          body={TableColumnActionsMenu({ items: actionItems, handleAction })}
+          body={TableColumnActionsMenu({
+            items: actionItems,
+            isVisible: isActionItemVisible,
+            handleAction,
+          })}
         />
       </DataTable>
 

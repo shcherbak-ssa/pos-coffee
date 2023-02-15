@@ -27,7 +27,7 @@ export function PageWrapper({
   subsection,
   isLoading = false,
   isError = false,
-  errorMessage = DEFAULT_ERROR_MESSAGE
+  errorMessage = DEFAULT_ERROR_MESSAGE,
 }: Props) {
 
   const messages = useRef(null);

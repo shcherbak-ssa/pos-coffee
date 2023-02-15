@@ -10,9 +10,10 @@ import type { ActionPayload } from '@admin/shared/types';
 export type Props = {
   items: MenuItem[];
   handleAction: (payload: ActionPayload) => void;
+  isVisible?: (id: number, item: MenuItem) => boolean;
 }
 
-export function TableColumnActionsMenu({ items, handleAction }: Props) {
+export function TableColumnActionsMenu({ items, handleAction, isVisible }: Props) {
 
   return function({ id }: { id: number }) {
     const menu = useRef(null);
@@ -20,6 +21,7 @@ export function TableColumnActionsMenu({ items, handleAction }: Props) {
     const menuItems: MenuItem[] = items.map((item) => {
       return {
         ...item,
+        visible: isVisible && isVisible(id, item),
         command: () => {
           handleAction({ id, action: item.data.action });
         },

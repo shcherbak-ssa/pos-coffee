@@ -38,27 +38,6 @@ export function PageHeaderTitle({ page }: Props) {
       model={planePageObject(page)}
       home={convertPageToMenuItem(page)}
     />
-    // <div className="flex items-center">
-    //   {
-    //     page.icon
-    //       ? <SimpleIcon className="text-xl mr-4" icon={page.icon} />
-    //       : EMPTY_STRING
-    //   }
-
-    //   <div className="font-semibold text-xl flex items-center gap-4">
-    //     <h2>{ page.title }</h2>
-
-    //     {
-    //       page.child
-    //         ? <>
-    //             <span>/</span>
-    //             <PageHeaderTitle page={page.child} />
-    //           </>
-    //         : EMPTY_STRING
-    //     }
-    //   </div>
-
-    // </div>
   );
 
 }

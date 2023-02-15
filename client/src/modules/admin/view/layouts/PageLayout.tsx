@@ -24,7 +24,11 @@ export function PageLayout({ page, children }: Props) {
   const appController = useController(ControllerName.APP) as AppController;
 
   useEffect(() => {
-    updatePageTitle(page.title);
+    let pageTitle: string = page.child
+      ? page.child.title
+      : page.title;
+
+    updatePageTitle(pageTitle);
   }, [page]);
 
   function closeMenu(): void {
