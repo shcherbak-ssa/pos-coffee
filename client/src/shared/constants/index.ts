@@ -34,6 +34,7 @@ export enum ErrorType {
 export enum LocalStorageKey {
   USER_TOKEN = 'USER_TOKEN',
   LAST_URL = 'LAST_URL',
+  LAST_LIST_PAGE_TAB = 'LAST_LIST_PAGE_TAB',
 }
 
 export enum ApiMethod {

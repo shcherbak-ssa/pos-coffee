@@ -1,5 +1,7 @@
 package com.digitazon.poscoffee.configs;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,6 +44,10 @@ public class AppConfig {
     clientUser.setEmail(user.getEmail());
     clientUser.setPhone(user.getPhone());
     clientUser.setType(user.getType().getName().name());
+    clientUser.setIsDeleted(user.getIsDeleted());
+    clientUser.setCreatedAt(user.getCreatedAt());
+    clientUser.setUpdatedAt(user.getUpdatedAt());
+    clientUser.setDeletedAt(user.getDeletedAt());
 
     return clientUser;
   }
@@ -72,6 +78,10 @@ public class AppConfig {
     user.setEmail(configUser.getEmail());
     user.setPassword(configUser.getPassword());
     user.setIsDeleted(configUser.getIsDeleted());
+
+    if (configUser.getIsDeleted()) {
+      user.setDeletedAt(new Date());
+    }
 
     return user;
   }

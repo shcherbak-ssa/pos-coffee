@@ -1,6 +1,6 @@
 import { EMPTY_STRING, UserType, ZERO } from 'shared/constants';
 
-import type { UserSchema as BaseUserSchema, UserDraft, UserUpdates } from '@admin/shared/types';
+import type { UserSchema as BaseUserSchema, UsersFilter, UserDraft, UserUpdates } from '@admin/shared/types';
 
 export class UserSchema implements BaseUserSchema {
   public id: number;
@@ -10,6 +10,9 @@ export class UserSchema implements BaseUserSchema {
   public phone: string;
   public type: UserType;
   public isDeleted: boolean;
+  public createdAt: Date | null;
+  public updatedAt: Date | null;
+  public deletedAt: Date | null;
 
   private constructor(schema?: BaseUserSchema) {
     this.id = schema?.id || ZERO;
@@ -19,6 +22,9 @@ export class UserSchema implements BaseUserSchema {
     this.phone = schema?.phone || EMPTY_STRING;
     this.type = schema?.type || UserType.ADMIN;
     this.isDeleted = schema?.isDeleted || false;
+    this.createdAt = schema?.createdAt ? new Date(schema.createdAt) : null;
+    this.updatedAt = schema?.updatedAt ? new Date(schema.updatedAt) : null;
+    this.deletedAt = schema?.deletedAt ? new Date(schema.deletedAt) : null;
   }
 
   public static create(schema?: BaseUserSchema): UserSchema {
@@ -30,10 +36,18 @@ export class UserSchema implements BaseUserSchema {
   }
 
   public getUpdates(): UserUpdates {
-    const { id, ...updates } = this;
+    const { id, createdAt, updatedAt, deletedAt, ...updates } = this;
 
     return updates;
   }
+}
+
+export function createUsersFilter({
+  onlyDeleted = false,
+}: UsersFilter): UsersFilter {
+  return {
+    onlyDeleted,
+  };
 }
 
 export function createUserDraft(schema: BaseUserSchema = UserSchema.create()): UserDraft {

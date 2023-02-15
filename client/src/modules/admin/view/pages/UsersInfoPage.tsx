@@ -106,11 +106,17 @@ export function UsersInfoPage() {
     },
   };
 
+  const deletedLabelButtonProps: ButtonProps = {
+    className: 'button-label p-button-text p-button-danger',
+    label: 'DELETED',
+    disabled: true,
+  };
+
   return (
     <PageLayout page={userInfoPage}>
       <PageWrapper
         page={userInfoPage}
-        addButtonProps={actionButtonProps}
+        addButtonProps={selectedUser.isDeleted ? deletedLabelButtonProps : actionButtonProps}
         content={<UsersPageInfoContainer isEditMode={isEditMode} />}
         isLoading={!isUserLoaded}
         isError={isError}

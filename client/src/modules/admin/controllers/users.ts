@@ -7,6 +7,7 @@ import { BaseController } from 'controllers/base-controller';
 import type {
   UserSchema as BaseUserSchema,
   UsersController as BaseUsersController,
+  UsersFilter as BaseUsersFilter,
   UsersStore,
   UsersStoreWithActions,
   UsersViewState,
@@ -14,7 +15,7 @@ import type {
 } from '@admin/shared/types';
 import { ApiEndpoint, Entity, StoreName, ValidationName } from '@admin/shared/constants';
 import { notifications } from '@admin/shared/configs';
-import { UserSchema } from '@admin/models/user';
+import { UserSchema, createUsersFilter } from '@admin/models/user';
 
 export class UsersController extends BaseController implements BaseUsersController {
 
@@ -22,10 +23,12 @@ export class UsersController extends BaseController implements BaseUsersControll
     return new UsersController();
   }
 
-  public async loadUsers(): Promise<boolean> {
+  public async loadUsers(filter?: BaseUsersFilter): Promise<boolean> {
     try {
       const apiService: ApiService = await this.getApiService();
-      const users: BaseUserSchema[] = await apiService.get(ApiEndpoint.USERS);
+      const users: BaseUserSchema[] = await apiService
+        .addQuery(createUsersFilter(filter || {}))
+        .get(ApiEndpoint.USERS);
 
       const store = await this.getStore() as UsersStoreWithActions;
       store.setUsers(users);
@@ -104,12 +107,34 @@ export class UsersController extends BaseController implements BaseUsersControll
       const apiService: ApiService = await this.getApiService();
       await apiService
         .addParams({ id: userId })
-        .delete(ApiEndpoint.USERS_ID);
+        .put(ApiEndpoint.USERS_DELETE);
 
       const store = await this.getStore() as UsersStoreWithActions;
       store.removeUser(userId);
 
       notificationService.addNotification(notifications.deleted(Entity.USER));
+
+      return true;
+    } catch (e: any) {
+      parseError(e);
+      return false;
+    }
+  }
+
+  public async restoreUser(userId: number): Promise<boolean> {
+    try {
+      const notificationService: NotificationService = await this.getNotificationService();
+      notificationService.addNotification(notifications.restoreProcess(Entity.USER));
+
+      const apiService: ApiService = await this.getApiService();
+      await apiService
+        .addParams({ id: userId })
+        .put(ApiEndpoint.USERS_RESTORE);
+
+      const store = await this.getStore() as UsersStoreWithActions;
+      store.removeUser(userId);
+
+      notificationService.addNotification(notifications.restored(Entity.USER));
 
       return true;
     } catch (e: any) {

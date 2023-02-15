@@ -27,6 +27,8 @@ public class AppConstants {
     public static final class Admin {
       public static final String USERS = "/api/admin/users";
       public static final String USERS_ID = "/api/admin/users/{id}";
+      public static final String USERS_DELETE = "/api/admin/users/{id}/delete";
+      public static final String USERS_RESTORE = "/api/admin/users/{id}/restore";
     }
   }
 

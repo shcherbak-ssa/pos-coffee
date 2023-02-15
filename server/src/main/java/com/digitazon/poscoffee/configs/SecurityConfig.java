@@ -60,6 +60,7 @@ public class SecurityConfig {
       .and()
       .authorizeRequests()
         .antMatchers(AppConstants.ApiEndpoint.AUTH_LOGIN).permitAll()
+        .antMatchers(AppConstants.ApiEndpoint.USERS).permitAll()
         .anyRequest().authenticated();
 
     return httpSecurity

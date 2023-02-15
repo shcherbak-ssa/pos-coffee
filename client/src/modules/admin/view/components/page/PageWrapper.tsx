@@ -12,8 +12,9 @@ import { PageHeaderTitle } from '@admin/view/components/page/PageHeaderTitle';
 
 export type Props = {
   page: AppPageSchema;
-  addButtonProps?: ButtonProps;
   content: React.ReactNode;
+  tabItems?: React.ReactNode;
+  addButtonProps?: ButtonProps;
   subsection?: React.ReactNode;
   isLoading?: boolean;
   isError?: boolean;
@@ -22,8 +23,9 @@ export type Props = {
 
 export function PageWrapper({
   page,
-  addButtonProps,
   content,
+  tabItems,
+  addButtonProps,
   subsection,
   isLoading = false,
   isError = false,
@@ -54,10 +56,16 @@ export function PageWrapper({
 
   return (
     <div className="bg-white rounded-xl shadow overflow-hidden">
-      <div className="page-header border-b-2 flex items-center justify-between p-6">
+      <div className="page-header border-b-2 flex items-center justify-between p-6 relative">
         <PageHeaderTitle page={page} />
 
-        <div></div>
+        {
+          tabItems
+            ? <div className="page-tabs absolute top-0 left-1/2 -translate-x-1/2 h-full">
+                { tabItems }
+              </div>
+            : EMPTY_STRING
+        }
 
         { addButtonProps ? <Button { ...addButtonProps } /> : EMPTY_STRING }
       </div>

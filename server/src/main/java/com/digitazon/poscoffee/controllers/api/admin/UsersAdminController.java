@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digitazon.poscoffee.models.helpers.ClientUser;
+import com.digitazon.poscoffee.models.helpers.UserFilter;
 import com.digitazon.poscoffee.services.UsersService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
@@ -34,8 +34,8 @@ public class UsersAdminController {
   @GetMapping(path = AppConstants.ApiEndpoint.Admin.USERS)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('ADMIN')")
-  public List<ClientUser> getUsers() {
-    return this.service.getUsers();
+  public List<ClientUser> getUsers(UserFilter filter) {
+    return this.service.getUsers(filter);
   }
 
   @GetMapping(path = AppConstants.ApiEndpoint.Admin.USERS_ID)
@@ -63,11 +63,18 @@ public class UsersAdminController {
     this.service.updateUser(updates);
   }
 
-  @DeleteMapping(path = AppConstants.ApiEndpoint.Admin.USERS_ID)
+  @PutMapping(path = AppConstants.ApiEndpoint.Admin.USERS_DELETE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasAuthority('ADMIN')")
   public void deleteUser(@PathVariable Long id) throws ResourceNotFoundException {
     this.service.deleteUserById(id);
+  }
+
+  @PutMapping(path = AppConstants.ApiEndpoint.Admin.USERS_RESTORE)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public void restoreUser(@PathVariable Long id) throws ResourceNotFoundException {
+    this.service.restoreUserById(id);
   }
 
 }

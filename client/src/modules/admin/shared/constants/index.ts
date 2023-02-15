@@ -4,6 +4,8 @@ export const CREATE_NEW_LABEL: string = 'new';
 export enum ApiEndpoint {
   USERS = '/api/admin/users',
   USERS_ID = '/api/admin/users/:id',
+  USERS_DELETE = '/api/admin/users/:id/delete',
+  USERS_RESTORE = '/api/admin/users/:id/restore',
 }
 
 export enum ControllerName {
@@ -55,12 +57,18 @@ export enum ListAction {
   FILTER = 'FILTER',
 }
 
+export enum Tab {
+  ACTIVE = 'ACTIVE',
+  DELETED = 'DELETED',
+}
+
 export enum Action {
   VIEW = 'VIEW',
   CREATE = 'CREATE',
   EDIT = 'EDIT',
   UPDATE = 'UPDATE',
   DELETE = 'DELETE',
+  RESTORE = 'RESTORE',
 }
 
 export enum Entity {

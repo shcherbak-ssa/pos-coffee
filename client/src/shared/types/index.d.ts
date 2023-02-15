@@ -8,6 +8,9 @@ export type CurrentUserSchema = {
   phone: string;
   type: UserType;
   isDeleted: boolean;
+  createdAt: Date | null;
+  updatedAt: Date | null;
+  deletedAt: Date | null;
 }
 
 export type AnyType = {

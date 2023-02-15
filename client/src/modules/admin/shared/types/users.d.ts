@@ -7,6 +7,10 @@ export type UserSchema = CurrentUserSchema;
 
 export type UserUpdates = Partial<UserSchema>;
 
+export type UsersFilter = Partial<{
+  onlyDeleted: boolean;
+}>;
+
 export type UserDraft = {
   get fullname(): string;
   set name(name: string);
@@ -44,10 +48,11 @@ export interface UsersStoreWithActions extends UsersStore {
 }
 
 export interface UsersController {
-  loadUsers(): Promise<boolean>;
+  loadUsers(filter?: UsersFilter): Promise<boolean>;
   loadUser(userId: number): Promise<boolean>;
   saveUser(user: UserSchema): Promise<boolean>;
   deleteUser(userId: number): Promise<boolean>;
+  restoreUser(userId: number): Promise<boolean>
   selectUser(userId?: number): Promise<void>;
   setCurrentUser(user: UserSchema): Promise<void>;
   updateViewState<T extends keyof UsersViewState>(state: T, value: UsersViewState[T]): Promise<void>;

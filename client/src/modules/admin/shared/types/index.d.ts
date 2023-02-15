@@ -1,4 +1,4 @@
-import type { Action, PagePath } from '@admin/shared/constants';
+import type { PagePath, Tab } from '@admin/shared/constants';
 
 import type { AppController } from './app';
 import type { UsersController } from './users';
@@ -22,7 +22,6 @@ export type OptionItem = {
   label?: string;
 }
 
-export type ActionPayload = {
-  id: number;
-  action: Action;
+export type LastListPageTabPayload = {
+  [key: string]: Tab;
 }

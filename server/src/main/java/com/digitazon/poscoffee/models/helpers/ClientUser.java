@@ -1,5 +1,7 @@
 package com.digitazon.poscoffee.models.helpers;
 
+import java.util.Date;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -89,5 +91,8 @@ public class ClientUser {
   private String type;
 
   private Boolean isDeleted;
+  private Date createdAt;
+  private Date updatedAt;
+  private Date deletedAt;
 
 }

@@ -1,5 +1,6 @@
 package com.digitazon.poscoffee.services;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,6 +21,7 @@ import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.User;
 import com.digitazon.poscoffee.models.UserType;
 import com.digitazon.poscoffee.models.helpers.ClientUser;
+import com.digitazon.poscoffee.models.helpers.UserFilter;
 import com.digitazon.poscoffee.repositories.UsersRepository;
 import com.digitazon.poscoffee.shared.constants.UsersConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
@@ -69,8 +71,8 @@ public class UsersService {
     throw new ResourceNotFoundException("User not found");
   }
 
-  public List<ClientUser> getUsers() {
-    final List<User> users = this.repository.findAll(UsersService.onlyActiveUsers());
+  public List<ClientUser> getUsers(UserFilter filter) {
+    final List<User> users = this.repository.findAll(UsersService.filter(filter));
 
     return users
       .stream()
@@ -123,6 +125,28 @@ public class UsersService {
     if (foundUser.isPresent()) {
       final User user = foundUser.get();
       user.setIsDeleted(true);
+      user.setDeletedAt(new Date());
+
+      this.repository.save(user);
+
+      return;
+    }
+
+    throw new ResourceNotFoundException("User not found");
+  }
+
+  public void restoreUserById(Long id) throws ResourceNotFoundException {
+    final Optional<User> foundUser = this.repository.findById(id);
+
+    if (foundUser.isPresent()) {
+      final User user = foundUser.get();
+
+      if (!user.getIsDeleted()) {
+        return;
+      }
+
+      user.setIsDeleted(false);
+      user.setDeletedAt(null);
 
       this.repository.save(user);
 
@@ -150,12 +174,16 @@ public class UsersService {
     user.setPhone(updates.getPhone() == null ? user.getPhone() : updates.getPhone());
   }
 
-  private static Specification<User> onlyActiveUsers() {
+  private static Specification<User> filter(UserFilter filter) {
     return new Specification<User>() {
 
       @Override
       public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
         Path<User> isDeletedPath = root.get("isDeleted");
+
+        if (filter.getOnlyDeleted()) {
+          return builder.equal(isDeletedPath, true);
+        }
 
         return builder.or(
           builder.isNull(isDeletedPath),

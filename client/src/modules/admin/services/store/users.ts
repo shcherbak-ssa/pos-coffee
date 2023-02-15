@@ -81,7 +81,7 @@ export const usersStore: UsersStore & UsersStoreWithActions = {
 
   removeUser(userId: number): void {
     const updatedUsers: BaseUserSchema[] = usersStore.state.users.filter(({ id }) => id !== userId);
-    this.setUsers((updatedUsers));
+    this.setUsers(updatedUsers);
   },
 
   selectUser(userId: number): void {

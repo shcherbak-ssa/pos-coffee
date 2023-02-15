@@ -118,7 +118,14 @@ export const listActionOptions: OptionItem[] = [
 ];
 
 export const notifications: {
-  [key: string]: (entity: Entity) => Notification,
+  created: (entity: Entity) => Notification,
+  updated: (entity: Entity) => Notification,
+  deleted: (entity: Entity) => Notification,
+  restored: (entity: Entity) => Notification,
+  createProcess: (entity: Entity) => Notification,
+  updateProcess: (entity: Entity) => Notification,
+  deleteProcess: (entity: Entity) => Notification,
+  restoreProcess: (entity: Entity) => Notification,
 } = {
   created: (entity: Entity) => ({
     severity: 'success',
@@ -134,6 +141,11 @@ export const notifications: {
     severity: 'success',
     heading: 'Deleted',
     message: `${entity} deleted successfully`,
+  }),
+  restored: (entity: Entity) => ({
+    severity: 'success',
+    heading: 'Restored',
+    message: `${entity} restored successfully`,
   }),
   createProcess: (entity: Entity) => ({
     type: 'process',
@@ -152,5 +164,11 @@ export const notifications: {
     severity: 'info',
     heading: 'Deleting...',
     message: `A new ${entity.toLowerCase()} is being deleted`,
+  }),
+  restoreProcess: (entity: Entity) => ({
+    type: 'process',
+    severity: 'info',
+    heading: 'Restoring...',
+    message: `A new ${entity.toLowerCase()} is being restored`,
   }),
 };

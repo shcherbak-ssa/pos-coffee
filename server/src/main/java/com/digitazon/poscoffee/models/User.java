@@ -1,6 +1,9 @@
 package com.digitazon.poscoffee.models;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,7 +18,10 @@ import javax.validation.constraints.Null;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import com.digitazon.poscoffee.shared.annotations.EqualTo;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.UsersConstants;
 
@@ -24,6 +30,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = AppConstants.DatabaseTable.USERS)
+@EntityListeners(AuditingEntityListener.class)
 @Data
 @NoArgsConstructor
 public class User {
@@ -100,5 +107,13 @@ public class User {
   private UserType type;
 
   private Boolean isDeleted;
+
+  @CreatedDate
+  private Date createdAt;
+
+  @LastModifiedDate
+  private Date updatedAt;
+
+  private Date deletedAt;
 
 }

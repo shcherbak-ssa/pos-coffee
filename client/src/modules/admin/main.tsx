@@ -4,6 +4,7 @@ import type { CurrentUserSchema } from 'shared/types';
 import { Context } from 'shared/context';
 import { replaceUrl } from 'shared/utils';
 import { setupPrimeReact, render } from 'shared/helpers/setup-view';
+import { setupCleanDataOncloseEvents } from 'shared/helpers/clean-onclose';
 
 import type { UsersController } from '@admin/shared/types';
 import { ControllerName, PagePath, StoreName } from '@admin/shared/constants';
@@ -22,6 +23,7 @@ export async function renderAdmin(currentUser: CurrentUserSchema): Promise<void>
 
 async function setup(currentUser: CurrentUserSchema): Promise<void> {
   setupPrimeReact();
+  setupCleanDataOncloseEvents();
 
   Context.setLoader(LoaderService.create());
 
