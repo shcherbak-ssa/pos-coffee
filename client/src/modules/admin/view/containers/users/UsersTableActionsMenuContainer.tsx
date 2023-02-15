@@ -11,19 +11,27 @@ import { IconButton } from 'view/components/IconButton';
 
 import type { UserSchema, UsersController, UsersStore } from '@admin/shared/types';
 import { Action, ControllerName, PagePath, StoreName } from '@admin/shared/constants';
+import { Button } from 'primereact/button';
 
-export function UsersTableActionsMenu({ id, isDeleted }: UserSchema) {
+export type Props = UserSchema & {
+  isInfoPage?: boolean;
+}
+
+export function UsersTableActionsMenuContainer({ id, isDeleted, isInfoPage = false }: Props) {
 
   const menu = useRef(null);
 
   const { state: { currentUser } } = useStore(StoreName.USERS) as UsersStore;
   const usersController = useController(ControllerName.USERS) as UsersController;
+
   const navigateToUsersInfoPage: NavigateFunctionHook = useNavigateWithParams(PagePath.USERS_INFO);
+  const navigateToUsersEditPage: NavigateFunctionHook = useNavigateWithParams(PagePath.USERS_EDIT);
 
   const actionItems: MenuItem[] = [
     {
       label: 'View',
       icon: PrimeIcons.EYE,
+      visible: !isInfoPage,
       command: () => {
         handleAction(Action.VIEW);
       },
@@ -31,8 +39,9 @@ export function UsersTableActionsMenu({ id, isDeleted }: UserSchema) {
     {
       label: 'Edit',
       icon: PrimeIcons.PENCIL,
+      visible: !isDeleted,
       command: () => {
-        handleAction(Action.EDIT );
+        handleAction(Action.EDIT);
       },
     },
     {
@@ -58,7 +67,7 @@ export function UsersTableActionsMenu({ id, isDeleted }: UserSchema) {
       case Action.VIEW:
         return navigateToUsersInfoPage({ id });
       case Action.EDIT:
-        return navigateToUsersInfoPage({ id }, { isEditMode: true });
+        return navigateToUsersEditPage({ id });
       case Action.DELETE:
         confirmDialog({
           header: 'Confirmation',
@@ -84,17 +93,28 @@ export function UsersTableActionsMenu({ id, isDeleted }: UserSchema) {
   }
 
   function toggleMenu(e: MouseEvent): void {
+    e.preventDefault();
+
     // @ts-ignore
     menu.current.toggle(e);
   }
 
   return (
     <div>
-      <IconButton
-        className="on-white"
-        icon={PrimeIcons.ELLIPSIS_H}
-        click={toggleMenu}
-      />
+      {
+        isInfoPage
+          ? <Button
+              className="p-button-sm"
+              icon={PrimeIcons.ELLIPSIS_H}
+              // @ts-ignore
+              onClick={toggleMenu}
+            />
+          : <IconButton
+              className="on-white"
+              icon={PrimeIcons.ELLIPSIS_H}
+              click={toggleMenu}
+            />
+      }
 
       <Menu
         model={actionItems}

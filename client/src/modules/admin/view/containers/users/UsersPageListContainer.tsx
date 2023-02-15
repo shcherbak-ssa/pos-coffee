@@ -12,7 +12,7 @@ import type { UserSchema, UsersStore } from '@admin/shared/types';
 import { ListAction, PagePath, StoreName } from '@admin/shared/constants';
 import { UserTypeLabel } from '@admin/view/components/user/UserTypeLabel';
 import { UserPhoto } from '@admin/view/components/user/UserPhoto';
-import { UsersTableActionsMenu } from '@admin/view/containers/users/UsersTableActionsMenu';
+import { UsersTableActionsMenuContainer } from '@admin/view/containers/users/UsersTableActionsMenuContainer';
 
 export function UsersPageListContainer() {
 
@@ -86,7 +86,7 @@ export function UsersPageListContainer() {
         <Column
           field="actions"
           header="Actions"
-          body={UsersTableActionsMenu}
+          body={UsersTableActionsMenuContainer}
         />
       </DataTable>
 

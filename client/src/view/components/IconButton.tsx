@@ -21,7 +21,7 @@ export function IconButton({ className = EMPTY_STRING, icon, click }: Props) {
     <Button
       className={
         classnames(
-          'icon-button p-button-raised p-button-rounded p-button-text duration-200',
+          'icon-button p-button-raised p-button-sm p-button-text duration-200',
           className,
         )
       }

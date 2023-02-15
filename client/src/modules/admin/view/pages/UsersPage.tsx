@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { MenuItem } from 'primereact/menuitem';
-import type { ButtonProps } from 'primereact/button';
+import { Button, type ButtonProps } from 'primereact/button';
 import { PrimeIcons } from 'primereact/api';
 
 import { EMPTY_STRING, LocalStorageKey } from 'shared/constants';
@@ -68,7 +68,7 @@ export function UsersPage() {
       <PageWrapper
         page={usersPage}
         content={<UsersPageListContainer />}
-        tabItems={
+        tabsMenu={
           currentTab
             ? <PageHeaderTabsContainer
                 tabs={usersTabItems}
@@ -77,7 +77,7 @@ export function UsersPage() {
               />
             : EMPTY_STRING
         }
-        addButtonProps={addUserButtonProps}
+        actions={<Button {...addUserButtonProps} />}
         subsection={<UsersPageSubsectionContainer />}
         isLoading={!isUsersLoaded}
       />

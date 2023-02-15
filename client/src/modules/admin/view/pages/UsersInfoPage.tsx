@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
-import { type Location, useLocation, useParams, type Params } from 'react-router-dom';
-import type { ButtonProps } from 'primereact/button';
-import { PrimeIcons } from 'primereact/api';
+import { useParams, type Params } from 'react-router-dom';
 
 import { ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
@@ -14,20 +12,35 @@ import { pages } from '@admin/shared/configs';
 import { PageLayout } from '@admin/view/layouts/PageLayout';
 import { PageWrapper } from '@admin/view/components/page/PageWrapper';
 import { UsersPageInfoContainer } from '@admin/view/containers/users/UsersPageInfoContainer';
+import { UsersPageInfoActionsContainer } from '@admin/view/containers/users/UsersPageInfoActionsContainer';
 
-export function UsersInfoPage() {
+export type Props = {
+  isEditPage?: boolean;
+}
+
+export function UsersInfoPage({ isEditPage = false }: Props) {
 
   const [ isUserLoaded, setIsUserLoaded ] = useState<boolean>(false);
   const [ isError, setIsError ] = useState<boolean>(false);
-  const [ isEditMode, setIsEditMode ] = useState<boolean>(false);
-  const [ isSaveProcessing, setIsSaveProcessing ] = useState<boolean>(false);
+  const [ isEditMode, setIsEditMode ] = useState<boolean>(isEditPage);
 
-  const location: Location = useLocation();
   const params: Params<string> = useParams();
 
   const { state: { selectedUser }, draftUser: user } = useStore(StoreName.USERS) as UsersStore;
   const usersController = useController(ControllerName.USERS) as UsersController;
   const navigateToUsersInfoPage: NavigateFunctionHook = useNavigateWithParams(PagePath.USERS_INFO);
+
+  const userInfoPage: AppPageSchema = {
+    ...pages[PageTitle.USERS],
+    to: PagePath.USERS,
+    child: {
+      title: user.fullname,
+    },
+  };
+
+  useEffect(() => {
+    setIsEditMode(isEditPage);
+  }, [isEditPage]);
 
   useEffect(() => {
     const { id } = selectedUser;
@@ -51,10 +64,6 @@ export function UsersInfoPage() {
 
     const userId: number = Number(params.id);
 
-    if (location.state && location.state.isEditMode) {
-      setIsEditMode(true);
-    }
-
     usersController.loadUser(userId)
       .then((success) => {
         if (success) {
@@ -72,51 +81,11 @@ export function UsersInfoPage() {
     };
   }, []);
 
-  const userInfoPage: AppPageSchema = {
-    ...pages[PageTitle.USERS],
-    to: PagePath.USERS,
-    child: {
-      title: user.fullname,
-    },
-  };
-
-  const actionButtonProps: ButtonProps = {
-    icon: isEditMode ? PrimeIcons.SAVE : PrimeIcons.PENCIL,
-    label: isEditMode ? 'Save' : 'Edit',
-    loading: isSaveProcessing,
-    onClick: () => {
-      if (isSaveProcessing) {
-        return;
-      }
-
-      if (isEditMode) {
-        setIsSaveProcessing(true);
-
-        usersController.saveUser(selectedUser)
-          .then((success) => {
-            if (success) {
-              setIsEditMode(false);
-            }
-
-            setIsSaveProcessing(false);
-          });
-      } else {
-        setIsEditMode(true);
-      }
-    },
-  };
-
-  const deletedLabelButtonProps: ButtonProps = {
-    className: 'button-label p-button-text p-button-danger',
-    label: 'DELETED',
-    disabled: true,
-  };
-
   return (
     <PageLayout page={userInfoPage}>
       <PageWrapper
         page={userInfoPage}
-        addButtonProps={selectedUser.isDeleted ? deletedLabelButtonProps : actionButtonProps}
+        actions={<UsersPageInfoActionsContainer isEditMode={isEditMode} />}
         content={<UsersPageInfoContainer isEditMode={isEditMode} />}
         isLoading={!isUserLoaded}
         isError={isError}

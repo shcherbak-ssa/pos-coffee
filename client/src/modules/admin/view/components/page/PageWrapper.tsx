@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { Button, type ButtonProps } from 'primereact/button';
 import { Messages } from 'primereact/messages';
 
 import { EMPTY_STRING } from 'shared/constants';
@@ -13,8 +12,8 @@ import { PageHeaderTitle } from '@admin/view/components/page/PageHeaderTitle';
 export type Props = {
   page: AppPageSchema;
   content: React.ReactNode;
-  tabItems?: React.ReactNode;
-  addButtonProps?: ButtonProps;
+  tabsMenu?: React.ReactNode;
+  actions?: React.ReactNode;
   subsection?: React.ReactNode;
   isLoading?: boolean;
   isError?: boolean;
@@ -24,8 +23,8 @@ export type Props = {
 export function PageWrapper({
   page,
   content,
-  tabItems,
-  addButtonProps,
+  tabsMenu,
+  actions,
   subsection,
   isLoading = false,
   isError = false,
@@ -59,15 +58,11 @@ export function PageWrapper({
       <div className="page-header border-b-2 flex items-center justify-between p-6 relative">
         <PageHeaderTitle page={page} />
 
-        {
-          tabItems
-            ? <div className="page-tabs absolute top-0 left-1/2 -translate-x-1/2 h-full">
-                { tabItems }
-              </div>
-            : EMPTY_STRING
-        }
+        <div className="page-tabs absolute top-0 left-1/2 -translate-x-1/2 h-full">
+          { tabsMenu || EMPTY_STRING }
+        </div>
 
-        { addButtonProps ? <Button { ...addButtonProps } /> : EMPTY_STRING }
+        { actions || EMPTY_STRING }
       </div>
 
       { subsection ? <div>{ subsection }</div> : EMPTY_STRING }

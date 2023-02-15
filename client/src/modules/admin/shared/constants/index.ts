@@ -32,6 +32,7 @@ export enum PagePath {
   ORDERS = '/admin/orders',
   USERS = '/admin/users',
   USERS_INFO = '/admin/users/:id',
+  USERS_EDIT = '/admin/users/:id/edit',
   SETTINGS = '/admin/settings',
 }
 

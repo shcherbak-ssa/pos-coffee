@@ -40,6 +40,10 @@ export const router = createBrowserRouter([
     element: <UsersInfoPage />,
   },
   {
+    path: PagePath.USERS_EDIT,
+    element: <UsersInfoPage isEditPage />,
+  },
+  {
     path: PagePath.SETTINGS,
     element: <SettingsPage />,
   },

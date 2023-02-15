@@ -29,9 +29,8 @@ export const usersStore: UsersStore & UsersStoreWithActions = {
 
   draftUser: createUserDraft(),
 
-
   hasSelectedUserUpdates(): boolean {
-    const { id, ...updates } = this.getSelectedUserUpdates();
+    const { id, createdAt, updatedAt, deletedAt, ...updates } = this.getSelectedUserUpdates();
 
     return !!Object.keys(updates).length;
   },
@@ -82,6 +81,11 @@ export const usersStore: UsersStore & UsersStoreWithActions = {
   removeUser(userId: number): void {
     const updatedUsers: BaseUserSchema[] = usersStore.state.users.filter(({ id }) => id !== userId);
     this.setUsers(updatedUsers);
+
+    updateSelectedUser({
+      ...usersStore.state.selectedUser,
+      isDeleted: !usersStore.state.selectedUser.isDeleted,
+    });
   },
 
   selectUser(userId: number): void {
@@ -90,9 +94,7 @@ export const usersStore: UsersStore & UsersStoreWithActions = {
       : findUserById(userId);
 
     if (user) {
-      usersStore.state.selectedUser = UserSchema.create(user);
-      usersStore.draftUser = createUserDraft(usersStore.state.selectedUser);
-
+      updateSelectedUser(user);
       return;
     }
 
@@ -107,4 +109,9 @@ export const usersStore: UsersStore & UsersStoreWithActions = {
 
 function findUserById(userId: number): BaseUserSchema | undefined {
   return usersStore.state.users.find(({ id }) => id === userId);
+}
+
+function updateSelectedUser(user: BaseUserSchema): void {
+  usersStore.state.selectedUser = UserSchema.create(user);
+  usersStore.draftUser = createUserDraft(usersStore.state.selectedUser);
 }
