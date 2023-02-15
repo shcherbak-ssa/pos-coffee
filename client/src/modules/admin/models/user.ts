@@ -1,9 +1,6 @@
 import { EMPTY_STRING, UserType, ZERO } from 'shared/constants';
 
-import type {
-  UserSchema as BaseUserSchema,
-  UserDraftSchema as BaseUserDraftSchema,
-} from '@admin/shared/types';
+import type { UserSchema as BaseUserSchema, UserDraft, UserUpdates } from '@admin/shared/types';
 
 export class UserSchema implements BaseUserSchema {
   public id: number;
@@ -12,6 +9,7 @@ export class UserSchema implements BaseUserSchema {
   public email: string;
   public phone: string;
   public type: UserType;
+  public isDeleted: boolean;
 
   private constructor(schema?: BaseUserSchema) {
     this.id = schema?.id || ZERO;
@@ -20,14 +18,25 @@ export class UserSchema implements BaseUserSchema {
     this.email = schema?.email || EMPTY_STRING;
     this.phone = schema?.phone || EMPTY_STRING;
     this.type = schema?.type || UserType.ADMIN;
+    this.isDeleted = schema?.isDeleted || false;
   }
 
   public static create(schema?: BaseUserSchema): UserSchema {
     return new UserSchema(schema);
   }
+
+  public isNewSchema(): boolean {
+    return this.id === ZERO;
+  }
+
+  public getUpdates(): UserUpdates {
+    const { id, ...updates } = this;
+
+    return updates;
+  }
 }
 
-export function createUserDraftSchema(schema: BaseUserSchema = UserSchema.create()): BaseUserDraftSchema {
+export function createUserDraft(schema: BaseUserSchema = UserSchema.create()): UserDraft {
 
   return {
     get fullname(): string {

@@ -7,6 +7,7 @@ export type CurrentUserSchema = {
   email: string;
   phone: string;
   type: UserType;
+  isDeleted: boolean;
 }
 
 export type AnyType = {

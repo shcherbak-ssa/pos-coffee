@@ -1,11 +1,18 @@
 import { proxy } from 'valtio';
 
+import { ZERO } from 'shared/constants';
 import { AppError } from 'shared/errors';
-import { cloneObject } from 'shared/utils';
 
-import type { UsersState, UsersStore, UsersStoreWithActions, UsersViewState } from '@admin/shared/types';
+import type {
+  UserSchema as BaseUserSchema,
+  UsersState,
+  UsersStore,
+  UsersStoreWithActions,
+  UsersViewState,
+  UserUpdates,
+} from '@admin/shared/types';
 import { ListView } from '@admin/shared/constants';
-import { createUserDraftSchema, UserSchema } from '@admin/models/user';
+import { createUserDraft, UserSchema } from '@admin/models/user';
 
 export const usersStore: UsersStore & UsersStoreWithActions = {
 
@@ -20,10 +27,37 @@ export const usersStore: UsersStore & UsersStoreWithActions = {
     },
   }),
 
-  draftUser: createUserDraftSchema(),
+  draftUser: createUserDraft(),
+
+
+  hasSelectedUserUpdates(): boolean {
+    const { id, ...updates } = this.getSelectedUserUpdates();
+
+    return !!Object.keys(updates).length;
+  },
+
+  getSelectedUserUpdates(): UserUpdates {
+    const { selectedUser } = usersStore.state;
+    const foundUser: BaseUserSchema | undefined = findUserById(selectedUser.id);
+
+    if (foundUser) {
+      const updates: UserUpdates = { id: selectedUser.id };
+
+      for (const [ key, value ] of Object.entries(selectedUser)) {
+        if (foundUser[key as keyof UserUpdates] !== value) {
+          // @ts-ignore
+          updates[key] = value;
+        }
+      }
+
+      return updates;
+    }
+
+    return (selectedUser as UserSchema).getUpdates();
+  },
 
   setCurrentUser(user: UserSchema): void {
-    usersStore.state.currentUser =  UserSchema.create(user);
+    usersStore.state.currentUser = UserSchema.create(user);
   },
 
   setUsers(users: UserSchema[]): void {
@@ -31,8 +65,8 @@ export const usersStore: UsersStore & UsersStoreWithActions = {
   },
 
   addUser(user: UserSchema): void {
-    const foundUser: UserSchema | undefined = findUserById(user.id);
-    let updatedUsers: UserSchema[] = cloneObject(usersStore.state.users);
+    const foundUser: BaseUserSchema | undefined = findUserById(user.id);
+    let updatedUsers: BaseUserSchema[] = usersStore.state.users.map(UserSchema.create);
 
     if (foundUser) {
       updatedUsers = usersStore.state.users.map((stateUser) => {
@@ -45,12 +79,21 @@ export const usersStore: UsersStore & UsersStoreWithActions = {
     this.setUsers(updatedUsers);
   },
 
-  selectUser(userId: number): void {
-    const foundUser: UserSchema | undefined = findUserById(userId);
+  removeUser(userId: number): void {
+    const updatedUsers: BaseUserSchema[] = usersStore.state.users.filter(({ id }) => id !== userId);
+    this.setUsers((updatedUsers));
+  },
 
-    if (foundUser) {
-      usersStore.state.selectedUser = cloneObject(foundUser);
-      usersStore.draftUser = createUserDraftSchema(usersStore.state.selectedUser);
+  selectUser(userId: number): void {
+    const user: BaseUserSchema | undefined = userId === ZERO
+      ? UserSchema.create()
+      : findUserById(userId);
+
+    if (user) {
+      usersStore.state.selectedUser = UserSchema.create(user);
+      usersStore.draftUser = createUserDraft(usersStore.state.selectedUser);
+
+      return;
     }
 
     throw new AppError(`User with id ${userId} not found`);
@@ -62,6 +105,6 @@ export const usersStore: UsersStore & UsersStoreWithActions = {
 
 };
 
-function findUserById(userId: number): UserSchema | undefined {
+function findUserById(userId: number): BaseUserSchema | undefined {
   return usersStore.state.users.find(({ id }) => id === userId);
 }

@@ -1,6 +1,5 @@
 package com.digitazon.poscoffee.controllers;
 
-import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,10 +12,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.digitazon.poscoffee.models.helpers.ErrorResponse;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
+import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
 import com.digitazon.poscoffee.shared.exceptions.UnauthorizedUserException;
 
+import lombok.extern.slf4j.Slf4j;
+
 @ControllerAdvice
+@Slf4j
 public class ExceptionsController {
 
   @ExceptionHandler(ResourceNotFoundException.class)
@@ -52,6 +55,16 @@ public class ExceptionsController {
     return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
   }
 
+  @ExceptionHandler(AlreadyExistException.class)
+  public ResponseEntity<ErrorResponse> handleAlreadyExistException(AlreadyExistException exception) {
+    final ErrorResponse errorResponse = new ErrorResponse(); // @TODO: add context
+    errorResponse.setType(AppConstants.ErrorType.VALIDATION.name());
+    errorResponse.setMessage(exception.getMessage());
+    errorResponse.setErrors(exception.getErrors());
+
+    return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
+  }
+
   @ExceptionHandler(UnauthorizedUserException.class)
   public ResponseEntity<ErrorResponse> handleUnauthorizedUserException(UnauthorizedUserException exception) {
     final ErrorResponse errorResponse = new ErrorResponse(); // @TODO: add context
@@ -63,6 +76,9 @@ public class ExceptionsController {
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorResponse> handleException(Exception exception) {
+    log.error(exception.getMessage());
+    log.error(exception.getCause().getMessage());
+
     final ErrorResponse errorResponse = new ErrorResponse(); // @TODO: add context
     String message = exception.getMessage();
     HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;

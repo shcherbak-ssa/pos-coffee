@@ -3,9 +3,10 @@ import type { ButtonProps } from 'primereact/button';
 import { PrimeIcons } from 'primereact/api';
 
 import { useController } from 'view/hooks/controller';
+import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/navigate';
 
 import type { AppPageSchema, UsersController } from '@admin/shared/types';
-import { ControllerName, PageTitle } from '@admin/shared/constants';
+import { ControllerName, CREATE_NEW_LABEL, PagePath, PageTitle } from '@admin/shared/constants';
 import { pages } from '@admin/shared/configs';
 import { PageLayout } from '@admin/view/layouts/PageLayout';
 import { PageWrapper } from '@admin/view/components/page/PageWrapper';
@@ -15,13 +16,18 @@ import { UsersPageSubsectionContainer } from '@admin/view/containers/users/Users
 export function UsersPage() {
 
   const [ isUsersLoaded, setIsUsersLoaded ] = useState<boolean>(false);
+
   const usersController = useController(ControllerName.USERS) as UsersController;
+  const navigateToUsersInfoPage: NavigateFunctionHook = useNavigateWithParams(PagePath.USERS_INFO);
 
   const usersPage: AppPageSchema = pages[PageTitle.USERS];
 
   const addUserButtonProps: ButtonProps = {
     icon: PrimeIcons.PLUS,
     label: 'Add new user',
+    onClick: () => {
+      navigateToUsersInfoPage({ id: CREATE_NEW_LABEL });
+    },
   };
 
   useEffect(() => {

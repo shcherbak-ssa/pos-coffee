@@ -1,5 +1,3 @@
-import cloneDeep from 'clone-deep';
-
 import type { CurrentUserSchema } from 'shared/types';
 import { APP_NAME, EMPTY_STRING, PAGE_TITLE_DIVIDER } from 'shared/constants';
 
@@ -35,8 +33,4 @@ export function firstToUpperCase(str: string): string {
 
 export function getUserInitials({ name, surname }: CurrentUserSchema): string {
   return (name[0] + surname[0]).toUpperCase();
-}
-
-export function cloneObject<T>(obj: T): T {
-  return cloneDeep(obj);
 }

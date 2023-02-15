@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import classnames from 'classnames';
 import { ScrollPanel } from 'primereact/scrollpanel';
+import { ConfirmDialog } from 'primereact/confirmdialog';
 
 import { updatePageTitle } from 'shared/utils';
 import { useStore } from 'view/hooks/store';
@@ -63,6 +64,7 @@ export function PageLayout({ page, children }: Props) {
       />
 
       <NotificationContainer />
+      <ConfirmDialog />
     </div>
   );
 

@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
-import { useParams, type Params } from 'react-router-dom';
+import { type Location, useLocation, useParams, type Params } from 'react-router-dom';
 import type { ButtonProps } from 'primereact/button';
 import { PrimeIcons } from 'primereact/api';
 
+import { ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
+import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/navigate';
 
 import type { AppPageSchema, UsersController, UsersStore } from '@admin/shared/types';
-import { ControllerName, PagePath, PageTitle, StoreName } from '@admin/shared/constants';
+import { ControllerName, CREATE_NEW_LABEL, PagePath, PageTitle, StoreName } from '@admin/shared/constants';
 import { pages } from '@admin/shared/configs';
 import { PageLayout } from '@admin/view/layouts/PageLayout';
 import { PageWrapper } from '@admin/view/components/page/PageWrapper';
@@ -17,13 +19,41 @@ export function UsersInfoPage() {
 
   const [ isUserLoaded, setIsUserLoaded ] = useState<boolean>(false);
   const [ isError, setIsError ] = useState<boolean>(false);
+  const [ isEditMode, setIsEditMode ] = useState<boolean>(false);
+  const [ isSaveProcessing, setIsSaveProcessing ] = useState<boolean>(false);
+
+  const location: Location = useLocation();
   const params: Params<string> = useParams();
 
-  const { draftUser: user } = useStore(StoreName.USERS) as UsersStore;
+  const { state: { selectedUser }, draftUser: user } = useStore(StoreName.USERS) as UsersStore;
   const usersController = useController(ControllerName.USERS) as UsersController;
+  const navigateToUsersInfoPage: NavigateFunctionHook = useNavigateWithParams(PagePath.USERS_INFO);
 
   useEffect(() => {
+    const { id } = selectedUser;
+
+    if (id !== ZERO && id.toString() !== params.id) {
+      navigateToUsersInfoPage({ id });
+    }
+  }, [selectedUser.id]);
+
+  useEffect(() => {
+    if (params.id === CREATE_NEW_LABEL) {
+      setIsEditMode(true);
+
+      usersController.selectUser()
+        .then(() => {
+          setIsUserLoaded(true);
+        });
+
+      return;
+    }
+
     const userId: number = Number(params.id);
+
+    if (location.state && location.state.isEditMode) {
+      setIsEditMode(true);
+    }
 
     usersController.loadUser(userId)
       .then((success) => {
@@ -36,6 +66,10 @@ export function UsersInfoPage() {
           setIsError(true);
         }
       });
+
+    return () => {
+      usersController.selectUser();
+    };
   }, []);
 
   const userInfoPage: AppPageSchema = {
@@ -46,17 +80,38 @@ export function UsersInfoPage() {
     },
   };
 
-  const addUserButtonProps: ButtonProps = {
-    icon: PrimeIcons.PLUS,
-    label: '@TODO',
+  const actionButtonProps: ButtonProps = {
+    icon: isEditMode ? PrimeIcons.SAVE : PrimeIcons.PENCIL,
+    label: isEditMode ? 'Save' : 'Edit',
+    loading: isSaveProcessing,
+    onClick: () => {
+      if (isSaveProcessing) {
+        return;
+      }
+
+      if (isEditMode) {
+        setIsSaveProcessing(true);
+
+        usersController.saveUser(selectedUser)
+          .then((success) => {
+            if (success) {
+              setIsEditMode(false);
+            }
+
+            setIsSaveProcessing(false);
+          });
+      } else {
+        setIsEditMode(true);
+      }
+    },
   };
 
   return (
     <PageLayout page={userInfoPage}>
       <PageWrapper
         page={userInfoPage}
-        addButtonProps={addUserButtonProps}
-        content={<UsersPageInfoContainer />}
+        addButtonProps={actionButtonProps}
+        content={<UsersPageInfoContainer isEditMode={isEditMode} />}
         isLoading={!isUserLoaded}
         isError={isError}
         errorMessage="User not found"

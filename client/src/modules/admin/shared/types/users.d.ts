@@ -5,14 +5,16 @@ import type { ListAction, ListView } from '@admin/shared/constants';
 
 export type UserSchema = CurrentUserSchema;
 
-export type UserDraftSchema = {
+export type UserUpdates = Partial<UserSchema>;
+
+export type UserDraft = {
   get fullname(): string;
   set name(name: string);
   set surname(surname: string);
   set email(email: string);
   set phone(phone: string);
   set type(type: UserType);
-};
+}
 
 export type UsersState = {
   currentUser: UserSchema;
@@ -27,13 +29,16 @@ export type UsersViewState = {
 }
 
 export interface UsersStore extends Store<UsersState> {
-  draftUser: UserDraftSchema;
+  draftUser: UserDraft;
 }
 
 export interface UsersStoreWithActions extends UsersStore {
+  hasSelectedUserUpdates(): boolean;
+  getSelectedUserUpdates(): UserUpdates;
   setCurrentUser(user: UserSchema): void;
   setUsers(users: UserSchema[]): void;
   addUser(user: UserSchema): void;
+  removeUser(userId: number): void;
   selectUser(userId: number): void;
   updateViewState<T extends keyof UsersViewState>(state: T, value: UsersViewState[T]): void;
 }
@@ -41,7 +46,9 @@ export interface UsersStoreWithActions extends UsersStore {
 export interface UsersController {
   loadUsers(): Promise<boolean>;
   loadUser(userId: number): Promise<boolean>;
-  selectUser(userId: number): Promise<void>;
+  saveUser(user: UserSchema): Promise<boolean>;
+  deleteUser(userId: number): Promise<boolean>;
+  selectUser(userId?: number): Promise<void>;
   setCurrentUser(user: UserSchema): Promise<void>;
   updateViewState<T extends keyof UsersViewState>(state: T, value: UsersViewState[T]): Promise<void>;
 }

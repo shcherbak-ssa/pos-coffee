@@ -87,13 +87,18 @@ export class ApiService implements BaseApiService {
 
   private async sendRequest<T = void>(method: ApiMethod, endpoint: string): Promise<T> {
     let apiEndpoint: string = setParamsToUrl(endpoint, this.params);
-    apiEndpoint += QUERY_URL_SEPARATOR + this.query;
+
+    if (this.query) {
+      apiEndpoint += QUERY_URL_SEPARATOR + this.query;
+    }
 
     const response = await fetch(location.origin + apiEndpoint, {
       method,
       headers: ApiService.getHeaders(),
       body: ApiService.isGetMethod(method) ? null : this.body,
     });
+
+    this.cleanData();
 
     if (response.ok) {
       if (ApiService.isNoContentCode(response.status)) {
@@ -110,6 +115,12 @@ export class ApiService implements BaseApiService {
     }
 
     throw new ApiError(error);
+  }
+
+  private cleanData(): void {
+    this.params = {};
+    this.query = EMPTY_STRING;
+    this.body = EMPTY_STRING;
   }
 
 }

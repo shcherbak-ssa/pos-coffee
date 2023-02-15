@@ -15,5 +15,6 @@ public class ConfigUser {
   private String phone;
   private String password;
   private String type;
+  private Boolean isDeleted;
 
 }

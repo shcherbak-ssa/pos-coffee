@@ -16,6 +16,7 @@ type Config = {
     phone: string;
     password: string;
     type: UserType;
+    isDeleted: boolean;
   }[];
 }
 
@@ -28,66 +29,92 @@ const fileContent: Config = {
       name: 'Stanislav',
       surname: 'Shcherbakov',
       email: 'shcherbak.ssa@gmail.com',
-      phone: '+375333081037',
+      phone: '375333081037',
       password: 'qwerty1234',
       type: UserType.ADMIN,
+      isDeleted: false,
     },
     {
       name: faker.name.firstName('female'),
       surname: faker.name.lastName('female'),
       email: faker.internet.email(),
-      phone: faker.phone.number('+############'),
+      phone: faker.phone.number('############'),
       password: faker.internet.password(10),
       type: UserType.ADMIN,
+      isDeleted: false,
     },
     {
       name: faker.name.firstName('female'),
       surname: faker.name.lastName('female'),
       email: faker.internet.email(),
-      phone: faker.phone.number('+############'),
+      phone: faker.phone.number('############'),
       password: faker.internet.password(10),
       type: UserType.MANAGER,
+      isDeleted: false,
     },
     {
       name: faker.name.firstName('male'),
       surname: faker.name.lastName('male'),
       email: faker.internet.email(),
-      phone: faker.phone.number('+############'),
+      phone: faker.phone.number('############'),
       password: faker.internet.password(10),
       type: UserType.MANAGER,
+      isDeleted: false,
     },
 
     {
       name: faker.name.firstName('female'),
       surname: faker.name.lastName('female'),
       email: faker.internet.email(),
-      phone: faker.phone.number('+############'),
+      phone: faker.phone.number('############'),
       password: faker.internet.password(10),
       type: UserType.WAITER,
+      isDeleted: false,
     },
     {
       name: faker.name.firstName('male'),
       surname: faker.name.lastName('male'),
       email: faker.internet.email(),
-      phone: faker.phone.number('+############'),
+      phone: faker.phone.number('############'),
       password: faker.internet.password(10),
       type: UserType.WAITER,
+      isDeleted: false,
     },
     {
       name: faker.name.firstName('female'),
       surname: faker.name.lastName('female'),
       email: faker.internet.email(),
-      phone: faker.phone.number('+############'),
+      phone: faker.phone.number('############'),
       password: faker.internet.password(10),
       type: UserType.WAITER,
+      isDeleted: false,
     },
     {
       name: faker.name.firstName('male'),
       surname: faker.name.lastName('male'),
       email: faker.internet.email(),
-      phone: faker.phone.number('+############'),
+      phone: faker.phone.number('############'),
       password: faker.internet.password(10),
       type: UserType.WAITER,
+      isDeleted: false,
+    },
+    {
+      name: faker.name.firstName('female'),
+      surname: faker.name.lastName('female'),
+      email: faker.internet.email(),
+      phone: faker.phone.number('############'),
+      password: faker.internet.password(10),
+      type: UserType.MANAGER,
+      isDeleted: true,
+    },
+    {
+      name: faker.name.firstName('male'),
+      surname: faker.name.lastName('male'),
+      email: faker.internet.email(),
+      phone: faker.phone.number('############'),
+      password: faker.internet.password(10),
+      type: UserType.WAITER,
+      isDeleted: true,
     },
   ]
 };

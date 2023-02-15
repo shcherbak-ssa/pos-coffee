@@ -12,8 +12,7 @@ import com.digitazon.poscoffee.models.UserType;
 import com.digitazon.poscoffee.models.helpers.ConfigUser;
 import com.digitazon.poscoffee.services.UserTypesService;
 import com.digitazon.poscoffee.services.UsersService;
-import com.digitazon.poscoffee.shared.constants.AppConstants;
-import com.digitazon.poscoffee.shared.constants.UsersConstants;
+import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
 import com.digitazon.poscoffee.shared.exceptions.ProgerException;
 
 @Component
@@ -33,37 +32,16 @@ public class DatabaseDataLoader {
     this.userTypesService.loadTypes();
   }
 
-  public void loadUsers(List<ConfigUser> users) throws ProgerException {
+  public void loadUsers(List<ConfigUser> users) throws ProgerException, AlreadyExistException {
     for (ConfigUser configUser : users) {
       final User user = (User) this.context.getBean("userFromConfigUser", configUser);
-      final UserType userType = this.getUserTypeFromUserConfig(configUser);
+      final UserType userType
+        = Helpers.converUserTypeToEnumValue(this.userTypesService, configUser.getType());
 
       user.setType(userType);
 
       this.usersService.createUser(user);
     }
-  }
-
-  private UserType getUserTypeFromUserConfig(ConfigUser user) throws ProgerException {
-    UsersConstants.UserType userType = null;
-
-    switch (user.getType()) {
-      case AppConstants.ConfigUserType.ADMIN:
-        userType = UsersConstants.UserType.ADMIN;
-        break;
-      case AppConstants.ConfigUserType.MANAGER:
-        userType = UsersConstants.UserType.MANAGER;
-        break;
-      case AppConstants.ConfigUserType.WAITER:
-        userType = UsersConstants.UserType.WAITER;
-        break;
-    }
-
-    if (userType == null) {
-      throw new ProgerException(String.format("Unknown user type %s from config", user.getType()));
-    }
-
-    return this.userTypesService.getByName(userType);
   }
 
 }

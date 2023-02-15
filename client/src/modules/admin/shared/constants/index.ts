@@ -1,4 +1,5 @@
 export const DEFAULT_ERROR_MESSAGE: string = 'Something went wrong!';
+export const CREATE_NEW_LABEL: string = 'new';
 
 export enum ApiEndpoint {
   USERS = '/api/admin/users',

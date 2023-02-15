@@ -48,6 +48,21 @@ public class AppConfig {
 
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+  public User user(ClientUser clientUser, UserType userType) {
+    final User user = new User();
+
+    user.setId(clientUser.getId());
+    user.setName(clientUser.getName());
+    user.setSurname(clientUser.getSurname());
+    user.setEmail(clientUser.getEmail());
+    user.setPhone(clientUser.getPhone());
+    user.setType(userType);
+
+    return user;
+  }
+
+  @Bean
+  @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
   public User userFromConfigUser(ConfigUser configUser) {
     final User user = new User();
 
@@ -56,6 +71,7 @@ public class AppConfig {
     user.setPhone(configUser.getPhone());
     user.setEmail(configUser.getEmail());
     user.setPassword(configUser.getPassword());
+    user.setIsDeleted(configUser.getIsDeleted());
 
     return user;
   }

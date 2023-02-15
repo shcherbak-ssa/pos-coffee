@@ -1,16 +1,33 @@
+import { useEffect } from 'react';
+
+import { ErrorType } from 'shared/constants';
+import { useError } from 'view/hooks/error';
 import { useStore } from 'view/hooks/store';
 
-import type { UsersStore } from '@admin/shared/types';
+import type { UserSchema, UsersStore } from '@admin/shared/types';
 import { StoreName } from '@admin/shared/constants';
 import { UserPersonalCard } from '@admin/view/components/user/UserPersonalCard';
 import { UserProfileCard } from '@admin/view/components/user/UserProfileCard';
 import { UserLocationCard } from '@admin/view/components/user/UserLocationCard';
-import { useState } from 'react';
 
-export function UsersPageInfoContainer() {
+export type Props = {
+  isEditMode: boolean;
+}
 
-  const [ isEditMode, setIsEditMode ] = useState<boolean>(false);
-  const { state: { selectedUser } } = useStore(StoreName.USERS) as UsersStore;
+export function UsersPageInfoContainer({ isEditMode }: Props) {
+
+  const { state: { selectedUser }, draftUser } = useStore(StoreName.USERS) as UsersStore;
+  const [ validationError, cleanValidationError ] = useError<UserSchema>(ErrorType.VALIDATION);
+
+  useEffect(() => {
+    cleanValidationError();
+  }, [isEditMode]);
+
+  useEffect(() => {
+    return () => {
+      cleanValidationError();
+    };
+  }, []);
 
   return (
     <div className="full p-6">
@@ -20,6 +37,8 @@ export function UsersPageInfoContainer() {
         <UserProfileCard
           className="col-span-3"
           user={selectedUser}
+          draftUser={draftUser}
+          validationError={validationError}
           isEditMode={isEditMode}
         />
 

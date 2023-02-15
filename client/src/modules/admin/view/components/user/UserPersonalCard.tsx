@@ -11,7 +11,7 @@ export function UserPersonalCard({ user }: Props) {
 
   return (
     <CardWrapper>
-      <div className="flex-center flex-col full">
+      <div className="flex-center flex-col text-center full">
         <UserPhoto
           className="mb-6"
           photo=""

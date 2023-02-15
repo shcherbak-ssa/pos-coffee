@@ -4,65 +4,91 @@
       "name": "Stanislav",
       "surname": "Shcherbakov",
       "email": "shcherbak.ssa@gmail.com",
-      "phone": "+375333081037",
+      "phone": "375333081037",
       "password": "qwerty1234",
-      "type": "ADMIN"
+      "type": "ADMIN",
+      "isDeleted": false
     },
     {
-      "name": "Tami",
-      "surname": "Ritchie",
-      "email": "Gabriel.Predovic@yahoo.com",
-      "phone": "+255753177587",
-      "password": "ynixqih7Ru",
-      "type": "ADMIN"
+      "name": "Debra",
+      "surname": "Wilderman",
+      "email": "Kelsi99@yahoo.com",
+      "phone": "502653836043",
+      "password": "790l1lVA4Y",
+      "type": "ADMIN",
+      "isDeleted": false
     },
     {
-      "name": "Julie",
-      "surname": "Hand",
-      "email": "Forest_Murphy18@hotmail.com",
-      "phone": "+105391792934",
-      "password": "8wENV5OcFH",
-      "type": "MANAGER"
+      "name": "Sharon",
+      "surname": "Konopelski",
+      "email": "Jayson_Collier69@hotmail.com",
+      "phone": "631809097024",
+      "password": "jBKai3G3EM",
+      "type": "MANAGER",
+      "isDeleted": false
     },
     {
-      "name": "Wilfred",
-      "surname": "MacGyver",
-      "email": "Michelle.Goodwin@hotmail.com",
-      "phone": "+813792352116",
-      "password": "JqufAxFOC0",
-      "type": "MANAGER"
+      "name": "Charlie",
+      "surname": "Hermann",
+      "email": "Cristal30@hotmail.com",
+      "phone": "391153584908",
+      "password": "N8BgIIE7y8",
+      "type": "MANAGER",
+      "isDeleted": false
     },
     {
-      "name": "Rita",
-      "surname": "Schoen",
-      "email": "Frances.Goyette@yahoo.com",
-      "phone": "+050409848230",
-      "password": "M8HDmQh6Tv",
-      "type": "WAITER"
+      "name": "Amanda",
+      "surname": "Romaguera",
+      "email": "Gerhard_Ernser@gmail.com",
+      "phone": "382055025418",
+      "password": "ZK6w5GSU6T",
+      "type": "WAITER",
+      "isDeleted": false
     },
     {
-      "name": "Fernando",
-      "surname": "Hudson",
-      "email": "Darrick.Zulauf@hotmail.com",
-      "phone": "+798082690614",
-      "password": "iGB4enwS2R",
-      "type": "WAITER"
+      "name": "Charles",
+      "surname": "Mann",
+      "email": "Maureen.Shields34@hotmail.com",
+      "phone": "605289520245",
+      "password": "wkuzGQqshk",
+      "type": "WAITER",
+      "isDeleted": false
     },
     {
-      "name": "Betty",
-      "surname": "Reichel",
-      "email": "Electa.Johnson49@yahoo.com",
-      "phone": "+111048317634",
-      "password": "Tuk58AG5ob",
-      "type": "WAITER"
+      "name": "Janie",
+      "surname": "Schaden",
+      "email": "Giovanna.Marks@hotmail.com",
+      "phone": "013360092748",
+      "password": "KPqzyGk4fG",
+      "type": "WAITER",
+      "isDeleted": false
     },
     {
-      "name": "Enrique",
-      "surname": "Bahringer",
-      "email": "Melyna.Mertz26@hotmail.com",
-      "phone": "+140858527033",
-      "password": "d8XOJqRLoB",
-      "type": "WAITER"
+      "name": "Eric",
+      "surname": "Batz",
+      "email": "Zachariah29@gmail.com",
+      "phone": "880312319489",
+      "password": "yKTQj7h54o",
+      "type": "WAITER",
+      "isDeleted": false
+    },
+    {
+      "name": "Kristen",
+      "surname": "Rempel",
+      "email": "Beulah_Graham@gmail.com",
+      "phone": "222974614537",
+      "password": "gjHGnl5Mni",
+      "type": "MANAGER",
+      "isDeleted": true
+    },
+    {
+      "name": "Al",
+      "surname": "Emmerich",
+      "email": "Kris99@gmail.com",
+      "phone": "050419568796",
+      "password": "knecb8hSO2",
+      "type": "WAITER",
+      "isDeleted": true
     }
   ]
 }

@@ -4,11 +4,12 @@ import { EMPTY_STRING } from 'shared/constants';
 
 export type Props = {
   label: string;
-  errorMessage?: string;
   children: React.ReactElement;
+  description?: string;
+  errorMessage?: string;
 }
 
-export function InputWrapper({ label, errorMessage, children }: Props) {
+export function InputWrapper({ label, errorMessage, description, children }: Props) {
 
   const { props: childrenProps } = children;
 
@@ -23,6 +24,12 @@ export function InputWrapper({ label, errorMessage, children }: Props) {
       {
         errorMessage
           ? <small className="p-invalid mt-1 px-2">{ errorMessage }</small>
+          : EMPTY_STRING
+      }
+
+      {
+        description && !errorMessage
+          ? <small className="mt-1 px-2">{ description }</small>
           : EMPTY_STRING
       }
 
