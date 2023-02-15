@@ -6,12 +6,12 @@ import { ConfirmDialog } from 'primereact/confirmdialog';
 import { updatePageTitle } from 'shared/utils';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
+import { NotificationContainer } from 'view/containers/NotificationContainer';
 
 import type { AppController, AppPageSchema, AppStore } from '@admin/shared/types';
 import { ControllerName, StoreName } from '@admin/shared/constants';
 import { AppMenuContainer } from '@admin/view/containers/app/AppMenuContainer';
 import { AppHeaderContainer } from '@admin/view/containers/app/AppHeaderContainer';
-import { NotificationContainer } from '@admin/view/containers/NotificationContainer';
 
 export type Props = {
   page: AppPageSchema;

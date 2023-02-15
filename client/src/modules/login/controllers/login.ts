@@ -1,4 +1,4 @@
-import type { Token } from 'shared/types';
+import type { ApiService, Token, ValidationService } from 'shared/types';
 import { LocalStorageKey, ROOT_PAGE_PATH } from 'shared/constants';
 import { replaceLocation } from 'shared/utils';
 import { LocalStorage } from 'shared/helpers/local-storage';
@@ -16,9 +16,11 @@ export class LoginController extends BaseController implements BaseLoginControll
 
   public async processLogin(schema: LoginSchema): Promise<void> {
     try {
-      await this.validation.validateToCreate(LOGIN_VALIDATION, schema);
+      const validationService: ValidationService = await this.getValidationService();
+      await validationService.validateToCreate(LOGIN_VALIDATION, schema);
 
-      const token: Token = await this.api
+      const apiService: ApiService = await this.getApiService();
+      const token: Token = await apiService
         .addBody(schema)
         .post(LOGIN_API_ENDPOINT);
 

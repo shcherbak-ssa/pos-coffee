@@ -1,7 +1,7 @@
-import type { ErrorService as BaseErrorService } from 'shared/types';
+import type { NotificationService as BaseNotificationService } from 'shared/types';
 import { ErrorType } from 'shared/constants';
 import { ApiError, AuthError, ValidationError } from 'shared/errors';
-import { ErrorService } from 'services/error';
+import { NotificationService } from 'services/notification';
 
 export function parseError(e: Error): void {
   if (e instanceof AuthError) {
@@ -13,10 +13,10 @@ export function parseError(e: Error): void {
     return;
   }
 
-  const errorService: BaseErrorService = ErrorService.create();
+  const notificationService: BaseNotificationService = NotificationService.create();
 
   if (e instanceof ValidationError) {
-    errorService.addError({
+    notificationService.addError({
       type: ErrorType.VALIDATION,
       message: e.message,
       errors: e.errors,
@@ -26,7 +26,7 @@ export function parseError(e: Error): void {
   }
 
   if (e instanceof ApiError) {
-    errorService.addError(e.error);
+    notificationService.addError(e.error);
     return;
   }
 

@@ -1,3 +1,4 @@
+import type { ApiService, NotificationService, ValidationService } from 'shared/types';
 import { ZERO } from 'shared/constants';
 import { Context } from 'shared/context';
 import { parseError } from 'shared/helpers/parse-error';
@@ -11,8 +12,9 @@ import type {
   UsersViewState,
   UserUpdates,
 } from '@admin/shared/types';
-import { ApiEndpoint, StoreName, ValidationName } from '@admin/shared/constants';
+import { ApiEndpoint, Entity, StoreName, ValidationName } from '@admin/shared/constants';
 import { UserSchema } from '@admin/models/user';
+import { notifications } from '@admin/shared/configs';
 
 export class UsersController extends BaseController implements BaseUsersController {
 
@@ -22,7 +24,8 @@ export class UsersController extends BaseController implements BaseUsersControll
 
   public async loadUsers(): Promise<boolean> {
     try {
-      const users: BaseUserSchema[] = await this.api.get(ApiEndpoint.USERS);
+      const apiService: ApiService = await this.getApiService();
+      const users: BaseUserSchema[] = await apiService.get(ApiEndpoint.USERS);
 
       const store = await this.getStore() as UsersStoreWithActions;
       store.setUsers(users);
@@ -36,7 +39,8 @@ export class UsersController extends BaseController implements BaseUsersControll
 
   public async loadUser(userId: number): Promise<boolean> {
     try {
-      const user: BaseUserSchema = await this.api
+      const apiService: ApiService = await this.getApiService();
+      const user: BaseUserSchema = await apiService
         .addParams({ id: userId })
         .get(ApiEndpoint.USERS_ID);
 
@@ -58,10 +62,11 @@ export class UsersController extends BaseController implements BaseUsersControll
         return true;
       }
 
+      const isNewSchema: boolean = user.isNewSchema();
       const updates: UserUpdates = store.getSelectedUserUpdates();
       let savedUser: BaseUserSchema = UserSchema.create(user);
 
-      if (user.isNewSchema()) {
+      if (isNewSchema) {
         savedUser = await this.createUser(updates);
       } else {
         await this.updateUser(updates);
@@ -69,6 +74,11 @@ export class UsersController extends BaseController implements BaseUsersControll
 
       store.addUser(savedUser);
       store.selectUser(savedUser.id);
+
+      const notificationService: NotificationService = await this.getNotificationService();
+      notificationService.addNotification(
+        (isNewSchema ? notifications.created : notifications.updated)(Entity.USER)
+      );
 
       return true;
     } catch (e: any) {
@@ -79,12 +89,16 @@ export class UsersController extends BaseController implements BaseUsersControll
 
   public async deleteUser(userId: number): Promise<boolean> {
     try {
-      await this.api
+      const apiService: ApiService = await this.getApiService();
+      await apiService
         .addParams({ id: userId })
         .delete(ApiEndpoint.USERS_ID);
 
       const store = await this.getStore() as UsersStoreWithActions;
       store.removeUser(userId);
+
+      const notificationService: NotificationService = await this.getNotificationService();
+      notificationService.addNotification(notifications.deleted(Entity.USER));
 
       return true;
     } catch (e: any) {
@@ -119,17 +133,21 @@ export class UsersController extends BaseController implements BaseUsersControll
   }
 
   private async createUser(updates: UserUpdates): Promise<BaseUserSchema> {
-    await this.validation.validateToCreate(ValidationName.USERS, updates);
+    const validationService: ValidationService = await this.getValidationService();
+    await validationService.validateToCreate(ValidationName.USERS, updates);
 
-    return await this.api
+    const apiService: ApiService = await this.getApiService();
+    return await apiService
       .addBody(updates)
       .post(ApiEndpoint.USERS);
   }
 
   private async updateUser(updates: UserUpdates): Promise<void> {
-    await this.validation.validateToUpdate(ValidationName.USERS, updates);
+    const validationService: ValidationService = await this.getValidationService();
+    await validationService.validateToUpdate(ValidationName.USERS, updates);
 
-    await this.api
+    const apiService: ApiService = await this.getApiService();
+    await apiService
       .addBody(updates)
       .put(ApiEndpoint.USERS);
   }

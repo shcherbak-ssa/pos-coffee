@@ -1,7 +1,9 @@
 import { PrimeIcons } from 'primereact/api';
 
+import type { Notification } from 'shared/types';
+
 import type { AppPageSchema, MenuItem, OptionItem } from '@admin/shared/types';
-import { ListAction, ListView, PagePath, PageTitle } from '@admin/shared/constants';
+import { Entity, ListAction, ListView, PagePath, PageTitle } from '@admin/shared/constants';
 
 export const appMenuItems: MenuItem[] = [
   {
@@ -114,3 +116,23 @@ export const listActionOptions: OptionItem[] = [
     label: 'Filter',
   },
 ];
+
+export const notifications: {
+  [key: string]: (entity: Entity) => Notification,
+} = {
+  created: (entity: Entity) => ({
+    severity: 'success',
+    heading: 'Created',
+    message: `${entity} created successfully`,
+  }),
+  updated: (entity: Entity) => ({
+    severity: 'success',
+    heading: 'Updated',
+    message: `${entity} updated successfully`,
+  }),
+  deleted: (entity: Entity) => ({
+    severity: 'success',
+    heading: 'Deleted',
+    message: `${entity} deleted successfully`,
+  }),
+};

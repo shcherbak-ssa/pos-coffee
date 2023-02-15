@@ -5,6 +5,8 @@ import { StoreName } from '@admin/shared/constants';
 
 export class AppController implements BaseAppController {
 
+  private constructor() {}
+
   public static create(): AppController {
     return new AppController();
   }

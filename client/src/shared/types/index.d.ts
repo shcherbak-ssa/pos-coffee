@@ -14,6 +14,16 @@ export type AnyType = {
   [key: string]: string | number | boolean | object | AnyType | AnyType[] | null | undefined;
 }
 
+export type Notification = {
+  severity?: 'success' | 'info' | 'warn' | 'error';
+  heading?: React.ReactNode;
+  message?: React.ReactNode;
+  closable?: boolean;
+  sticky?: boolean;
+  life?: number;
+  className?: string;
+}
+
 export type ViewSeverity = 'success' | 'info' | 'warning' | 'danger' | null | undefined;
 
 export type Controller = {}
@@ -32,6 +42,7 @@ export type Token = {
   type: string;
 }
 
+export type NotificationHandler = (notification: Notification) => void;
 export type ErrorHandler<T> = (error: ErrorObject<T>) => void;
 
 export type Errors<T> = {
@@ -54,10 +65,13 @@ export interface ApiService {
   delete(endpoint: string): Promise<void>;
 }
 
-export interface ErrorService {
+export interface NotificationService {
+  addNotification(notification: Notification): void;
+  subscribeToNotification(handler: NotificationHandler): void;
+  unsubscribeFromNoification(handler: NotificationHandler): void;
   addError<T>(error: ErrorObject<T>): void;
-  subscribe<T>(errorType: ErrorType, handler: ErrorHandler<T>): void;
-  unsubscribe<T>(errorType: ErrorType, handler: ErrorHandler<T>): void;
+  subscribeToError<T>(errorType: ErrorType, handler: ErrorHandler<T>): void;
+  unsubscribeFromError<T>(errorType: ErrorType, handler: ErrorHandler<T>): void;
 }
 
 export interface LoaderService {

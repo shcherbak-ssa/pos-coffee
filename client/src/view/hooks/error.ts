@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
-import type { ErrorObject, ErrorService as BaseErrorService } from 'shared/types';
+import type { ErrorObject, NotificationService as BaseNotificationService } from 'shared/types';
 import type { ErrorType } from 'shared/constants';
-import { ErrorService } from 'services/error';
+import { NotificationService } from 'services/notification';
 
 export type ErrorObjectHook<T> = ErrorObject<T> | undefined;
 
@@ -10,11 +10,11 @@ export function useError<T>(errorType: ErrorType): [ErrorObjectHook<T>, () => vo
   const [ error, setError ] = useState<ErrorObject<T>>();
 
   useEffect(() => {
-    const errorService: BaseErrorService = ErrorService.create();
-    errorService.subscribe(errorType, handleError);
+    const notificationService: BaseNotificationService = NotificationService.create();
+    notificationService.subscribeToError(errorType, handleError);
 
     return () => {
-      errorService.unsubscribe(errorType, handleError);
+      notificationService.unsubscribeFromError(errorType, handleError);
     }
   }, []);
 
