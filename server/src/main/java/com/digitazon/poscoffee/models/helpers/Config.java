@@ -1,6 +1,6 @@
 package com.digitazon.poscoffee.models.helpers;
 
-import com.digitazon.poscoffee.models.User;
+import java.util.List;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Config {
 
-  private User admin;
+  private List<ConfigUser> users;
 
 }

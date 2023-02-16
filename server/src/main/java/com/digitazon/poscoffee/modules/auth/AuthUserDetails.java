@@ -19,7 +19,6 @@ import lombok.Data;
 public class AuthUserDetails implements UserDetails {
 
   private Long id;
-  private String username;
   private String email;
 
   @JsonIgnore
@@ -28,16 +27,19 @@ public class AuthUserDetails implements UserDetails {
   private Collection<? extends GrantedAuthority> authorities;
 
   public static AuthUserDetails build(User user) {
-    List<GrantedAuthority> authorities = new ArrayList<>();
+    final List<GrantedAuthority> authorities = new ArrayList<>();
     authorities.add(new SimpleGrantedAuthority(user.getType().getName().toString()));
 
     return new AuthUserDetails(
       user.getId(),
-      user.getUsername(),
       user.getEmail(),
       user.getPassword(),
       authorities
     );
+  }
+
+  public String getUsername() {
+    return this.email;
   }
 
   @Override

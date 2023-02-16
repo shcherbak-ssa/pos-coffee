@@ -17,9 +17,9 @@ public class AuthUserDetailsService implements UserDetailsService {
   private UsersService usersService;
 
   @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     try {
-      User user = this.usersService.findByUsername(username);
+      final User user = this.usersService.findByEmail(email);
 
       return AuthUserDetails.build(user);
     } catch (ResourceNotFoundException exception) {

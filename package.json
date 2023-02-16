@@ -1,0 +1,22 @@
+{
+  "name": "pos-coffee",
+  "version": "1.0.0",
+  "description": "The final project of the Digitazon course",
+  "scripts": {
+    "generate-server-config": "npx ts-node scripts/generate-server-config.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shcherbak-ssa/pos-coffee.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shcherbak-ssa/pos-coffee/issues"
+  },
+  "homepage": "https://github.com/shcherbak-ssa/pos-coffee#readme",
+  "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
+    "@types/node": "^18.13.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5"
+  }
+}

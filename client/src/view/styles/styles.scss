@@ -1,5 +1,9 @@
 .app {
   &-logo {
+    .normal {
+      width: 32px;
+    }
+
     .large {
       width: 64px;
     }
@@ -10,14 +14,18 @@
   }
 }
 
-.login {
-  @media screen and (min-width: 475px) {
-    max-width: 360px;
+.icon-button.p-button {
+  &.p-button-raised {
+    @apply bg-white shadow;
+    color: var(--primary-color);
   }
 
-  &-image {
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
+  &.on-white {
+    @apply shadow-none;
+  }
+
+  &.is-active, &:enabled:hover {
+    @apply bg-transparent;
+    box-shadow: inset 0 0 0 0.1rem #81a1c1;
   }
 }

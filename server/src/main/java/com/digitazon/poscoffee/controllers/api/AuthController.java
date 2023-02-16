@@ -33,7 +33,7 @@ public class AuthController {
   @ResponseStatus(HttpStatus.OK)
   public LoginResponse login(@RequestBody @Valid LoginRequest request) {
     final Authentication authentication = this.authManager.authenticate(
-      new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+      new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
     );
 
     SecurityContextHolder.getContext().setAuthentication(authentication);

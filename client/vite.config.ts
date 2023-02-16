@@ -19,6 +19,9 @@ export default defineConfig({
       services: path.join(__dirname, 'src', 'services'),
       shared: path.join(__dirname, 'src', 'shared'),
       view: path.join(__dirname, 'src', 'view'),
+      '@admin': path.join(__dirname, 'src', 'modules', 'admin'),
+      '@app': path.join(__dirname, 'src', 'modules', 'app'),
+      '@login': path.join(__dirname, 'src', 'modules', 'login'),
     },
   },
 });

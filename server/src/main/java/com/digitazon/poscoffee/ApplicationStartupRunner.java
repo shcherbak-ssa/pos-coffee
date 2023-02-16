@@ -25,17 +25,17 @@ public class ApplicationStartupRunner implements CommandLineRunner {
   @Override
   public void run(String... args) throws Exception {
     this.addConsoleSpace();
-    this.logStartedMessage();
 
     this.dataLoader.loadConstants();
     this.log("# Constants loaded");
 
     Config config = this.localResourceLoader
       .loadJSONResource(AppConstants.POSCOFFEE_CONFIG_FILENAME, Config.class);
-    this.log("# Config Loaded");
 
-    this.dataLoader.loadAdmin(config.getAdmin());
-    this.log("# Admin user loaded");
+    this.dataLoader.loadUsers(config.getUsers());
+    this.log("# Config loaded");
+
+    this.logStartedMessage();
 
     this.log("\n");
   }

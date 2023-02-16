@@ -12,14 +12,17 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.digitazon.poscoffee.models.helpers.ErrorResponse;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
+import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
+import com.digitazon.poscoffee.shared.exceptions.UnauthorizedUserException;
+
+import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
+@Slf4j
 public class ExceptionsController {
 
-  private static final String VALIDATION_ERROR_MESSAGE = "Validation error";
-
-  @ExceptionHandler(value = ResourceNotFoundException.class)
+  @ExceptionHandler(ResourceNotFoundException.class)
   public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException exception) {
     final ErrorResponse errorResponse = new ErrorResponse(); // @TODO: add context
     errorResponse.setMessage(exception.getMessage());
@@ -27,7 +30,7 @@ public class ExceptionsController {
     return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.NOT_FOUND);
   }
 
-  @ExceptionHandler(value = MethodArgumentNotValidException.class)
+  @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException exception) {
     Map<String, String> errors = new HashMap<>();
 
@@ -36,28 +39,58 @@ public class ExceptionsController {
     });
 
     final ErrorResponse errorResponse = new ErrorResponse(); // @TODO: add context
-    errorResponse.setType(AppConstants.ErrorType.VALIDATION);
-    errorResponse.setMessage(ExceptionsController.VALIDATION_ERROR_MESSAGE);
+    errorResponse.setType(AppConstants.ErrorType.VALIDATION.name());
+    errorResponse.setMessage(AppConstants.VALIDATION_ERROR_MESSAGE);
     errorResponse.setErrors(errors);
 
     return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
   }
 
-  @ExceptionHandler(value = BadCredentialsException.class)
+  @ExceptionHandler(BadCredentialsException.class)
   public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException exception) {
     final ErrorResponse errorResponse = new ErrorResponse(); // @TODO: add context
-    errorResponse.setType(AppConstants.ErrorType.CLIENT);
+    errorResponse.setType(AppConstants.ErrorType.CLIENT.name());
     errorResponse.setMessage(AppConstants.BAD_CREDENTIALS_MESSAGE);
 
     return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
   }
 
-  @ExceptionHandler(value = Exception.class)
-  public ResponseEntity<ErrorResponse> handleException(Exception exception) {
+  @ExceptionHandler(AlreadyExistException.class)
+  public ResponseEntity<ErrorResponse> handleAlreadyExistException(AlreadyExistException exception) {
     final ErrorResponse errorResponse = new ErrorResponse(); // @TODO: add context
+    errorResponse.setType(AppConstants.ErrorType.VALIDATION.name());
+    errorResponse.setMessage(exception.getMessage());
+    errorResponse.setErrors(exception.getErrors());
+
+    return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(UnauthorizedUserException.class)
+  public ResponseEntity<ErrorResponse> handleUnauthorizedUserException(UnauthorizedUserException exception) {
+    final ErrorResponse errorResponse = new ErrorResponse(); // @TODO: add context
+    errorResponse.setType(AppConstants.ErrorType.AUTH.name());
     errorResponse.setMessage(exception.getMessage());
 
-    return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.UNAUTHORIZED);
+  }
+
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<ErrorResponse> handleException(Exception exception) {
+    log.error(exception.getMessage());
+    log.error(exception.getCause().getMessage());
+
+    final ErrorResponse errorResponse = new ErrorResponse(); // @TODO: add context
+    String message = exception.getMessage();
+    HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+    if (exception.getClass().getName().endsWith(AppConstants.ACCESS_DENIED_ERROR)) {
+      message = AppConstants.ACCESS_DENY_MESSAGE;
+      status = HttpStatus.FORBIDDEN;
+    }
+
+    errorResponse.setMessage(message);
+
+    return new ResponseEntity<ErrorResponse>(errorResponse, status);
   }
 
 }
