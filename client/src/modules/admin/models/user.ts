@@ -9,6 +9,7 @@ export class UserSchema implements BaseUserSchema {
   public email: string;
   public phone: string;
   public type: UserType;
+  public photo: string;
   public isDeleted: boolean;
   public createdAt: Date | null;
   public updatedAt: Date | null;
@@ -21,6 +22,7 @@ export class UserSchema implements BaseUserSchema {
     this.email = schema?.email || EMPTY_STRING;
     this.phone = schema?.phone || EMPTY_STRING;
     this.type = schema?.type || UserType.ADMIN;
+    this.photo = schema?.photo || EMPTY_STRING;
     this.isDeleted = schema?.isDeleted || false;
     this.createdAt = schema?.createdAt ? new Date(schema.createdAt) : null;
     this.updatedAt = schema?.updatedAt ? new Date(schema.updatedAt) : null;

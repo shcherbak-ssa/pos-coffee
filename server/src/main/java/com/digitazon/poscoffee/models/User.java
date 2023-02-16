@@ -106,6 +106,8 @@ public class User {
   )
   private UserType type;
 
+  private String photo;
+
   private Boolean isDeleted;
 
   @CreatedDate

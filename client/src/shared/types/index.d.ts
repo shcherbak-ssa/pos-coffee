@@ -7,6 +7,7 @@ export type CurrentUserSchema = {
   email: string;
   phone: string;
   type: UserType;
+  photo: string;
   isDeleted: boolean;
   createdAt: Date | null;
   updatedAt: Date | null;

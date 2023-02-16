@@ -44,6 +44,7 @@ public class AppConfig {
     clientUser.setEmail(user.getEmail());
     clientUser.setPhone(user.getPhone());
     clientUser.setType(user.getType().getName().name());
+    clientUser.setPhoto(user.getPhoto());
     clientUser.setIsDeleted(user.getIsDeleted());
     clientUser.setCreatedAt(user.getCreatedAt());
     clientUser.setUpdatedAt(user.getUpdatedAt());
@@ -62,6 +63,7 @@ public class AppConfig {
     user.setSurname(clientUser.getSurname());
     user.setEmail(clientUser.getEmail());
     user.setPhone(clientUser.getPhone());
+    user.setPhoto(clientUser.getPhoto());
     user.setType(userType);
 
     return user;
@@ -77,6 +79,7 @@ public class AppConfig {
     user.setPhone(configUser.getPhone());
     user.setEmail(configUser.getEmail());
     user.setPassword(configUser.getPassword());
+    user.setPhoto(configUser.getPhoto());
     user.setIsDeleted(configUser.getIsDeleted());
 
     if (configUser.getIsDeleted()) {

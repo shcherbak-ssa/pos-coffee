@@ -39,6 +39,7 @@ export function UsersPage() {
   ];
 
   const addUserButtonProps: ButtonProps = {
+    className: 'p-button-sm',
     icon: PrimeIcons.PLUS,
     label: 'Add new user',
     onClick: () => {

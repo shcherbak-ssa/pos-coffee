@@ -1,3 +1,4 @@
+import classames from 'classnames';
 import { PrimeIcons } from 'primereact/api';
 import { Avatar } from 'primereact/avatar';
 
@@ -11,9 +12,10 @@ export function UserPhoto({ className, photo, size = 'large' }: Props) {
 
   return (
     <Avatar
-      className={className}
+      className={classames('overflow-hidden', className)}
       icon={PrimeIcons.USER}
       size={size}
+      image={photo || undefined}
     />
   );
 

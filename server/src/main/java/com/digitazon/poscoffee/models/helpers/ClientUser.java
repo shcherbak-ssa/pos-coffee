@@ -90,6 +90,7 @@ public class ClientUser {
   )
   private String type;
 
+  private String photo;
   private Boolean isDeleted;
   private Date createdAt;
   private Date updatedAt;

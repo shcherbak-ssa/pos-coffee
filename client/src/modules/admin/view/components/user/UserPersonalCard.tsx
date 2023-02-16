@@ -14,7 +14,7 @@ export function UserPersonalCard({ user }: Props) {
       <div className="flex-center flex-col text-center full">
         <UserPhoto
           className="mb-6"
-          photo=""
+          photo={user.photo}
           size="xlarge"
         />
 

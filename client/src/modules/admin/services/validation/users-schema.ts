@@ -32,6 +32,7 @@ const baseSchema: Schema = Joi.object({
     'string.empty': 'Type cannot be empty',
   }),
   isDeleted: Joi.boolean(),
+  photo: Joi.string(),
 });
 
 const schemaToCreate: Schema = baseSchema.keys({
