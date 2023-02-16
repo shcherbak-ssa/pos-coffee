@@ -4,7 +4,6 @@ import { PagePath } from '@admin/shared/constants';
 import { HomePage } from '@admin/view/pages/HomePage';
 import { UsersPage } from '@admin/view/pages/UsersPage';
 import { ProductsPage } from '@admin/view/pages/ProductsPage';
-import { SitesPage } from '@admin/view/pages/SitesPage';
 import { DashboardPage } from '@admin/view/pages/DashboardPage';
 import { OrdersPage } from '@admin/view/pages/OrdersPage';
 import { SettingsPage } from '@admin/view/pages/SettingsPage';
@@ -18,10 +17,6 @@ export const router = createBrowserRouter([
   {
     path: PagePath.DASHBOARD,
     element: <DashboardPage />,
-  },
-  {
-    path: PagePath.SITES,
-    element: <SitesPage />,
   },
   {
     path: PagePath.PRODUCTS,

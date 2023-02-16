@@ -17,26 +17,10 @@ export const appMenuItems: MenuItem[] = [
     to: PagePath.DASHBOARD,
   },
   {
-    label: PageTitle.SITES,
-    icon: PrimeIcons.MAP_MARKER,
-    to: PagePath.SITES,
-  },
-  {
     label: PageTitle.PRODUCTS,
     icon: PrimeIcons.BOX,
     to: PagePath.PRODUCTS,
   },
-  // @TODO: move to another place
-  // {
-  //   label: 'Categories',
-  //   icon: PrimeIcons.TAGS,
-  //   to: PagePath.CATEGORIES,
-  // },
-  // {
-  //   label: 'Stock',
-  //   icon: PrimeIcons.SHOPPING_CART,
-  //   to: PagePath.STOCK,
-  // },
   {
     label: PageTitle.ORDERS,
     icon: PrimeIcons.SHOPPING_BAG,
@@ -62,10 +46,6 @@ export const pages: { [key in PageTitle]: AppPageSchema } = {
   [PageTitle.DASHBOARD]: {
     title: PageTitle.DASHBOARD,
     icon: PrimeIcons.CHART_BAR,
-  },
-  [PageTitle.SITES]: {
-    title: PageTitle.SITES,
-    icon: PrimeIcons.MAP_MARKER,
   },
   [PageTitle.PRODUCTS]: {
     title: PageTitle.PRODUCTS,
