@@ -1,6 +1,8 @@
+import type { AddressDraft, AddressSchema as BaseAddressSchema, UserSchema as BaseUserSchema } from 'shared/types';
 import { EMPTY_STRING, UserType, ZERO } from 'shared/constants';
 
-import type { UserSchema as BaseUserSchema, UsersFilter, UserDraft, UserUpdates } from '@admin/shared/types';
+import type { UsersFilter, UserDraft, UserUpdates } from '@admin/shared/types';
+import { AddressSchema, createAddressDraft } from '@admin/models/address';
 
 export class UserSchema implements BaseUserSchema {
   public id: number;
@@ -10,6 +12,7 @@ export class UserSchema implements BaseUserSchema {
   public phone: string;
   public type: UserType;
   public photo: string;
+  public address: BaseAddressSchema | null;
   public isDeleted: boolean;
   public createdAt: Date | null;
   public updatedAt: Date | null;
@@ -23,6 +26,7 @@ export class UserSchema implements BaseUserSchema {
     this.phone = schema?.phone || EMPTY_STRING;
     this.type = schema?.type || UserType.ADMIN;
     this.photo = schema?.photo || EMPTY_STRING;
+    this.address = AddressSchema.create(schema?.address || undefined);
     this.isDeleted = schema?.isDeleted || false;
     this.createdAt = schema?.createdAt ? new Date(schema.createdAt) : null;
     this.updatedAt = schema?.updatedAt ? new Date(schema.updatedAt) : null;
@@ -38,9 +42,12 @@ export class UserSchema implements BaseUserSchema {
   }
 
   public getUpdates(): UserUpdates {
-    const { id, createdAt, updatedAt, deletedAt, ...updates } = this;
+    const { id, createdAt, updatedAt, deletedAt, address, ...updates } = this;
 
-    return updates;
+    return {
+      ...updates,
+      address: (address as AddressSchema).getUpdates(),
+    };
   }
 }
 
@@ -57,6 +64,10 @@ export function createUserDraft(schema: BaseUserSchema = UserSchema.create()): U
   return {
     get fullname(): string {
       return `${schema.name} ${schema.surname}`;
+    },
+
+    get address(): AddressDraft {
+      return createAddressDraft(schema.address || undefined);
     },
 
     set name(name: string) {

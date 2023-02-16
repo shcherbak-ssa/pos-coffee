@@ -4,11 +4,12 @@ import { DataTable, type DataTableRowClickEvent, type DataTableSelectionChangeEv
 import { Column } from 'primereact/column';
 import { Paginator, type PaginatorPageStateEvent } from 'primereact/paginator';
 
+import type { UserSchema } from 'shared/types';
 import { ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/navigate';
 
-import type { UserSchema, UsersStore } from '@admin/shared/types';
+import type { UsersStore } from '@admin/shared/types';
 import { ListAction, PagePath, StoreName } from '@admin/shared/constants';
 import { UserTypeLabel } from '@admin/view/components/user/UserTypeLabel';
 import { UserPhoto } from '@admin/view/components/user/UserPhoto';

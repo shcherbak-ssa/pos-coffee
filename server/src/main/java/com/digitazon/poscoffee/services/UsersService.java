@@ -65,7 +65,7 @@ public class UsersService {
     final Optional<User> foundUser = this.repository.findById(id);
 
     if (foundUser.isPresent()) {
-      return this.convertToClientUser(foundUser.get());
+      return this.convertToClientUser(foundUser.get(), true);
     }
 
     throw new ResourceNotFoundException("User not found");
@@ -76,7 +76,7 @@ public class UsersService {
 
     return users
       .stream()
-      .map(this::convertToClientUser)
+      .map((user) -> this.convertToClientUser(user, false))
       .collect(Collectors.toList());
   }
 
@@ -88,7 +88,7 @@ public class UsersService {
     final User createdUser = this.createUser(user);
     // @TODO: add email notification
 
-    return this.convertToClientUser(createdUser);
+    return this.convertToClientUser(createdUser, true);
   }
 
   public User createUser(User userToCreate) throws AlreadyExistException {
@@ -156,8 +156,8 @@ public class UsersService {
     throw new ResourceNotFoundException("User not found");
   }
 
-  private ClientUser convertToClientUser(User user) {
-    return (ClientUser) this.context.getBean("clientUser", user);
+  private ClientUser convertToClientUser(User user, boolean loadAddress) {
+    return (ClientUser) this.context.getBean("clientUser", user, loadAddress);
   }
 
   private User convertToUser(ClientUser user) throws ProgerException {
@@ -179,9 +179,10 @@ public class UsersService {
 
       @Override
       public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-        Path<User> isDeletedPath = root.get("isDeleted");
+        final Path<User> isDeletedPath = root.get("isDeleted");
+        final Boolean onlyDeleted = filter.getOnlyDeleted();
 
-        if (filter.getOnlyDeleted()) {
+        if (onlyDeleted != null && onlyDeleted) {
           return builder.equal(isDeletedPath, true);
         }
 

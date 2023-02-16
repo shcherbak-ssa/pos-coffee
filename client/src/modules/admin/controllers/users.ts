@@ -1,10 +1,9 @@
-import type { ApiService, NotificationService, ValidationService } from 'shared/types';
+import type { UserSchema as BaseUserSchema, ApiService, NotificationService, ValidationService } from 'shared/types';
 import { ZERO } from 'shared/constants';
 import { Context } from 'shared/context';
 import { BaseController } from 'controllers/base-controller';
 
 import type {
-  UserSchema as BaseUserSchema,
   UsersController as BaseUsersController,
   UsersFilter as BaseUsersFilter,
   UsersStore,

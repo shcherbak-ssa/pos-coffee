@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 import type { MenuItem } from 'primereact/menuitem';
 import { Button, type ButtonProps } from 'primereact/button';
 import { PrimeIcons } from 'primereact/api';
@@ -6,10 +7,9 @@ import { PrimeIcons } from 'primereact/api';
 import { EMPTY_STRING, LocalStorageKey } from 'shared/constants';
 import { LocalStorage } from 'shared/helpers/local-storage';
 import { useController } from 'view/hooks/controller';
-import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/navigate';
 
 import type { AppPageSchema, LastListPageTabPayload, UsersController } from '@admin/shared/types';
-import { ControllerName, CREATE_NEW_LABEL, PagePath, PageTitle, Tab } from '@admin/shared/constants';
+import { ControllerName, PagePath, PageTitle, Tab } from '@admin/shared/constants';
 import { pages } from '@admin/shared/configs';
 import { PageLayout } from '@admin/view/layouts/PageLayout';
 import { PageWrapper } from '@admin/view/components/page/PageWrapper';
@@ -22,8 +22,8 @@ export function UsersPage() {
   const [ isUsersLoaded, setIsUsersLoaded ] = useState<boolean>(false);
   const [ currentTab, setCurrentTab ] = useState<Tab>();
 
+  const navigate: NavigateFunction = useNavigate();
   const usersController = useController(ControllerName.USERS) as UsersController;
-  const navigateToUsersInfoPage: NavigateFunctionHook = useNavigateWithParams(PagePath.USERS_INFO);
 
   const usersPage: AppPageSchema = pages[PageTitle.USERS];
 
@@ -43,7 +43,7 @@ export function UsersPage() {
     icon: PrimeIcons.PLUS,
     label: 'Add new user',
     onClick: () => {
-      navigateToUsersInfoPage({ id: CREATE_NEW_LABEL });
+      navigate(PagePath.USERS_CREATE);
     },
   };
 

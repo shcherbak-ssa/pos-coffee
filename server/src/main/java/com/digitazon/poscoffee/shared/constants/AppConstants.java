@@ -4,6 +4,8 @@ import javax.validation.groups.Default;
 
 public class AppConstants {
 
+  public static final int MIN_UPDATE_LENGTH = 1;
+
   public static final String EMPTY_STRING = "";
   public static final String PASSWORD_GENERATOR_HELPER_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -36,6 +38,7 @@ public class AppConstants {
     public static final String USERS = "users";
     public static final String USER_TYPES = "user_types";
     public static final String USER_TYPE_JOIN = "user_type_join";
+    public static final String ADDRESSES = "addresses";
   }
 
   public static enum ErrorType {

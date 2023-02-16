@@ -4,12 +4,13 @@ import { Menu } from 'primereact/menu';
 import { confirmDialog } from 'primereact/confirmdialog';
 import { PrimeIcons } from 'primereact/api';
 
+import type { UserSchema } from 'shared/types';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/navigate';
 import { IconButton } from 'view/components/IconButton';
 
-import type { UserSchema, UsersController, UsersStore } from '@admin/shared/types';
+import type { UsersController, UsersStore } from '@admin/shared/types';
 import { Action, ControllerName, PagePath, StoreName } from '@admin/shared/constants';
 import { Button } from 'primereact/button';
 

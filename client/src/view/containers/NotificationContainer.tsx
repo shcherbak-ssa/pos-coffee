@@ -75,9 +75,9 @@ export function NotificationContainer() {
       // @ts-ignore
       toastProgress.current.show({
         ...notification,
+        sticky: true,
         summary: notification.heading,
         detail: notification.message,
-        life: NOTIFICATION_LIFE,
         content: <NotificationTemplate type="process" notification={notification} />,
       });
     }

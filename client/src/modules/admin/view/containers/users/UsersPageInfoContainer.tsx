@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
 
+import type { UserSchema } from 'shared/types';
 import { ErrorType } from 'shared/constants';
 import { useError } from 'view/hooks/error';
 import { useStore } from 'view/hooks/store';
 
-import type { UserSchema, UsersStore } from '@admin/shared/types';
+import type { UsersStore } from '@admin/shared/types';
 import { StoreName } from '@admin/shared/constants';
 import { UserPersonalInfo } from '@admin/view/components/user/UserPersonalInfo';
 import { UserProfileInfo } from '@admin/view/components/user/UserProfileInfo';
-import { UserLocationInfo } from '@admin/view/components/user/UserLocationInfo';
+import { LocationInfo } from '@admin/view/components/card/LocationInfo';
 
 export type Props = {
   isEditMode: boolean;
@@ -42,10 +43,10 @@ export function UsersPageInfoContainer({ isEditMode }: Props) {
           isEditMode={isEditMode}
         />
 
-        <UserLocationInfo
+        <LocationInfo
           className="col-span-4"
-          user={selectedUser}
-          draftUser={draftUser}
+          address={selectedUser.address}
+          draftAddress={draftUser.address}
           validationError={validationError}
           isEditMode={isEditMode}
         />

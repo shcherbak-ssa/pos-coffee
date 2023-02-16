@@ -1,5 +1,7 @@
 package com.digitazon.poscoffee.models.helpers;
 
+import com.digitazon.poscoffee.models.Address;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +18,7 @@ public class ConfigUser {
   private String password;
   private String type;
   private String photo;
+  private Address address;
   private Boolean isDeleted;
 
 }

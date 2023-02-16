@@ -1,18 +1,19 @@
-import type { CurrentUserSchema, Store } from 'shared/types';
+import type { UserSchema, Store, AddressDraft, AddressUpdates } from 'shared/types';
 import type { UserType } from 'shared/constants';
 
 import type { ListAction, ListView } from '@admin/shared/constants';
 
-export type UserSchema = CurrentUserSchema;
-
-export type UserUpdates = Partial<UserSchema>;
+export type UserUpdates = Partial<Omit<UserSchema, 'address'> & {
+  address: AddressUpdates;
+}>
 
 export type UsersFilter = Partial<{
   onlyDeleted: boolean;
-}>;
+}>
 
 export type UserDraft = {
   get fullname(): string;
+  get address(): AddressDraft;
   set name(name: string);
   set surname(surname: string);
   set email(email: string);

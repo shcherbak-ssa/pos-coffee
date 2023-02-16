@@ -1,6 +1,6 @@
 import '@admin/view/styles/admin.scss';
 
-import type { CurrentUserSchema } from 'shared/types';
+import type { UserSchema } from 'shared/types';
 import { Context } from 'shared/context';
 import { replaceLocation } from 'shared/utils';
 import { setupPrimeReact, render } from 'shared/helpers/setup-view';
@@ -11,13 +11,13 @@ import { ControllerName, PagePath, StoreName } from '@admin/shared/constants';
 import { LoaderService } from '@admin/services/loader';
 import { EntryLayout } from '@admin/view/layouts/EntryLayout';
 
-export async function renderAdmin(currentUser: CurrentUserSchema): Promise<void> {
+export async function renderAdmin(currentUser: UserSchema): Promise<void> {
   await setup(currentUser);
 
   render(<EntryLayout />);
 }
 
-async function setup(currentUser: CurrentUserSchema): Promise<void> {
+async function setup(currentUser: UserSchema): Promise<void> {
   setupPrimeReact();
   setupCleanDataOncloseEvents();
 

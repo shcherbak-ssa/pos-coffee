@@ -3,7 +3,7 @@ import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import 'view/styles/main.scss';
 
-import type { CurrentUserSchema } from 'shared/types';
+import type { UserSchema } from 'shared/types';
 import { LocalStorageKey, UserType } from 'shared/constants';
 import { AuthError } from 'shared/errors';
 import { LocalStorage } from 'shared/helpers/local-storage';
@@ -28,7 +28,7 @@ async function renderNext(isTokenExist: boolean): Promise<void> {
   if (isTokenExist) {
     try {
       const { loadCurrentUser } = await import('shared/helpers/current-user');
-      const currentUser: CurrentUserSchema = await loadCurrentUser();
+      const currentUser: UserSchema = await loadCurrentUser();
 
       if (currentUser.type === UserType.ADMIN) {
         const { renderAdmin } = await import('@admin/main');

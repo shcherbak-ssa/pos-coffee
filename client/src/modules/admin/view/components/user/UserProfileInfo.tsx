@@ -3,11 +3,12 @@ import type { SelectItem } from 'primereact/selectitem';
 import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
 
+import type { UserSchema } from 'shared/types';
 import { EMPTY_STRING, UserType, ZERO } from 'shared/constants';
 import type { ErrorObjectHook } from 'view/hooks/error';
 import { InputWrapper } from 'view/components/InputWrapper';
 
-import type { UserDraft, UserSchema } from '@admin/shared/types';
+import type { UserDraft } from '@admin/shared/types';
 import { CardWrapper } from '@admin/view/components/card/CardWrapper';
 import { CardHeading } from '@admin/view/components/card/CardHeading';
 

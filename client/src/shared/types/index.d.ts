@@ -1,18 +1,6 @@
-import type { ErrorType, UserType } from 'shared/constants';
+import type { ErrorType } from 'shared/constants';
 
-export type CurrentUserSchema = {
-  id: number;
-  name: string;
-  surname: string;
-  email: string;
-  phone: string;
-  type: UserType;
-  photo: string;
-  isDeleted: boolean;
-  createdAt: Date | null;
-  updatedAt: Date | null;
-  deletedAt: Date | null;
-}
+export * from './models';
 
 export type AnyType = {
   [key: string]: string | number | boolean | object | AnyType | AnyType[] | null | undefined;

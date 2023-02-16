@@ -4,12 +4,14 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -44,7 +46,7 @@ public class User {
     groups = AppConstants.ValidationGroups.ToCreate.class
   )
   @Size(
-    min = UsersConstants.MIN_UPDATE_LENGTH,
+    min = AppConstants.MIN_UPDATE_LENGTH,
     message = UsersConstants.NAME_EMPTY_MESSAGE,
     groups = AppConstants.ValidationGroups.ToUpdate.class
   )
@@ -55,8 +57,8 @@ public class User {
     groups = AppConstants.ValidationGroups.ToCreate.class
   )
   @Size(
-    min = UsersConstants.MIN_UPDATE_LENGTH,
-    message = UsersConstants.NAME_EMPTY_MESSAGE,
+    min = AppConstants.MIN_UPDATE_LENGTH,
+    message = UsersConstants.SURNAME_EMPTY_MESSAGE,
     groups = AppConstants.ValidationGroups.ToUpdate.class
   )
   private String surname;
@@ -73,8 +75,8 @@ public class User {
     groups = AppConstants.ValidationGroups.ToCreate.class
   )
   @Size(
-    min = UsersConstants.MIN_UPDATE_LENGTH,
-    message = UsersConstants.NAME_EMPTY_MESSAGE,
+    min = AppConstants.MIN_UPDATE_LENGTH,
+    message = UsersConstants.PHONE_EMPTY_MESSAGE,
     groups = AppConstants.ValidationGroups.ToUpdate.class
   )
   @Pattern(
@@ -107,6 +109,9 @@ public class User {
   private UserType type;
 
   private String photo;
+
+  @OneToOne(fetch = FetchType.EAGER)
+  private Address address;
 
   private Boolean isDeleted;
 

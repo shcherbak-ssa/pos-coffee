@@ -9,6 +9,7 @@ import javax.validation.constraints.Null;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import com.digitazon.poscoffee.models.Address;
 import com.digitazon.poscoffee.shared.annotations.EqualTo;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.UsersConstants;
@@ -33,7 +34,7 @@ public class ClientUser {
     groups = AppConstants.ValidationGroups.ToCreate.class
   )
   @Size(
-    min = UsersConstants.MIN_UPDATE_LENGTH,
+    min = AppConstants.MIN_UPDATE_LENGTH,
     message = UsersConstants.NAME_EMPTY_MESSAGE,
     groups = AppConstants.ValidationGroups.ToUpdate.class
   )
@@ -44,8 +45,8 @@ public class ClientUser {
     groups = AppConstants.ValidationGroups.ToCreate.class
   )
   @Size(
-    min = UsersConstants.MIN_UPDATE_LENGTH,
-    message = UsersConstants.NAME_EMPTY_MESSAGE,
+    min = AppConstants.MIN_UPDATE_LENGTH,
+    message = UsersConstants.SURNAME_EMPTY_MESSAGE,
     groups = AppConstants.ValidationGroups.ToUpdate.class
   )
   private String surname;
@@ -62,8 +63,8 @@ public class ClientUser {
     groups = AppConstants.ValidationGroups.ToCreate.class
   )
   @Size(
-    min = UsersConstants.MIN_UPDATE_LENGTH,
-    message = UsersConstants.NAME_EMPTY_MESSAGE,
+    min = AppConstants.MIN_UPDATE_LENGTH,
+    message = UsersConstants.PHONE_EMPTY_MESSAGE,
     groups = AppConstants.ValidationGroups.ToUpdate.class
   )
   @Pattern(
@@ -91,6 +92,7 @@ public class ClientUser {
   private String type;
 
   private String photo;
+  private Address address;
   private Boolean isDeleted;
   private Date createdAt;
   private Date updatedAt;

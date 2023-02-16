@@ -1,137 +1,73 @@
-import path from 'path';
 import fs from 'fs';
 import { faker } from '@faker-js/faker';
 
-enum UserType {
-  ADMIN = 'ADMIN',
-  MANAGER = 'MANAGER',
-  WAITER = 'WAITER',
-}
-
-type Config = {
-  users: {
-    name: string;
-    surname: string;
-    email: string;
-    phone: string;
-    password: string;
-    type: UserType;
-    photo: string;
-    isDeleted: boolean;
-  }[];
-}
-
-const AVATART_GENERATOR_URL: string = 'https://i.pravatar.cc/300?img=';
-const SERVER_CONFIG_FILENAME: string
-  = path.resolve(__dirname, '..', 'server', 'src', 'main', 'resources', 'poscoffee', 'poscoffee.config.json');
+import type { Address, Config, User } from './shared/types';
+import { AVATART_GENERATOR_URL, SERVER_CONFIG_FILENAME, UserType } from './shared/constants';
 
 const alreadyGeneratedAvatarIds: number[] = [];
 
-const fileContent: Config = {
-  users: [
-    {
-      name: 'Stanislav',
-      surname: 'Shcherbakov',
-      email: 'shcherbak.ssa@gmail.com',
-      phone: '375333081037',
-      password: 'qwerty1234',
-      type: UserType.ADMIN,
-      photo: generateRundomAvatar(),
-      isDeleted: false,
-    },
-    {
-      name: faker.name.firstName('female'),
-      surname: faker.name.lastName('female'),
-      email: faker.internet.email(),
-      phone: faker.phone.number('############'),
-      password: faker.internet.password(10),
-      type: UserType.ADMIN,
-      photo: generateRundomAvatar(),
-      isDeleted: false,
-    },
-    {
-      name: faker.name.firstName('female'),
-      surname: faker.name.lastName('female'),
-      email: faker.internet.email(),
-      phone: faker.phone.number('############'),
-      password: faker.internet.password(10),
-      type: UserType.MANAGER,
-      photo: generateRundomAvatar(),
-      isDeleted: false,
-    },
-    {
-      name: faker.name.firstName('male'),
-      surname: faker.name.lastName('male'),
-      email: faker.internet.email(),
-      phone: faker.phone.number('############'),
-      password: faker.internet.password(10),
-      type: UserType.MANAGER,
-      photo: '',
-      isDeleted: false,
-    },
-
-    {
-      name: faker.name.firstName('female'),
-      surname: faker.name.lastName('female'),
-      email: faker.internet.email(),
-      phone: faker.phone.number('############'),
-      password: faker.internet.password(10),
-      type: UserType.WAITER,
-      photo: '',
-      isDeleted: false,
-    },
-    {
-      name: faker.name.firstName('male'),
-      surname: faker.name.lastName('male'),
-      email: faker.internet.email(),
-      phone: faker.phone.number('############'),
-      password: faker.internet.password(10),
-      type: UserType.WAITER,
-      photo: generateRundomAvatar(),
-      isDeleted: false,
-    },
-    {
-      name: faker.name.firstName('female'),
-      surname: faker.name.lastName('female'),
-      email: faker.internet.email(),
-      phone: faker.phone.number('############'),
-      password: faker.internet.password(10),
-      type: UserType.WAITER,
-      photo: generateRundomAvatar(),
-      isDeleted: false,
-    },
-    {
-      name: faker.name.firstName('male'),
-      surname: faker.name.lastName('male'),
-      email: faker.internet.email(),
-      phone: faker.phone.number('############'),
-      password: faker.internet.password(10),
-      type: UserType.WAITER,
-      photo: '',
-      isDeleted: false,
-    },
-    {
-      name: faker.name.firstName('female'),
-      surname: faker.name.lastName('female'),
-      email: faker.internet.email(),
-      phone: faker.phone.number('############'),
-      password: faker.internet.password(10),
-      type: UserType.MANAGER,
-      photo: generateRundomAvatar(),
-      isDeleted: true,
-    },
-    {
-      name: faker.name.firstName('male'),
-      surname: faker.name.lastName('male'),
-      email: faker.internet.email(),
-      phone: faker.phone.number('############'),
-      password: faker.internet.password(10),
-      type: UserType.WAITER,
-      photo: generateRundomAvatar(),
-      isDeleted: true,
-    },
-  ]
+const adminUser: User = {
+  name: 'Stanislav',
+  surname: 'Shcherbakov',
+  email: 'shcherbak.ssa@gmail.com',
+  phone: '375333081037',
+  password: 'qwerty1234',
+  type: UserType.ADMIN,
+  photo: generateRundomAvatar(),
+  address: generateAddress(),
+  isDeleted: false,
 };
+
+fs.writeFileSync(
+  SERVER_CONFIG_FILENAME,
+  JSON.stringify(generateConfig(), null, 2)
+);
+
+console.log('Generated!\n');
+
+function generateConfig(): Config {
+  return {
+    users: [
+      adminUser,
+      generateUser('female', {}),
+      generateUser('female', { type: UserType.MANAGER }),
+      generateUser('male', { type: UserType.MANAGER }),
+      generateUser('male', { type: UserType.MANAGER, photo: '', isDeleted: true }),
+      generateUser('male', { type: UserType.WAITER, photo: '', }),
+      generateUser('female', { type: UserType.WAITER }),
+      generateUser('male', { type: UserType.WAITER, isDeleted: true }),
+      generateUser('female', { type: UserType.WAITER, photo: '', isDeleted: true }),
+      generateUser('female', { type: UserType.WAITER, photo: '', }),
+      generateUser('female', { type: UserType.WAITER }),
+    ],
+  };
+}
+
+function generateUser(
+  gender: 'male' | 'female',
+  { type = UserType.ADMIN, isDeleted = false, photo = generateRundomAvatar() }: Partial<User>,
+): User {
+  const name: string = faker.name.firstName(gender);
+  const surname: string = faker.name.lastName(gender);
+  const email: string = faker.internet.email(name, surname);
+
+  return {
+    name, surname, email, type, isDeleted, photo,
+    phone: faker.phone.number('############'),
+    password: faker.internet.password(10),
+    address: generateAddress(),
+  };
+}
+
+function generateAddress(): Address {
+  return {
+    country: faker.address.country(),
+    state: faker.address.state(),
+    city: faker.address.city(),
+    zipCode: faker.address.zipCode(),
+    address: faker.address.streetAddress(true),
+  };
+}
 
 function generateRundomAvatar(): string {
   const avatarId: number = getRandomNumber(1, 70);
@@ -151,7 +87,3 @@ function getRandomNumber(min: number, max: number): number {
 
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
-fs.writeFileSync(SERVER_CONFIG_FILENAME, JSON.stringify(fileContent, null, 2));
-
-console.log('Generated!\n');

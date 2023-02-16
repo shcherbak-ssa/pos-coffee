@@ -7,98 +7,185 @@
       "phone": "375333081037",
       "password": "qwerty1234",
       "type": "ADMIN",
-      "photo": "https://i.pravatar.cc/300?img=70",
+      "photo": "https://i.pravatar.cc/300?img=2",
+      "address": {
+        "country": "Madagascar",
+        "state": "Utah",
+        "city": "West Gilbert",
+        "zipCode": "25128-0752",
+        "address": "5621 MacGyver Knoll Apt. 200"
+      },
       "isDeleted": false
     },
     {
-      "name": "Rochelle",
-      "surname": "Gerlach",
-      "email": "Louvenia_West@hotmail.com",
-      "phone": "114527724698",
-      "password": "z4nbQtAhsS",
+      "name": "Estelle",
+      "surname": "Koss",
+      "email": "Estelle_Koss@yahoo.com",
       "type": "ADMIN",
-      "photo": "https://i.pravatar.cc/300?img=37",
-      "isDeleted": false
+      "isDeleted": false,
+      "photo": "https://i.pravatar.cc/300?img=63",
+      "phone": "472647699775",
+      "password": "Dfje5TvtZX",
+      "address": {
+        "country": "Lebanon",
+        "state": "Alaska",
+        "city": "Fort Grant",
+        "zipCode": "65856-9970",
+        "address": "564 Manuel Plaza Apt. 013"
+      }
     },
     {
-      "name": "Peggy",
-      "surname": "Connelly",
-      "email": "Melany.Miller57@yahoo.com",
-      "phone": "998190178512",
-      "password": "OfT9EeBDxr",
+      "name": "Gwen",
+      "surname": "Corkery",
+      "email": "Gwen_Corkery80@gmail.com",
       "type": "MANAGER",
-      "photo": "https://i.pravatar.cc/300?img=4",
-      "isDeleted": false
+      "isDeleted": false,
+      "photo": "https://i.pravatar.cc/300?img=27",
+      "phone": "698366160491",
+      "password": "y3jJ4ISc5C",
+      "address": {
+        "country": "Serbia",
+        "state": "Colorado",
+        "city": "Casperhaven",
+        "zipCode": "56344-4752",
+        "address": "408 Devante Estates Suite 186"
+      }
     },
     {
-      "name": "Julio",
-      "surname": "Bode",
-      "email": "Imogene89@yahoo.com",
-      "phone": "745909458250",
-      "password": "cRtBnNEgAK",
+      "name": "Randall",
+      "surname": "Pacocha",
+      "email": "Randall.Pacocha@hotmail.com",
       "type": "MANAGER",
+      "isDeleted": false,
+      "photo": "https://i.pravatar.cc/300?img=3",
+      "phone": "893140786403",
+      "password": "RSP7J3uPHK",
+      "address": {
+        "country": "Morocco",
+        "state": "Iowa",
+        "city": "Miramar",
+        "zipCode": "60090",
+        "address": "99138 Ernser Land Suite 610"
+      }
+    },
+    {
+      "name": "Ben",
+      "surname": "Barton",
+      "email": "Ben_Barton@hotmail.com",
+      "type": "MANAGER",
+      "isDeleted": true,
       "photo": "",
-      "isDeleted": false
+      "phone": "977940267450",
+      "password": "D12gTP8Vqq",
+      "address": {
+        "country": "Tunisia",
+        "state": "Vermont",
+        "city": "Port Ophelia",
+        "zipCode": "87235-7608",
+        "address": "492 Schroeder Falls Suite 368"
+      }
     },
     {
-      "name": "Kerry",
-      "surname": "Upton",
-      "email": "Kameron_Leannon62@hotmail.com",
-      "phone": "817455072311",
-      "password": "YvtDrHbfrz",
+      "name": "Santos",
+      "surname": "Harber",
+      "email": "Santos96@hotmail.com",
       "type": "WAITER",
+      "isDeleted": false,
       "photo": "",
-      "isDeleted": false
+      "phone": "640156898918",
+      "password": "s51gqGJ6Y6",
+      "address": {
+        "country": "Benin",
+        "state": "South Carolina",
+        "city": "East Julianneside",
+        "zipCode": "61583",
+        "address": "493 Emard Orchard Suite 724"
+      }
     },
     {
-      "name": "Andres",
-      "surname": "West",
-      "email": "Verona.Mohr95@gmail.com",
-      "phone": "360802098460",
-      "password": "W2pSkRyTZv",
+      "name": "Ollie",
+      "surname": "Turner",
+      "email": "Ollie70@gmail.com",
       "type": "WAITER",
-      "photo": "https://i.pravatar.cc/300?img=46",
-      "isDeleted": false
-    },
-    {
-      "name": "Lynne",
-      "surname": "Boyer",
-      "email": "Raul_Dach51@yahoo.com",
-      "phone": "875704541961",
-      "password": "YkwiNP_P6Y",
-      "type": "WAITER",
+      "isDeleted": false,
       "photo": "https://i.pravatar.cc/300?img=59",
-      "isDeleted": false
+      "phone": "159769388159",
+      "password": "3GEhPawDOe",
+      "address": {
+        "country": "Sierra Leone",
+        "state": "North Carolina",
+        "city": "Lake Ethelworth",
+        "zipCode": "70176-6757",
+        "address": "614 Aidan Tunnel Suite 334"
+      }
     },
     {
-      "name": "Erik",
-      "surname": "Tremblay",
-      "email": "Elouise6@gmail.com",
-      "phone": "801943923111",
-      "password": "I67b_1z2Cv",
+      "name": "Chester",
+      "surname": "Greenholt",
+      "email": "Chester9@gmail.com",
       "type": "WAITER",
+      "isDeleted": true,
+      "photo": "https://i.pravatar.cc/300?img=32",
+      "phone": "117886798122",
+      "password": "zqigJC4rBp",
+      "address": {
+        "country": "Switzerland",
+        "state": "Maine",
+        "city": "Rosemead",
+        "zipCode": "41333-3947",
+        "address": "1520 Seth Dam Suite 870"
+      }
+    },
+    {
+      "name": "Bobbie",
+      "surname": "Kertzmann",
+      "email": "Bobbie89@hotmail.com",
+      "type": "WAITER",
+      "isDeleted": true,
       "photo": "",
-      "isDeleted": false
+      "phone": "335960039346",
+      "password": "Y5jHi8qlDw",
+      "address": {
+        "country": "Portugal",
+        "state": "Washington",
+        "city": "Hettingerberg",
+        "zipCode": "27337-1727",
+        "address": "68478 Gail Rue Apt. 357"
+      }
     },
     {
-      "name": "Jo",
-      "surname": "Hamill",
-      "email": "Joe59@gmail.com",
-      "phone": "017766090279",
-      "password": "8755Kfk7fi",
-      "type": "MANAGER",
-      "photo": "https://i.pravatar.cc/300?img=22",
-      "isDeleted": true
-    },
-    {
-      "name": "Joshua",
-      "surname": "Senger",
-      "email": "Yasmine_McCullough54@yahoo.com",
-      "phone": "549381965256",
-      "password": "CPZ0nHEd0g",
+      "name": "Luz",
+      "surname": "Jerde",
+      "email": "Luz_Jerde14@yahoo.com",
       "type": "WAITER",
-      "photo": "https://i.pravatar.cc/300?img=62",
-      "isDeleted": true
+      "isDeleted": false,
+      "photo": "",
+      "phone": "955115040447",
+      "password": "f4h_aqSNZE",
+      "address": {
+        "country": "El Salvador",
+        "state": "Nebraska",
+        "city": "Larueborough",
+        "zipCode": "37953",
+        "address": "6004 Cruickshank Cliff Suite 995"
+      }
+    },
+    {
+      "name": "Vanessa",
+      "surname": "Jones",
+      "email": "Vanessa_Jones@yahoo.com",
+      "type": "WAITER",
+      "isDeleted": false,
+      "photo": "https://i.pravatar.cc/300?img=24",
+      "phone": "346484041478",
+      "password": "_zi2KWBENg",
+      "address": {
+        "country": "South Africa",
+        "state": "Tennessee",
+        "city": "Fort Flavieview",
+        "zipCode": "14032-5938",
+        "address": "12324 Barrows Rue Apt. 668"
+      }
     }
   ]
 }

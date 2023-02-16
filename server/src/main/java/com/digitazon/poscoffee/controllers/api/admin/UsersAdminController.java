@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.digitazon.poscoffee.models.Address;
 import com.digitazon.poscoffee.models.helpers.ClientUser;
 import com.digitazon.poscoffee.models.helpers.UserFilter;
+import com.digitazon.poscoffee.services.AddressService;
 import com.digitazon.poscoffee.services.UsersService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
@@ -30,6 +32,9 @@ public class UsersAdminController {
 
   @Autowired
   private UsersService service;
+
+  @Autowired
+  private AddressService addressService;
 
   @GetMapping(path = AppConstants.ApiEndpoint.Admin.USERS)
   @ResponseStatus(HttpStatus.OK)
@@ -51,6 +56,9 @@ public class UsersAdminController {
   public ClientUser createUser(
     @RequestBody @Validated(AppConstants.ValidationGroups.ToCreate.class) ClientUser userToCreate
   ) throws ProgerException, AlreadyExistException {
+    final Address createdAdress = this.addressService.createAddress(userToCreate.getAddress());
+    userToCreate.setAddress(createdAdress);
+
     return this.service.createUser(userToCreate);
   }
 
@@ -60,6 +68,12 @@ public class UsersAdminController {
   public void updateUser(
     @RequestBody @Validated(AppConstants.ValidationGroups.ToUpdate.class) ClientUser updates
   ) throws ResourceNotFoundException {
+    final Address addressUpdates = updates.getAddress();
+
+    if (addressUpdates != null) {
+      this.addressService.updateAddress(addressUpdates);
+    }
+
     this.service.updateUser(updates);
   }
 

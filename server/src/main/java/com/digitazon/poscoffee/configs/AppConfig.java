@@ -35,7 +35,7 @@ public class AppConfig {
 
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-  public ClientUser clientUser(User user) {
+  public ClientUser clientUser(User user, boolean loadAddress) {
     final ClientUser clientUser = new ClientUser();
 
     clientUser.setId(user.getId());
@@ -49,6 +49,10 @@ public class AppConfig {
     clientUser.setCreatedAt(user.getCreatedAt());
     clientUser.setUpdatedAt(user.getUpdatedAt());
     clientUser.setDeletedAt(user.getDeletedAt());
+
+    if (loadAddress) {
+      clientUser.setAddress(user.getAddress());
+    }
 
     return clientUser;
   }
@@ -64,6 +68,7 @@ public class AppConfig {
     user.setEmail(clientUser.getEmail());
     user.setPhone(clientUser.getPhone());
     user.setPhoto(clientUser.getPhoto());
+    user.setAddress(clientUser.getAddress());
     user.setType(userType);
 
     return user;

@@ -1,10 +1,11 @@
 import { proxy } from 'valtio';
 
+import type { UserSchema as BaseUserSchema } from 'shared/types';
 import { ZERO } from 'shared/constants';
 import { AppError } from 'shared/errors';
+import { getUpdates } from 'shared/helpers/get-updates';
 
 import type {
-  UserSchema as BaseUserSchema,
   UsersState,
   UsersStore,
   UsersStoreWithActions,
@@ -40,16 +41,17 @@ export const usersStore: UsersStore & UsersStoreWithActions = {
     const foundUser: BaseUserSchema | undefined = findUserById(selectedUser.id);
 
     if (foundUser) {
-      const updates: UserUpdates = { id: selectedUser.id };
+      return getUpdates(foundUser, selectedUser);
+      // const updates: UserUpdates = { id: selectedUser.id };
 
-      for (const [ key, value ] of Object.entries(selectedUser)) {
-        if (foundUser[key as keyof UserUpdates] !== value) {
-          // @ts-ignore
-          updates[key] = value;
-        }
-      }
+      // for (const [ key, value ] of Object.entries(selectedUser)) {
+      //   if (foundUser[key as keyof UserUpdates] !== value) {
+      //     // @ts-ignore
+      //     updates[key] = value;
+      //   }
+      // }
 
-      return updates;
+      // return updates;
     }
 
     return (selectedUser as UserSchema).getUpdates();

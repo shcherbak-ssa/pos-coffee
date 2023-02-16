@@ -3,7 +3,6 @@ package com.digitazon.poscoffee.shared.constants;
 public class UsersConstants {
 
   public static final int MIN_PASSWORD_LENGTH = 8;
-  public static final int MIN_UPDATE_LENGTH = 1;
   public static final String PHONE_PATTERN = "\\d{12}";
 
   public static final String ID_EMPTY_MESSAGE = "Id cannot be empty";

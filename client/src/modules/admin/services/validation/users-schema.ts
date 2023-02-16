@@ -1,9 +1,9 @@
 import Joi from 'joi';
 
-import type { ValidationSchema } from 'shared/types';
-import { UserType } from 'shared/constants';
+import type { UserSchema, ValidationSchema } from 'shared/types';
+import { EMPTY_STRING, UserType } from 'shared/constants';
 
-import type { UserSchema } from '@admin/shared/types';
+import { addressSchema, addressSchemaToCreate } from './address-schema';
 
 type Schema = Joi.ObjectSchema<UserSchema>;
 
@@ -31,8 +31,9 @@ const baseSchema: Schema = Joi.object({
     'any.invalid': 'Type is invalid',
     'string.empty': 'Type cannot be empty',
   }),
+  photo: Joi.string().empty(EMPTY_STRING),
   isDeleted: Joi.boolean(),
-  photo: Joi.string(),
+  address: addressSchema,
 });
 
 const schemaToCreate: Schema = baseSchema.keys({
@@ -41,6 +42,7 @@ const schemaToCreate: Schema = baseSchema.keys({
   email: baseSchema.extract('email').required(),
   phone: baseSchema.extract('phone').required(),
   type: baseSchema.extract('type').required(),
+  address: addressSchemaToCreate(),
 });
 
 const schemaToUpdate: Schema = baseSchema.keys();

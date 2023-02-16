@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, type Params } from 'react-router-dom';
+import { type Location, useLocation, useParams, type Params } from 'react-router-dom';
 
 import { ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
@@ -22,8 +22,8 @@ export function UsersInfoPage({ isEditPage = false }: Props) {
 
   const [ isUserLoaded, setIsUserLoaded ] = useState<boolean>(false);
   const [ isError, setIsError ] = useState<boolean>(false);
-  const [ isEditMode, setIsEditMode ] = useState<boolean>(isEditPage);
 
+  const location: Location = useLocation();
   const params: Params<string> = useParams();
 
   const { state: { selectedUser }, draftUser: user } = useStore(StoreName.USERS) as UsersStore;
@@ -39,10 +39,6 @@ export function UsersInfoPage({ isEditPage = false }: Props) {
   };
 
   useEffect(() => {
-    setIsEditMode(isEditPage);
-  }, [isEditPage]);
-
-  useEffect(() => {
     const { id } = selectedUser;
 
     if (id !== ZERO && id.toString() !== params.id) {
@@ -51,9 +47,7 @@ export function UsersInfoPage({ isEditPage = false }: Props) {
   }, [selectedUser.id]);
 
   useEffect(() => {
-    if (params.id === CREATE_NEW_LABEL) {
-      setIsEditMode(true);
-
+    if (location.pathname.endsWith(CREATE_NEW_LABEL)) {
       usersController.selectUser()
         .then(() => {
           setIsUserLoaded(true);
@@ -85,8 +79,8 @@ export function UsersInfoPage({ isEditPage = false }: Props) {
     <PageLayout page={userInfoPage}>
       <PageWrapper
         page={userInfoPage}
-        actions={<UsersPageInfoActionsContainer isEditMode={isEditMode} />}
-        content={<UsersPageInfoContainer isEditMode={isEditMode} />}
+        actions={<UsersPageInfoActionsContainer isEditMode={isEditPage} />}
+        content={<UsersPageInfoContainer isEditMode={isEditPage} />}
         isLoading={!isUserLoaded}
         isError={isError}
         errorMessage="User not found"
