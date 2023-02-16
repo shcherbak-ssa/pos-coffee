@@ -9,7 +9,7 @@ import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/nav
 
 import type { UsersStore, UsersController } from '@admin/shared/types';
 import { StoreName, ControllerName, PagePath } from '@admin/shared/constants';
-import { UsersTableActionsMenuContainer } from '@admin/view/containers/users/UsersTableActionsMenuContainer';
+import { UsersActionsMenuContainer } from '@admin/view/containers/users/UsersActionsMenuContainer';
 
 export type Props = {
   isEditMode: boolean;
@@ -67,7 +67,7 @@ export function UsersPageInfoActionsContainer({ isEditMode }: Props) {
           : EMPTY_STRING
       }
 
-      <UsersTableActionsMenuContainer {...selectedUser} isInfoPage />
+      <UsersActionsMenuContainer {...selectedUser} isInfoPage />
     </div>
   );
 

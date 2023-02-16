@@ -6,12 +6,13 @@ import { UserPhoto } from '@admin/view/components/user/UserPhoto';
 
 export type Props = {
   user: UserSchema;
+  className?: string;
 }
 
-export function UserPersonalInfo({ user }: Props) {
+export function UserPersonalInfo({ user, className }: Props) {
 
   return (
-    <CardWrapper>
+    <CardWrapper className={className}>
       <div className="flex-center flex-col text-center full">
         <UserPhoto
           className="mb-6"

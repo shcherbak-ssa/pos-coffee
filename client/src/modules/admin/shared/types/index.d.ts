@@ -1,10 +1,11 @@
-import type { PagePath, Tab } from '@admin/shared/constants';
+import type { PagePath } from '@admin/shared/constants';
 
 import type { AppController } from './app';
 import type { UsersController } from './users';
 
 export * from './app';
 export * from './users';
+export * from './view';
 
 export type Controllers =
   | UsersController
@@ -20,8 +21,4 @@ export type OptionItem = {
   value: string;
   icon: string;
   label?: string;
-}
-
-export type LastListPageTabPayload = {
-  [key: string]: Tab;
 }

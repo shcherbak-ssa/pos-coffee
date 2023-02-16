@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
+import type { MenuItem } from 'primereact/menuitem';
 import { Messages } from 'primereact/messages';
+import { TabMenu } from 'primereact/tabmenu';
 
 import { EMPTY_STRING } from 'shared/constants';
 import { AppLoader } from 'view/components/AppLoader';
@@ -12,9 +14,10 @@ import { PageHeaderTitle } from '@admin/view/components/page/PageHeaderTitle';
 export type Props = {
   page: AppPageSchema;
   content: React.ReactNode;
-  tabsMenu?: React.ReactNode;
   actions?: React.ReactNode;
   subsection?: React.ReactNode;
+  tabs?: MenuItem[];
+  currentTabIndex?: number;
   isLoading?: boolean;
   isError?: boolean;
   errorMessage?: string;
@@ -23,7 +26,8 @@ export type Props = {
 export function PageWrapper({
   page,
   content,
-  tabsMenu,
+  tabs,
+  currentTabIndex,
   actions,
   subsection,
   isLoading = false,
@@ -59,7 +63,7 @@ export function PageWrapper({
         <PageHeaderTitle page={page} />
 
         <div className="page-tabs absolute top-0 left-1/2 -translate-x-1/2 h-full">
-          { tabsMenu || EMPTY_STRING }
+          { tabs ? <TabMenu model={tabs} activeIndex={currentTabIndex} /> : EMPTY_STRING }
         </div>
 
         { actions || EMPTY_STRING }

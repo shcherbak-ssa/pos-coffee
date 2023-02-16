@@ -23,3 +23,7 @@ export function setParamsToUrl<T extends object>(url: string, params: T): string
 export function updatePageTitle(title: string): void {
   document.title = [title, APP_NAME].join(PAGE_TITLE_DIVIDER);
 }
+
+export function filterItemById<T extends { id: number }>(items: T[], item: T): T[] {
+  return items.filter(({ id }) => id !== item.id);
+}

@@ -18,7 +18,7 @@ export type Props = UserSchema & {
   isInfoPage?: boolean;
 }
 
-export function UsersTableActionsMenuContainer({ id, isDeleted, isInfoPage = false }: Props) {
+export function UsersActionsMenuContainer({ id, isDeleted, isInfoPage = false }: Props) {
 
   const menu = useRef(null);
 

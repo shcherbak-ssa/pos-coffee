@@ -50,7 +50,7 @@ export enum PageTitle {
 }
 
 export enum ListView {
-  LIST = 'LIST',
+  TABLE = 'TABLE',
   CARD = 'CARD',
 }
 
@@ -59,7 +59,7 @@ export enum ListAction {
   FILTER = 'FILTER',
 }
 
-export enum Tab {
+export enum ListTab {
   ACTIVE = 'ACTIVE',
   DELETED = 'DELETED',
 }
@@ -75,4 +75,9 @@ export enum Action {
 
 export enum Entity {
   USER = 'User',
+}
+
+export enum CssClasses {
+  CLICK = 'click',
+  CARD_ACTIVE = 'card-active',
 }

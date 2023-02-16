@@ -3,16 +3,17 @@ import { proxy } from 'valtio';
 import type { UserSchema as BaseUserSchema } from 'shared/types';
 import { ZERO } from 'shared/constants';
 import { AppError } from 'shared/errors';
+import { filterItemById } from 'shared/utils';
 import { getUpdates } from 'shared/helpers/get-updates';
 
 import type {
   UsersState,
   UsersStore,
   UsersStoreWithActions,
-  UsersViewState,
+  ViewState,
   UserUpdates,
 } from '@admin/shared/types';
-import { ListView } from '@admin/shared/constants';
+import { ListTab, ListView } from '@admin/shared/constants';
 import { createUserDraft, UserSchema } from '@admin/models/user';
 
 export const usersStore: UsersStore & UsersStoreWithActions = {
@@ -23,7 +24,8 @@ export const usersStore: UsersStore & UsersStoreWithActions = {
     selectedUser: UserSchema.create(),
 
     view: {
-      listView: ListView.LIST,
+      listView: ListView.TABLE,
+      listTab: ListTab.ACTIVE,
       listAction: [],
     },
   }),
@@ -42,16 +44,6 @@ export const usersStore: UsersStore & UsersStoreWithActions = {
 
     if (foundUser) {
       return getUpdates(foundUser, selectedUser);
-      // const updates: UserUpdates = { id: selectedUser.id };
-
-      // for (const [ key, value ] of Object.entries(selectedUser)) {
-      //   if (foundUser[key as keyof UserUpdates] !== value) {
-      //     // @ts-ignore
-      //     updates[key] = value;
-      //   }
-      // }
-
-      // return updates;
     }
 
     return (selectedUser as UserSchema).getUpdates();
@@ -81,7 +73,7 @@ export const usersStore: UsersStore & UsersStoreWithActions = {
   },
 
   removeUser(userId: number): void {
-    const updatedUsers: BaseUserSchema[] = usersStore.state.users.filter(({ id }) => id !== userId);
+    const updatedUsers: BaseUserSchema[] = filterItemById(usersStore.state.users, { id: userId } as UserSchema);
     this.setUsers(updatedUsers);
 
     updateSelectedUser({
@@ -103,7 +95,7 @@ export const usersStore: UsersStore & UsersStoreWithActions = {
     throw new AppError(`User with id ${userId} not found`);
   },
 
-  updateViewState<T extends keyof UsersViewState>(state: T, value: UsersViewState[T]): void {
+  updateViewState<T extends keyof ViewState>(state: T, value: ViewState[T]): void {
     usersStore.state.view[state] = value;
   },
 

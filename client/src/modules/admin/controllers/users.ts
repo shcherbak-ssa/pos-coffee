@@ -8,7 +8,7 @@ import type {
   UsersFilter as BaseUsersFilter,
   UsersStore,
   UsersStoreWithActions,
-  UsersViewState,
+  ViewState,
   UserUpdates,
 } from '@admin/shared/types';
 import { ApiEndpoint, Entity, StoreName, ValidationName } from '@admin/shared/constants';
@@ -154,7 +154,7 @@ export class UsersController extends BaseController implements BaseUsersControll
     }
   }
 
-  public async updateViewState<T extends keyof UsersViewState>(state: T, value: UsersViewState[T]): Promise<void> {
+  public async updateViewState<T extends keyof ViewState>(state: T, value: ViewState[T]): Promise<void> {
     const store = await this.getStore() as UsersStoreWithActions;
     store.updateViewState(state, value);
   }

@@ -96,7 +96,7 @@ export const pages: { [key in PageTitle]: AppPageSchema } = {
 export const listViewOptions: OptionItem[] = [
   {
     icon: PrimeIcons.LIST,
-    value: ListView.LIST,
+    value: ListView.TABLE,
   },
   {
     icon: PrimeIcons.TH_LARGE,
