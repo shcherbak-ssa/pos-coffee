@@ -1,22 +1,26 @@
 import { PrimeIcons } from 'primereact/api';
 
+import type { MessageType } from 'shared/types';
+import { useMessageIcon } from 'view/hooks/message-icon';
 import { SimpleIcon } from 'view/components/SimpleIcon';
 
 export type Props = {
   message: string;
+  type: MessageType;
 }
 
-export function PageErrorMessageContent({ message }: Props) {
+export function MessageContent({ message, type }: Props) {
+
+  const icon: string = useMessageIcon(type);
 
   return (
     <div className="flex items-center">
       <SimpleIcon
         className="text-3xl"
-        icon={PrimeIcons.TIMES_CIRCLE}
+        icon={icon}
       />
 
       <div className="ml-6">
-        <h3>Error</h3>
         <div>{ message }</div>
       </div>
     </div>

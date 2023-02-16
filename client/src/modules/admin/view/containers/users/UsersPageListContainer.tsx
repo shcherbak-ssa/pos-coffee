@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import type { UserSchema } from 'shared/types';
+import { ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/navigate';
 import { EmptyComponent } from 'view/components/EmptyComponent';
@@ -13,6 +14,7 @@ import {
   UsersPageTableContainer,
 } from '@admin/view/containers/users/UsersPageTableContainer';
 import { UsersPageCardsContainer } from '@admin/view/containers/users/UsersPageCardsContainer';
+import { PageMessage } from '@admin/view/components/page/PageMessage';
 
 export function UsersPageListContainer() {
 
@@ -34,6 +36,10 @@ export function UsersPageListContainer() {
   useEffect(() => {
     setSelectedUsers([]);
   }, [view.listTab, view.listView]);
+
+  if (users.length === ZERO) {
+    return <PageMessage type="info" message="No users found" />;
+  }
 
   if (view.listView === ListView.TABLE) {
     return <UsersPageTableContainer {...usersViewProps} />;

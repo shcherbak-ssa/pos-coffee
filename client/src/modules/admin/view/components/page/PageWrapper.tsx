@@ -1,6 +1,4 @@
-import { useEffect, useRef } from 'react';
 import type { MenuItem } from 'primereact/menuitem';
-import { Messages } from 'primereact/messages';
 import { TabMenu } from 'primereact/tabmenu';
 
 import { EMPTY_STRING } from 'shared/constants';
@@ -8,8 +6,9 @@ import { AppLoader } from 'view/components/AppLoader';
 
 import type { AppPageSchema } from '@admin/shared/types';
 import { DEFAULT_ERROR_MESSAGE } from '@admin/shared/constants';
-import { PageErrorMessageContent } from '@admin/view/components/page/PageErrorMessageContent';
+import { MessageContent } from '@admin/view/components/MessageContent';
 import { PageHeaderTitle } from '@admin/view/components/page/PageHeaderTitle';
+import { PageMessage } from '@admin/view/components/page/PageMessage';
 
 export type Props = {
   page: AppPageSchema;
@@ -35,22 +34,8 @@ export function PageWrapper({
   errorMessage = DEFAULT_ERROR_MESSAGE,
 }: Props) {
 
-  const messages = useRef(null);
-
-  useEffect(() => {
-    if (isError) {
-      // @ts-ignore
-      messages.current.show({
-        sticky: true,
-        severity: 'error',
-        closable: false,
-        content: <PageErrorMessageContent message={errorMessage} />,
-      });
-    }
-  }, [isError]);
-
   if (isError) {
-    return <Messages ref={messages} />;
+    return <PageMessage type="error" message={errorMessage} />;
   }
 
   if (isLoading) {

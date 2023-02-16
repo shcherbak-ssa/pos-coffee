@@ -8,7 +8,7 @@ export type AnyType = {
 
 export type Notification = {
   type?: 'result' | 'process',
-  severity?: 'success' | 'info' | 'warn' | 'error';
+  severity?: MessageType;
   heading?: React.ReactNode;
   message?: React.ReactNode;
   closable?: boolean;
@@ -17,6 +17,7 @@ export type Notification = {
   className?: string;
 }
 
+export type MessageType = 'success' | 'info' | 'warn' | 'error' | undefined;
 export type ViewSeverity = 'success' | 'info' | 'warning' | 'danger' | null | undefined;
 
 export type Controller = {}
