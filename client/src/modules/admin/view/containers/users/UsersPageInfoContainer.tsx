@@ -6,9 +6,9 @@ import { useStore } from 'view/hooks/store';
 
 import type { UserSchema, UsersStore } from '@admin/shared/types';
 import { StoreName } from '@admin/shared/constants';
-import { UserPersonalCard } from '@admin/view/components/user/UserPersonalCard';
-import { UserProfileCard } from '@admin/view/components/user/UserProfileCard';
-import { UserLocationCard } from '@admin/view/components/user/UserLocationCard';
+import { UserPersonalInfo } from '@admin/view/components/user/UserPersonalInfo';
+import { UserProfileInfo } from '@admin/view/components/user/UserProfileInfo';
+import { UserLocationInfo } from '@admin/view/components/user/UserLocationInfo';
 
 export type Props = {
   isEditMode: boolean;
@@ -32,9 +32,9 @@ export function UsersPageInfoContainer({ isEditMode }: Props) {
   return (
     <div className="full p-6">
       <div className="grid grid-cols-4 gap-4 full">
-        <UserPersonalCard user={selectedUser} />
+        <UserPersonalInfo user={selectedUser} />
 
-        <UserProfileCard
+        <UserProfileInfo
           className="col-span-3"
           user={selectedUser}
           draftUser={draftUser}
@@ -42,7 +42,13 @@ export function UsersPageInfoContainer({ isEditMode }: Props) {
           isEditMode={isEditMode}
         />
 
-        <UserLocationCard className="col-span-4" user={selectedUser} />
+        <UserLocationInfo
+          className="col-span-4"
+          user={selectedUser}
+          draftUser={draftUser}
+          validationError={validationError}
+          isEditMode={isEditMode}
+        />
       </div>
     </div>
   );

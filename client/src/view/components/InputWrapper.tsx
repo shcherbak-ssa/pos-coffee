@@ -7,18 +7,19 @@ export type Props = {
   children: React.ReactElement;
   description?: string;
   errorMessage?: string;
+  className?: string;
 }
 
-export function InputWrapper({ label, errorMessage, description, children }: Props) {
+export function InputWrapper({ label, errorMessage, description, children, className }: Props) {
 
   const { props: childrenProps } = children;
 
-  const wrapperClassnames: string = classnames('p-float-label flex flex-col w-full', {
-    'p-invalid': !!errorMessage,
-  });
-
   return (
-    <div className={wrapperClassnames}>
+    <div
+      className={classnames('p-float-label flex flex-col w-full', className, {
+        'p-invalid': !!errorMessage,
+      })}
+    >
       { children }
 
       {

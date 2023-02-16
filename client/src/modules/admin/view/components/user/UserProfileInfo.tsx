@@ -8,8 +8,8 @@ import type { ErrorObjectHook } from 'view/hooks/error';
 import { InputWrapper } from 'view/components/InputWrapper';
 
 import type { UserDraft, UserSchema } from '@admin/shared/types';
-import { CardWrapper } from '@admin/view/components/CardWrapper';
-import { CardHeading } from '@admin/view/components/CardHeading';
+import { CardWrapper } from '@admin/view/components/card/CardWrapper';
+import { CardHeading } from '@admin/view/components/card/CardHeading';
 
 export type Props = {
   user: UserSchema;
@@ -19,7 +19,7 @@ export type Props = {
   className?: string;
 }
 
-export function UserProfileCard({ user, draftUser, validationError, isEditMode, className }: Props) {
+export function UserProfileInfo({ user, draftUser, validationError, isEditMode, className }: Props) {
 
   function userTypeOptions(): SelectItem[] {
     const userTypes: UserType[] = [
