@@ -57,7 +57,7 @@ export function UsersPage() {
   };
 
   useEffect(() => {
-    loadUsers(false);
+    loadUsers(view.listTab === ListTab.DELETED);
 
     const index: number | undefined
       = usersTabItems.findIndex(({ data }) => data.tab === view.listTab);
