@@ -55,12 +55,12 @@ export class UsersController extends BaseController implements BaseUsersControll
     }
   }
 
-  public async saveUser(user: UserSchema): Promise<boolean> {
+  public async saveUser(user: UserSchema): Promise<number | void> {
     try {
       const store = await this.getStore() as UsersStoreWithActions;
 
       if (!store.hasSelectedUserUpdates()) {
-        return true;
+        return;
       }
 
       const isNewSchema: boolean = user.isNewSchema();
@@ -90,10 +90,9 @@ export class UsersController extends BaseController implements BaseUsersControll
           : notifications.updated(Entity.USER)
       );
 
-      return true;
+      return savedUser.id;
     } catch (e: any) {
       await this.parseError(e);
-      return false;
     }
   }
 

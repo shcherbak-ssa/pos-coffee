@@ -33,9 +33,9 @@ export function UsersPageInfoActionsContainer({ isEditMode }: Props) {
     setIsSaveProcessing(true);
 
     usersController.saveUser(selectedUser)
-      .then((success) => {
-        if (success) {
-          navigateToUsersInfoPage({ id: selectedUser.id });
+      .then((id: number | void) => {
+        if (id) {
+          navigateToUsersInfoPage({ id });
         }
 
         setIsSaveProcessing(false);

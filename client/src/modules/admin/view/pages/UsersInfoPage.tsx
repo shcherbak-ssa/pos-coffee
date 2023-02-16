@@ -26,9 +26,8 @@ export function UsersInfoPage({ isEditPage = false }: Props) {
   const location: Location = useLocation();
   const params: Params<string> = useParams();
 
-  const { state: { selectedUser }, draftUser: user } = useStore(StoreName.USERS) as UsersStore;
+  const { draftUser: user } = useStore(StoreName.USERS) as UsersStore;
   const usersController = useController(ControllerName.USERS) as UsersController;
-  const navigateToUsersInfoPage: NavigateFunctionHook = useNavigateWithParams(PagePath.USERS_INFO);
 
   const userInfoPage: AppPageSchema = {
     ...pages[PageTitle.USERS],
@@ -37,14 +36,6 @@ export function UsersInfoPage({ isEditPage = false }: Props) {
       title: user.fullname,
     },
   };
-
-  useEffect(() => {
-    const { id } = selectedUser;
-
-    if (id !== ZERO && id.toString() !== params.id) {
-      navigateToUsersInfoPage({ id });
-    }
-  }, [selectedUser.id]);
 
   useEffect(() => {
     if (location.pathname.endsWith(CREATE_NEW_LABEL)) {
