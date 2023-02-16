@@ -5,9 +5,9 @@ import 'view/styles/main.scss';
 
 import type { CurrentUserSchema } from 'shared/types';
 import { LocalStorageKey, UserType } from 'shared/constants';
+import { AuthError } from 'shared/errors';
 import { LocalStorage } from 'shared/helpers/local-storage';
 import { render } from 'shared/helpers/setup-view';
-import { parseError } from 'shared/helpers/parse-error';
 
 renderLoader()
   .then(checkUserToken)
@@ -40,13 +40,23 @@ async function renderNext(isTokenExist: boolean): Promise<void> {
         return await renderApp(currentUser);
       }
     } catch (e: any) {
-      parseError(e);
+      if (e instanceof AuthError) {
+        redirectToLogin();
+        return;
+      }
+
+      console.error(e);
     }
 
     return;
   }
 
-  const { toLogin } = await import('shared/helpers/to-login');
+  redirectToLogin();
+}
 
-  toLogin();
+function redirectToLogin(): void {
+  import('shared/helpers/to-login')
+    .then(({ toLogin }) => {
+      toLogin();
+    });
 }

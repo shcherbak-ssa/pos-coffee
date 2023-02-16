@@ -1,7 +1,6 @@
 import type { ApiService, NotificationService, ValidationService } from 'shared/types';
 import { ZERO } from 'shared/constants';
 import { Context } from 'shared/context';
-import { parseError } from 'shared/helpers/parse-error';
 import { BaseController } from 'controllers/base-controller';
 
 import type {
@@ -35,7 +34,7 @@ export class UsersController extends BaseController implements BaseUsersControll
 
       return true;
     } catch (e: any) {
-      parseError(e);
+      await this.parseError(e);
       return false;
     }
   }
@@ -52,7 +51,7 @@ export class UsersController extends BaseController implements BaseUsersControll
 
       return true;
     } catch (e: any) {
-      parseError(e);
+      await this.parseError(e);
       return false;
     }
   }
@@ -94,7 +93,7 @@ export class UsersController extends BaseController implements BaseUsersControll
 
       return true;
     } catch (e: any) {
-      parseError(e);
+      await this.parseError(e);
       return false;
     }
   }
@@ -116,7 +115,7 @@ export class UsersController extends BaseController implements BaseUsersControll
 
       return true;
     } catch (e: any) {
-      parseError(e);
+      await this.parseError(e);
       return false;
     }
   }
@@ -138,7 +137,7 @@ export class UsersController extends BaseController implements BaseUsersControll
 
       return true;
     } catch (e: any) {
-      parseError(e);
+      await this.parseError(e);
       return false;
     }
   }
@@ -153,7 +152,7 @@ export class UsersController extends BaseController implements BaseUsersControll
       const store = await this.getStore() as UsersStoreWithActions;
       store.selectUser(userId);
     } catch (e: any) {
-      parseError(e);
+      await this.parseError(e);
     }
   }
 

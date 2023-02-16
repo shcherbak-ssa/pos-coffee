@@ -2,7 +2,6 @@ import type { ApiService, Token, ValidationService } from 'shared/types';
 import { LocalStorageKey, ROOT_PAGE_PATH } from 'shared/constants';
 import { replaceLocation } from 'shared/utils';
 import { LocalStorage } from 'shared/helpers/local-storage';
-import { parseError } from 'shared/helpers/parse-error';
 import { BaseController } from 'controllers/base-controller';
 
 import type { LoginController as BaseLoginController, LoginSchema } from '@login/shared/types';
@@ -28,7 +27,7 @@ export class LoginController extends BaseController implements BaseLoginControll
 
       this.redirectToLastUrl();
     } catch (e: any) {
-      parseError(e);
+      await this.parseError(e);
     }
   }
 
