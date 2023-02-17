@@ -46,8 +46,6 @@ export function PageLayout({
     return children;
   }
 
-  // @TODO: add skeleton
-
   return (
     <div className="app-container full relative">
       <AppHeaderContainer />

@@ -1,20 +1,15 @@
-import type { UserSchema } from 'shared/types';
+import type { EntityComponentProps, UserSchema } from 'shared/types';
 
 import { CardWrapper } from '@admin/view/components/card/CardWrapper';
-import { UserTypeLabel } from '@admin/view/components/user/UserTypeLabel';
-import { UserPhoto } from '@admin/view/components/user/UserPhoto';
+import { UsersTypeLabel } from '@admin/view/components/UsersTypeLabel';
+import { UsersPhoto } from '@admin/view/components/UsersPhoto';
 
-export type Props = {
-  user: UserSchema;
-  className?: string;
-}
-
-export function UserPersonalInfo({ user, className }: Props) {
+export function UsersPersonalInfo({ entity: user, className }: EntityComponentProps<UserSchema>) {
 
   return (
     <CardWrapper className={className}>
       <div className="flex-center flex-col text-center full">
-        <UserPhoto
+        <UsersPhoto
           className="mb-6"
           photo={user.photo}
           size="xlarge"
@@ -22,7 +17,7 @@ export function UserPersonalInfo({ user, className }: Props) {
 
         <h3 className="mb-3">{ `${user.name} ${user.surname}` }</h3>
 
-        <UserTypeLabel type={user.type} />
+        <UsersTypeLabel type={user.type} />
       </div>
     </CardWrapper>
   );

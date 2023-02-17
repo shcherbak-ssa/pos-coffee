@@ -8,7 +8,7 @@ export type Props = {
   size?: "xlarge" | "normal" | "large";
 }
 
-export function UserPhoto({ className, photo, size = 'large' }: Props) {
+export function UsersPhoto({ className, photo, size = 'large' }: Props) {
 
   return (
     <Avatar

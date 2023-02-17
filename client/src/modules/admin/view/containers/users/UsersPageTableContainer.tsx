@@ -4,8 +4,8 @@ import { Column } from 'primereact/column';
 
 import type { UserSchema } from 'shared/types';
 
-import { UserTypeLabel } from '@admin/view/components/user/UserTypeLabel';
-import { UserPhoto } from '@admin/view/components/user/UserPhoto';
+import { UsersTypeLabel } from '@admin/view/components/UsersTypeLabel';
+import { UsersPhoto } from '@admin/view/components/UsersPhoto';
 import { UsersActionsMenuContainer } from '@admin/view/containers/users/UsersActionsMenuContainer';
 
 export type Props = {
@@ -55,13 +55,13 @@ export function UsersPageTableContainer({
         <Column
           field="type"
           header="Type"
-          body={UserTypeLabel}
+          body={UsersTypeLabel}
         />
 
         <Column
           field="photo"
           header="Photo"
-          body={UserPhoto}
+          body={UsersPhoto}
         />
 
         <Column field="name" header="Name" />

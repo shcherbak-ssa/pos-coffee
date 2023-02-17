@@ -7,7 +7,7 @@ import { useStore } from 'view/hooks/store';
 
 import type { UsersStore } from '@admin/shared/types';
 import { StoreName } from '@admin/shared/constants';
-import { UserPersonalInfo } from '@admin/view/components/user/UserPersonalInfo';
+import { UsersPersonalInfo } from '@admin/view/components/UsersPersonalInfo';
 import { UserProfileInfo } from '@admin/view/components/user/UserProfileInfo';
 import { LocationInfo } from '@admin/view/components/card/LocationInfo';
 
@@ -33,7 +33,7 @@ export function UsersPageInfoContainer({ isEditMode }: Props) {
   return (
     <div className="full p-6">
       <div className="grid grid-cols-4 gap-4 full">
-        <UserPersonalInfo user={selectedUser} />
+        <UsersPersonalInfo entity={selectedUser} />
 
         <UserProfileInfo
           className="col-span-3"

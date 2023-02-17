@@ -6,7 +6,7 @@ import { EMPTY_STRING } from 'shared/constants';
 import { filterItemById } from 'shared/utils';
 
 import { CssClasses } from '@admin/shared/constants';
-import { UserPersonalInfo } from '@admin/view/components/user/UserPersonalInfo';
+import { UsersPersonalInfo } from '@admin/view/components/UsersPersonalInfo';
 import { UsersActionsMenuContainer } from '@admin/view/containers/users/UsersActionsMenuContainer';
 
 export type Props = {
@@ -64,7 +64,7 @@ export function UsersPageCardsContainer({
     // @ts-ignore
     const { classList } = e.target;
 
-    if (classList.contains(CssClasses.CLICK)) {
+    if (classList.contains(CssClasses.CARD_CONTENT)) {
       classList.add(CssClasses.CARD_ACTIVE);
       setLastFocusedCard(e.target as HTMLElement);
     }
@@ -89,7 +89,7 @@ export function UsersPageCardsContainer({
                 onClick={focusCard}
                 onDoubleClick={() => selectUser(user)}
               >
-                <UserPersonalInfo className="!py-12" user={user} />
+                <UsersPersonalInfo className="!py-12" entity={user} />
               </div>
 
               <div className="card-menu absolute top-4 right-4">

@@ -10,6 +10,11 @@ export type Entity = AnyType & {
   id: number;
 }
 
+export type EntityComponentProps<T> = {
+  entity: T;
+  className?: string;
+}
+
 export type Notification = {
   type?: 'result' | 'process',
   severity?: MessageType;

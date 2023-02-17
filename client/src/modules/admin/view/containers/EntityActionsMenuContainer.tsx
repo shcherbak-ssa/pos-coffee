@@ -5,20 +5,20 @@ import { Button } from 'primereact/button';
 import { PrimeIcons } from 'primereact/api';
 import { confirmDialog } from 'primereact/confirmdialog';
 
+import type { Entity } from 'shared/types';
 import { IconButton } from 'view/components/IconButton';
 
 import type { ActionMenuItemOverride } from '@admin/shared/types';
 import { Action } from '@admin/shared/constants';
 import { entityActionsMenuItems } from '@admin/shared/configs';
-import type { Entity } from 'shared/types';
 
 export type Props = {
-  isEntityPage: boolean;
   overrideItems: ActionMenuItemOverride[];
+  isEntityPage?: boolean;
   entity?: Entity;
 }
 
-export function EntityActionsMenuContainer({ isEntityPage, overrideItems, entity }: Props) {
+export function EntityActionsMenuContainer({ overrideItems, isEntityPage = false, entity }: Props) {
 
   const menu = useRef<Menu>(null);
 
@@ -44,18 +44,20 @@ export function EntityActionsMenuContainer({ isEntityPage, overrideItems, entity
   }, []);
 
   function getActionCommand(action: Action, command: (id: number) => void): () => void {
+    const executeCommand = () => entity && command(entity.id);
+
     return () => {
       switch (action) {
         case Action.VIEW:
         case Action.EDIT:
-          return entity && command(entity.id);
+          return executeCommand();
         case Action.DELETE:
           confirmDialog({
             header: 'Confirmation',
             message: 'Are you sure you want to delete this user?',
             icon: PrimeIcons.EXCLAMATION_TRIANGLE,
             acceptClassName: 'p-button-danger',
-            accept: () => entity && command(entity.id),
+            accept: () => executeCommand(),
           });
           return;
         case Action.RESTORE:
@@ -63,7 +65,7 @@ export function EntityActionsMenuContainer({ isEntityPage, overrideItems, entity
             header: 'Confirmation',
             message: 'Are you sure you want to restore this user?',
             icon: PrimeIcons.INFO_CIRCLE,
-            accept: () => entity && command(entity.id),
+            accept: () => executeCommand(),
           });
           return;
       }

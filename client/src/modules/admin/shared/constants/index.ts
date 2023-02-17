@@ -76,6 +76,6 @@ export enum Entity {
 }
 
 export enum CssClasses {
-  CLICK = 'click',
+  CARD_CONTENT = 'card-content',
   CARD_ACTIVE = 'card-active',
 }

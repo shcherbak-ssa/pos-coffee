@@ -1,4 +1,4 @@
-import { type Dispatch, type SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import type { AppViewState } from '@admin/shared/types';
 import { ListAction } from '@admin/shared/constants';
@@ -7,11 +7,11 @@ export type Props = {
   view: AppViewState;
 }
 
-export type HoolReturn<T> = [boolean, T[], (t: T[]) => void];
+export type HookReturn<T> = [boolean, T[], (entities: T[]) => void];
 
-export function useListSelect<T>({ view }: Props): HoolReturn<T> {
+export function useSelectedEntities<T>({ view }: Props): HookReturn<T> {
   const [ isSelectEnable, setIsSelectEnable ] = useState<boolean>(false);
-  const [ selectedUsers, setSelectedUsers ] = useState<T[]>([]);
+  const [ selectedEntities, setSelectedEntities ] = useState<T[]>([]);
 
   useEffect(() => {
     const selectEnable: boolean = view.listAction.includes(ListAction.SELECT);
@@ -19,10 +19,14 @@ export function useListSelect<T>({ view }: Props): HoolReturn<T> {
     setIsSelectEnable(selectEnable);
 
     if (!selectEnable) {
-      setSelectedUsers([]);
+      setSelectedEntities([]);
     }
-
   }, [view.listAction]);
 
-  return [ isSelectEnable, selectedUsers, setSelectedUsers ];
+  useEffect(
+    () => setSelectedEntities([]),
+    [view.listTab],
+  );
+
+  return [ isSelectEnable, selectedEntities, setSelectedEntities ];
 }
