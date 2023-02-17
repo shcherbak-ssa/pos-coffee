@@ -1,6 +1,9 @@
+import { useEffect } from 'react';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import type { MenuItem } from 'primereact/menuitem';
 import { BreadCrumb } from 'primereact/breadcrumb';
+
+import { updatePageTitle } from 'shared/utils';
 
 import type { AppPageSchema } from '@admin/shared/types';
 
@@ -8,9 +11,13 @@ export type Props = {
   page: AppPageSchema;
 }
 
-export function PageHeaderTitle({ page }: Props) {
+export function PageHeaderTitleContainer({ page }: Props) {
 
   const navigate: NavigateFunction = useNavigate();
+
+  useEffect(() => {
+    updatePageTitle(page.child?.title || page.title);
+  }, [page]);
 
   function convertPageToMenuItem(page: AppPageSchema): MenuItem {
     return {

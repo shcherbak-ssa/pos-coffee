@@ -6,6 +6,10 @@ export type AnyType = {
   [key: string]: string | number | boolean | object | AnyType | AnyType[] | null | undefined;
 }
 
+export type Entity = AnyType & {
+  id: number;
+}
+
 export type Notification = {
   type?: 'result' | 'process',
   severity?: MessageType;

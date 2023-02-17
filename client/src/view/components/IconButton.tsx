@@ -1,15 +1,16 @@
+import type { MouseEvent } from 'react';
 import classnames from 'classnames';
 import { Button } from 'primereact/button';
 
 import { EMPTY_STRING } from 'shared/constants';
 
 export type Props = {
-  className?: string;
   icon: string;
   click: (e: MouseEvent) => void;
+  className?: string;
 }
 
-export function IconButton({ className = EMPTY_STRING, icon, click }: Props) {
+export function IconButton({ icon, click, className = EMPTY_STRING }: Props) {
 
   function handleClick(e: MouseEvent): void {
     e.preventDefault();
@@ -26,7 +27,6 @@ export function IconButton({ className = EMPTY_STRING, icon, click }: Props) {
         )
       }
       icon={icon}
-      // @ts-ignore
       onClick={handleClick}
     />
   );

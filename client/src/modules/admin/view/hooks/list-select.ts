@@ -1,10 +1,10 @@
 import { type Dispatch, type SetStateAction, useEffect, useState } from 'react';
 
-import type { ViewState } from '@admin/shared/types';
+import type { AppViewState } from '@admin/shared/types';
 import { ListAction } from '@admin/shared/constants';
 
 export type Props = {
-  view: ViewState;
+  view: AppViewState;
 }
 
 export type HoolReturn<T> = [boolean, T[], (t: T[]) => void];

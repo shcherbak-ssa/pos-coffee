@@ -2,10 +2,10 @@ import { PrimeIcons } from 'primereact/api';
 
 import type { Notification } from 'shared/types';
 
-import type { AppPageSchema, MenuItem, OptionItem } from '@admin/shared/types';
-import { Entity, ListAction, ListView, PagePath, PageTitle } from '@admin/shared/constants';
+import type { AppPageSchema, AppMenuItem, OptionItem, ActionMenuItem } from '@admin/shared/types';
+import { Action, Entity, ListAction, ListView, PagePath, PageTitle } from '@admin/shared/constants';
 
-export const appMenuItems: MenuItem[] = [
+export const appMenuItems: AppMenuItem[] = [
   {
     label: PageTitle.HOME,
     icon: PrimeIcons.HOME,
@@ -94,6 +94,29 @@ export const listActionOptions: OptionItem[] = [
     icon: PrimeIcons.FILTER,
     value: ListAction.FILTER,
     label: 'Filter',
+  },
+];
+
+export const entityActionsMenuItems: ActionMenuItem[] = [
+  {
+    label: 'View',
+    icon: PrimeIcons.EYE,
+    action: Action.VIEW,
+  },
+  {
+    label: 'Edit',
+    icon: PrimeIcons.PENCIL,
+    action: Action.EDIT,
+  },
+  {
+    label: 'Delete',
+    icon: PrimeIcons.TRASH,
+    action: Action.DELETE,
+  },
+  {
+    label: 'Restore',
+    icon: PrimeIcons.REPLAY,
+    action: Action.RESTORE,
   },
 ];
 

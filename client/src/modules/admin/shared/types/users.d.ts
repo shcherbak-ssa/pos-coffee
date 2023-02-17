@@ -1,8 +1,6 @@
 import type { UserSchema, Store, AddressDraft, AddressUpdates } from 'shared/types';
 import type { UserType } from 'shared/constants';
 
-import type { ViewState } from './view';
-
 export type UserUpdates = Partial<Omit<UserSchema, 'address'> & {
   address: AddressUpdates;
 }>
@@ -25,7 +23,6 @@ export type UsersState = {
   currentUser: UserSchema;
   users: UserSchema[];
   selectedUser: UserSchema;
-  view: ViewState;
 }
 
 export interface UsersStore extends Store<UsersState> {
@@ -40,7 +37,6 @@ export interface UsersStoreWithActions extends UsersStore {
   addUser(user: UserSchema): void;
   removeUser(userId: number): void;
   selectUser(userId: number): void;
-  updateViewState<T extends keyof ViewState>(state: T, value: ViewState[T]): void;
 }
 
 export interface UsersController {
@@ -51,5 +47,4 @@ export interface UsersController {
   restoreUser(userId: number): Promise<boolean>
   selectUser(userId?: number): Promise<void>;
   setCurrentUser(user: UserSchema): Promise<void>;
-  updateViewState<T extends keyof ViewState>(state: T, value: ViewState[T]): Promise<void>;
 }

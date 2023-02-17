@@ -6,28 +6,15 @@ import { AppError } from 'shared/errors';
 import { filterItemById } from 'shared/utils';
 import { getUpdates } from 'shared/helpers/get-updates';
 
-import type {
-  UsersState,
-  UsersStore,
-  UsersStoreWithActions,
-  ViewState,
-  UserUpdates,
-} from '@admin/shared/types';
-import { ListTab, ListView } from '@admin/shared/constants';
+import type { UsersState, UsersStore, UsersStoreWithActions, UserUpdates } from '@admin/shared/types';
 import { createUserDraft, UserSchema } from '@admin/models/user';
 
 export const usersStore: UsersStore & UsersStoreWithActions = {
 
   state: proxy<UsersState>({
-    currentUser: UserSchema.create(),
     users: [],
+    currentUser: UserSchema.create(),
     selectedUser: UserSchema.create(),
-
-    view: {
-      listView: ListView.TABLE,
-      listTab: ListTab.ACTIVE,
-      listAction: [],
-    },
   }),
 
   draftUser: createUserDraft(),
@@ -93,10 +80,6 @@ export const usersStore: UsersStore & UsersStoreWithActions = {
     }
 
     throw new AppError(`User with id ${userId} not found`);
-  },
-
-  updateViewState<T extends keyof ViewState>(state: T, value: ViewState[T]): void {
-    usersStore.state.view[state] = value;
   },
 
 };

@@ -93,9 +93,7 @@ export function UsersActionsMenuContainer({ id, isDeleted, isInfoPage = false }:
     }
   }
 
-  function toggleMenu(e: MouseEvent): void {
-    e.preventDefault();
-
+  function toggleMenu(): void {
     // @ts-ignore
     menu.current.toggle(e);
   }

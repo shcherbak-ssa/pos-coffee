@@ -1,5 +1,3 @@
-import { PrimeIcons } from 'primereact/api';
-
 import type { MessageType } from 'shared/types';
 import { useMessageIcon } from 'view/hooks/message-icon';
 import { SimpleIcon } from 'view/components/SimpleIcon';
@@ -9,7 +7,7 @@ export type Props = {
   type: MessageType;
 }
 
-export function MessageContent({ message, type }: Props) {
+export function PageMessageContent({ message, type }: Props) {
 
   const icon: string = useMessageIcon(type);
 

@@ -1,93 +1,117 @@
 import { useEffect, useState } from 'react';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
-import type { MenuItem } from 'primereact/menuitem';
-import { Button, type ButtonProps } from 'primereact/button';
-import { PrimeIcons } from 'primereact/api';
 
-import { ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
+import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/navigate';
+import { EmptyComponent } from 'view/components/EmptyComponent';
 
-import type { AppPageSchema, UsersController, UsersStore } from '@admin/shared/types';
-import { ControllerName, PagePath, PageTitle, ListTab, StoreName } from '@admin/shared/constants';
+import type { ActionMenuItemOverride, AppStore, UsersController, UsersStore } from '@admin/shared/types';
+import { ControllerName, PagePath, PageTitle, ListTab, StoreName, Action } from '@admin/shared/constants';
 import { pages } from '@admin/shared/configs';
-import { PageLayout } from '@admin/view/layouts/PageLayout';
-import { PageWrapper } from '@admin/view/components/page/PageWrapper';
-import { UsersPageListContainer } from '@admin/view/containers/users/UsersPageListContainer';
-import { UsersPageSubsectionContainer } from '@admin/view/containers/users/UsersPageSubsectionContainer';
+import { type Props as PageLayoutPage, PageLayout } from '@admin/view/layouts/PageLayout';
 
 export function UsersPage() {
 
-  const [ isUsersLoaded, setIsUsersLoaded ] = useState<boolean>(false);
-  const [ currentTabIndex, setCurrentTabIndex ] = useState<number>(ZERO);
+  const [ isUsersLoading, setIsUsersLoading ] = useState<boolean>(true);
+  const [ pageLayoutProps, setPageLayoutProps ] = useState<Omit<PageLayoutPage, 'children'>>();
 
-  const navigate: NavigateFunction = useNavigate();
-
-  const { state: { view } } = useStore(StoreName.USERS) as UsersStore;
+  const { state: { users, currentUser } } = useStore(StoreName.USERS) as UsersStore;
+  const { state: { view } } = useStore(StoreName.APP) as AppStore;
   const usersController = useController(ControllerName.USERS) as UsersController;
 
-  const usersPage: AppPageSchema = pages[PageTitle.USERS];
+  const toUsersInfoPage: NavigateFunctionHook = useNavigateWithParams(PagePath.USERS_INFO);
+  const toUsersEditPage: NavigateFunctionHook = useNavigateWithParams(PagePath.USERS_EDIT);
 
-  const usersTabItems: MenuItem[] = [
+  const overrideItems: ActionMenuItemOverride[] = [
     {
-      label: 'Active',
-      data: { tab: ListTab.ACTIVE },
-      command: () => {
-        loadUsers(false);
-        usersController.updateViewState('listTab', ListTab.ACTIVE);
+      action: Action.VIEW,
+      isVisible: () => true,
+      command: (id: number) => {
+        toUsersInfoPage({ id });
       },
     },
     {
-      label: 'Deleted',
-      data: { tab: ListTab.DELETED },
-      command: () => {
-        loadUsers(true);
-        usersController.updateViewState('listTab', ListTab.DELETED);
+      action: Action.EDIT,
+      isVisible: () => true,
+      command: (id: number) => {
+        toUsersEditPage({ id });
+      },
+    },
+    {
+      action: Action.DELETE,
+      isVisible: (id?: number) => currentUser.id !== id,
+      command: (id: number) => {
+        usersController.deleteUser(id);
+      },
+    },
+    {
+      action: Action.RESTORE,
+      isVisible: () => true,
+      command: (id: number) => {
+        usersController.restoreUser(id);
       },
     },
   ];
 
-  const addUserButtonProps: ButtonProps = {
-    className: 'p-button-sm',
-    icon: PrimeIcons.PLUS,
-    label: 'Add new user',
-    onClick: () => {
-      navigate(PagePath.USERS_CREATE);
-    },
-  };
-
   useEffect(() => {
     loadUsers(view.listTab === ListTab.DELETED);
-
-    const index: number | undefined
-      = usersTabItems.findIndex(({ data }) => data.tab === view.listTab);
-
-    if (index) {
-      setCurrentTabIndex(index);
-    }
   }, []);
 
+  useEffect(() => {
+    setPageLayoutProps({
+      page: pages[PageTitle.USERS],
+      actionsProps: {
+        isEntityPage: false,
+        addActionProps: isUsersLoading ? undefined : {
+          label: 'Create new user',
+          to: PagePath.USERS_CREATE,
+        },
+        entityActionsProps: { overrideItems },
+      },
+      showSubHeader: !isUsersLoading,
+      tabs: isUsersLoading ? [] : [
+        {
+          label: 'Active',
+          listTab: ListTab.ACTIVE,
+          command: () => {
+            loadUsers(false);
+          },
+        },
+        {
+          label: 'Deleted',
+          listTab: ListTab.DELETED,
+          command: () => {
+            loadUsers(true);
+          },
+        },
+      ],
+      isLoading: isUsersLoading,
+      messageProps: users.length ? undefined : {
+        type: 'info',
+        message: 'No users found',
+      },
+    });
+  }, [isUsersLoading, users]);
+
   function loadUsers(onlyDeleted: boolean): void {
+    setIsUsersLoading(true);
+
     usersController.loadUsers({ onlyDeleted })
       .then((success: boolean) => {
         if (success) {
-          setIsUsersLoaded(true);
+          setIsUsersLoading(false);
         }
       });
   }
 
-  return (
-    <PageLayout page={usersPage}>
-      <PageWrapper
-        page={usersPage}
-        content={<UsersPageListContainer />}
-        tabs={usersTabItems}
-        currentTabIndex={currentTabIndex}
-        actions={<Button {...addUserButtonProps} />}
-        subsection={<UsersPageSubsectionContainer />}
-        isLoading={!isUsersLoaded}
-      />
-    </PageLayout>
-  );
+  if (pageLayoutProps) {
+    return (
+      <PageLayout {...pageLayoutProps}>
+        <div></div>
+      </PageLayout>
+    );
+  }
+
+  return <EmptyComponent />;
 
 }

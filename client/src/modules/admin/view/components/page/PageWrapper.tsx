@@ -6,9 +6,8 @@ import { AppLoader } from 'view/components/AppLoader';
 
 import type { AppPageSchema } from '@admin/shared/types';
 import { DEFAULT_ERROR_MESSAGE } from '@admin/shared/constants';
-import { MessageContent } from '@admin/view/components/MessageContent';
-import { PageHeaderTitle } from '@admin/view/components/page/PageHeaderTitle';
-import { PageMessage } from '@admin/view/components/page/PageMessage';
+import { PageHeaderTitleContainer } from '@admin/view/containers/PageHeaderHeadingContainer';
+import { PageMessage } from '@admin/view/components/PageMessage';
 
 export type Props = {
   page: AppPageSchema;
@@ -45,7 +44,7 @@ export function PageWrapper({
   return (
     <div className="bg-white rounded-xl shadow overflow-hidden">
       <div className="page-header border-b-2 flex items-center justify-between p-6 relative">
-        <PageHeaderTitle page={page} />
+        <PageHeaderTitleContainer page={page} />
 
         <div className="page-tabs absolute top-0 left-1/2 -translate-x-1/2 h-full">
           { tabs ? <TabMenu model={tabs} activeIndex={currentTabIndex} /> : EMPTY_STRING }

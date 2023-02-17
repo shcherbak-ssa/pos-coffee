@@ -1,71 +1,71 @@
-import { useEffect } from 'react';
-import classnames from 'classnames';
-import { ScrollPanel } from 'primereact/scrollpanel';
 import { ConfirmDialog } from 'primereact/confirmdialog';
 
-import { updatePageTitle } from 'shared/utils';
-import { useStore } from 'view/hooks/store';
-import { useController } from 'view/hooks/controller';
+import { EMPTY_STRING } from 'shared/constants';
 import { NotificationContainer } from 'view/containers/NotificationContainer';
+import { AppLoader } from 'view/components/AppLoader';
 
-import type { AppController, AppPageSchema, AppStore } from '@admin/shared/types';
-import { ControllerName, StoreName } from '@admin/shared/constants';
-import { AppMenuContainer } from '@admin/view/containers/app/AppMenuContainer';
-import { AppHeaderContainer } from '@admin/view/containers/app/AppHeaderContainer';
+import type { AppPageSchema, TabItem } from '@admin/shared/types';
+import { AppHeaderContainer } from '@admin/view/containers/AppHeaderContainer';
+import { AppMenuContainer } from '@admin/view/containers/AppMenuContainer';
+import { PageContentContainer } from '@admin/view/containers/PageContentContainer';
+import { PageHeaderTitleContainer } from '@admin/view/containers/PageHeaderHeadingContainer';
+import { PageHeaderTabsContainer } from '@admin/view/containers/PageHeaderTabsContainer';
+import { PageSubHeaderContainer } from '@admin/view/containers/PageSubHeaderContainer';
+import { type Props as ActionsProps, PageHeaderActions } from '@admin/view/components/PageHeaderActions';
+import { type Props as PageMessageProps, PageMessage } from '@admin/view/components/PageMessage';
 
 export type Props = {
   page: AppPageSchema;
+  actionsProps: ActionsProps;
+  showSubHeader: boolean;
   children: React.ReactNode;
+  tabs?: TabItem[];
+  isLoading?: boolean;
+  messageProps?: PageMessageProps;
 }
 
-export function PageLayout({ page, children }: Props) {
+export function PageLayout({
+  page,
+  actionsProps,
+  children,
+  showSubHeader,
+  tabs = [],
+  isLoading = false,
+  messageProps,
+}: Props) {
 
-  const { state: { isAppMenuOpen } } = useStore(StoreName.APP) as AppStore;
-  const appController = useController(ControllerName.APP) as AppController;
+  function drawContent(): React.ReactNode {
+    if (isLoading) {
+      return <AppLoader />;
+    }
 
-  useEffect(() => {
-    let pageTitle: string = page.child
-      ? page.child.title
-      : page.title;
+    if (messageProps) {
+      return <PageMessage {...messageProps} />;
+    }
 
-    updatePageTitle(pageTitle);
-  }, [page]);
-
-  function closeMenu(): void {
-    appController.setIsAppMenuOpen(false);
+    return children;
   }
+
+  // @TODO: add skeleton
 
   return (
     <div className="app-container full relative">
       <AppHeaderContainer />
+      <AppMenuContainer />
 
-      <div
-        className={classnames('app-menu-container duration-200 h-full absolute top-0 z-30 lg:z-10', {
-          'is-open': isAppMenuOpen,
-          'is-close': !isAppMenuOpen,
-        })}
+      <PageContentContainer
+        header={
+          <>
+            <PageHeaderTitleContainer page={page} />
+            <PageHeaderTabsContainer tabs={tabs} />
+            <PageHeaderActions {...actionsProps} />
+          </>
+        }
       >
-        <AppMenuContainer />
-      </div>
+        { showSubHeader ? <PageSubHeaderContainer /> : EMPTY_STRING }
 
-      <ScrollPanel style={{ width: '100%', height: 'calc(100% - 6rem)' }}>
-        <div
-          className={classnames('p-12 duration-200', {
-            'lg:pl-72': isAppMenuOpen,
-            'lg:pl-36': !isAppMenuOpen,
-          })}
-        >
-          { children }
-        </div>
-      </ScrollPanel>
-
-      <div
-        className={classnames('app-menu-overlay fixed top-0 left-0 z-10 full', {
-          'block lg:hidden': isAppMenuOpen,
-          'hidden': !isAppMenuOpen,
-        })}
-        onClick={closeMenu}
-      />
+        { drawContent() }
+      </PageContentContainer>
 
       <NotificationContainer />
       <ConfirmDialog />

@@ -8,7 +8,7 @@ import type { UsersStore, UsersController } from '@admin/shared/types';
 import { StoreName, ControllerName } from '@admin/shared/constants';
 import { listActionOptions, listViewOptions } from '@admin/shared/configs';
 import { PageSubSectionWrapper } from '@admin/view/components/page/PageSubSectionWrapper';
-import { ListActionTemplate } from '@admin/view/components/ListActionTemplate';
+import { PageSubHeaderOption } from '@admin/view/components/PageSubHeaderOption';
 
 export function UsersPageSubsectionContainer() {
 
@@ -31,7 +31,7 @@ export function UsersPageSubsectionContainer() {
         <SelectButton
           value={view.listAction}
           options={listActionOptions}
-          itemTemplate={ListActionTemplate}
+          itemTemplate={PageSubHeaderOption}
           onChange={selectListAction}
           multiple
         />

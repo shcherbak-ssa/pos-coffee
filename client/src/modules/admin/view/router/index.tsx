@@ -7,7 +7,7 @@ import { ProductsPage } from '@admin/view/pages/ProductsPage';
 import { DashboardPage } from '@admin/view/pages/DashboardPage';
 import { OrdersPage } from '@admin/view/pages/OrdersPage';
 import { SettingsPage } from '@admin/view/pages/SettingsPage';
-import { UsersInfoPage } from '@admin/view/pages/UsersInfoPage';
+// import { UsersInfoPage } from '@admin/view/pages/UsersInfoPage';
 
 export const router = createBrowserRouter([
   {
@@ -30,18 +30,18 @@ export const router = createBrowserRouter([
     path: PagePath.USERS,
     element: <UsersPage />,
   },
-  {
-    path: PagePath.USERS_INFO,
-    element: <UsersInfoPage />,
-  },
-  {
-    path: PagePath.USERS_CREATE,
-    element: <UsersInfoPage isEditPage />,
-  },
-  {
-    path: PagePath.USERS_EDIT,
-    element: <UsersInfoPage isEditPage />,
-  },
+  // {
+  //   path: PagePath.USERS_INFO,
+  //   element: <UsersInfoPage />,
+  // },
+  // {
+  //   path: PagePath.USERS_CREATE,
+  //   element: <UsersInfoPage isEditPage />,
+  // },
+  // {
+  //   path: PagePath.USERS_EDIT,
+  //   element: <UsersInfoPage isEditPage />,
+  // },
   {
     path: PagePath.SETTINGS,
     element: <SettingsPage />,
