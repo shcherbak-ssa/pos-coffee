@@ -1,5 +1,4 @@
-export const DEFAULT_ERROR_MESSAGE: string = 'Something went wrong!';
-export const CREATE_NEW_LABEL: string = 'create';
+export const TO_BACK: number = -1;
 
 export enum ApiEndpoint {
   USERS = '/api/admin/users',
@@ -34,6 +33,11 @@ export enum PagePath {
   USERS_CREATE = '/admin/users/create',
   USERS_EDIT = '/admin/users/:id/edit',
   SETTINGS = '/admin/settings',
+}
+
+export enum PagePathLabel {
+  CREATE = 'create',
+  EDIT = 'edit',
 }
 
 export enum PageTitle {
@@ -78,4 +82,8 @@ export enum Entity {
 export enum CssClasses {
   CARD_CONTENT = 'card-content',
   CARD_ACTIVE = 'card-active',
+}
+
+export enum ViewEvent {
+  SAVE = 'save',
 }

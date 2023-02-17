@@ -1,3 +1,5 @@
+import type { EmptyFunction } from 'shared/types';
+
 import type { Action, ListTab, PagePath } from '@admin/shared/constants';
 
 import type { AppController } from './app';
@@ -25,17 +27,11 @@ export type OptionItem = {
 export type TabItem = {
   label: string;
   listTab: ListTab;
-  command: () => void;
+  command: EmptyFunction;
 }
 
 export type ActionMenuItem = {
   label: string;
   icon: string;
   action: Action;
-}
-
-export type ActionMenuItemOverride = {
-  action: Action;
-  command: (id: number) => void;
-  isVisible: (id?: number) => boolean;
 }

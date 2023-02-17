@@ -10,12 +10,11 @@ import { Column, type ColumnProps } from 'primereact/column';
 
 import type { Entity } from 'shared/types';
 
-import type { ActionMenuItemOverride } from '@admin/shared/types';
+import type { ActionMenuItemsFunction } from '@admin/view/hooks/actions-menu-items';
 import { EntityActionsMenuContainer } from '@admin/view/containers/EntityActionsMenuContainer';
 
-export type Props<T extends DataTableValue> = {
+export type Props<T extends Entity> = {
   entities: T[];
-  overrideActionItems: ActionMenuItemOverride[];
   selectEntity: (entity: T) => void;
   columns: ColumnProps[];
   isSelectEnable: boolean;
@@ -23,9 +22,8 @@ export type Props<T extends DataTableValue> = {
   setSelectedEntities: (entities: T[]) => void;
 }
 
-export function EntityTableContainer<T extends DataTableValue>({
+export function EntityTableContainer<T extends Entity>({
   entities,
-  overrideActionItems,
   selectEntity,
   columns,
   isSelectEnable,
@@ -65,10 +63,10 @@ export function EntityTableContainer<T extends DataTableValue>({
     return {
       field: 'actions',
       header: 'Actions',
-      body: (entity: Entity) => (
+      body: (entity: T) => (
         <EntityActionsMenuContainer
-          overrideItems={overrideActionItems}
           entity={entity}
+          isEntityPage={false}
         />
       ),
     };

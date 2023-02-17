@@ -6,8 +6,8 @@ import type { ErrorObjectHook } from 'view/hooks/error';
 import { InputWrapper } from 'view/components/InputWrapper';
 import { EmptyComponent } from 'view/components/EmptyComponent';
 
-import { CardHeading } from '@admin/view/components/card/CardHeading';
-import { CardWrapper } from '@admin/view/components/card/CardWrapper';
+import { CardHeading } from '@admin/view/components/CardHeading';
+import { CardWrapper } from '@admin/view/components/CardWrapper';
 
 export type Props = {
   address: AddressSchema | null;
@@ -17,7 +17,7 @@ export type Props = {
   className?: string;
 }
 
-export function LocationInfo({ address, draftAddress, validationError, isEditMode, className }: Props) {
+export function AddressCard({ address, draftAddress, validationError, isEditMode, className }: Props) {
 
   if (address === null) {
     return <EmptyComponent />;
@@ -25,7 +25,7 @@ export function LocationInfo({ address, draftAddress, validationError, isEditMod
 
   return (
     <CardWrapper className={className}>
-      <CardHeading heading="Location" />
+      <CardHeading heading="Address" />
 
       <div className="grid grid-cols-3 gap-x-4 gap-y-10">
         <InputWrapper

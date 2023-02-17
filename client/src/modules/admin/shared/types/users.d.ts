@@ -44,7 +44,7 @@ export interface UsersController {
   loadUser(userId: number): Promise<boolean>;
   saveUser(user: UserSchema): Promise<number | void>;
   deleteUser(userId: number): Promise<boolean>;
-  restoreUser(userId: number): Promise<boolean>
+  restoreUser(userId: number): Promise<boolean>;
   selectUser(userId?: number): Promise<void>;
   setCurrentUser(user: UserSchema): Promise<void>;
 }

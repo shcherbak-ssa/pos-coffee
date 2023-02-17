@@ -60,7 +60,7 @@ export class UsersController extends BaseController implements BaseUsersControll
       const store = await this.getStore() as UsersStoreWithActions;
 
       if (!store.hasSelectedUserUpdates()) {
-        return;
+        return user.id;
       }
 
       const isNewSchema: boolean = user.isNewSchema();

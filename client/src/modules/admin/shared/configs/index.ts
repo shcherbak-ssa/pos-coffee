@@ -97,29 +97,6 @@ export const listActionOptions: OptionItem[] = [
   },
 ];
 
-export const entityActionsMenuItems: ActionMenuItem[] = [
-  {
-    label: 'View',
-    icon: PrimeIcons.EYE,
-    action: Action.VIEW,
-  },
-  {
-    label: 'Edit',
-    icon: PrimeIcons.PENCIL,
-    action: Action.EDIT,
-  },
-  {
-    label: 'Delete',
-    icon: PrimeIcons.TRASH,
-    action: Action.DELETE,
-  },
-  {
-    label: 'Restore',
-    icon: PrimeIcons.REPLAY,
-    action: Action.RESTORE,
-  },
-];
-
 export const notifications: {
   created: (entity: Entity) => Notification,
   updated: (entity: Entity) => Notification,

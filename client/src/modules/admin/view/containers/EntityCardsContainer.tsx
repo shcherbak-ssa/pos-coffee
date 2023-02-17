@@ -5,13 +5,12 @@ import type { Entity, EntityComponentProps } from 'shared/types';
 import { EMPTY_STRING } from 'shared/constants';
 import { filterItemById } from 'shared/utils';
 
-import type { ActionMenuItemOverride } from '@admin/shared/types';
 import { CssClasses } from '@admin/shared/constants';
 import { EntityActionsMenuContainer } from '@admin/view/containers/EntityActionsMenuContainer';
+import type { ActionMenuItemsFunction } from '@admin/view/hooks/actions-menu-items';
 
-export type Props<T> = {
+export type Props<T extends Entity> = {
   entities: T[];
-  overrideActionItems: ActionMenuItemOverride[];
   selectEntity: (entity: T) => void;
   EntityComponent: React.ComponentType<EntityComponentProps<T>>;
   isSelectEnable: boolean;
@@ -21,7 +20,6 @@ export type Props<T> = {
 
 export function EntityCardsContainer<T extends Entity>({
   entities,
-  overrideActionItems,
   selectEntity,
   EntityComponent,
   isSelectEnable,
@@ -98,8 +96,8 @@ export function EntityCardsContainer<T extends Entity>({
 
               <div className="card-menu absolute top-4 right-4">
                 <EntityActionsMenuContainer
-                  overrideItems={overrideActionItems}
                   entity={entity}
+                  isEntityPage={false}
                 />
               </div>
 

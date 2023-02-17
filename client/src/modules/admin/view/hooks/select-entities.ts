@@ -10,6 +10,7 @@ export type Props = {
 export type HookReturn<T> = [boolean, T[], (entities: T[]) => void];
 
 export function useSelectedEntities<T>({ view }: Props): HookReturn<T> {
+
   const [ isSelectEnable, setIsSelectEnable ] = useState<boolean>(false);
   const [ selectedEntities, setSelectedEntities ] = useState<T[]>([]);
 
@@ -29,4 +30,5 @@ export function useSelectedEntities<T>({ view }: Props): HookReturn<T> {
   );
 
   return [ isSelectEnable, selectedEntities, setSelectedEntities ];
+
 }

@@ -6,6 +6,8 @@ export type AnyType = {
   [key: string]: string | number | boolean | object | AnyType | AnyType[] | null | undefined;
 }
 
+export type EmptyFunction<T = void> = () => T;
+
 export type Entity = AnyType & {
   id: number;
 }
@@ -30,7 +32,7 @@ export type MessageType = 'success' | 'info' | 'warn' | 'error' | undefined;
 export type ViewSeverity = 'success' | 'info' | 'warning' | 'danger' | null | undefined;
 
 export type Controller = {}
-export type ControllerList = Map<string, Controller>
+export type ControllerList = Map<string, Controller>;
 
 export type Store<T = AnyType> = { readonly state: T }
 export type StoreList = Map<string, Store>;
@@ -56,6 +58,18 @@ export type ErrorObject<T> = {
   type: ErrorType;
   message: string;
   errors: Errors<T>;
+}
+
+export interface CrudController extends Controller {
+  loadById(entityId: number): Promise<boolean>;
+  loadAll<T>(filter?: T): Promise<boolean>;
+  save<T>(entity: T): Promise<number | void>;
+  delete(entityId: number): Promise<boolean>;
+  restore(entityId: number): Promise<boolean>;
+}
+
+export interface CrudStore extends Store {
+  add<T>(entity: T): void;
 }
 
 export interface ApiService {

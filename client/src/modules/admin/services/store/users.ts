@@ -20,9 +20,10 @@ export const usersStore: UsersStore & UsersStoreWithActions = {
   draftUser: createUserDraft(),
 
   hasSelectedUserUpdates(): boolean {
-    const { id, createdAt, updatedAt, deletedAt, ...updates } = this.getSelectedUserUpdates();
+    const { id, createdAt, updatedAt, deletedAt, address, ...updates } = this.getSelectedUserUpdates();
+    const { id: addressId, ...addressUpdates } = address || {};
 
-    return !!Object.keys(updates).length;
+    return !!Object.keys(updates).length || !!Object.keys(addressUpdates).length;
   },
 
   getSelectedUserUpdates(): UserUpdates {

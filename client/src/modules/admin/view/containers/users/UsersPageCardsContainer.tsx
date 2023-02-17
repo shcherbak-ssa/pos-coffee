@@ -6,7 +6,7 @@ import { EMPTY_STRING } from 'shared/constants';
 import { filterItemById } from 'shared/utils';
 
 import { CssClasses } from '@admin/shared/constants';
-import { UsersPersonalInfo } from '@admin/view/components/UsersPersonalInfo';
+import { UsersPersonalCard } from '@admin/view/components/UsersPersonalCard';
 import { UsersActionsMenuContainer } from '@admin/view/containers/users/UsersActionsMenuContainer';
 
 export type Props = {
@@ -89,7 +89,7 @@ export function UsersPageCardsContainer({
                 onClick={focusCard}
                 onDoubleClick={() => selectUser(user)}
               >
-                <UsersPersonalInfo className="!py-12" entity={user} />
+                <UsersPersonalCard className="!py-12" entity={user} />
               </div>
 
               <div className="card-menu absolute top-4 right-4">
