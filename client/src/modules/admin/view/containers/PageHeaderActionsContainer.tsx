@@ -4,26 +4,25 @@ import { PrimeIcons } from 'primereact/api';
 import { Button } from 'primereact/button';
 
 import type { CrudController, Entity } from 'shared/types';
-import { EMPTY_STRING } from 'shared/constants';
 import { useController } from 'view/hooks/controller';
 import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/navigate';
 
-import { PagePathLabel, GO_BACK, ControllerName } from '@admin/shared/constants';
+import { PagePathLabel, GO_BACK } from '@admin/shared/constants';
 import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-menu-items';
 import { EntityActionsMenuContainer } from '@admin/view/containers/EntityActionsMenuContainer';
 
 export type Props = {
   entity: Entity;
   actionsMenuItemsProps: ActionsMenuItemsProps;
-  controllerName?: string;
-  infoPagePath?: string;
+  controllerName: string;
+  infoPagePath: string;
 }
 
 export function PageHeaderActionsContainer({
   entity,
   actionsMenuItemsProps,
-  controllerName = ControllerName.APP,
-  infoPagePath = EMPTY_STRING,
+  controllerName,
+  infoPagePath,
 }: Props) {
 
   const [ isSaveProcessing, setIsSaveProcessing ] = useState<boolean>(false);

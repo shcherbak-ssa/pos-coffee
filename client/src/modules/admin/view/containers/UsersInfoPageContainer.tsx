@@ -46,10 +46,14 @@ export function UsersInfoPageContainer({ isEditMode }: Props) {
           title: draftUser.fullname,
         }
       },
-      actionsMenuItemsProps,
+      actionProps: {
+        actionsMenuItemsProps,
+        entity: selectedUser,
+        controllerName: ControllerName.USERS,
+        infoPagePath: PagePath.USERS_INFO,
+      },
       showSubHeader: false,
       isEntityPage: true,
-      entity: selectedUser,
       isLoading: isUsersLoading && !isError,
       messageProps: !isError ? undefined : {
         type: 'error',
@@ -72,7 +76,7 @@ export function UsersInfoPageContainer({ isEditMode }: Props) {
 
     const userId: number = Number(params.id);
 
-    usersController.loadUser(userId)
+    usersController.loadById(userId)
       .then((success) => {
         if (success) {
           usersController.selectUser(userId)

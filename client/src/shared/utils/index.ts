@@ -1,3 +1,4 @@
+import type { Entity } from 'shared/types';
 import { APP_NAME, EMPTY_STRING, PAGE_TITLE_DIVIDER } from 'shared/constants';
 
 export function replaceUrl(to: string): void {
@@ -24,6 +25,10 @@ export function updatePageTitle(title: string): void {
   document.title = [title, APP_NAME].join(PAGE_TITLE_DIVIDER);
 }
 
-export function filterItemById<T extends { id: number }>(items: T[], item: T): T[] {
-  return items.filter(({ id }) => id !== item.id);
+export function filterById<T extends Entity>(items: T[], itemId: number): T[] {
+  return items.filter(({ id }) => id !== itemId);
+}
+
+export function findById<T extends Entity>(items: T[], itemId: number): T | undefined {
+  return items.find(({ id }) => id === itemId);
 }

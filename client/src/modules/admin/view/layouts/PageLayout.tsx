@@ -3,28 +3,28 @@ import { type NavigateFunction, useNavigate } from 'react-router';
 import { Button } from 'primereact/button';
 import { PrimeIcons } from 'primereact/api';
 
-import type { Entity } from 'shared/types';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 import { AppLoader } from 'view/components/AppLoader';
 
 import type { AppController, AppPageSchema, AppStore, PageComponentProps, TabItem } from '@admin/shared/types';
 import { ControllerName, PagePath, StoreName } from '@admin/shared/constants';
-import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-menu-items';
 import { PageSubHeaderContainer } from '@admin/view/containers/PageSubHeaderContainer';
 import { PageHeaderTabsContainer } from '@admin/view/containers/PageHeaderTabsContainer';
 import { PageHeaderHeadingContainer } from '@admin/view/containers/PageHeaderHeadingContainer';
-import { PageHeaderActionsContainer } from '@admin/view/containers/PageHeaderActionsContainer';
+import {
+  type Props as ActionsProps,
+  PageHeaderActionsContainer,
+} from '@admin/view/containers/PageHeaderActionsContainer';
 import { type Props as PageMessageProps, PageMessage } from '@admin/view/components/PageMessage';
 
 export type Props = {
   page: AppPageSchema;
   showSubHeader: boolean;
   isEntityPage: boolean;
-  actionsMenuItemsProps: ActionsMenuItemsProps
   children: React.ReactNode;
+  actionProps?: ActionsProps,
   addButton?: { label: string; to: PagePath };
-  entity?: Entity;
   tabs?: TabItem[];
   isLoading?: boolean;
   messageProps?: PageMessageProps;
@@ -35,9 +35,8 @@ export function PageLayout({
   addButton,
   showSubHeader,
   isEntityPage,
-  actionsMenuItemsProps,
+  actionProps,
   children,
-  entity,
   tabs = [],
   isLoading = false,
   messageProps,
@@ -59,12 +58,9 @@ export function PageLayout({
   }
 
   function drawActions(): React.ReactNode {
-    if (isEntityPage && entity) {
+    if (isEntityPage && actionProps) {
       return (
-        <PageHeaderActionsContainer
-          entity={entity}
-          actionsMenuItemsProps={actionsMenuItemsProps}
-        />
+        <PageHeaderActionsContainer {...actionProps} />
       );
     } else {
       return (

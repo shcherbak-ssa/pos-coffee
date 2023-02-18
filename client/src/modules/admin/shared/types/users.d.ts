@@ -1,4 +1,4 @@
-import type { UserSchema, Store, AddressDraft, AddressUpdates } from 'shared/types';
+import type { UserSchema, AddressDraft, AddressUpdates, StoreCrud, CrudController, StoreState } from 'shared/types';
 import type { UserType } from 'shared/constants';
 
 export type UserUpdates = Partial<Omit<UserSchema, 'address'> & {
@@ -25,26 +25,15 @@ export type UsersState = {
   selectedUser: UserSchema;
 }
 
-export interface UsersStore extends Store<UsersState> {
+export interface UsersStore extends StoreState<UsersState> {
   draftUser: UserDraft;
 }
 
-export interface UsersStoreWithActions extends UsersStore {
-  hasSelectedUserUpdates(): boolean;
-  getSelectedUserUpdates(): UserUpdates;
+export interface UsersStoreActions extends StoreCrud<UserSchema> {
   setCurrentUser(user: UserSchema): void;
-  setUsers(users: UserSchema[]): void;
-  addUser(user: UserSchema): void;
-  removeUser(userId: number): void;
-  selectUser(userId: number): void;
 }
 
-export interface UsersController {
-  loadUsers(filter?: UsersFilter): Promise<boolean>;
-  loadUser(userId: number): Promise<boolean>;
-  saveUser(user: UserSchema): Promise<number | void>;
-  deleteUser(userId: number): Promise<boolean>;
-  restoreUser(userId: number): Promise<boolean>;
+export interface UsersController extends CrudController<UserSchema, UsersFilter> {
   selectUser(userId?: number): Promise<void>;
   setCurrentUser(user: UserSchema): Promise<void>;
 }

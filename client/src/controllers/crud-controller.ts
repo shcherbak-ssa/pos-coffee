@@ -1,11 +1,21 @@
-import type { CrudController as BaseCrudController, CrudStore, Store } from 'shared/types';
-
-import type { ApiService } from 'shared/types';
-import { BaseController } from 'controllers/base-controller';
+import type {
+  ApiService,
+  Entity,
+  NotificationService,
+  PayloadToSave,
+  PayloadToGetById,
+  PayloadToGetAll,
+  Store,
+  StoreCrud,
+  ValidationService,
+  PayloadToChangeArchiveState,
+} from 'shared/types';
 import { Context } from 'shared/context';
-import { ProgerError } from 'shared/errors';
+import { notifications } from 'shared/configs';
+import { BaseController } from 'controllers/base-controller';
+import { sleep } from 'shared/utils/sleep';
 
-export class CrudController extends BaseController implements BaseCrudController {
+export class CrudController extends BaseController {
 
   private storeName: string;
 
@@ -14,29 +24,7 @@ export class CrudController extends BaseController implements BaseCrudController
     this.storeName = storeName;
   }
 
-  public async loadById(entityId: number): Promise<boolean> {
-    throw new ProgerError(`Method CrudController.loadById() not implemented.`);
-  }
-
-  public async loadAll<T>(filter?: T): Promise<boolean> {
-    throw new ProgerError(`Method CrudController.loadAll() not implemented.`);
-  }
-
-  public async save<T>(entity: T): Promise<number | void> {
-    throw new ProgerError(`Method CrudController.save() not implemented.`);
-  }
-
-  public async delete(entityId: number): Promise<boolean> {
-    throw new ProgerError(`Method CrudController.delete() not implemented.`);
-  }
-
-  public async restore(entityId: number): Promise<boolean> {
-    throw new ProgerError(`Method CrudController.restore() not implemented.`);
-  }
-
-  protected async tryToLoadById<T>(
-    { entityId, endpoint }: { entityId: number, endpoint: string },
-  ): Promise<boolean> {
+  protected async tryToLoadById<T>({ endpoint, entityId }: PayloadToGetById): Promise<boolean> {
     try {
       const apiService: ApiService = await this.getApiService();
 
@@ -44,8 +32,118 @@ export class CrudController extends BaseController implements BaseCrudController
         .addParams({ id: entityId })
         .get(endpoint);
 
-      const store = await this.getStore() as CrudStore;
-      store.add(entity);
+      const store = await this.getStore() as StoreCrud<T>;
+      store.save(entity);
+
+      return true;
+    } catch (e: any) {
+      await this.parseError(e);
+      return false;
+    }
+  }
+
+  protected async tryToLoadAll<T, F>({ endpoint, filter }: PayloadToGetAll<F>): Promise<boolean> {
+    try {
+      const apiService: ApiService = await this.getApiService();
+
+      const entities: T[] = await apiService
+        .addQuery(filter)
+        .get(endpoint);
+
+      const store = await this.getStore() as StoreCrud<T>;
+      store.add(entities);
+
+      return true;
+    } catch (e: any) {
+      await this.parseError(e);
+      return false;
+    }
+  }
+
+  protected async tryToSave<T extends Entity>({
+    endpoint,
+    entity,
+    isEntityNew,
+    validationName,
+    entityName,
+  }: PayloadToSave<T>): Promise<number | undefined> {
+    try {
+      console.log('entity', entity);
+      const store = await this.getStore() as StoreCrud<T>;
+
+      if (!store.selected.hadUpdates()) {
+        return entity.id;
+      }
+
+      const notificationService: NotificationService = await this.getNotificationService();
+
+      notificationService.addNotification(
+        isEntityNew
+          ? notifications.createProcess(entityName)
+          : notifications.updateProcess(entityName)
+      );
+
+      const updates: Partial<T> = store.selected.getUpdates();
+      let savedEntity: T = entity;
+
+      await sleep(10000);
+
+      console.log('updates', updates)
+
+      const validationService: ValidationService = await this.getValidationService();
+      await validationService.validate(isEntityNew ? 'toCreate' : 'toUpdate', validationName, updates);
+
+      const apiService: ApiService = await this.getApiService();
+      apiService.addBody(updates);
+
+      if (isEntityNew) {
+        savedEntity = await apiService.post(endpoint);
+      } else {
+        await apiService.put(endpoint);
+      }
+
+      store.save(savedEntity);
+      store.selected.set(savedEntity.id);
+
+      notificationService.addNotification(
+        isEntityNew
+          ? notifications.created(entityName)
+          : notifications.updated(entityName)
+      );
+
+      return savedEntity.id;
+    } catch (e: any) {
+      await this.parseError(e);
+    }
+  }
+
+  protected async tryToChangeArchiveState<T>({
+    endpoint,
+    action,
+    entityId,
+    entityName,
+  }: PayloadToChangeArchiveState): Promise<boolean> {
+    try {
+      const notificationService: NotificationService = await this.getNotificationService();
+      notificationService.addNotification(
+        action === 'archive'
+          ? notifications.archiveProcess(entityName)
+          : notifications.restoreProcess(entityName)
+      );
+
+      const apiService: ApiService = await this.getApiService();
+      await apiService
+        .addParams({ id: entityId })
+        .put(endpoint);
+
+      const store = await this.getStore() as StoreCrud<T>;
+      store.remove(entityId);
+
+      notificationService.addNotification(
+        action === 'archive'
+          ? notifications.archived(entityName)
+          : notifications.restored(entityName)
+      );
 
       return true;
     } catch (e: any) {

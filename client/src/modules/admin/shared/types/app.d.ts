@@ -1,4 +1,4 @@
-import type { Store } from 'shared/types';
+import type { StoreState } from 'shared/types';
 
 import type { ListView, ListAction, ListTab , PagePath } from '@admin/shared/constants';
 
@@ -20,7 +20,7 @@ export type AppState = {
   view: AppViewState;
 }
 
-export interface AppStore extends Store<AppState> {}
+export interface AppStore extends StoreState<AppState> {}
 
 export interface AppStoreActions extends AppStore {
   setIsAppMenuOpen(isOpen: boolean): void;

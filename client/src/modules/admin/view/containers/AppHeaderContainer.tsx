@@ -13,8 +13,6 @@ export function AppHeaderContainer({ isAppMenuOpen, appController }: Props) {
     appController.setIsAppMenuOpen(!isAppMenuOpen);
   }
 
-  console.log(isAppMenuOpen);
-
   return (
     <header className="
       app-header border-b-2

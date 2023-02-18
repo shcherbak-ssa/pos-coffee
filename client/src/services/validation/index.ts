@@ -1,13 +1,17 @@
 import type Joi from 'joi';
 import type { ValidationError as JoiValidationError } from 'joi';
 
-import type { Errors, ValidationSchema, ValidationService as BaseValidationService } from 'shared/types';
+import type {
+  Errors,
+  ValidationSchema,
+  ValidationService as BaseValidationService,
+  ValidationType,
+} from 'shared/types';
 import { ValidationError } from 'shared/errors';
 import { Context } from 'shared/context';
 
 type Schema<T> = {
-  schemaToCreate: Joi.ObjectSchema<T>;
-  schemaToUpdate: Joi.ObjectSchema<T>;
+  [key in ValidationType]: Joi.ObjectSchema<T>;
 }
 
 export class ValidationService implements BaseValidationService {
@@ -18,21 +22,21 @@ export class ValidationService implements BaseValidationService {
     return new ValidationService();
   }
 
-  public async validateToCreate<T>(schemaName: string, object: T): Promise<void> {
-    await this.validate('schemaToCreate', schemaName, object);
-  }
-
-  public async validateToUpdate<T>(schemaName: string, object: T): Promise<void> {
-    await this.validate('schemaToUpdate', schemaName, object);
-  }
-
-  private async validate<T, R extends keyof Schema<T>>(type: R, schemaName: string, object: T): Promise<void> {
+  public async validate<T>(type: ValidationType, schemaName: string, object: T): Promise<void> {
     try {
       const schema: Schema<T> = await this.loadSchema(schemaName);
       await schema[type].validateAsync(object, { abortEarly: false });
     } catch (e: any) {
       this.parseValidationError(e, schemaName);
     }
+  }
+
+  public async validateToCreate<T>(schemaName: string, object: T): Promise<void> {
+    await this.validate('toCreate', schemaName, object);
+  }
+
+  public async validateToUpdate<T>(schemaName: string, object: T): Promise<void> {
+    await this.validate('toUpdate', schemaName, object);
   }
 
   public async loadSchema<T>(schemaName: string): Promise<Schema<T>> {

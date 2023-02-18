@@ -1,4 +1,4 @@
-import type { Store } from 'shared/types';
+import type { StoreState } from 'shared/types';
 
 export type Controllers = LoginController;
 
@@ -11,7 +11,7 @@ export type LoginState = {
   login: LoginSchema;
 }
 
-export interface LoginStore extends Store<LoginState> {
+export interface LoginStore extends StoreState<LoginState> {
   login: LoginSchema;
 }
 

@@ -74,7 +74,3 @@ export enum Action {
   DELETE = 'DELETE',
   RESTORE = 'RESTORE',
 }
-
-export enum Entity {
-  USER = 'User',
-}

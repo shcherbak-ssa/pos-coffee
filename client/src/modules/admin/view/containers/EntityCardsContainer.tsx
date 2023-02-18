@@ -2,7 +2,7 @@ import { type MouseEvent, useState, useEffect } from 'react';
 import { Checkbox } from 'primereact/checkbox';
 
 import type { Entity, EntityComponentProps } from 'shared/types';
-import { filterItemById } from 'shared/utils';
+import { filterById } from 'shared/utils';
 
 import type { EntityViewComponentProps } from '@admin/shared/types';
 import { EntityActionsMenuContainer } from '@admin/view/containers/EntityActionsMenuContainer';
@@ -46,7 +46,7 @@ export function EntityCardsContainer<T extends Entity>({
     removeLastFocus();
 
     if (isEntitySelected(entity)) {
-      setSelectedEntities(filterItemById(selectedEntities, entity));
+      setSelectedEntities(filterById(selectedEntities, entity.id));
       return;
     }
 

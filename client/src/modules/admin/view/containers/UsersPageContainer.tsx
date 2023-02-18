@@ -84,7 +84,6 @@ export function UsersPageContainer() {
         label: 'Create new user',
         to: PagePath.USERS_CREATE,
       },
-      actionsMenuItemsProps,
       isEntityPage: false,
       tabs: [
         {
@@ -113,7 +112,7 @@ export function UsersPageContainer() {
   function loadUsers(onlyDeleted: boolean): void {
     setIsUsersLoading(true);
 
-    usersController.loadUsers({ onlyDeleted })
+    usersController.loadAll({ onlyDeleted })
       .then((success: boolean) => {
         if (success) {
           setIsUsersLoading(false);

@@ -1,6 +1,8 @@
-import type { ErrorType } from 'shared/constants';
+import type { ErrorType, EntityName, UserType } from 'shared/constants';
 
-export * from './models';
+/**
+ * Helpers
+ */
 
 export type AnyType = {
   [key: string]: string | number | boolean | object | AnyType | AnyType[] | null | undefined;
@@ -17,29 +19,17 @@ export type EntityComponentProps<T> = {
   className?: string;
 }
 
-export type Notification = {
-  type?: 'result' | 'process',
-  severity?: MessageType;
-  heading?: React.ReactNode;
-  message?: React.ReactNode;
-  closable?: boolean;
-  sticky?: boolean;
-  life?: number;
-  className?: string;
-}
-
 export type MessageType = 'success' | 'info' | 'warn' | 'error' | undefined;
 export type ViewSeverity = 'success' | 'info' | 'warning' | 'danger' | null | undefined;
+export type ValidationType = 'toCreate' | 'toUpdate';
+export type ArchiveAction = 'archive' | 'restore';
 
-export type Controller = {}
-export type ControllerList = Map<string, Controller>;
-
-export type Store<T = AnyType> = { readonly state: T }
-export type StoreList = Map<string, Store>;
+/**
+ * Entities
+ */
 
 export type ValidationSchema<T> = {
-  schemaToCreate: T;
-  schemaToUpdate: T;
+  [key in ValidationType]: T;
 }
 
 export type Token = {
@@ -47,8 +37,59 @@ export type Token = {
   type: string;
 }
 
+export type UserSchema = {
+  id: number;
+  name: string;
+  surname: string;
+  email: string;
+  phone: string;
+  type: UserType;
+  photo: string;
+  address: AddressSchema | null;
+  isDeleted: boolean;
+  createdAt: Date | null;
+  updatedAt: Date | null;
+  deletedAt: Date | null;
+}
+
+export type AddressSchema = {
+  id: number;
+  country: string;
+  state: string;
+  city: string;
+  zipCode: string;
+  address: string;
+  createdAt: Date | null;
+  updatedAt: Date | null;
+}
+
+export type AddressUpdates = Partial<AddressSchema>;
+
+export type AddressDraft = {
+  set country(country: string);
+  set state(state: string);
+  set city(city: string);
+  set zipCode(zipCode: string);
+  set address(address: string);
+}
+
+/**
+ * Notifications and errors
+ */
+
 export type NotificationHandler = (notification: Notification) => void;
 export type ErrorHandler<T> = (error: ErrorObject<T>) => void;
+
+export type Notification = Partial<{
+  type: 'result' | 'process',
+  severity: MessageType;
+  heading: string;
+  message: string;
+  closable: boolean;
+  sticky: boolean;
+  life: number;
+  className: string;
+}>
 
 export type Errors<T> = {
   [key in keyof T]?: string;
@@ -60,17 +101,73 @@ export type ErrorObject<T> = {
   errors: Errors<T>;
 }
 
-export interface CrudController extends Controller {
+/**
+ * Controllers
+ */
+
+export type Controller = {}
+export type ControllerList = Map<string, Controller>;
+
+export interface CrudController<T = Entity, F = {}> extends Controller {
   loadById(entityId: number): Promise<boolean>;
-  loadAll<T>(filter?: T): Promise<boolean>;
-  save<T>(entity: T): Promise<number | void>;
+  loadAll(filter?: F): Promise<boolean>;
+  save(entity: T): Promise<number | undefined>;
   delete(entityId: number): Promise<boolean>;
   restore(entityId: number): Promise<boolean>;
 }
 
-export interface CrudStore extends Store {
-  add<T>(entity: T): void;
+export type PayloadToGetById = {
+  endpoint: string;
+  entityId: number;
 }
+
+export type PayloadToGetAll<T> = {
+  endpoint: string;
+  filter: T;
+}
+
+export type PayloadToSave<T> = {
+  endpoint: string;
+  entity: T;
+  isEntityNew: boolean;
+  validationName: string;
+  entityName: EntityName;
+}
+
+export type PayloadToChangeArchiveState = {
+  endpoint: string;
+  action: ArchiveAction;
+  entityId: number;
+  entityName: EntityName;
+}
+
+/**
+ * Store
+ */
+
+export type Store = {}
+export type StoreList = Map<string, Store>;
+
+export interface StoreState<T = AnyType> extends Store {
+  readonly state: T;
+}
+
+export interface StoreCrud<T = AnyType> extends Store {
+  add(entities: T[]): void;
+  save(entity: T): void;
+  remove(entityId: number): void;
+  selected: StoreSelected<T>;
+}
+
+export interface StoreSelected<T> {
+  set(entityId: number): void;
+  hadUpdates(): boolean;
+  getUpdates(): Partial<T>;
+}
+
+/**
+ * Services
+ */
 
 export interface ApiService {
   addParams<T>(params: T): ApiService;
@@ -97,9 +194,8 @@ export interface LoaderService {
   loadValidationSchema<T>(schemaName: string): Promise<ValidationSchema<T>>;
 }
 
-export interface StoreService {}
-
 export interface ValidationService {
+  validate<T>(type: ValidationType, schemaName: string, object: T): Promise<void>
   validateToCreate<T>(schemaName: string, object: T): Promise<void>;
   validateToUpdate<T>(schemaName: string, object: T): Promise<void>;
 }

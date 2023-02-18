@@ -51,3 +51,7 @@ export enum ApiResponseCode {
   UNAUTHORIZED = 401,
   FORBIDDEN = 403,
 }
+
+export enum EntityName {
+  USER = 'User',
+}
