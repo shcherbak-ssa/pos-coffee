@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class UserFilter {
+public class UsersFilter {
 
   private Boolean onlyArchived = false;
 

@@ -15,11 +15,14 @@ public class AppConstants {
   public static final String AUTHORIZATION_HEADER = "Authorization";
   public static final String AUTHORIZATION_TYPE = "Bearer";
   public static final String AUTHORIZATION_DIVIDER = " ";
-  public static final String UNAUTHORIZED_ERROR_MESSAGE = "Unauthorized";
   public static final String ANONYMOUS_USER = "anonymousUser";
+
+  public static final String ID_EMPTY_MESSAGE = "Id cannot be empty";
+  public static final String UNAUTHORIZED_ERROR_MESSAGE = "Unauthorized";
   public static final String VALIDATION_ERROR_MESSAGE = "Validation error";
   public static final String BAD_CREDENTIALS_MESSAGE = "Invalid email or password";
   public static final String ACCESS_DENY_MESSAGE = "Access denied";
+
   public static final String ACCESS_DENIED_ERROR = "AccessDeniedException";
 
   public static final class ApiEndpoint {
@@ -29,8 +32,12 @@ public class AppConstants {
     public static final class Admin {
       public static final String USERS = "/api/admin/users";
       public static final String USERS_ID = "/api/admin/users/{id}";
-      public static final String USERS_DELETE = "/api/admin/users/{id}/delete";
+      public static final String USERS_ARCHIVE = "/api/admin/users/{id}/archive";
       public static final String USERS_RESTORE = "/api/admin/users/{id}/restore";
+      public static final String PRODUCTS = "/api/admin/products";
+      public static final String PRODUCTS_ID = "/api/admin/products/{id}";
+      public static final String PRODUCTS_ARCHIVE = "/api/admin/products/{id}/archive";
+      public static final String PRODUCTS_RESTORE = "/api/admin/products/{id}/restore";
     }
   }
 
@@ -39,6 +46,7 @@ public class AppConstants {
     public static final String USER_TYPES = "user_types";
     public static final String USER_TYPE_JOIN = "user_type_join";
     public static final String ADDRESSES = "addresses";
+    public static final String PRODUCTS = "products";
   }
 
   public static enum ErrorType {

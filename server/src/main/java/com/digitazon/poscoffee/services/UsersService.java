@@ -21,7 +21,7 @@ import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.User;
 import com.digitazon.poscoffee.models.UserType;
 import com.digitazon.poscoffee.models.helpers.ClientUser;
-import com.digitazon.poscoffee.models.helpers.UserFilter;
+import com.digitazon.poscoffee.models.helpers.UsersFilter;
 import com.digitazon.poscoffee.repositories.UsersRepository;
 import com.digitazon.poscoffee.shared.constants.UsersConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
@@ -46,9 +46,7 @@ public class UsersService {
   private PasswordEncoder encoder;
 
   public boolean isUserExist(String email) {
-    final Optional<User> foundUser = this.repository.findByEmail(email);
-
-    return foundUser.isPresent();
+    return this.repository.existsByEmail(email);
   }
 
   public User findByEmail(String email) throws ResourceNotFoundException {
@@ -71,7 +69,7 @@ public class UsersService {
     throw new ResourceNotFoundException("User not found");
   }
 
-  public List<ClientUser> getUsers(UserFilter filter) {
+  public List<ClientUser> getUsers(UsersFilter filter) {
     final List<User> users = this.repository.findAll(UsersService.filter(filter));
 
     return users
@@ -93,7 +91,7 @@ public class UsersService {
 
   public User createUser(User userToCreate) throws AlreadyExistException {
     if (this.isUserExist(userToCreate.getEmail())) {
-      throw new AlreadyExistException(UsersConstants.UNIQUE_FIELD, UsersConstants.USER_ALREADY_EXIST_MESSAGE);
+      throw new AlreadyExistException(UsersConstants.UNIQUE_FIELD, UsersConstants.ALREADY_EXIST_MESSAGE);
     }
 
     String password = userToCreate.getPassword();
@@ -119,7 +117,7 @@ public class UsersService {
     throw new ResourceNotFoundException("User not found");
   }
 
-  public void deleteUserById(Long id) throws ResourceNotFoundException {
+  public void archiveUserById(Long id) throws ResourceNotFoundException {
     final Optional<User> foundUser = this.repository.findById(id);
 
     if (foundUser.isPresent()) {
@@ -174,7 +172,7 @@ public class UsersService {
     user.setPhone(updates.getPhone() == null ? user.getPhone() : updates.getPhone());
   }
 
-  private static Specification<User> filter(UserFilter filter) {
+  private static Specification<User> filter(UsersFilter filter) {
     return new Specification<User>() {
 
       @Override

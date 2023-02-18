@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 public class ClientUser {
 
   @NotNull(
-    message = UsersConstants.ID_EMPTY_MESSAGE,
+    message = AppConstants.ID_EMPTY_MESSAGE,
     groups = AppConstants.ValidationGroups.ToUpdate.class
   )
   private Long id;
@@ -96,6 +96,6 @@ public class ClientUser {
   private Boolean isArchived;
   private Date createdAt;
   private Date updatedAt;
-  private Date deletedAt;
+  private Date archivedAt;
 
 }

@@ -64,7 +64,7 @@ export class UsersController extends CrudController implements BaseUsersControll
 
   public async delete(userId: number): Promise<boolean> {
     return await this.tryToChangeArchiveState({
-      endpoint: ApiEndpoint.USERS_DELETE,
+      endpoint: ApiEndpoint.USERS_ARCHIVE,
       entityId: userId,
       entityName: EntityName.USER,
       action: 'archive',

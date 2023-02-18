@@ -13,7 +13,6 @@ import type {
 import { Context } from 'shared/context';
 import { notifications } from 'shared/configs';
 import { BaseController } from 'controllers/base-controller';
-import { sleep } from 'shared/utils/sleep';
 
 export class CrudController extends BaseController {
 
@@ -68,7 +67,6 @@ export class CrudController extends BaseController {
     entityName,
   }: PayloadToSave<T>): Promise<number | undefined> {
     try {
-      console.log('entity', entity);
       const store = await this.getStore() as StoreCrud<T>;
 
       if (!store.selected.hadUpdates()) {
@@ -85,10 +83,6 @@ export class CrudController extends BaseController {
 
       const updates: Partial<T> = store.selected.getUpdates();
       let savedEntity: T = entity;
-
-      await sleep(10000);
-
-      console.log('updates', updates)
 
       const validationService: ValidationService = await this.getValidationService();
       await validationService.validate(isEntityNew ? 'toCreate' : 'toUpdate', validationName, updates);

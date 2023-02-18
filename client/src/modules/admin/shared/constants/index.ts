@@ -3,7 +3,7 @@ export const GO_BACK: number = -1;
 export enum ApiEndpoint {
   USERS = '/api/admin/users',
   USERS_ID = '/api/admin/users/:id',
-  USERS_DELETE = '/api/admin/users/:id/delete',
+  USERS_ARCHIVE = '/api/admin/users/:id/archive',
   USERS_RESTORE = '/api/admin/users/:id/restore',
 }
 

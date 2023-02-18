@@ -5,7 +5,6 @@ public class UsersConstants {
   public static final int MIN_PASSWORD_LENGTH = 8;
   public static final String PHONE_PATTERN = "\\d{12}";
 
-  public static final String ID_EMPTY_MESSAGE = "Id cannot be empty";
   public static final String NAME_EMPTY_MESSAGE = "Name cannot be empty";
   public static final String SURNAME_EMPTY_MESSAGE = "Surname cannot be empty";
   public static final String PHONE_EMPTY_MESSAGE = "Phone cannot be empty";
@@ -15,7 +14,7 @@ public class UsersConstants {
   public static final String PASSWORD_LENGTH_MESSAGE = "Password must be at least 8 characters";
   public static final String PASSWORD_EMPTY_MESSAGE = "Password cannot be empty";
   public static final String TYPE_EMPTY_MESSAGE = "Type cannot be empty";
-  public static final String USER_ALREADY_EXIST_MESSAGE = "Email already exists";
+  public static final String ALREADY_EXIST_MESSAGE = "Email already exists";
   public static final String CANNOT_CHANGE_TYPE_MESSAGE = "Cannot change the type of an existing user";
 
   public static final String UNIQUE_FIELD = "email";

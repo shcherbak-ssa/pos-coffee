@@ -82,12 +82,12 @@ export function PageHeaderActionsContainer({
     }
   }
 
-  function drawDeleteLabel(): React.ReactNode {
+  function drawArchivedLabel(): React.ReactNode {
     if (entity.isArchived) {
       return (
         <Button
           className="button-label p-button-text p-button-danger"
-          label="DELETED"
+          label="ARCHIVED"
           disabled
         />
       );
@@ -118,7 +118,7 @@ export function PageHeaderActionsContainer({
     <div className="flex gap-4">
       { drawSaveButton() }
 
-      { drawDeleteLabel() }
+      { drawArchivedLabel() }
 
       { drawMenuButton() }
     </div>
