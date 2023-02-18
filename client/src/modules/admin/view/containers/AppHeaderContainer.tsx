@@ -1,17 +1,13 @@
 import { PrimeIcons } from 'primereact/api';
 
 import { APP_NAME } from 'shared/constants';
-import { useStore } from 'view/hooks/store';
-import { useController } from 'view/hooks/controller';
 import { IconButton } from 'view/components/IconButton';
 
-import type { AppController, AppStore } from '@admin/shared/types';
-import { ControllerName, StoreName } from '@admin/shared/constants';
+import type { AppComponentProps } from '@admin/shared/types';
 
-export function AppHeaderContainer() {
+export type Props = AppComponentProps;
 
-  const { state: { isAppMenuOpen } } = useStore(StoreName.APP) as AppStore;
-  const appController = useController(ControllerName.APP) as AppController;
+export function AppHeaderContainer({ isAppMenuOpen, appController }: Props) {
 
   function toggleMenu(): void {
     appController.setIsAppMenuOpen(!isAppMenuOpen);

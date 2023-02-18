@@ -1,16 +1,22 @@
-import { NavigateFunction, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import type { NavigateFunction } from 'react-router-dom';
 import type { MenuItem } from 'primereact/menuitem';
 import { BreadCrumb } from 'primereact/breadcrumb';
+
+import { updatePageTitle } from 'shared/utils';
 
 import type { AppPageSchema } from '@admin/shared/types';
 
 export type Props = {
   page: AppPageSchema;
+  navigate: NavigateFunction;
 }
 
-export function PageHeaderTitle({ page }: Props) {
+export function PageHeaderHeadingContainer({ page, navigate }: Props) {
 
-  const navigate: NavigateFunction = useNavigate();
+  useEffect(() => {
+    updatePageTitle(page.child?.title || page.title);
+  }, [page]);
 
   function convertPageToMenuItem(page: AppPageSchema): MenuItem {
     return {

@@ -1,74 +1,116 @@
-import { useEffect } from 'react';
-import classnames from 'classnames';
-import { ScrollPanel } from 'primereact/scrollpanel';
-import { ConfirmDialog } from 'primereact/confirmdialog';
+import type { MouseEvent } from 'react';
+import { type NavigateFunction, useNavigate } from 'react-router';
+import { Button } from 'primereact/button';
+import { PrimeIcons } from 'primereact/api';
 
-import { updatePageTitle } from 'shared/utils';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
-import { NotificationContainer } from 'view/containers/NotificationContainer';
+import { AppLoader } from 'view/components/AppLoader';
 
-import type { AppController, AppPageSchema, AppStore } from '@admin/shared/types';
-import { ControllerName, StoreName } from '@admin/shared/constants';
-import { AppMenuContainer } from '@admin/view/containers/app/AppMenuContainer';
-import { AppHeaderContainer } from '@admin/view/containers/app/AppHeaderContainer';
+import type { AppController, AppPageSchema, AppStore, PageComponentProps, TabItem } from '@admin/shared/types';
+import { ControllerName, PagePath, StoreName } from '@admin/shared/constants';
+import { PageSubHeaderContainer } from '@admin/view/containers/PageSubHeaderContainer';
+import { PageHeaderTabsContainer } from '@admin/view/containers/PageHeaderTabsContainer';
+import { PageHeaderHeadingContainer } from '@admin/view/containers/PageHeaderHeadingContainer';
+import {
+  type Props as ActionsProps,
+  PageHeaderActionsContainer,
+} from '@admin/view/containers/PageHeaderActionsContainer';
+import { type Props as PageMessageProps, PageMessage } from '@admin/view/components/PageMessage';
 
 export type Props = {
   page: AppPageSchema;
+  showSubHeader: boolean;
+  isEntityPage: boolean;
   children: React.ReactNode;
+  actionProps?: ActionsProps,
+  addButton?: { label: string; to: PagePath };
+  tabs?: TabItem[];
+  isLoading?: boolean;
+  messageProps?: PageMessageProps;
 }
 
-export function PageLayout({ page, children }: Props) {
+export function PageLayout({
+  page,
+  addButton,
+  showSubHeader,
+  isEntityPage,
+  actionProps,
+  children,
+  tabs = [],
+  isLoading = false,
+  messageProps,
+}: Props) {
 
-  const { state: { isAppMenuOpen } } = useStore(StoreName.APP) as AppStore;
+  const navigate: NavigateFunction = useNavigate();
+
+  const { state: { view } } = useStore(StoreName.APP) as AppStore;
   const appController = useController(ControllerName.APP) as AppController;
 
-  useEffect(() => {
-    let pageTitle: string = page.child
-      ? page.child.title
-      : page.title;
+  const pageComponentProps: PageComponentProps = { view, appController };
 
-    updatePageTitle(pageTitle);
-  }, [page]);
+  function handleAddButonClick(e: MouseEvent): void {
+    e.preventDefault();
 
-  function closeMenu(): void {
-    appController.setIsAppMenuOpen(false);
+    if (addButton) {
+      navigate(addButton.to);
+    }
+  }
+
+  function drawActions(): React.ReactNode {
+    if (isEntityPage && actionProps) {
+      return (
+        <PageHeaderActionsContainer {...actionProps} />
+      );
+    } else {
+      return (
+        <Button
+          className="p-button-sm"
+          icon={PrimeIcons.PLUS}
+          label={addButton?.label || 'Add'}
+          onClick={handleAddButonClick}
+        />
+      );
+    }
+  }
+
+  function drawSubHeader(): React.ReactNode {
+    if (showSubHeader) {
+      return <PageSubHeaderContainer {...pageComponentProps} />;
+    }
+  }
+
+  function drawContent(): React.ReactNode {
+    if (isLoading) {
+      return <AppLoader />;
+    }
+
+    if (messageProps) {
+      return <PageMessage {...messageProps} />;
+    }
+
+    return children;
   }
 
   return (
-    <div className="app-container full relative">
-      <AppHeaderContainer />
+    <div className="bg-white rounded-xl shadow overflow-hidden">
+      <div className="page-header border-b-2 flex items-center justify-between p-6 relative">
+        <PageHeaderHeadingContainer
+          page={page}
+          navigate={navigate}
+        />
 
-      <div
-        className={classnames('app-menu-container duration-200 h-full absolute top-0 z-30 lg:z-10', {
-          'is-open': isAppMenuOpen,
-          'is-close': !isAppMenuOpen,
-        })}
-      >
-        <AppMenuContainer />
+        <PageHeaderTabsContainer
+          tabs={tabs}
+          {...pageComponentProps}
+        />
+
+        { drawActions() }
       </div>
 
-      <ScrollPanel style={{ width: '100%', height: 'calc(100% - 6rem)' }}>
-        <div
-          className={classnames('p-12 duration-200', {
-            'lg:pl-72': isAppMenuOpen,
-            'lg:pl-36': !isAppMenuOpen,
-          })}
-        >
-          { children }
-        </div>
-      </ScrollPanel>
+      { drawSubHeader() }
 
-      <div
-        className={classnames('app-menu-overlay fixed top-0 left-0 z-10 full', {
-          'block lg:hidden': isAppMenuOpen,
-          'hidden': !isAppMenuOpen,
-        })}
-        onClick={closeMenu}
-      />
-
-      <NotificationContainer />
-      <ConfirmDialog />
+      { drawContent() }
     </div>
   );
 

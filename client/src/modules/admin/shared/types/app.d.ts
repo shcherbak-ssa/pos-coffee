@@ -1,6 +1,6 @@
-import type { Store } from 'shared/types';
+import type { StoreState } from 'shared/types';
 
-import type { PagePath } from '@admin/shared/constants';
+import type { ListView, ListAction, ListTab , PagePath } from '@admin/shared/constants';
 
 export type AppPageSchema = {
   title: string;
@@ -9,16 +9,25 @@ export type AppPageSchema = {
   child?: AppPageSchema;
 }
 
-export type AppState = {
-  isAppMenuOpen: boolean;
+export type AppViewState = {
+  listView: ListView;
+  listAction: ListAction[];
+  listTab: ListTab;
 }
 
-export interface AppStore extends Store<AppState> {}
+export type AppState = {
+  isAppMenuOpen: boolean;
+  view: AppViewState;
+}
+
+export interface AppStore extends StoreState<AppState> {}
 
 export interface AppStoreActions extends AppStore {
   setIsAppMenuOpen(isOpen: boolean): void;
+  updateViewState<T extends keyof AppViewState>(state: T, value: AppViewState[T]): void;
 }
 
 export interface AppController {
   setIsAppMenuOpen(isOpen: boolean): Promise<void>;
+  updateViewState<T extends keyof AppViewState>(state: T, value: AppViewState[T]): Promise<void>;
 }

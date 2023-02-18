@@ -7,7 +7,7 @@ export type Props = {
   type: UserType;
 }
 
-export function UserTypeLabel({ type }: Props) {
+export function UsersTypeLabel({ type }: Props) {
 
   function getSeverity(): ViewSeverity {
     switch (type) {

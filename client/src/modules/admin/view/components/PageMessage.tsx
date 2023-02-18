@@ -3,7 +3,7 @@ import { Messages } from 'primereact/messages';
 
 import type { MessageType } from 'shared/types';
 
-import { MessageContent } from '@admin/view/components/MessageContent';
+import { PageMessageContent } from '@admin/view/components/PageMessageContent';
 
 export type Props = {
   message: string;
@@ -12,16 +12,17 @@ export type Props = {
 
 export function PageMessage({ message, type }: Props) {
 
-  const messages = useRef(null);
+  const messages = useRef<Messages>(null);
 
   useEffect(() => {
-    // @ts-ignore
-    messages.current.show({
-      sticky: true,
-      closable: false,
-      severity: type,
-      content: <MessageContent type={type} message={message} />,
-    });
+    if (messages.current) {
+      messages.current.show({
+        sticky: true,
+        closable: false,
+        severity: type,
+        content: <PageMessageContent type={type} message={message} />,
+      });
+    }
   }, []);
 
   return (

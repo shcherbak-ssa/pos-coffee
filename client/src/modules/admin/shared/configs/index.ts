@@ -1,11 +1,9 @@
 import { PrimeIcons } from 'primereact/api';
 
-import type { Notification } from 'shared/types';
+import type { AppPageSchema, AppMenuItem, OptionItem } from '@admin/shared/types';
+import { ListAction, ListView, PagePath, PageTitle } from '@admin/shared/constants';
 
-import type { AppPageSchema, MenuItem, OptionItem } from '@admin/shared/types';
-import { Entity, ListAction, ListView, PagePath, PageTitle } from '@admin/shared/constants';
-
-export const appMenuItems: MenuItem[] = [
+export const appMenuItems: AppMenuItem[] = [
   {
     label: PageTitle.HOME,
     icon: PrimeIcons.HOME,
@@ -96,59 +94,3 @@ export const listActionOptions: OptionItem[] = [
     label: 'Filter',
   },
 ];
-
-export const notifications: {
-  created: (entity: Entity) => Notification,
-  updated: (entity: Entity) => Notification,
-  deleted: (entity: Entity) => Notification,
-  restored: (entity: Entity) => Notification,
-  createProcess: (entity: Entity) => Notification,
-  updateProcess: (entity: Entity) => Notification,
-  deleteProcess: (entity: Entity) => Notification,
-  restoreProcess: (entity: Entity) => Notification,
-} = {
-  created: (entity: Entity) => ({
-    severity: 'success',
-    heading: 'Created',
-    message: `${entity} created successfully`,
-  }),
-  updated: (entity: Entity) => ({
-    severity: 'success',
-    heading: 'Updated',
-    message: `${entity} updated successfully`,
-  }),
-  deleted: (entity: Entity) => ({
-    severity: 'success',
-    heading: 'Deleted',
-    message: `${entity} deleted successfully`,
-  }),
-  restored: (entity: Entity) => ({
-    severity: 'success',
-    heading: 'Restored',
-    message: `${entity} restored successfully`,
-  }),
-  createProcess: (entity: Entity) => ({
-    type: 'process',
-    severity: 'info',
-    heading: 'Creating...',
-    message: `A new ${entity.toLowerCase()} is being created`,
-  }),
-  updateProcess: (entity: Entity) => ({
-    type: 'process',
-    severity: 'info',
-    heading: 'Updating...',
-    message: `A new ${entity.toLowerCase()} is being updated`,
-  }),
-  deleteProcess: (entity: Entity) => ({
-    type: 'process',
-    severity: 'info',
-    heading: 'Deleting...',
-    message: `A new ${entity.toLowerCase()} is being deleted`,
-  }),
-  restoreProcess: (entity: Entity) => ({
-    type: 'process',
-    severity: 'info',
-    heading: 'Restoring...',
-    message: `A new ${entity.toLowerCase()} is being restored`,
-  }),
-};

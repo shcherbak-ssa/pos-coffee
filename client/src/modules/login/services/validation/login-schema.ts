@@ -18,6 +18,6 @@ const loginSchema: Schema = Joi.object({
 });
 
 export const schema: ValidationSchema<Schema> = {
-  schemaToCreate: loginSchema,
-  schemaToUpdate: loginSchema,
+  toCreate: loginSchema,
+  toUpdate: loginSchema,
 };

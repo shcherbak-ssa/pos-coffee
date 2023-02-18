@@ -1,56 +1,42 @@
-import { type Location, type NavigateFunction, useLocation, useNavigate } from 'react-router-dom';
+import type { MouseEvent } from 'react';
 import classnames from 'classnames';
 import { Tooltip } from 'primereact/tooltip';
 
 import { EMPTY_STRING } from 'shared/constants';
-import { useStore } from 'view/hooks/store';
 import { IconButton } from 'view/components/IconButton';
 
-import type { AppStore, MenuItem as MenuItemType } from '@admin/shared/types';
-import { StoreName } from '@admin/shared/constants';
+import type { AppMenuItem } from '@admin/shared/types';
 
 export type Props = {
-  item: MenuItemType;
-  closeMenu: () => void
+  item: AppMenuItem;
+  isItemActive: boolean;
+  isAppMenuOpen: boolean;
+  click: (item: AppMenuItem) => void;
 }
 
-export function AppMenuItemContainer({ item, closeMenu }: Props) {
+export function AppMenuItem({ item, isItemActive, isAppMenuOpen, click }: Props) {
 
-  const location: Location = useLocation();
-  const navigate: NavigateFunction = useNavigate();
-
-  const { state: { isAppMenuOpen } } = useStore(StoreName.APP) as AppStore;
-
-  function isActive(): boolean {
-    return item.to === location.pathname;
-  }
-
-  function navigateTo(e: MouseEvent): void {
+  function handleClick(e: MouseEvent): void {
     e.preventDefault();
 
-    navigate(item.to);
-
-    if (isAppMenuOpen) {
-      closeMenu();
-    }
+    click(item);
   }
 
   return (
     <div
       className={classnames('app-menu-item rounded flex items-center py-2 duration-200 select-none', {
-        'is-active': isActive() && isAppMenuOpen,
+        'is-active': isItemActive && isAppMenuOpen,
         'click px-2 gap-2': isAppMenuOpen,
         'is-close px-0 gap-0': !isAppMenuOpen,
       })}
-      // @ts-ignore
-      onClick={navigateTo}
+      onClick={handleClick}
       data-pr-tooltip={item.label}
       data-pr-position="right"
       data-pr-at="right+5 center"
     >
       <IconButton
         className={classnames({
-          'is-active': isActive() && !isAppMenuOpen,
+          'is-active': isItemActive && !isAppMenuOpen,
         })}
         icon={item.icon}
         click={() => {}}

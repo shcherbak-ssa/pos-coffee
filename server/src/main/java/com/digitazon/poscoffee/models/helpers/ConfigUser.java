@@ -19,6 +19,6 @@ public class ConfigUser {
   private String type;
   private String photo;
   private Address address;
-  private Boolean isDeleted;
+  private Boolean isArchived;
 
 }

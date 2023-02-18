@@ -48,6 +48,6 @@ const schemaToCreate: Schema = baseSchema.keys({
 const schemaToUpdate: Schema = baseSchema.keys();
 
 export const schema: ValidationSchema<Schema> = {
-  schemaToCreate,
-  schemaToUpdate,
+  toCreate: schemaToCreate,
+  toUpdate: schemaToUpdate,
 };

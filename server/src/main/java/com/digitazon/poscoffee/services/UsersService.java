@@ -124,8 +124,8 @@ public class UsersService {
 
     if (foundUser.isPresent()) {
       final User user = foundUser.get();
-      user.setIsDeleted(true);
-      user.setDeletedAt(new Date());
+      user.setIsArchived(true);
+      user.setArchivedAt(new Date());
 
       this.repository.save(user);
 
@@ -141,12 +141,12 @@ public class UsersService {
     if (foundUser.isPresent()) {
       final User user = foundUser.get();
 
-      if (!user.getIsDeleted()) {
+      if (!user.getIsArchived()) {
         return;
       }
 
-      user.setIsDeleted(false);
-      user.setDeletedAt(null);
+      user.setIsArchived(false);
+      user.setArchivedAt(null);
 
       this.repository.save(user);
 
@@ -179,16 +179,16 @@ public class UsersService {
 
       @Override
       public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-        final Path<User> isDeletedPath = root.get("isDeleted");
-        final Boolean onlyDeleted = filter.getOnlyDeleted();
+        final Path<User> isArchivedPath = root.get("isArchived");
+        final Boolean onlyArchived = filter.getOnlyArchived();
 
-        if (onlyDeleted != null && onlyDeleted) {
-          return builder.equal(isDeletedPath, true);
+        if (onlyArchived != null && onlyArchived) {
+          return builder.equal(isArchivedPath, true);
         }
 
         return builder.or(
-          builder.isNull(isDeletedPath),
-          builder.equal(isDeletedPath, false)
+          builder.isNull(isArchivedPath),
+          builder.equal(isArchivedPath, false)
         );
       }
 

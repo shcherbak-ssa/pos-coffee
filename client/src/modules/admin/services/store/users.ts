@@ -3,62 +3,36 @@ import { proxy } from 'valtio';
 import type { UserSchema as BaseUserSchema } from 'shared/types';
 import { ZERO } from 'shared/constants';
 import { AppError } from 'shared/errors';
-import { filterItemById } from 'shared/utils';
+import { filterById, findById } from 'shared/utils';
 import { getUpdates } from 'shared/helpers/get-updates';
 
-import type {
-  UsersState,
-  UsersStore,
-  UsersStoreWithActions,
-  ViewState,
-  UserUpdates,
-} from '@admin/shared/types';
-import { ListTab, ListView } from '@admin/shared/constants';
+import type { UsersState, UsersStore, UsersStoreActions, UserUpdates } from '@admin/shared/types';
 import { createUserDraft, UserSchema } from '@admin/models/user';
 
-export const usersStore: UsersStore & UsersStoreWithActions = {
+export const usersStore: UsersStore & UsersStoreActions = {
 
   state: proxy<UsersState>({
-    currentUser: UserSchema.create(),
     users: [],
+    currentUser: UserSchema.create(),
     selectedUser: UserSchema.create(),
-
-    view: {
-      listView: ListView.TABLE,
-      listTab: ListTab.ACTIVE,
-      listAction: [],
-    },
   }),
 
   draftUser: createUserDraft(),
-
-  hasSelectedUserUpdates(): boolean {
-    const { id, createdAt, updatedAt, deletedAt, ...updates } = this.getSelectedUserUpdates();
-
-    return !!Object.keys(updates).length;
-  },
-
-  getSelectedUserUpdates(): UserUpdates {
-    const { selectedUser } = usersStore.state;
-    const foundUser: BaseUserSchema | undefined = findUserById(selectedUser.id);
-
-    if (foundUser) {
-      return getUpdates(foundUser, selectedUser);
-    }
-
-    return (selectedUser as UserSchema).getUpdates();
-  },
 
   setCurrentUser(user: UserSchema): void {
     usersStore.state.currentUser = UserSchema.create(user);
   },
 
-  setUsers(users: UserSchema[]): void {
+  /**
+   * CrudStore implementation
+   */
+
+  add(users: BaseUserSchema[]): void {
     usersStore.state.users = users.map(UserSchema.create);
   },
 
-  addUser(user: UserSchema): void {
-    const foundUser: BaseUserSchema | undefined = findUserById(user.id);
+  save(user: BaseUserSchema): void {
+    const foundUser: BaseUserSchema | undefined = findById(usersStore.state.users, user.id);
     let updatedUsers: BaseUserSchema[] = usersStore.state.users.map(UserSchema.create);
 
     if (foundUser) {
@@ -69,41 +43,56 @@ export const usersStore: UsersStore & UsersStoreWithActions = {
       updatedUsers.push(user);
     }
 
-    this.setUsers(updatedUsers);
+    this.add(updatedUsers);
   },
 
-  removeUser(userId: number): void {
-    const updatedUsers: BaseUserSchema[] = filterItemById(usersStore.state.users, { id: userId } as UserSchema);
-    this.setUsers(updatedUsers);
+  remove(userId: number): void {
+    const updatedUsers: BaseUserSchema[] = filterById(usersStore.state.users, userId);
+    this.add(updatedUsers);
 
     updateSelectedUser({
       ...usersStore.state.selectedUser,
-      isDeleted: !usersStore.state.selectedUser.isDeleted,
+      isArchived: !usersStore.state.selectedUser.isArchived,
     });
   },
 
-  selectUser(userId: number): void {
-    const user: BaseUserSchema | undefined = userId === ZERO
-      ? UserSchema.create()
-      : findUserById(userId);
+  selected: {
 
-    if (user) {
-      updateSelectedUser(user);
-      return;
-    }
+    set(userId: number): void {
+      const user: BaseUserSchema | undefined = userId === ZERO
+        ? UserSchema.create()
+        : findById(usersStore.state.users, userId);
 
-    throw new AppError(`User with id ${userId} not found`);
-  },
+      if (user) {
+        updateSelectedUser(user);
+        return;
+      }
 
-  updateViewState<T extends keyof ViewState>(state: T, value: ViewState[T]): void {
-    usersStore.state.view[state] = value;
+      throw new AppError(`User with id ${userId} not found`);
+    },
+
+    hadUpdates(): boolean {
+      const { id, createdAt, updatedAt, archivedAt: deletedAt, address, ...updates } = this.getUpdates();
+      const { id: addressId, ...addressUpdates } = address || {};
+
+      return !!Object.keys(updates).length || !!Object.keys(addressUpdates).length;
+    },
+
+    // @ts-ignore
+    getUpdates(): UserUpdates {
+      const { selectedUser } = usersStore.state;
+      const foundUser: BaseUserSchema | undefined = findById(usersStore.state.users, selectedUser.id);
+
+      if (foundUser) {
+        return getUpdates(foundUser, selectedUser);
+      }
+
+      return (selectedUser as UserSchema).getUpdates();
+    },
+
   },
 
 };
-
-function findUserById(userId: number): BaseUserSchema | undefined {
-  return usersStore.state.users.find(({ id }) => id === userId);
-}
 
 function updateSelectedUser(user: BaseUserSchema): void {
   usersStore.state.selectedUser = UserSchema.create(user);

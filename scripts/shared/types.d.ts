@@ -13,7 +13,7 @@ export type User = {
   type: UserType;
   photo: string;
   address: Address;
-  isDeleted: boolean;
+  isArchived: boolean;
 }
 
 export type Address = {

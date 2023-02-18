@@ -93,7 +93,7 @@ public class ClientUser {
 
   private String photo;
   private Address address;
-  private Boolean isDeleted;
+  private Boolean isArchived;
   private Date createdAt;
   private Date updatedAt;
   private Date deletedAt;
