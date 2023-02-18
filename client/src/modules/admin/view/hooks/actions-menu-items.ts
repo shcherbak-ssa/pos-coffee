@@ -64,7 +64,7 @@ export function useActionsMenuItems({
           icon: PrimeIcons.EXCLAMATION_TRIANGLE,
           acceptClassName: 'p-button-danger',
           accept: () => {
-            controller.delete(entity.id);
+            controller.archive(entity.id);
           },
         });
       }

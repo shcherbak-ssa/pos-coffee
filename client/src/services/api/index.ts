@@ -8,7 +8,7 @@ import {
   AUTHORIZATION_HEADER,
 } from 'shared/constants';
 import { ApiError, AuthError } from 'shared/errors';
-import { setParamsToUrl } from 'shared/utils';
+import { setParamsToUrl } from 'shared/utils/url-params';
 import { LocalStorage } from 'shared/helpers/local-storage';
 
 type Headers = { [key: string]: string };

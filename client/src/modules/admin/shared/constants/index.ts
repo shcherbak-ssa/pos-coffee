@@ -5,20 +5,27 @@ export enum ApiEndpoint {
   USERS_ID = '/api/admin/users/:id',
   USERS_ARCHIVE = '/api/admin/users/:id/archive',
   USERS_RESTORE = '/api/admin/users/:id/restore',
+  PRODUCTS = '/api/admin/products',
+  PRODUCTS_ID = '/api/admin/products/:id',
+  PRODUCTS_ARCHIVE = '/api/admin/products/:id/archive',
+  PRODUCTS_RESTORE = '/api/admin/products/:id/restore',
 }
 
 export enum ControllerName {
   APP = 'APP',
   USERS = 'USERS',
+  PRODUCTS = 'PRODUCTS',
 }
 
 export enum StoreName {
   APP = 'APP',
   USERS = 'USERS',
+  PRODUCTS = 'PRODUCTS',
 }
 
 export enum ValidationName {
   USERS = 'USERS',
+  PRODUCTS = 'PRODUCTS',
 }
 
 export enum PagePath {

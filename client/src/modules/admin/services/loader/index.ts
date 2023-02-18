@@ -24,9 +24,14 @@ export class LoaderService implements BaseLoaderService {
 
         return UsersController.create();
       }
+      case ControllerName.PRODUCTS: {
+        const { ProductsController } = await import('@admin/controllers/products');
+
+        return ProductsController.create();
+      }
     }
 
-    throw new ProgerError(`Controller ${name} does not exist`);
+    throw new ProgerError(`[LOADER] Controller ${name} does not exist`);
   }
 
   public async loadStore(name: StoreName): Promise<Store> {
@@ -41,9 +46,14 @@ export class LoaderService implements BaseLoaderService {
 
         return usersStore;
       }
+      case StoreName.PRODUCTS: {
+        const { productsStore } = await import('@admin/services/store/products');
+
+        return productsStore;
+      }
     }
 
-    throw new ProgerError(`Store ${name} does not exist`);
+    throw new ProgerError(`[LOADER] Store ${name} does not exist`);
   }
 
   public async loadValidationSchema<T>(name: ValidationName): Promise<ValidationSchema<T>> {
@@ -53,9 +63,14 @@ export class LoaderService implements BaseLoaderService {
 
         return schema as ValidationSchema<T>;
       }
+      case ValidationName.PRODUCTS: {
+        const { schema } = await import('@admin/services/validation/products-schema');
+
+        return schema as ValidationSchema<T>;
+      }
     }
 
-    throw new ProgerError(`Validation ${name} does not exist`);
+    throw new ProgerError(`[LOADER] Validation ${name} does not exist`);
   }
 
 }

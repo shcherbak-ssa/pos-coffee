@@ -42,7 +42,7 @@ export class UserSchema implements BaseUserSchema {
   }
 
   public getUpdates(): UserUpdates {
-    const { id, createdAt, updatedAt, archivedAt: deletedAt, address, ...updates } = this;
+    const { id, createdAt, updatedAt, archivedAt, address, ...updates } = this;
 
     return {
       ...updates,
@@ -51,15 +51,13 @@ export class UserSchema implements BaseUserSchema {
   }
 }
 
-export function createUsersFilter({
-  onlyArchived: onlyDeleted = false,
-}: UsersFilter): UsersFilter {
+export function createFilter({ onlyArchived = false }: UsersFilter): UsersFilter {
   return {
-    onlyArchived: onlyDeleted,
+    onlyArchived,
   };
 }
 
-export function createUserDraft(schema: BaseUserSchema = UserSchema.create()): UserDraft {
+export function createDraft(schema: BaseUserSchema = UserSchema.create()): UserDraft {
 
   return {
     get fullname(): string {

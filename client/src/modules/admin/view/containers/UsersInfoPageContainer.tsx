@@ -32,7 +32,7 @@ export function UsersInfoPageContainer({ isEditMode }: Props) {
   const location: Location = useLocation();
   const params: Params<string> = useParams();
 
-  const { state: { selectedUser }, draftUser } = useStore(StoreName.USERS) as UsersStore;
+  const { state: { selected: selectedUser }, draft: draftUser } = useStore(StoreName.USERS) as UsersStore;
   const usersController = useController(ControllerName.USERS) as UsersController;
   const [ validationError, cleanValidationError ] = useError<UserSchema>(ErrorType.VALIDATION);
   const actionsMenuItemsProps: ActionsMenuItemsProps = useUsersActionsMenuItemsProps();
@@ -66,7 +66,7 @@ export function UsersInfoPageContainer({ isEditMode }: Props) {
     setIsUsersLoading(true);
 
     if (location.pathname.endsWith(PagePathLabel.CREATE)) {
-      usersController.selectUser()
+      usersController.select()
         .then(() => {
           setIsUsersLoading(false);
         });
@@ -79,7 +79,7 @@ export function UsersInfoPageContainer({ isEditMode }: Props) {
     usersController.loadById(userId)
       .then((success) => {
         if (success) {
-          usersController.selectUser(userId)
+          usersController.select(userId)
             .then(() => {
               setIsUsersLoading(false);
             });

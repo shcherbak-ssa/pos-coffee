@@ -74,6 +74,18 @@ export type AddressDraft = {
   set address(address: string);
 }
 
+export type ProductSchema = {
+  id: number;
+  sku: string;
+  name: string;
+  price: number;
+  photo: string;
+  isArchived: boolean;
+  createdAt: Date | null;
+  updatedAt: Date | null;
+  archivedAt: Date | null;
+}
+
 /**
  * Notifications and errors
  */
@@ -113,8 +125,9 @@ export interface CrudController<T = Entity, F = {}> extends Controller {
   loadById(entityId: number): Promise<boolean>;
   loadAll(filter?: F): Promise<boolean>;
   save(entity: T): Promise<number | undefined>;
-  delete(entityId: number): Promise<boolean>;
+  archive(entityId: number): Promise<boolean>;
   restore(entityId: number): Promise<boolean>;
+  select(entityId?: number): Promise<void>;
 }
 
 export type PayloadToGetById = {
@@ -148,9 +161,19 @@ export type PayloadToChangeArchiveState = {
 
 export type Store = {}
 export type StoreList = Map<string, Store>;
+export type JoinedStore<T, E, D> = StoreEntityState<T, E, D> & StoreCrud<E>;
 
 export interface StoreState<T = AnyType> extends Store {
   readonly state: T;
+}
+
+export interface StoreEntityState<T = AnyType, E = AnyType, D = AnyType> extends Store {
+  readonly state: T & {
+    list: E[];
+    selected: E;
+  };
+
+  draft: D;
 }
 
 export interface StoreCrud<T = AnyType> extends Store {
@@ -193,6 +216,12 @@ export interface LoaderService {
   loadController(name: string): Promise<Controller>;
   loadStore(name: string): Promise<Store>;
   loadValidationSchema<T>(schemaName: string): Promise<ValidationSchema<T>>;
+}
+
+export interface StoreService<T, E, D> {
+  save(store: JoinedStore<T, E, D>, entity: E): void;
+  remove(store: JoinedStore<T, E, D>, entityId: number): void;
+  getSelectedUpdates(store: JoinedStore<T, E, D>): Partial<E> | undefined;
 }
 
 export interface ValidationService {

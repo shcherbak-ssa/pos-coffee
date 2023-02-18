@@ -1,6 +1,6 @@
 import type { ApiService, Token, ValidationService } from 'shared/types';
 import { LocalStorageKey, ROOT_PAGE_PATH } from 'shared/constants';
-import { replaceLocation } from 'shared/utils';
+import { replaceLocation } from 'shared/utils/replace-location';
 import { LocalStorage } from 'shared/helpers/local-storage';
 import { BaseController } from 'controllers/base-controller';
 

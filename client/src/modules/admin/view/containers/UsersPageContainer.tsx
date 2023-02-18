@@ -25,7 +25,7 @@ export function UsersPageContainer() {
   const [ isUsersLoading, setIsUsersLoading ] = useState<boolean>(true);
   const [ pageLayoutProps, setPageLayoutProps ] = useState<Omit<PageLayoutProps, 'children'>>();
 
-  const { state: { users } } = useStore(StoreName.USERS) as UsersStore;
+  const { state: { list: users } } = useStore(StoreName.USERS) as UsersStore;
   const { state: { view } } = useStore(StoreName.APP) as AppStore;
 
   const usersController = useController(ControllerName.USERS) as UsersController;

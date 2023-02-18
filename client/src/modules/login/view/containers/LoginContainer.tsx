@@ -6,7 +6,8 @@ import { Button } from 'primereact/button';
 
 import { ErrorType } from 'shared/constants';
 import { loadContext } from 'shared/helpers/load-context';
-import { replaceUrl, updatePageTitle } from 'shared/utils';
+import { replaceUrl } from 'shared/utils/replace-url';
+import { updatePageTitle } from 'shared/utils/page-title';
 import { useError } from 'view/hooks/error';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';

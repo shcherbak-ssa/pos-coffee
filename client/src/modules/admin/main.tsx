@@ -2,7 +2,7 @@ import '@admin/view/styles/admin.scss';
 
 import type { UserSchema } from 'shared/types';
 import { Context } from 'shared/context';
-import { replaceLocation } from 'shared/utils';
+import { replaceLocation } from 'shared/utils/replace-location';
 import { setupPrimeReact, render } from 'shared/helpers/setup-view';
 
 import type { UsersController } from '@admin/shared/types';

@@ -2,7 +2,7 @@ import { type MouseEvent, useState, useEffect } from 'react';
 import { Checkbox } from 'primereact/checkbox';
 
 import type { Entity, EntityComponentProps } from 'shared/types';
-import { filterById } from 'shared/utils';
+import { filterById } from 'shared/utils/by-id';
 
 import type { EntityViewComponentProps } from '@admin/shared/types';
 import { EntityActionsMenuContainer } from '@admin/view/containers/EntityActionsMenuContainer';

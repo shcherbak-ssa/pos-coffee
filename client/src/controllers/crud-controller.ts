@@ -11,7 +11,7 @@ import type {
   PayloadToChangeArchiveState,
 } from 'shared/types';
 import { Context } from 'shared/context';
-import { notifications } from 'shared/configs';
+import { notifications } from 'shared/configs/notifications';
 import { BaseController } from 'controllers/base-controller';
 
 export class CrudController extends BaseController {
@@ -143,6 +143,15 @@ export class CrudController extends BaseController {
     } catch (e: any) {
       await this.parseError(e);
       return false;
+    }
+  }
+
+  public async tryToSelect(entityId: number): Promise<void> {
+    try {
+      const store = await this.getStore() as StoreCrud;
+      store.selected.set(entityId);
+    } catch (e: any) {
+      await this.parseError(e);
     }
   }
 
