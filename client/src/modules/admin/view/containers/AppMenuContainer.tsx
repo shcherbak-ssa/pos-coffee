@@ -5,22 +5,18 @@ import { PrimeIcons } from 'primereact/api';
 import { ScrollPanel } from 'primereact/scrollpanel';
 
 import { APP_NAME } from 'shared/constants';
-import { useController } from 'view/hooks/controller';
-import { useStore } from 'view/hooks/store';
 import { IconButton } from 'view/components/IconButton';
 
-import type { AppStore, AppController, AppMenuItem as AppMenuItemType } from '@admin/shared/types';
-import { StoreName, ControllerName } from '@admin/shared/constants';
+import type { AppMenuItem as AppMenuItemType, AppComponentProps } from '@admin/shared/types';
 import { appMenuItems } from '@admin/shared/configs';
 import { AppMenuItem } from '@admin/view/components/AppMenuItem';
 
-export function AppMenuContainer() {
+export type Props = AppComponentProps;
+
+export function AppMenuContainer({ isAppMenuOpen, appController }: Props) {
 
   const location: Location = useLocation();
   const navigate: NavigateFunction = useNavigate();
-
-  const { state: { isAppMenuOpen } } = useStore(StoreName.APP) as AppStore;
-  const appController = useController(ControllerName.APP) as AppController;
 
   function closeMenu(e?: MouseEvent): void {
     if (e) {

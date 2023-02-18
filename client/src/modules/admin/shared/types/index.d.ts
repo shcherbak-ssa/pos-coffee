@@ -7,6 +7,7 @@ import type { UsersController } from './users';
 
 export * from './app';
 export * from './users';
+export * from './props';
 
 export type Controllers =
   | UsersController

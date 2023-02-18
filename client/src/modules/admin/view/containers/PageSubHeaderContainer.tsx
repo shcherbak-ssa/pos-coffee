@@ -1,18 +1,14 @@
 import { SelectButton, type SelectButtonChangeEvent } from 'primereact/selectbutton';
 
-import { useStore } from 'view/hooks/store';
-import { useController } from 'view/hooks/controller';
 import { SimpleIcon } from 'view/components/SimpleIcon';
 
-import type { AppController, AppStore } from '@admin/shared/types';
-import { StoreName, ControllerName } from '@admin/shared/constants';
+import type { PageComponentProps } from '@admin/shared/types';
 import { listActionOptions, listViewOptions } from '@admin/shared/configs';
 import { PageSubHeaderOption } from '@admin/view/components/PageSubHeaderOption';
 
-export function PageSubHeaderContainer() {
+export type Props = PageComponentProps;
 
-  const { state: { view } } = useStore(StoreName.APP) as AppStore;
-  const appController = useController(ControllerName.APP) as AppController;
+export function PageSubHeaderContainer({ view, appController }: Props) {
 
   function selectListView(event: SelectButtonChangeEvent): void {
     if (event.value !== null) {

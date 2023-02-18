@@ -7,7 +7,7 @@ import {
 import {
   Props as EntityActionsProps,
   PageHeaderEntityActionsContainer,
-} from '@admin/view/containers/PageHeaderEntityActionsContainer';
+} from '@admin/view/containers/PageHeaderActionsContainer';
 
 export type Props = {
   isEntityPage: boolean;

@@ -8,12 +8,12 @@ import { setupPrimeReact, render } from 'shared/helpers/setup-view';
 import type { UsersController } from '@admin/shared/types';
 import { ControllerName, PagePath, StoreName } from '@admin/shared/constants';
 import { LoaderService } from '@admin/services/loader';
-import { EntryLayout } from '@admin/view/layouts/EntryLayout';
+import { AppLayout } from '@admin/view/layouts/AppLayout';
 
 export async function renderAdmin(currentUser: UserSchema): Promise<void> {
   await setup(currentUser);
 
-  render(<EntryLayout />);
+  render(<AppLayout />);
 }
 
 async function setup(currentUser: UserSchema): Promise<void> {

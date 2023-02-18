@@ -1,24 +1,23 @@
 import { useEffect, useState } from 'react';
 import { type Location, type Params, useLocation, useParams } from 'react-router';
 
-import type { EmptyFunction, UserSchema } from 'shared/types';
+import type { UserSchema } from 'shared/types';
 import { ErrorType } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 import { useError } from 'view/hooks/error';
-import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/navigate';
 import { EmptyComponent } from 'view/components/EmptyComponent';
 
 import type { UsersController, UsersStore } from '@admin/shared/types';
-import { ControllerName, PagePath, PagePathLabel, PageTitle, StoreName, ViewEvent } from '@admin/shared/constants';
+import { ControllerName, PagePath, PagePathLabel, PageTitle, StoreName } from '@admin/shared/constants';
 import { pages } from '@admin/shared/configs';
-import { useUsersActionsMenuItems } from '@admin/view/hooks/users-actions-menu-items';
+import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-menu-items';
+import { useUsersActionsMenuItemsProps } from '@admin/view/hooks/users-actions-menu-items';
 import { type Props as PageLayoutProps, PageLayout } from '@admin/view/layouts/PageLayout';
 import { AddressCard } from '@admin/view/components/AddressCard';
 import { UsersProfileCard } from '@admin/view/components/UsersProfileCard';
 import { UsersPersonalCard } from '@admin/view/components/UsersPersonalCard';
 import { UsersInfoWrapper } from '@admin/view/components/UsersInfoWrapper';
-import { EventEmitter } from 'shared/helpers/event-emitter';
 
 export type Props = {
   isEditMode: boolean;
@@ -36,29 +35,7 @@ export function UsersInfoPageContainer({ isEditMode }: Props) {
   const { state: { selectedUser }, draftUser } = useStore(StoreName.USERS) as UsersStore;
   const usersController = useController(ControllerName.USERS) as UsersController;
   const [ validationError, cleanValidationError ] = useError<UserSchema>(ErrorType.VALIDATION);
-
-  const toUsersInfoPage: NavigateFunctionHook = useNavigateWithParams(PagePath.USERS_INFO);
-  const setActionsMenuItems: EmptyFunction = useUsersActionsMenuItems();
-
-  useEffect(() => {
-    setActionsMenuItems();
-  }, []);
-
-  useEffect(() => {
-    const emitter: EventEmitter = EventEmitter.get();
-
-    emitter.on(ViewEvent.SAVE, async (): Promise<void> => {
-      const savedUserId: number | void = await usersController.saveUser(selectedUser);
-
-      if (savedUserId) {
-        toUsersInfoPage({ id: savedUserId });
-      }
-    });
-
-    return () => {
-      emitter.remove(ViewEvent.SAVE);
-    };
-  }, [selectedUser]);
+  const actionsMenuItemsProps: ActionsMenuItemsProps = useUsersActionsMenuItemsProps();
 
   useEffect(() => {
     setPageLayoutProps({
@@ -69,20 +46,17 @@ export function UsersInfoPageContainer({ isEditMode }: Props) {
           title: draftUser.fullname,
         }
       },
-      actionsProps: {
-        isEntityPage: true,
-        entityActionsProps: isUsersLoading ? undefined : {
-          entity: selectedUser,
-        },
-      },
+      actionsMenuItemsProps,
       showSubHeader: false,
+      isEntityPage: true,
+      entity: selectedUser,
       isLoading: isUsersLoading && !isError,
       messageProps: !isError ? undefined : {
         type: 'error',
         message: 'User not found',
       },
     });
-  }, [isUsersLoading, isError, selectedUser, isEditMode]);
+  }, [isUsersLoading, isError, selectedUser]);
 
   useEffect(() => {
     setIsUsersLoading(true);
@@ -109,10 +83,6 @@ export function UsersInfoPageContainer({ isEditMode }: Props) {
           setIsError(true);
         }
       });
-
-    // return () => {
-    //   usersController.selectUser();
-    // };
   }, [location.pathname]);
 
   useEffect(() => {

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import classnames from 'classnames';
 import {
   DataTable,
-  type DataTableValue,
   type DataTableRowClickEvent,
   type DataTableSelectionChangeEvent,
 } from 'primereact/datatable';
@@ -10,16 +9,11 @@ import { Column, type ColumnProps } from 'primereact/column';
 
 import type { Entity } from 'shared/types';
 
-import type { ActionMenuItemsFunction } from '@admin/view/hooks/actions-menu-items';
+import type { EntityViewComponentProps } from '@admin/shared/types';
 import { EntityActionsMenuContainer } from '@admin/view/containers/EntityActionsMenuContainer';
 
-export type Props<T extends Entity> = {
-  entities: T[];
-  selectEntity: (entity: T) => void;
+export type Props<T extends Entity> = EntityViewComponentProps<T> & {
   columns: ColumnProps[];
-  isSelectEnable: boolean;
-  selectedEntities: T[];
-  setSelectedEntities: (entities: T[]) => void;
 }
 
 export function EntityTableContainer<T extends Entity>({
@@ -29,6 +23,7 @@ export function EntityTableContainer<T extends Entity>({
   isSelectEnable,
   selectedEntities,
   setSelectedEntities,
+  actionsMenuItemsProps,
 }: Props<T>) {
 
   const [ columnsProps, setColumnsProps ] = useState<ColumnProps[]>([]);
@@ -67,6 +62,7 @@ export function EntityTableContainer<T extends Entity>({
         <EntityActionsMenuContainer
           entity={entity}
           isEntityPage={false}
+          actionsMenuItemsProps={actionsMenuItemsProps}
         />
       ),
     };

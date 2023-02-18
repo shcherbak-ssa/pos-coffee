@@ -3,24 +3,18 @@ import type { MenuItem } from 'primereact/menuitem';
 import { TabMenu } from 'primereact/tabmenu';
 
 import { ZERO } from 'shared/constants';
-import { useController } from 'view/hooks/controller';
-import { useStore } from 'view/hooks/store';
 import { EmptyComponent } from 'view/components/EmptyComponent';
 
-import type { AppController, AppStore, TabItem } from '@admin/shared/types';
-import { StoreName, ControllerName } from '@admin/shared/constants';
+import type { PageComponentProps, TabItem } from '@admin/shared/types';
 
-export type Props = {
+export type Props = PageComponentProps & {
   tabs: TabItem[];
 }
 
-export function PageHeaderTabsContainer({ tabs }: Props) {
+export function PageHeaderTabsContainer({ view, appController, tabs }: Props) {
 
   const [ tabItems, setTabItems ] = useState<MenuItem[]>([]);
   const [ currentTabIndex, setCurrentTabIndex ] = useState<number>(ZERO);
-
-  const { state: { view } } = useStore(StoreName.APP) as AppStore;
-  const appController = useController(ControllerName.APP) as AppController;
 
   useEffect(() => {
     setTabItems([

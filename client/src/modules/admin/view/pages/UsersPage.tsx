@@ -1,6 +1,6 @@
 import { UsersPageContainer } from '@admin/view/containers/UsersPageContainer';
 
-export function UsersPage() {
+export default function UsersPage() {
 
   return <UsersPageContainer />;
 

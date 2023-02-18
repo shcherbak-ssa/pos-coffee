@@ -2,20 +2,16 @@ import { type MouseEvent, useState, useEffect } from 'react';
 import { Checkbox } from 'primereact/checkbox';
 
 import type { Entity, EntityComponentProps } from 'shared/types';
-import { EMPTY_STRING } from 'shared/constants';
 import { filterItemById } from 'shared/utils';
 
-import { CssClasses } from '@admin/shared/constants';
+import type { EntityViewComponentProps } from '@admin/shared/types';
 import { EntityActionsMenuContainer } from '@admin/view/containers/EntityActionsMenuContainer';
-import type { ActionMenuItemsFunction } from '@admin/view/hooks/actions-menu-items';
 
-export type Props<T extends Entity> = {
-  entities: T[];
-  selectEntity: (entity: T) => void;
+const CARD_CONTENT: string = 'card-content';
+const CARD_ACTIVE: string = 'card-active';
+
+export type Props<T extends Entity> = EntityViewComponentProps<T> & {
   EntityComponent: React.ComponentType<EntityComponentProps<T>>;
-  isSelectEnable: boolean;
-  selectedEntities: T[];
-  setSelectedEntities: (entities: T[]) => void;
 }
 
 export function EntityCardsContainer<T extends Entity>({
@@ -25,6 +21,7 @@ export function EntityCardsContainer<T extends Entity>({
   isSelectEnable,
   selectedEntities,
   setSelectedEntities,
+  actionsMenuItemsProps,
 }: Props<T>) {
 
   const [ lastFocusedCard, setLastFocusedCard ] = useState<HTMLElement>();
@@ -34,9 +31,9 @@ export function EntityCardsContainer<T extends Entity>({
 
     for (const user of userCards) {
       if (isEntitySelected({ id: Number(user.dataset.userId) } as T)) {
-        user.classList.add(CssClasses.CARD_ACTIVE);
+        user.classList.add(CARD_ACTIVE);
       } else {
-        user.classList.remove(CssClasses.CARD_ACTIVE);
+        user.classList.remove(CARD_ACTIVE);
       }
     }
   }, [selectedEntities]);
@@ -67,53 +64,56 @@ export function EntityCardsContainer<T extends Entity>({
 
     const { classList } = e.target as HTMLElement;
 
-    if (classList.contains(CssClasses.CARD_CONTENT)) {
-      classList.add(CssClasses.CARD_ACTIVE);
+    if (classList.contains(CARD_CONTENT)) {
+      classList.add(CARD_ACTIVE);
       setLastFocusedCard(e.target as HTMLElement);
     }
   }
 
   function removeLastFocus(): void {
     if (lastFocusedCard) {
-      lastFocusedCard.classList.remove(CssClasses.CARD_ACTIVE);
+      lastFocusedCard.classList.remove(CARD_ACTIVE);
+    }
+  }
+
+  function drawCheckbox(entity: T): React.ReactNode {
+    if (isSelectEnable) {
+      return (
+        <Checkbox
+          checked={isEntitySelected(entity)}
+          onChange={() => select(entity)}
+        />
+      );
     }
   }
 
   return (
     <div className="full p-6 grid grid-cols-4 gap-4">
       {
-        entities.map((entity) => {
-          return (
-            <div className="card relative" key={entity.id}>
-              <div
-                className="card-content click full"
-                data-user-id={entity.id}
-                onClick={focusCard}
-                onDoubleClick={() => selectEntity(entity)}
-              >
-                <EntityComponent entity={entity} className="!py-12" />
-              </div>
-
-              <div className="card-menu absolute top-4 right-4">
-                <EntityActionsMenuContainer
-                  entity={entity}
-                  isEntityPage={false}
-                />
-              </div>
-
-              <div className="absolute top-4 left-4">
-                {
-                  isSelectEnable
-                    ? <Checkbox
-                        checked={isEntitySelected(entity)}
-                        onChange={() => select(entity)}
-                      />
-                    : EMPTY_STRING
-                }
-              </div>
+        entities.map((entity) => (
+          <div className="card relative" key={entity.id}>
+            <div
+              className="card-content click full"
+              data-user-id={entity.id}
+              onClick={focusCard}
+              onDoubleClick={() => selectEntity(entity)}
+            >
+              <EntityComponent entity={entity} className="!py-12" />
             </div>
-          );
-        })
+
+            <div className="card-menu absolute top-4 right-4">
+              <EntityActionsMenuContainer
+                entity={entity}
+                isEntityPage={false}
+                actionsMenuItemsProps={actionsMenuItemsProps}
+              />
+            </div>
+
+            <div className="absolute top-4 left-4">
+              { drawCheckbox(entity) }
+            </div>
+          </div>
+        ))
       }
     </div>
   );

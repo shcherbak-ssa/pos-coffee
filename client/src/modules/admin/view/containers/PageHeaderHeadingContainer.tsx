@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
+import type { NavigateFunction } from 'react-router-dom';
 import type { MenuItem } from 'primereact/menuitem';
 import { BreadCrumb } from 'primereact/breadcrumb';
 
@@ -9,11 +9,10 @@ import type { AppPageSchema } from '@admin/shared/types';
 
 export type Props = {
   page: AppPageSchema;
+  navigate: NavigateFunction;
 }
 
-export function PageHeaderTitleContainer({ page }: Props) {
-
-  const navigate: NavigateFunction = useNavigate();
+export function PageHeaderHeadingContainer({ page, navigate }: Props) {
 
   useEffect(() => {
     updatePageTitle(page.child?.title || page.title);

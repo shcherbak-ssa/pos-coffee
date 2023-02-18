@@ -1,19 +1,18 @@
 import { useEffect, useState } from 'react';
-import type { DataTableValue } from 'primereact/datatable';
 import type { ColumnProps } from 'primereact/column';
-import type { MenuItem } from 'primereact/menuitem';
 
-import type { EmptyFunction, Entity, UserSchema } from 'shared/types';
+import type { UserSchema } from 'shared/types';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/navigate';
 import { EmptyComponent } from 'view/components/EmptyComponent';
 
-import type { AppStore, UsersController, UsersStore } from '@admin/shared/types';
+import type { AppStore, EntityViewComponentProps, UsersController, UsersStore } from '@admin/shared/types';
 import { ControllerName, ListTab, ListView, PagePath, PageTitle, StoreName } from '@admin/shared/constants';
 import { pages } from '@admin/shared/configs';
 import { useSelectedEntities } from '@admin/view/hooks/select-entities';
-import { useUsersActionsMenuItems } from '@admin/view/hooks/users-actions-menu-items';
+import { useUsersActionsMenuItemsProps } from '@admin/view/hooks/users-actions-menu-items';
+import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-menu-items';
 import { type Props as PageLayoutProps, PageLayout } from '@admin/view/layouts/PageLayout';
 import { EntityCardsContainer } from '@admin/view/containers/EntityCardsContainer';
 import { EntityTableContainer } from '@admin/view/containers/EntityTableContainer';
@@ -33,7 +32,16 @@ export function UsersPageContainer() {
   const [ isSelectEnable, selectedEntities, setSelectedEntities ] = useSelectedEntities<UserSchema>({ view });
 
   const toUsersInfoPage: NavigateFunctionHook = useNavigateWithParams(PagePath.USERS_INFO);
-  const setActionsMenuItems: EmptyFunction = useUsersActionsMenuItems();
+  const actionsMenuItemsProps: ActionsMenuItemsProps = useUsersActionsMenuItemsProps();
+
+  const entityViewComponentProps: EntityViewComponentProps<UserSchema> = {
+    entities: users,
+    selectEntity: selectUser,
+    isSelectEnable,
+    selectedEntities,
+    setSelectedEntities,
+    actionsMenuItemsProps,
+  };
 
   const usersTableColumns: ColumnProps[] = [
     {
@@ -66,21 +74,18 @@ export function UsersPageContainer() {
 
   useEffect(() => {
     loadUsers(view.listTab === ListTab.DELETED);
-
-    setActionsMenuItems();
   }, []);
 
   useEffect(() => {
     setPageLayoutProps({
       page: pages[PageTitle.USERS],
-      actionsProps: {
-        isEntityPage: false,
-        addActionProps: isUsersLoading ? undefined : {
-          label: 'Create new user',
-          to: PagePath.USERS_CREATE,
-        },
+      showSubHeader: true,
+      addButton: {
+        label: 'Create new user',
+        to: PagePath.USERS_CREATE,
       },
-      showSubHeader: !isUsersLoading,
+      actionsMenuItemsProps,
+      isEntityPage: false,
       tabs: [
         {
           label: 'Active',
@@ -124,12 +129,8 @@ export function UsersPageContainer() {
     if (view.listView === ListView.TABLE) {
       return (
         <EntityTableContainer
-          entities={users}
-          selectEntity={(entity: DataTableValue) => selectUser(entity as UserSchema)}
           columns={usersTableColumns}
-          isSelectEnable={isSelectEnable}
-          selectedEntities={selectedEntities}
-          setSelectedEntities={setSelectedEntities}
+          { ...entityViewComponentProps }
         />
       );
     }
@@ -137,17 +138,11 @@ export function UsersPageContainer() {
     if (view.listView === ListView.CARD) {
       return (
         <EntityCardsContainer
-          entities={users}
-          selectEntity={(entity: Entity) => selectUser(entity as UserSchema)}
           EntityComponent={UsersPersonalCard}
-          isSelectEnable={isSelectEnable}
-          selectedEntities={selectedEntities}
-          setSelectedEntities={setSelectedEntities}
+          { ...entityViewComponentProps }
         />
       );
     }
-
-    return <EmptyComponent />;
   }
 
   if (pageLayoutProps) {

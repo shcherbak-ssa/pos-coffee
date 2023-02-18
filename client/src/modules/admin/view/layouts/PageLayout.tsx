@@ -1,24 +1,30 @@
-import { ConfirmDialog } from 'primereact/confirmdialog';
+import type { MouseEvent } from 'react';
+import { type NavigateFunction, useNavigate } from 'react-router';
+import { Button } from 'primereact/button';
+import { PrimeIcons } from 'primereact/api';
 
-import { EMPTY_STRING } from 'shared/constants';
-import { NotificationContainer } from 'view/containers/NotificationContainer';
+import type { Entity } from 'shared/types';
+import { useStore } from 'view/hooks/store';
+import { useController } from 'view/hooks/controller';
 import { AppLoader } from 'view/components/AppLoader';
 
-import type { AppPageSchema, TabItem } from '@admin/shared/types';
-import { AppHeaderContainer } from '@admin/view/containers/AppHeaderContainer';
-import { AppMenuContainer } from '@admin/view/containers/AppMenuContainer';
-import { PageContentContainer } from '@admin/view/containers/PageContentContainer';
-import { PageHeaderTitleContainer } from '@admin/view/containers/PageHeaderHeadingContainer';
-import { PageHeaderTabsContainer } from '@admin/view/containers/PageHeaderTabsContainer';
+import type { AppController, AppPageSchema, AppStore, PageComponentProps, TabItem } from '@admin/shared/types';
+import { ControllerName, PagePath, StoreName } from '@admin/shared/constants';
+import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-menu-items';
 import { PageSubHeaderContainer } from '@admin/view/containers/PageSubHeaderContainer';
-import { type Props as ActionsProps, PageHeaderActions } from '@admin/view/components/PageHeaderActions';
+import { PageHeaderTabsContainer } from '@admin/view/containers/PageHeaderTabsContainer';
+import { PageHeaderHeadingContainer } from '@admin/view/containers/PageHeaderHeadingContainer';
+import { PageHeaderActionsContainer } from '@admin/view/containers/PageHeaderActionsContainer';
 import { type Props as PageMessageProps, PageMessage } from '@admin/view/components/PageMessage';
 
 export type Props = {
   page: AppPageSchema;
-  actionsProps: ActionsProps;
   showSubHeader: boolean;
+  isEntityPage: boolean;
+  actionsMenuItemsProps: ActionsMenuItemsProps
   children: React.ReactNode;
+  addButton?: { label: string; to: PagePath };
+  entity?: Entity;
   tabs?: TabItem[];
   isLoading?: boolean;
   messageProps?: PageMessageProps;
@@ -26,13 +32,57 @@ export type Props = {
 
 export function PageLayout({
   page,
-  actionsProps,
-  children,
+  addButton,
   showSubHeader,
+  isEntityPage,
+  actionsMenuItemsProps,
+  children,
+  entity,
   tabs = [],
   isLoading = false,
   messageProps,
 }: Props) {
+
+  const navigate: NavigateFunction = useNavigate();
+
+  const { state: { view } } = useStore(StoreName.APP) as AppStore;
+  const appController = useController(ControllerName.APP) as AppController;
+
+  const pageComponentProps: PageComponentProps = { view, appController };
+
+  function handleAddButonClick(e: MouseEvent): void {
+    e.preventDefault();
+
+    if (addButton) {
+      navigate(addButton.to);
+    }
+  }
+
+  function drawActions(): React.ReactNode {
+    if (isEntityPage && entity) {
+      return (
+        <PageHeaderActionsContainer
+          entity={entity}
+          actionsMenuItemsProps={actionsMenuItemsProps}
+        />
+      );
+    } else {
+      return (
+        <Button
+          className="p-button-sm"
+          icon={PrimeIcons.PLUS}
+          label={addButton?.label || 'Add'}
+          onClick={handleAddButonClick}
+        />
+      );
+    }
+  }
+
+  function drawSubHeader(): React.ReactNode {
+    if (showSubHeader) {
+      return <PageSubHeaderContainer {...pageComponentProps} />;
+    }
+  }
 
   function drawContent(): React.ReactNode {
     if (isLoading) {
@@ -47,26 +97,24 @@ export function PageLayout({
   }
 
   return (
-    <div className="app-container full relative">
-      <AppHeaderContainer />
-      <AppMenuContainer />
+    <div className="bg-white rounded-xl shadow overflow-hidden">
+      <div className="page-header border-b-2 flex items-center justify-between p-6 relative">
+        <PageHeaderHeadingContainer
+          page={page}
+          navigate={navigate}
+        />
 
-      <PageContentContainer
-        header={
-          <>
-            <PageHeaderTitleContainer page={page} />
-            <PageHeaderTabsContainer tabs={tabs} />
-            <PageHeaderActions {...actionsProps} />
-          </>
-        }
-      >
-        { showSubHeader ? <PageSubHeaderContainer /> : EMPTY_STRING }
+        <PageHeaderTabsContainer
+          tabs={tabs}
+          {...pageComponentProps}
+        />
 
-        { drawContent() }
-      </PageContentContainer>
+        { drawActions() }
+      </div>
 
-      <NotificationContainer />
-      <ConfirmDialog />
+      { drawSubHeader() }
+
+      { drawContent() }
     </div>
   );
 

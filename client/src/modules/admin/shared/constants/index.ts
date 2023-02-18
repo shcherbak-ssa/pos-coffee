@@ -1,4 +1,4 @@
-export const TO_BACK: number = -1;
+export const GO_BACK: number = -1;
 
 export enum ApiEndpoint {
   USERS = '/api/admin/users',
@@ -77,13 +77,4 @@ export enum Action {
 
 export enum Entity {
   USER = 'User',
-}
-
-export enum CssClasses {
-  CARD_CONTENT = 'card-content',
-  CARD_ACTIVE = 'card-active',
-}
-
-export enum ViewEvent {
-  SAVE = 'save',
 }
