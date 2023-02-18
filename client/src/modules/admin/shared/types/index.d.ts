@@ -88,6 +88,7 @@ export type AppViewState = {
 }
 
 export type AppState = {
+  currentUser: UserSchema;
   isAppMenuOpen: boolean;
   view: AppViewState;
 }
@@ -95,11 +96,13 @@ export type AppState = {
 export interface AppStore extends StoreState<AppState> {}
 
 export interface AppStoreActions extends AppStore {
+  setCurrentUser(user: UserSchema): void;
   setIsAppMenuOpen(isOpen: boolean): void;
   updateViewState<T extends keyof AppViewState>(state: T, value: AppViewState[T]): void;
 }
 
 export interface AppController {
+  setCurrentUser(user: UserSchema): Promise<void>;
   setIsAppMenuOpen(isOpen: boolean): Promise<void>;
   updateViewState<T extends keyof AppViewState>(state: T, value: AppViewState[T]): Promise<void>;
 }
@@ -126,19 +129,13 @@ export type UserDraft = {
   set type(type: UserType);
 }
 
-export type UsersState = {
-  currentUser: UserSchema;
-}
+export type UsersState = {}
 
 export interface UsersStore extends StoreEntityState<UsersState, UserSchema, UserDraft> {}
 
-export interface UsersStoreActions extends StoreCrud<UserSchema> {
-  setCurrentUser(user: UserSchema): void;
-}
+export interface UsersStoreActions extends StoreCrud<UserSchema> {}
 
-export interface UsersController extends CrudController<UserSchema, UsersFilter> {
-  setCurrentUser(user: UserSchema): Promise<void>;
-}
+export interface UsersController extends CrudController<UserSchema, UsersFilter> {}
 
 /**
  * Products

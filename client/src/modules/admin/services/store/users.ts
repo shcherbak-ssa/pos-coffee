@@ -14,14 +14,9 @@ export const usersStore: UsersStore & UsersStoreActions = {
   state: proxy({
     list: [],
     selected: UserSchema.create(),
-    currentUser: UserSchema.create(),
   }),
 
   draft: createDraft(),
-
-  setCurrentUser(user: UserSchema): void {
-    usersStore.state.currentUser = UserSchema.create(user);
-  },
 
   /**
    * CrudStore implementation

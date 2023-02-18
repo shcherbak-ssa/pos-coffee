@@ -1,3 +1,4 @@
+import type { Store, UserSchema } from 'shared/types';
 import { Context } from 'shared/context';
 
 import type { AppController as BaseAppController, AppStore, AppStoreActions, AppViewState } from '@admin/shared/types';
@@ -11,6 +12,16 @@ export class AppController implements BaseAppController {
     return new AppController();
   }
 
+  public async getCurrentUser(): Promise<UserSchema> {
+    const store = await this.getStore() as AppStore;
+    return store.state.currentUser;
+  }
+
+  public async setCurrentUser(user: UserSchema): Promise<void> {
+    const store = await this.getStore() as AppStoreActions;
+    store.setCurrentUser(user);
+  }
+
   public async setIsAppMenuOpen(isOpen: boolean): Promise<void> {
     const store = await this.getStore() as AppStoreActions;
     store.setIsAppMenuOpen(isOpen);
@@ -21,10 +32,10 @@ export class AppController implements BaseAppController {
     store.updateViewState(state, value);
   }
 
-  private async getStore(): Promise<AppStore> {
+  private async getStore(): Promise<Store> {
     await Context.loadStore(StoreName.APP);
 
-    return Context.getStore(StoreName.APP) as AppStore;
+    return Context.getStore(StoreName.APP) as Store;
   }
 
 }

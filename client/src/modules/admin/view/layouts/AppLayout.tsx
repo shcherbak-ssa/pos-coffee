@@ -24,16 +24,15 @@ const SettingsPage = lazy(() => import('@admin/view/pages/SettingsPage'));
 
 export function AppLayout() {
 
-  const appStore = useStore(StoreName.APP) as AppStore;
+  const { state: { isAppMenuOpen, currentUser } } = useStore(StoreName.APP) as AppStore;
   const appController = useController(ControllerName.APP) as AppController;
 
-  const { isAppMenuOpen } = appStore.state;
   const appProps: AppComponentProps = { isAppMenuOpen, appController };
 
   return (
     <div className="app-container full relative">
       <BrowserRouter>
-        <AppHeaderContainer {...appProps} />
+        <AppHeaderContainer currentUser={currentUser} {...appProps} />
         <AppMenuContainer {...appProps} />
 
         <ScrollPanel style={{ width: '100%', height: 'calc(100% - 6rem)' }}>

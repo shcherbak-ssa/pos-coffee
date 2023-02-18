@@ -3,13 +3,13 @@ import type { MenuItem } from 'primereact/menuitem';
 import type { Entity } from 'shared/types';
 import { useStore } from 'view/hooks/store';
 
-import type { UsersStore } from '@admin/shared/types';
+import type { AppStore } from '@admin/shared/types';
 import { StoreName, PagePath, ControllerName, Action } from '@admin/shared/constants';
 import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-menu-items';
 
 export function useUsersActionsMenuItemsProps(): ActionsMenuItemsProps {
 
-  const { state: { currentUser } } = useStore(StoreName.USERS) as UsersStore;
+  const { state: { currentUser } } = useStore(StoreName.APP) as AppStore;
 
   return {
     infoPagePath: PagePath.USERS_INFO,

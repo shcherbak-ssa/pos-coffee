@@ -1,15 +1,19 @@
 import { PrimeIcons } from 'primereact/api';
 
+import type { UserSchema } from 'shared/types';
 import { APP_NAME } from 'shared/constants';
 import { IconButton } from 'view/components/IconButton';
 
 import type { AppComponentProps } from '@admin/shared/types';
+import { UsersPhoto } from '../components/UsersPhoto';
 
-export type Props = AppComponentProps;
+export type Props = AppComponentProps & {
+  currentUser: UserSchema;
+};
 
-export function AppHeaderContainer({ isAppMenuOpen, appController }: Props) {
+export function AppHeaderContainer({ isAppMenuOpen, appController, currentUser }: Props) {
 
-  function toggleMenu(): void {
+  function toggleAppMenu(): void {
     appController.setIsAppMenuOpen(!isAppMenuOpen);
   }
 
@@ -24,10 +28,17 @@ export function AppHeaderContainer({ isAppMenuOpen, appController }: Props) {
         <IconButton
           className="mr-6"
           icon={isAppMenuOpen ? PrimeIcons.TIMES : PrimeIcons.BARS}
-          click={toggleMenu}
+          click={toggleAppMenu}
         />
 
         <h1 className="app-name text-2xl">{ APP_NAME }</h1>
+      </div>
+
+      <div className="flex items-center click">
+        <UsersPhoto
+          size="large"
+          photo={currentUser.photo}
+        />
       </div>
     </header>
   );
