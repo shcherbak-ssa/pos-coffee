@@ -1,10 +1,9 @@
 import fs from 'fs';
 import { faker } from '@faker-js/faker';
 
-import type { Address, Config, User } from './shared/types';
-import { AVATART_GENERATOR_URL, SERVER_CONFIG_FILENAME, UserType } from './shared/constants';
-
-const alreadyGeneratedAvatarIds: number[] = [];
+import type { Address, Config, Product, User } from './shared/types';
+import { SERVER_CONFIG_FILENAME, UserType } from './shared/constants';
+import { generateRundomAvatar } from './shared/utils';
 
 const adminUser: User = {
   name: 'Stanislav',
@@ -18,12 +17,16 @@ const adminUser: User = {
   isArchived: false,
 };
 
-fs.writeFileSync(
-  SERVER_CONFIG_FILENAME,
-  JSON.stringify(generateConfig(), null, 2)
-);
+run();
 
-console.log('Generated!\n');
+function run(): void {
+  fs.writeFileSync(
+    SERVER_CONFIG_FILENAME,
+    JSON.stringify(generateConfig(), null, 2)
+  );
+
+  console.log('Generated!\n');
+}
 
 function generateConfig(): Config {
   return {
@@ -39,6 +42,27 @@ function generateConfig(): Config {
       generateUser('female', { type: UserType.WAITER, photo: '', isArchived: true }),
       generateUser('female', { type: UserType.WAITER, photo: '', }),
       generateUser('female', { type: UserType.WAITER }),
+      generateUser('male', { type: UserType.WAITER, isArchived: true }),
+      generateUser('male', { type: UserType.WAITER, isArchived: true }),
+    ],
+    products: [
+      // Coffee
+      generateProduct({ photo: 'https://unsplash.com/photos/ZJJVZyedgH4' }),
+      generateProduct({ photo: 'https://unsplash.com/photos/dQdyO9jsixA' }),
+      generateProduct({ photo: 'https://unsplash.com/photos/9_Dollf_7aI' }),
+      generateProduct({ photo: 'https://unsplash.com/photos/P9HWKYu2bQA', isArchived: true }),
+      generateProduct({ photo: 'https://unsplash.com/photos/w17rvzEglgY' }),
+      // Cappuccino
+      generateProduct({ photo: 'https://unsplash.com/photos/0rI80lQco18' }),
+      generateProduct({ photo: 'https://unsplash.com/photos/VCXk_bO97VQ' }),
+      generateProduct({ isArchived: true }),
+      generateProduct({ photo: 'https://unsplash.com/photos/hmLY7GiNFyE' }),
+      generateProduct({ photo: 'https://unsplash.com/photos/tZKwLRO904E' }),
+      // Tea
+      generateProduct({ photo: 'https://unsplash.com/photos/XjkQouRM5Co' }),
+      generateProduct({ photo: 'https://unsplash.com/photos/8yBQQqH3q8Q' }),
+      generateProduct({ photo: 'https://unsplash.com/photos/EE6fFDyEtRc' }),
+      generateProduct({ photo: 'https://unsplash.com/photos/eR3eB0D97_Q', isArchived: true }),
     ],
   };
 }
@@ -69,21 +93,14 @@ function generateAddress(): Address {
   };
 }
 
-function generateRundomAvatar(): string {
-  const avatarId: number = getRandomNumber(1, 70);
+function generateProduct({ photo = '', isArchived = false }: Partial<Product>): Product {
+  const name: string = faker.commerce.productName();
 
-  if (alreadyGeneratedAvatarIds.includes(avatarId)) {
-    return generateRundomAvatar();
-  }
-
-  alreadyGeneratedAvatarIds.push(avatarId);
-
-  return AVATART_GENERATOR_URL + avatarId;
-}
-
-function getRandomNumber(min: number, max: number): number {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  return {
+    sku: name.toUpperCase().replace(/\s/g, '_'),
+    price: Number(faker.commerce.price(1, 127)),
+    photo,
+    name,
+    isArchived,
+  };
 }
