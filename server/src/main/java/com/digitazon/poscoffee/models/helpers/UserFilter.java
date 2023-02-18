@@ -7,6 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class UserFilter {
 
-  private Boolean onlyDeleted = false;
+  private Boolean onlyArchived = false;
 
 }

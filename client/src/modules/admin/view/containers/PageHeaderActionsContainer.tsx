@@ -83,7 +83,7 @@ export function PageHeaderActionsContainer({
   }
 
   function drawDeleteLabel(): React.ReactNode {
-    if (entity.isDeleted) {
+    if (entity.isArchived) {
       return (
         <Button
           className="button-label p-button-text p-button-danger"

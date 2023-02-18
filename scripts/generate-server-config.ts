@@ -15,7 +15,7 @@ const adminUser: User = {
   type: UserType.ADMIN,
   photo: generateRundomAvatar(),
   address: generateAddress(),
-  isDeleted: false,
+  isArchived: false,
 };
 
 fs.writeFileSync(
@@ -32,11 +32,11 @@ function generateConfig(): Config {
       generateUser('female', {}),
       generateUser('female', { type: UserType.MANAGER }),
       generateUser('male', { type: UserType.MANAGER }),
-      generateUser('male', { type: UserType.MANAGER, photo: '', isDeleted: true }),
+      generateUser('male', { type: UserType.MANAGER, photo: '', isArchived: true }),
       generateUser('male', { type: UserType.WAITER, photo: '', }),
       generateUser('female', { type: UserType.WAITER }),
-      generateUser('male', { type: UserType.WAITER, isDeleted: true }),
-      generateUser('female', { type: UserType.WAITER, photo: '', isDeleted: true }),
+      generateUser('male', { type: UserType.WAITER, isArchived: true }),
+      generateUser('female', { type: UserType.WAITER, photo: '', isArchived: true }),
       generateUser('female', { type: UserType.WAITER, photo: '', }),
       generateUser('female', { type: UserType.WAITER }),
     ],
@@ -45,14 +45,14 @@ function generateConfig(): Config {
 
 function generateUser(
   gender: 'male' | 'female',
-  { type = UserType.ADMIN, isDeleted = false, photo = generateRundomAvatar() }: Partial<User>,
+  { type = UserType.ADMIN, isArchived = false, photo = generateRundomAvatar() }: Partial<User>,
 ): User {
   const name: string = faker.name.firstName(gender);
   const surname: string = faker.name.lastName(gender);
   const email: string = faker.internet.email(name, surname);
 
   return {
-    name, surname, email, type, isDeleted, photo,
+    name, surname, email, type, isArchived, photo,
     phone: faker.phone.number('############'),
     password: faker.internet.password(10),
     address: generateAddress(),

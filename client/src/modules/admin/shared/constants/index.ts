@@ -63,7 +63,7 @@ export enum ListAction {
 
 export enum ListTab {
   ACTIVE = 'ACTIVE',
-  DELETED = 'DELETED',
+  ARCHIVE = 'ARCHIVE',
 }
 
 export enum Action {
@@ -71,6 +71,6 @@ export enum Action {
   CREATE = 'CREATE',
   EDIT = 'EDIT',
   UPDATE = 'UPDATE',
-  DELETE = 'DELETE',
+  ARCHIVE = 'ARCHIVE',
   RESTORE = 'RESTORE',
 }

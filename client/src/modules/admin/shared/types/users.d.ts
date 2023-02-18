@@ -6,7 +6,7 @@ export type UserUpdates = Partial<Omit<UserSchema, 'address'> & {
 }>
 
 export type UsersFilter = Partial<{
-  onlyDeleted: boolean;
+  onlyArchived: boolean;
 }>
 
 export type UserDraft = {

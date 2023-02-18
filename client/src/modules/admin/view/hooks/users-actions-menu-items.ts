@@ -16,7 +16,7 @@ export function useUsersActionsMenuItemsProps(): ActionsMenuItemsProps {
     editPagePath: PagePath.USERS_EDIT,
     controllerName: ControllerName.USERS,
     overrides: {
-      [Action.DELETE]: (item: MenuItem, entity: Entity): MenuItem => {
+      [Action.ARCHIVE]: (item: MenuItem, entity: Entity): MenuItem => {
         return {
           ...item,
           visible: item.visible && currentUser.id !== entity.id,

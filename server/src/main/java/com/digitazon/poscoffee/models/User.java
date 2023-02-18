@@ -113,7 +113,7 @@ public class User {
   @OneToOne(fetch = FetchType.EAGER)
   private Address address;
 
-  private Boolean isDeleted;
+  private Boolean isArchived;
 
   @CreatedDate
   private Date createdAt;
@@ -121,6 +121,6 @@ public class User {
   @LastModifiedDate
   private Date updatedAt;
 
-  private Date deletedAt;
+  private Date archivedAt;
 
 }

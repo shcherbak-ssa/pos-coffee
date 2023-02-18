@@ -45,10 +45,10 @@ public class AppConfig {
     clientUser.setPhone(user.getPhone());
     clientUser.setType(user.getType().getName().name());
     clientUser.setPhoto(user.getPhoto());
-    clientUser.setIsDeleted(user.getIsDeleted());
+    clientUser.setIsArchived(user.getIsArchived());
     clientUser.setCreatedAt(user.getCreatedAt());
     clientUser.setUpdatedAt(user.getUpdatedAt());
-    clientUser.setDeletedAt(user.getDeletedAt());
+    clientUser.setDeletedAt(user.getArchivedAt());
 
     if (loadAddress) {
       clientUser.setAddress(user.getAddress());
@@ -85,10 +85,10 @@ public class AppConfig {
     user.setEmail(configUser.getEmail());
     user.setPassword(configUser.getPassword());
     user.setPhoto(configUser.getPhoto());
-    user.setIsDeleted(configUser.getIsDeleted());
+    user.setIsArchived(configUser.getIsArchived());
 
-    if (configUser.getIsDeleted()) {
-      user.setDeletedAt(new Date());
+    if (configUser.getIsArchived()) {
+      user.setArchivedAt(new Date());
     }
 
     return user;

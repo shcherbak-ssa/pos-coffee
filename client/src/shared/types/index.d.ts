@@ -12,6 +12,7 @@ export type EmptyFunction<T = void> = () => T;
 
 export type Entity = AnyType & {
   id: number;
+  isArchived?: boolean;
 }
 
 export type EntityComponentProps<T> = {
@@ -46,10 +47,10 @@ export type UserSchema = {
   type: UserType;
   photo: string;
   address: AddressSchema | null;
-  isDeleted: boolean;
+  isArchived: boolean;
   createdAt: Date | null;
   updatedAt: Date | null;
-  deletedAt: Date | null;
+  archivedAt: Date | null;
 }
 
 export type AddressSchema = {

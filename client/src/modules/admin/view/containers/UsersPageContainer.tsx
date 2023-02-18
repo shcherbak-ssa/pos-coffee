@@ -73,7 +73,7 @@ export function UsersPageContainer() {
   ];
 
   useEffect(() => {
-    loadUsers(view.listTab === ListTab.DELETED);
+    loadUsers(view.listTab === ListTab.ARCHIVE);
   }, []);
 
   useEffect(() => {
@@ -94,8 +94,8 @@ export function UsersPageContainer() {
           },
         },
         {
-          label: 'Deleted',
-          listTab: ListTab.DELETED,
+          label: 'Archived',
+          listTab: ListTab.ARCHIVE,
           command: () => {
             loadUsers(true);
           },
@@ -109,10 +109,10 @@ export function UsersPageContainer() {
     });
   }, [isUsersLoading, users]);
 
-  function loadUsers(onlyDeleted: boolean): void {
+  function loadUsers(onlyArchived: boolean): void {
     setIsUsersLoading(true);
 
-    usersController.loadAll({ onlyDeleted })
+    usersController.loadAll({ onlyArchived })
       .then((success: boolean) => {
         if (success) {
           setIsUsersLoading(false);

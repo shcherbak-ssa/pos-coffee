@@ -52,7 +52,7 @@ export const usersStore: UsersStore & UsersStoreActions = {
 
     updateSelectedUser({
       ...usersStore.state.selectedUser,
-      isDeleted: !usersStore.state.selectedUser.isDeleted,
+      isArchived: !usersStore.state.selectedUser.isArchived,
     });
   },
 
@@ -72,7 +72,7 @@ export const usersStore: UsersStore & UsersStoreActions = {
     },
 
     hadUpdates(): boolean {
-      const { id, createdAt, updatedAt, deletedAt, address, ...updates } = this.getUpdates();
+      const { id, createdAt, updatedAt, archivedAt: deletedAt, address, ...updates } = this.getUpdates();
       const { id: addressId, ...addressUpdates } = address || {};
 
       return !!Object.keys(updates).length || !!Object.keys(addressUpdates).length;

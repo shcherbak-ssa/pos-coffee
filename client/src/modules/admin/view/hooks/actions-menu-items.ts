@@ -46,21 +46,21 @@ export function useActionsMenuItems({
     {
       label: 'Edit',
       icon: PrimeIcons.PENCIL,
-      visible: !entity.isDeleted,
+      visible: !entity.isArchived,
       data: { action: Action.EDIT },
       command: () => {
         toEditPage({ id: entity.id });
       },
     },
     {
-      label: 'Delete',
-      icon: PrimeIcons.TRASH,
-      visible: !entity.isDeleted,
-      data: { action: Action.DELETE },
+      label: 'Archive',
+      icon: PrimeIcons.INBOX,
+      visible: !entity.isArchived,
+      data: { action: Action.ARCHIVE },
       command: () => {
         confirmDialog({
           header: 'Confirmation',
-          message: 'Are you sure you want to delete this user?',
+          message: 'Are you sure you want to archive this user?',
           icon: PrimeIcons.EXCLAMATION_TRIANGLE,
           acceptClassName: 'p-button-danger',
           accept: () => {
@@ -72,7 +72,7 @@ export function useActionsMenuItems({
     {
       label: 'Restore',
       icon: PrimeIcons.REPLAY,
-      visible: entity.isDeleted as boolean,
+      visible: entity.isArchived as boolean,
       data: { action: Action.RESTORE },
       command: () => {
         confirmDialog({

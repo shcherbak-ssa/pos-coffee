@@ -13,10 +13,10 @@ export class UserSchema implements BaseUserSchema {
   public type: UserType;
   public photo: string;
   public address: BaseAddressSchema | null;
-  public isDeleted: boolean;
+  public isArchived: boolean;
   public createdAt: Date | null;
   public updatedAt: Date | null;
-  public deletedAt: Date | null;
+  public archivedAt: Date | null;
 
   private constructor(schema?: BaseUserSchema) {
     this.id = schema?.id || ZERO;
@@ -27,10 +27,10 @@ export class UserSchema implements BaseUserSchema {
     this.type = schema?.type || UserType.ADMIN;
     this.photo = schema?.photo || EMPTY_STRING;
     this.address = AddressSchema.create(schema?.address || undefined);
-    this.isDeleted = schema?.isDeleted || false;
+    this.isArchived = schema?.isArchived || false;
     this.createdAt = schema?.createdAt ? new Date(schema.createdAt) : null;
     this.updatedAt = schema?.updatedAt ? new Date(schema.updatedAt) : null;
-    this.deletedAt = schema?.deletedAt ? new Date(schema.deletedAt) : null;
+    this.archivedAt = schema?.archivedAt ? new Date(schema.archivedAt) : null;
   }
 
   public static create(schema?: BaseUserSchema): UserSchema {
@@ -42,7 +42,7 @@ export class UserSchema implements BaseUserSchema {
   }
 
   public getUpdates(): UserUpdates {
-    const { id, createdAt, updatedAt, deletedAt, address, ...updates } = this;
+    const { id, createdAt, updatedAt, archivedAt: deletedAt, address, ...updates } = this;
 
     return {
       ...updates,
@@ -52,10 +52,10 @@ export class UserSchema implements BaseUserSchema {
 }
 
 export function createUsersFilter({
-  onlyDeleted = false,
+  onlyArchived: onlyDeleted = false,
 }: UsersFilter): UsersFilter {
   return {
-    onlyDeleted,
+    onlyArchived: onlyDeleted,
   };
 }
 
