@@ -7,7 +7,7 @@ import { usePageContainer } from '@admin/view/hooks/page-container';
 import { useUsersActionsMenuItemsProps } from '@admin/view/hooks/users-actions-menu-items';
 import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-menu-items';
 import { type Props as PageLayoutProps, PageLayout } from '@admin/view/layouts/PageLayout';
-import { UsersPersonalCard } from '@admin/view/components/UsersPersonalCard';
+import { UsersCard } from '@admin/view/components/UsersCard';
 import { UsersTypeLabel } from '@admin/view/components/UsersTypeLabel';
 import { UsersPhoto } from '@admin/view/components/UsersPhoto';
 
@@ -51,7 +51,7 @@ export function UsersPageContainer() {
     infoPagePath: PagePath.USERS_INFO,
     actionsMenuItemsProps,
     tableColums: usersTableColumns,
-    EntityComponent: UsersPersonalCard,
+    EntityComponent: UsersCard,
     addButton: {
       label: 'Create new user',
       to: PagePath.USERS_CREATE,

@@ -4,7 +4,7 @@ import { CardWrapper } from '@admin/view/components/CardWrapper';
 import { UsersTypeLabel } from '@admin/view/components/UsersTypeLabel';
 import { UsersPhoto } from '@admin/view/components/UsersPhoto';
 
-export function UsersPersonalCard({ entity: user, className }: EntityComponentProps<UserSchema>) {
+export function UsersCard({ entity: user, className }: EntityComponentProps<UserSchema>) {
 
   return (
     <CardWrapper className={className}>

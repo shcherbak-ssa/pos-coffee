@@ -47,22 +47,22 @@ function generateConfig(): Config {
     ],
     products: [
       // Coffee
-      generateProduct({ photo: 'https://unsplash.com/photos/ZJJVZyedgH4' }),
-      generateProduct({ photo: 'https://unsplash.com/photos/dQdyO9jsixA' }),
-      generateProduct({ photo: 'https://unsplash.com/photos/9_Dollf_7aI' }),
-      generateProduct({ photo: 'https://unsplash.com/photos/P9HWKYu2bQA', isArchived: true }),
-      generateProduct({ photo: 'https://unsplash.com/photos/w17rvzEglgY' }),
+      generateProduct({ photo: 'https://images.unsplash.com/photo-1580600160741-4556fe4413b5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }),
+      generateProduct({ photo: 'https://images.unsplash.com/photo-1595434091143-b375ced5fe5c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80' }),
+      generateProduct({ photo: 'https://images.unsplash.com/photo-1544787219-2c5077fcfcf1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=871&q=80' }),
+      generateProduct({ photo: 'https://images.unsplash.com/photo-1559275117-d096eb5d85b2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80', isArchived: true }),
+      generateProduct({ photo: 'https://images.unsplash.com/photo-1458819757519-7581bade511d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=872&q=80' }),
       // Cappuccino
-      generateProduct({ photo: 'https://unsplash.com/photos/0rI80lQco18' }),
-      generateProduct({ photo: 'https://unsplash.com/photos/VCXk_bO97VQ' }),
+      generateProduct({ photo: 'https://images.unsplash.com/photo-1538587888044-79f13ddd7e49?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80' }),
+      generateProduct({ photo: 'https://images.unsplash.com/photo-1517256064527-09c73fc73e38?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }),
       generateProduct({ isArchived: true }),
-      generateProduct({ photo: 'https://unsplash.com/photos/hmLY7GiNFyE' }),
-      generateProduct({ photo: 'https://unsplash.com/photos/tZKwLRO904E' }),
+      generateProduct({ photo: 'https://images.unsplash.com/photo-1561882468-9110e03e0f78?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }),
+      generateProduct({ photo: 'https://images.unsplash.com/photo-1413745094207-a01b234cc32f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1032&q=80' }),
       // Tea
-      generateProduct({ photo: 'https://unsplash.com/photos/XjkQouRM5Co' }),
-      generateProduct({ photo: 'https://unsplash.com/photos/8yBQQqH3q8Q' }),
-      generateProduct({ photo: 'https://unsplash.com/photos/EE6fFDyEtRc' }),
-      generateProduct({ photo: 'https://unsplash.com/photos/eR3eB0D97_Q', isArchived: true }),
+      generateProduct({ photo: 'https://images.unsplash.com/photo-1605773202042-63ef5f7f5883?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }),
+      generateProduct({ photo: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }),
+      generateProduct({ photo: 'https://images.unsplash.com/photo-1594136604897-29f7e564db27?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80' }),
+      generateProduct({ photo: 'https://images.unsplash.com/photo-1610823455970-fa109c9cb643?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80', isArchived: true }),
     ],
   };
 }

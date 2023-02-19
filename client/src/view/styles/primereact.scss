@@ -138,3 +138,7 @@
     @apply opacity-100;
   }
 }
+
+.p-avatar img {
+  object-fit: cover;
+}

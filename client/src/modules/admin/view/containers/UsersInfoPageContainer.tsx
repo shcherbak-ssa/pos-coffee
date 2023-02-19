@@ -9,7 +9,7 @@ import { useUsersActionsMenuItemsProps } from '@admin/view/hooks/users-actions-m
 import { PageLayout } from '@admin/view/layouts/PageLayout';
 import { AddressCard } from '@admin/view/components/AddressCard';
 import { UsersProfileCard } from '@admin/view/components/UsersProfileCard';
-import { UsersPersonalCard } from '@admin/view/components/UsersPersonalCard';
+import { UsersCard } from '@admin/view/components/UsersCard';
 import { UsersInfoWrapper } from '@admin/view/components/UsersInfoWrapper';
 import { Return, useInfoPageContainer } from '@admin/view/hooks/info-page-container';
 
@@ -40,7 +40,7 @@ export function UsersInfoPageContainer({ isEditMode }: Props) {
     return (
       <PageLayout {...pageLayoutProps}>
         <UsersInfoWrapper>
-          <UsersPersonalCard entity={selectedUser} />
+          <UsersCard entity={selectedUser} />
 
           <UsersProfileCard
             className="col-span-3"

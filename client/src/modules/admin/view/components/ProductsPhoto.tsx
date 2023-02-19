@@ -8,14 +8,14 @@ export type Props = {
   size?: "xlarge" | "normal" | "large";
 }
 
-export function ProductsPhoto({ className, photo, size = 'large' }: Props) {
+export function ProductsPhoto({ className, photo, size = 'xlarge' }: Props) {
 
   return (
     <Avatar
       className={classames('overflow-hidden', className)}
       icon={PrimeIcons.BOX}
       size={size}
-      image={undefined}
+      image={photo || undefined}
     />
   );
 
