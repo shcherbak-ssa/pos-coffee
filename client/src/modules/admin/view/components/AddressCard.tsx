@@ -1,22 +1,22 @@
 import { InputText } from 'primereact/inputtext';
 
 import type { AddressDraft, AddressSchema } from 'shared/types';
-import type { ErrorObjectHook } from 'view/hooks/error';
 import { InputWrapper } from 'view/components/InputWrapper';
 import { EmptyComponent } from 'view/components/EmptyComponent';
 
+import type { CardWithInputsProps } from '@admin/shared/types';
 import { CardHeading } from '@admin/view/components/CardHeading';
 import { CardWrapper } from '@admin/view/components/CardWrapper';
 
-export type Props = {
-  address: AddressSchema | null;
-  draftAddress: AddressDraft;
-  validationError: ErrorObjectHook<AddressSchema>;
-  isEditMode: boolean;
-  className?: string;
-}
+export type Props = CardWithInputsProps<AddressSchema, AddressDraft>;
 
-export function AddressCard({ address, draftAddress, validationError, isEditMode, className }: Props) {
+export function AddressCard({
+  entity: address,
+  entityDraft: draftAddress,
+  validationError,
+  isEditMode,
+  className,
+}: Props) {
 
   if (address === null) {
     return <EmptyComponent />;

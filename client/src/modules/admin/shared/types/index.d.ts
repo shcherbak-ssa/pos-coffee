@@ -8,6 +8,7 @@ import type {
   CrudController,
   ProductSchema,
   StoreEntityState,
+  ErrorObject,
 } from 'shared/types';
 import type { UserType } from 'shared/constants';
 
@@ -73,6 +74,14 @@ export type EntityViewComponentProps<T> = {
   selectedEntities: T[];
   setSelectedEntities: (entities: T[]) => void;
   actionsMenuItemsProps: ActionsMenuItemsProps;
+}
+
+export type CardWithInputsProps<T, D> = {
+  entity: T;
+  entityDraft: D;
+  isEditMode: boolean;
+  validationError: ErrorObject<T> | undefined;
+  className?: string;
 }
 
 /**

@@ -11,6 +11,12 @@
   }
 }
 
+.p-inputnumber {
+  &-input {
+    @apply w-full;
+  }
+}
+
 .p-float-label {
   label {
     @apply opacity-60;

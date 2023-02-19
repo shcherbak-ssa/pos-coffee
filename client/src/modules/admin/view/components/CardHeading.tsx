@@ -4,6 +4,6 @@ export type Props = {
 
 export function CardHeading({ heading }: Props) {
 
-  return <h3 className="mb-12">{ heading }</h3>;
+  return <h3 className="mb-10">{ heading }</h3>;
 
 }

@@ -4,22 +4,21 @@ import { Dropdown } from 'primereact/dropdown';
 
 import type { UserSchema } from 'shared/types';
 import { EMPTY_STRING, UserType, ZERO } from 'shared/constants';
-import type { ErrorObjectHook } from 'view/hooks/error';
 import { InputWrapper } from 'view/components/InputWrapper';
 
-import type { UserDraft } from '@admin/shared/types';
+import type { CardWithInputsProps, UserDraft } from '@admin/shared/types';
 import { CardWrapper } from '@admin/view/components/CardWrapper';
 import { CardHeading } from '@admin/view/components/CardHeading';
 
-export type Props = {
-  user: UserSchema;
-  draftUser: UserDraft;
-  isEditMode: boolean;
-  validationError: ErrorObjectHook<UserSchema>;
-  className?: string;
-}
+export type Props = CardWithInputsProps<UserSchema, UserDraft>;
 
-export function UsersProfileCard({ user, draftUser, validationError, isEditMode, className }: Props) {
+export function UsersProfileCard({
+  entity: user,
+  entityDraft: draftUser,
+  validationError,
+  isEditMode,
+  className,
+}: Props) {
 
   function userTypeOptions(): SelectItem[] {
     const userTypes: UserType[] = [

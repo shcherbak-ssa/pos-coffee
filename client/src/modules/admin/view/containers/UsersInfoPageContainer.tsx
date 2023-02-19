@@ -36,6 +36,20 @@ export function UsersInfoPageContainer({ isEditMode }: Props) {
     isEditMode,
   });
 
+  function drawAddressCard(): React.ReactNode {
+    if (selectedUser.address) {
+      return (
+        <AddressCard
+          className="col-span-4"
+          entity={selectedUser.address}
+          entityDraft={draftUser.address}
+          validationError={validationError}
+          isEditMode={isEditMode}
+        />
+      );
+    }
+  }
+
   if (pageLayoutProps) {
     return (
       <PageLayout {...pageLayoutProps}>
@@ -44,19 +58,13 @@ export function UsersInfoPageContainer({ isEditMode }: Props) {
 
           <UsersProfileCard
             className="col-span-3"
-            user={selectedUser}
-            draftUser={draftUser}
+            entity={selectedUser}
+            entityDraft={draftUser}
             validationError={validationError}
             isEditMode={isEditMode}
           />
 
-          <AddressCard
-            className="col-span-4"
-            address={selectedUser.address}
-            draftAddress={draftUser.address}
-            validationError={validationError}
-            isEditMode={isEditMode}
-          />
+          { drawAddressCard() }
         </UsersInfoWrapper>
       </PageLayout>
     );

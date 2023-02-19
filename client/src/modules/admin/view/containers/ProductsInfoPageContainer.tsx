@@ -7,6 +7,8 @@ import { PagePath, PageTitle, StoreName, ControllerName } from '@admin/shared/co
 import { actionsMenuItemsProps } from '@admin/shared/configs/pages';
 import { type Return, useInfoPageContainer } from '@admin/view/hooks/info-page-container';
 import { PageLayout } from '@admin/view/layouts/PageLayout';
+import { ProductsInfoWrapper } from '@admin/view/components/ProductsInfoWrapper';
+import { ProductsMainCard } from '@admin/view/components/ProductsMainCard';
 
 export type Props = {
   isEditMode: boolean;
@@ -14,12 +16,12 @@ export type Props = {
 
 export function ProductsInfoPageContainer({ isEditMode }: Props) {
 
-  const { state: { selected } } = useStore(StoreName.PRODUCTS) as ProductsStore;
+  const { state: { selected: selectedProduct }, draft: draftProduct } = useStore(StoreName.PRODUCTS) as ProductsStore;
 
   const [ pageLayoutProps, validationError ]: Return<ProductSchema> = useInfoPageContainer({
     page: {
       to: PagePath.PRODUCTS,
-      child: { title: selected.name },
+      child: { title: selectedProduct.name },
     },
     pageTitle: PageTitle.PRODUCTS,
     storeName: StoreName.PRODUCTS,
@@ -33,7 +35,14 @@ export function ProductsInfoPageContainer({ isEditMode }: Props) {
   if (pageLayoutProps) {
     return (
       <PageLayout {...pageLayoutProps}>
-        <div></div>
+        <ProductsInfoWrapper>
+          <ProductsMainCard
+            entity={selectedProduct}
+            entityDraft={draftProduct}
+            validationError={validationError}
+            isEditMode={isEditMode}
+          />
+        </ProductsInfoWrapper>
       </PageLayout>
     );
   }

@@ -5,7 +5,7 @@ import { Avatar } from 'primereact/avatar';
 export type Props = {
   photo: string;
   className?: string;
-  size?: "xlarge" | "normal" | "large";
+  size?: 'xlarge' | 'normal' | 'large';
 }
 
 export function UsersPhoto({ className, photo, size = 'large' }: Props) {
