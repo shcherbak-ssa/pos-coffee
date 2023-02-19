@@ -1,4 +1,3 @@
-import classnames from 'classnames';
 import type { SelectItem } from 'primereact/selectitem';
 import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
@@ -39,14 +38,12 @@ export function UsersProfileCard({ user, draftUser, validationError, isEditMode,
       <div className="grid grid-cols-3 gap-x-4 gap-y-10">
         <InputWrapper
           label="Name"
-          errorMessage={validationError && validationError.errors.name}
+          valueKey="name"
+          validationError={validationError}
         >
           <InputText
             id="name"
             type="text"
-            className={classnames({
-              'p-invalid': validationError && validationError.errors.name,
-            })}
             disabled={!isEditMode}
             value={user.name}
             onChange={(e) => draftUser.name = e.target.value}
@@ -55,14 +52,12 @@ export function UsersProfileCard({ user, draftUser, validationError, isEditMode,
 
         <InputWrapper
           label="Surname"
-          errorMessage={validationError && validationError.errors.surname}
+          valueKey="surname"
+          validationError={validationError}
         >
           <InputText
             id="surname"
             type="text"
-            className={classnames({
-              'p-invalid': validationError && validationError.errors.surname,
-            })}
             disabled={!isEditMode}
             value={user.surname}
             onChange={(e) => draftUser.surname = e.target.value}
@@ -71,14 +66,12 @@ export function UsersProfileCard({ user, draftUser, validationError, isEditMode,
 
         <InputWrapper
           label="Email"
-          errorMessage={validationError && validationError.errors.email}
+          valueKey="email"
+          validationError={validationError}
         >
           <InputText
             id="email"
             type="text"
-            className={classnames({
-              'p-invalid': validationError && validationError.errors.email,
-            })}
             disabled={!isEditMode}
             value={user.email}
             onChange={(e) => draftUser.email  = e.target.value}
@@ -87,15 +80,13 @@ export function UsersProfileCard({ user, draftUser, validationError, isEditMode,
 
         <InputWrapper
           label="Phone"
-          errorMessage={validationError && validationError.errors.phone}
+          valueKey="phone"
+          validationError={validationError}
         >
           <InputText
             id="phone"
             type="text"
             keyfilter="int"
-            className={classnames({
-              'p-invalid': validationError && validationError.errors.phone,
-            })}
             disabled={!isEditMode}
             value={user.phone}
             onChange={(e) => draftUser.phone = e.target.value}
@@ -104,7 +95,8 @@ export function UsersProfileCard({ user, draftUser, validationError, isEditMode,
 
         <InputWrapper
           label="Type"
-          errorMessage={validationError && validationError.errors.type}
+          valueKey="type"
+          validationError={validationError}
           description={isEditMode && user.id !== ZERO ? 'Cannot change the type of an existing user' : EMPTY_STRING}
         >
           <Dropdown

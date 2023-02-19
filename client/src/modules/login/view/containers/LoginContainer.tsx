@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import classnames from 'classnames';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
@@ -55,13 +54,11 @@ function Container() {
       <div className="flex flex-col gap-8">
         <InputWrapper
           label="Email"
-          errorMessage={validationError && validationError.errors.email}
+          valueKey="email"
+          validationError={validationError}
         >
           <InputText
             id="email"
-            className={classnames('w-full', {
-              'p-invalid': validationError && validationError.errors.email,
-            })}
             type="text"
             value={state.login.email}
             onChange={(e) => login.email = e.target.value}
@@ -70,13 +67,11 @@ function Container() {
 
         <InputWrapper
           label="Password"
-          errorMessage={validationError && validationError.errors.password}
+          valueKey="password"
+          validationError={validationError}
         >
           <Password
             inputId="password"
-            className={classnames('w-full', {
-              'p-invalid': validationError && validationError.errors.password,
-            })}
             value={state.login.password}
             onChange={(e) => login.password = e.target.value}
             feedback={false}
