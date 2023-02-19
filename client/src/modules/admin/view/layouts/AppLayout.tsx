@@ -17,6 +17,7 @@ import { AppMenuContainer } from '@admin/view/containers/AppMenuContainer';
 const HomePage = lazy(() => import('@admin/view/pages/HomePage'));
 const DashboardPage = lazy(() => import('@admin/view/pages/DashboardPage'));
 const ProductsPage = lazy(() => import('@admin/view/pages/ProductsPage'));
+const ProductsInfoPage = lazy(() => import('@admin/view/pages/ProductsInfoPage'));
 const OrdersPage = lazy(() => import('@admin/view/pages/OrdersPage'));
 const UsersPage = lazy(() => import('@admin/view/pages/UsersPage'));
 const UsersInfoPage = lazy(() => import('@admin/view/pages/UsersInfoPage'));
@@ -52,14 +53,29 @@ export function AppLayout() {
                   path={PagePath.DASHBOARD}
                   element={<DashboardPage />}
                 />
+
                 <Route
                   path={PagePath.PRODUCTS}
                   element={<ProductsPage />}
                 />
                 <Route
+                  path={PagePath.PRODUCTS_INFO}
+                  element={<ProductsInfoPage />}
+                />
+                <Route
+                  path={PagePath.PRODUCTS_CREATE}
+                  element={<ProductsInfoPage isEditMode />}
+                />
+                <Route
+                  path={PagePath.PRODUCTS_EDIT}
+                  element={<ProductsInfoPage isEditMode />}
+                />
+
+                <Route
                   path={PagePath.ORDERS}
                   element={<OrdersPage />}
                 />
+
                 <Route
                   path={PagePath.USERS}
                   element={<UsersPage />}
@@ -76,6 +92,7 @@ export function AppLayout() {
                   path={PagePath.USERS_EDIT}
                   element={<UsersInfoPage isEditMode />}
                 />
+
                 <Route
                   path={PagePath.SETTINGS}
                   element={<SettingsPage />}

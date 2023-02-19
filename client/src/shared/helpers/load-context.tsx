@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import type { AnyType } from 'shared/types';
 import { Context } from 'shared/context';
 import { AppLoader } from 'view/components/AppLoader';
 
@@ -8,9 +9,9 @@ export type Props = {
   controllers?: string[];
 }
 
-export function loadContext<T>(Container: React.ComponentType<T>, { stores = [], controllers = [] }: Props) {
+export function loadContext(Container: React.ComponentType<AnyType>, { stores = [], controllers = [] }: Props) {
 
-  return function (props: typeof Container.propTypes = {}) {
+  return function (props: AnyType) {
 
     const [ isStoresLoaded, setIsStoresLoaded ] = useState<boolean>(false);
     const [ isControllersLoaded, setIsControllersLoaded ] = useState<boolean>(false);
@@ -29,7 +30,6 @@ export function loadContext<T>(Container: React.ComponentType<T>, { stores = [],
 
 
     if (isStoresLoaded && isControllersLoaded) {
-      // @ts-ignore
       return <Container {...props} />;
     }
 

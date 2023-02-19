@@ -51,6 +51,11 @@ export type ActionMenuItem = {
  * Props
  */
 
+export type PageAddButtonProps = {
+  label: string;
+  to: PagePath;
+}
+
 export type AppComponentProps = {
   isAppMenuOpen: boolean;
   appController: AppController;

@@ -8,7 +8,7 @@ import { APP_NAME } from 'shared/constants';
 import { IconButton } from 'view/components/IconButton';
 
 import type { AppMenuItem as AppMenuItemType, AppComponentProps } from '@admin/shared/types';
-import { appMenuItems } from '@admin/shared/configs';
+import { appMenuItems } from '@admin/shared/configs/app-menu';
 import { AppMenuItem } from '@admin/view/components/AppMenuItem';
 
 export type Props = AppComponentProps;

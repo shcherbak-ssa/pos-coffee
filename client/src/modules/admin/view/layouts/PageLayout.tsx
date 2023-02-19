@@ -7,8 +7,15 @@ import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 import { AppLoader } from 'view/components/AppLoader';
 
-import type { AppController, AppPageSchema, AppStore, PageComponentProps, TabItem } from '@admin/shared/types';
-import { ControllerName, PagePath, StoreName } from '@admin/shared/constants';
+import type {
+  AppController,
+  AppPageSchema,
+  AppStore,
+  PageAddButtonProps,
+  PageComponentProps,
+  TabItem,
+} from '@admin/shared/types';
+import { ControllerName, StoreName } from '@admin/shared/constants';
 import { PageSubHeaderContainer } from '@admin/view/containers/PageSubHeaderContainer';
 import { PageHeaderTabsContainer } from '@admin/view/containers/PageHeaderTabsContainer';
 import { PageHeaderHeadingContainer } from '@admin/view/containers/PageHeaderHeadingContainer';
@@ -24,7 +31,7 @@ export type Props = {
   isEntityPage: boolean;
   children: React.ReactNode;
   actionProps?: ActionsProps,
-  addButton?: { label: string; to: PagePath };
+  addButton?: PageAddButtonProps;
   tabs?: TabItem[];
   isLoading?: boolean;
   messageProps?: PageMessageProps;
