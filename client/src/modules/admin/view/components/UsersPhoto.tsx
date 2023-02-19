@@ -13,6 +13,7 @@ export function UsersPhoto({ className, photo, size = 'large' }: Props) {
   return (
     <Avatar
       className={classames('overflow-hidden', className)}
+      shape="circle"
       icon={PrimeIcons.USER}
       size={size}
       image={photo || undefined}

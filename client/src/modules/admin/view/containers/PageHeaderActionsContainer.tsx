@@ -98,7 +98,7 @@ export function PageHeaderActionsContainer({
     if (isEditMode) {
       return (
         <Button
-          className="p-button-sm"
+          className="p-button-sm p-button-rounded"
           icon={PrimeIcons.TIMES}
           onClick={goBack}
         />

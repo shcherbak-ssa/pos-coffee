@@ -41,7 +41,7 @@ export function EntityActionsMenuContainer<T extends Entity>({
     if (isEntityPage) {
       return (
         <Button
-          className="p-button-sm"
+          className="p-button-sm p-button-rounded"
           icon={PrimeIcons.ELLIPSIS_H}
           onClick={toggleMenu}
         />
