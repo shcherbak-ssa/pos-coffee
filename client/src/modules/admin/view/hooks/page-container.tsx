@@ -5,10 +5,10 @@ import type { CrudController, Entity, EntityComponentProps, StoreEntityState } f
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/navigate';
+import { EmptyComponent } from 'view/components/EmptyComponent';
 
-import type { AppStore, EntityViewComponentProps, PageAddButtonProps } from '@admin/shared/types';
-import { ControllerName, ListTab, ListView, PagePath, PageTitle, StoreName } from '@admin/shared/constants';
-import { pages } from '@admin/shared/configs/pages';
+import type { AppPageSchema, AppStore, EntityViewComponentProps, PageAddButtonProps } from '@admin/shared/types';
+import { ControllerName, ListTab, ListView, PagePath, StoreName } from '@admin/shared/constants';
 import { useSelectedEntities } from '@admin/view/hooks/select-entities';
 import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-menu-items';
 import type { Props as PageLayoutProps } from '@admin/view/layouts/PageLayout';
@@ -16,25 +16,29 @@ import { EntityTableContainer } from '@admin/view/containers/EntityTableContaine
 import { EntityCardsContainer } from '@admin/view/containers/EntityCardsContainer';
 
 export type Props<T> = {
-  pageTitle: PageTitle;
+  page: AppPageSchema;
   storeName: StoreName;
   controllerName: ControllerName;
   addButton: PageAddButtonProps;
   infoPagePath: PagePath;
   actionsMenuItemsProps: ActionsMenuItemsProps;
-  tableColums: ColumnProps[]
-  EntityComponent: React.ComponentType<EntityComponentProps<T>>;
+  EntityComponent?: React.ComponentType<EntityComponentProps<T>>;
+  tableColums?: ColumnProps[];
+  showSubHeader?: boolean;
+  pageContent?: (props: EntityViewComponentProps<T>) => React.ReactNode;
 }
 
 export function usePageContainer<T extends Entity>({
-  pageTitle,
+  page,
   storeName,
   controllerName,
   addButton,
   infoPagePath,
   actionsMenuItemsProps,
-  tableColums,
-  EntityComponent
+  EntityComponent,
+  tableColums = [],
+  showSubHeader = true,
+  pageContent,
 }: Props<T>): PageLayoutProps | undefined {
 
   const [ isLoading, setIsLoading ] = useState<boolean>(true);
@@ -63,8 +67,8 @@ export function usePageContainer<T extends Entity>({
 
   useEffect(() => {
     setPageLayoutProps({
-      page: pages[pageTitle],
-      showSubHeader: true,
+      page,
+      showSubHeader,
       addButton,
       isEntityPage: false,
       tabs: [
@@ -107,6 +111,10 @@ export function usePageContainer<T extends Entity>({
   }
 
   function drawContent(): React.ReactNode {
+    if (pageContent) {
+      return pageContent(entityViewComponentProps);
+    }
+
     if (view.listView === ListView.TABLE) {
       return (
         <EntityTableContainer
@@ -119,7 +127,7 @@ export function usePageContainer<T extends Entity>({
     if (view.listView === ListView.CARD) {
       return (
         <EntityCardsContainer
-          EntityComponent={EntityComponent}
+          EntityComponent={EntityComponent || EmptyComponent}
           { ...entityViewComponentProps }
         />
       );

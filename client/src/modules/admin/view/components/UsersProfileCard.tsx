@@ -88,7 +88,7 @@ export function UsersProfileCard({
             keyfilter="int"
             disabled={!isEditMode}
             value={user.phone}
-            onChange={(e) => draftUser.phone = e.target.value}
+            onChange={(e) => draftUser.image = e.target.value}
           />
         </InputWrapper>
 

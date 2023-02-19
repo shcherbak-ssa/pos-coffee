@@ -1,6 +1,5 @@
 package com.digitazon.poscoffee.services;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,9 +20,11 @@ import com.digitazon.poscoffee.models.Product;
 import com.digitazon.poscoffee.models.helpers.ClientProduct;
 import com.digitazon.poscoffee.models.helpers.ProductsFilter;
 import com.digitazon.poscoffee.repositories.ProductsRepository;
+import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.ProductsConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
+import com.digitazon.poscoffee.shared.helpers.ServiceHelpers;
 
 @Service
 public class ProductsService {
@@ -32,8 +33,16 @@ public class ProductsService {
   private AnnotationConfigApplicationContext context
     = new AnnotationConfigApplicationContext(AppConfig.class);
 
-  @Autowired
   private ProductsRepository repository;
+
+  private ServiceHelpers<Product> helpers;
+
+  @SuppressWarnings("unchecked")
+  public ProductsService(@Autowired ProductsRepository repository) {
+    this.repository = repository;
+    this.helpers = (ServiceHelpers<Product>)
+      this.context.getBean("serviceHelpers", repository, AppConstants.Entity.PRODUCT);
+  }
 
   public boolean isProductExist(String sku) {
     return this.repository.existsBySku(sku);
@@ -74,55 +83,15 @@ public class ProductsService {
   }
 
   public void updateProduct(ClientProduct updates) throws ResourceNotFoundException {
-    final Optional<Product> foundProduct = this.repository.findById(updates.getId());
-
-    if (foundProduct.isPresent()) {
-      final Product user = foundProduct.get();
-      this.mergeWithUpdates(user, updates);
-
-      this.repository.save(user);
-
-      return;
-    }
-
-    throw new ResourceNotFoundException("Product not found");
+    this.helpers.update(updates.getId(), (Product product) -> this.mergeWithUpdates(product, updates));
   }
 
   public void archiveProductById(Long id) throws ResourceNotFoundException {
-    final Optional<Product> foundProduct = this.repository.findById(id);
-
-    if (foundProduct.isPresent()) {
-      final Product product = foundProduct.get();
-      product.setIsArchived(true);
-      product.setArchivedAt(new Date());
-
-      this.repository.save(product);
-
-      return;
-    }
-
-    throw new ResourceNotFoundException("Product not found");
+    this.helpers.archiveById(id);
   }
 
   public void restoreProductById(Long id) throws ResourceNotFoundException {
-    final Optional<Product> foundProduct = this.repository.findById(id);
-
-    if (foundProduct.isPresent()) {
-      final Product product = foundProduct.get();
-
-      if (!product.getIsArchived()) {
-        return;
-      }
-
-      product.setIsArchived(false);
-      product.setArchivedAt(null);
-
-      this.repository.save(product);
-
-      return;
-    }
-
-    throw new ResourceNotFoundException("Product not found");
+    this.helpers.restoreById(id);
   }
 
   private ClientProduct convertToClientProduct(Product product) {
@@ -137,7 +106,7 @@ public class ProductsService {
     product.setSku(updates.getSku() == null ? product.getSku() : updates.getSku());
     product.setName(updates.getName() == null ? product.getName() : updates.getName());
     product.setPrice(updates.getPrice() == null ? product.getPrice() : updates.getPrice());
-    product.setPhoto(updates.getPhoto() == null ? product.getPhoto() : updates.getPhoto());
+    product.setImage(updates.getImage() == null ? product.getImage() : updates.getImage());
   }
 
   private static Specification<Product> filter(ProductsFilter filter) {

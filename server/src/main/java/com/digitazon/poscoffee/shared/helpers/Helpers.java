@@ -1,4 +1,4 @@
-package com.digitazon.poscoffee.shared.utils;
+package com.digitazon.poscoffee.shared.helpers;
 
 import java.util.Random;
 

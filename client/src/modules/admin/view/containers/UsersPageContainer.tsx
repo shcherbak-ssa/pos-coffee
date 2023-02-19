@@ -3,13 +3,14 @@ import type { ColumnProps } from 'primereact/column';
 import { EmptyComponent } from 'view/components/EmptyComponent';
 
 import { ControllerName, PagePath, PageTitle, StoreName } from '@admin/shared/constants';
+import { pages } from '@admin/shared/configs/pages';
 import { usePageContainer } from '@admin/view/hooks/page-container';
 import { useUsersActionsMenuItemsProps } from '@admin/view/hooks/users-actions-menu-items';
 import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-menu-items';
 import { type Props as PageLayoutProps, PageLayout } from '@admin/view/layouts/PageLayout';
 import { UsersCard } from '@admin/view/components/UsersCard';
 import { UsersTypeLabel } from '@admin/view/components/UsersTypeLabel';
-import { UsersPhoto } from '@admin/view/components/UsersPhoto';
+import { UsersImage } from '@admin/view/components/UsersImage';
 
 export function UsersPageContainer() {
 
@@ -24,7 +25,7 @@ export function UsersPageContainer() {
     {
       field: 'photo',
       header: 'Photo',
-      body: UsersPhoto,
+      body: UsersImage,
     },
     {
       field: 'name',
@@ -45,7 +46,7 @@ export function UsersPageContainer() {
   ];
 
   const pageLayoutProps: PageLayoutProps | undefined = usePageContainer({
-    pageTitle: PageTitle.USERS,
+    page: pages[PageTitle.USERS],
     storeName: StoreName.USERS,
     controllerName: ControllerName.USERS,
     infoPagePath: PagePath.USERS_INFO,

@@ -2,16 +2,16 @@ import type { EntityComponentProps, UserSchema } from 'shared/types';
 
 import { CardWrapper } from '@admin/view/components/CardWrapper';
 import { UsersTypeLabel } from '@admin/view/components/UsersTypeLabel';
-import { UsersPhoto } from '@admin/view/components/UsersPhoto';
+import { UsersImage } from '@admin/view/components/UsersImage';
 
 export function UsersCard({ entity: user, className }: EntityComponentProps<UserSchema>) {
 
   return (
     <CardWrapper className={className}>
       <div className="flex-center flex-col text-center full">
-        <UsersPhoto
+        <UsersImage
           className="mb-6"
-          photo={user.photo}
+          image={user.image}
           size="xlarge"
         />
 

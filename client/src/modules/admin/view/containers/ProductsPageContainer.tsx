@@ -3,10 +3,10 @@ import type { ColumnProps } from 'primereact/column';
 import { EmptyComponent } from 'view/components/EmptyComponent';
 
 import { ControllerName, PagePath, PageTitle, StoreName } from '@admin/shared/constants';
-import { actionsMenuItemsProps } from '@admin/shared/configs/pages';
+import { actionsMenuItemsProps, headerMenuItems, pages } from '@admin/shared/configs/pages';
 import { usePageContainer } from '@admin/view/hooks/page-container';
 import { type Props as PageLayoutProps, PageLayout } from '@admin/view/layouts/PageLayout';
-import { ProductsPhoto } from '@admin/view/components/ProductsPhoto';
+import { ProductsImage } from '@admin/view/components/ProductsImage';
 import { ProductsCard } from '@admin/view/components/ProductsCard';
 
 export function ProductsPageContainer() {
@@ -15,15 +15,15 @@ export function ProductsPageContainer() {
     {
       field: 'photo',
       header: 'Photo',
-      body: ProductsPhoto,
-    },
-    {
-      field: 'sku',
-      header: 'Sku',
+      body: ProductsImage,
     },
     {
       field: 'name',
       header: 'Name',
+    },
+    {
+      field: 'sku',
+      header: 'Sku',
     },
     {
       field: 'price',
@@ -32,7 +32,10 @@ export function ProductsPageContainer() {
   ];
 
   const pageLayoutProps: PageLayoutProps | undefined = usePageContainer({
-    pageTitle: PageTitle.PRODUCTS,
+    page: {
+      ...pages[PageTitle.PRODUCTS],
+      headerMenuItem: headerMenuItems.products,
+    },
     storeName: StoreName.PRODUCTS,
     controllerName: ControllerName.PRODUCTS,
     infoPagePath: PagePath.PRODUCTS_INFO,

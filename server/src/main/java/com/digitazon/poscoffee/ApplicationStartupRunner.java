@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 
 import com.digitazon.poscoffee.models.helpers.Config;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
-import com.digitazon.poscoffee.shared.utils.DatabaseDataLoader;
-import com.digitazon.poscoffee.shared.utils.LocalResourceLoader;
+import com.digitazon.poscoffee.shared.helpers.DatabaseDataLoader;
+import com.digitazon.poscoffee.shared.helpers.LocalResourceLoader;
 
 @Component
 public class ApplicationStartupRunner implements CommandLineRunner {

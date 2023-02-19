@@ -18,7 +18,7 @@ const baseSchema: Schema = Joi.object({
     'string.max': 'Price must be between 0 and 127',
     'string.empty': 'Phone cannot be empty',
   }),
-  photo: Joi.string().empty(EMPTY_STRING),
+  image: Joi.string().empty(EMPTY_STRING),
   isArchived: Joi.boolean(),
 });
 

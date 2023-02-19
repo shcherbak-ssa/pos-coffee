@@ -29,6 +29,14 @@ export type ArchiveAction = 'archive' | 'restore';
  * Entities
  */
 
+export type BaseSchema = {
+  id: number;
+  isArchived: boolean;
+  createdAt: Date | null;
+  updatedAt: Date | null;
+  archivedAt: Date | null;
+}
+
 export type ValidationSchema<T> = {
   [key in ValidationType]: T;
 }
@@ -38,19 +46,14 @@ export type Token = {
   type: string;
 }
 
-export type UserSchema = {
-  id: number;
+export type UserSchema = BaseSchema & {
   name: string;
   surname: string;
   email: string;
   phone: string;
   type: UserType;
-  photo: string;
+  image: string;
   address: AddressSchema | null;
-  isArchived: boolean;
-  createdAt: Date | null;
-  updatedAt: Date | null;
-  archivedAt: Date | null;
 }
 
 export type AddressSchema = {
@@ -74,16 +77,15 @@ export type AddressDraft = {
   set address(address: string);
 }
 
-export type ProductSchema = {
-  id: number;
+export type ProductSchema = BaseSchema & {
   sku: string;
   name: string;
   price: number;
-  photo: string;
-  isArchived: boolean;
-  createdAt: Date | null;
-  updatedAt: Date | null;
-  archivedAt: Date | null;
+  image: string;
+}
+
+export type CategorySchema = BaseSchema & {
+  name: string;
 }
 
 /**
@@ -145,14 +147,12 @@ export type PayloadToSave<T> = {
   entity: T;
   isEntityNew: boolean;
   validationName: string;
-  entityName: EntityName;
 }
 
 export type PayloadToChangeArchiveState = {
   endpoint: string;
   action: ArchiveAction;
   entityId: number;
-  entityName: EntityName;
 }
 
 /**

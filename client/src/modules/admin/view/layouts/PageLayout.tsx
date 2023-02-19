@@ -1,4 +1,4 @@
-import type { MouseEvent } from 'react';
+import { type MouseEvent, useEffect } from 'react';
 import { type NavigateFunction, useNavigate } from 'react-router';
 import { Button } from 'primereact/button';
 import { PrimeIcons } from 'primereact/api';
@@ -56,11 +56,22 @@ export function PageLayout({
 
   const pageComponentProps: PageComponentProps = { view, appController };
 
+  useEffect(() => {
+    appController.setCurrentPage(page);
+  }, [page]);
+
   function handleAddButonClick(e: MouseEvent): void {
     e.preventDefault();
 
     if (addButton) {
-      navigate(addButton.to);
+      if (addButton.to) {
+        navigate(addButton.to);
+        return;
+      }
+
+      if (addButton.command) {
+        addButton.command();
+      }
     }
   }
 

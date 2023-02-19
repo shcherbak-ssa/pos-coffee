@@ -1,6 +1,6 @@
 import { PrimeIcons } from 'primereact/api';
 
-import type { AppPageSchema } from '@admin/shared/types';
+import type { AppHeaderMenuItem, AppPageSchema } from '@admin/shared/types';
 import { ControllerName, PagePath, PageTitle } from '@admin/shared/constants';
 import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-menu-items';
 
@@ -19,7 +19,7 @@ export const pages: { [key in PageTitle]: AppPageSchema } = {
   },
   [PageTitle.CATEGORIES]: {
     title: PageTitle.CATEGORIES,
-    icon: PrimeIcons.TAGS,
+    icon: PrimeIcons.BOX,
   },
   [PageTitle.STOCK]: {
     title: PageTitle.STOCK,
@@ -40,11 +40,31 @@ export const pages: { [key in PageTitle]: AppPageSchema } = {
 };
 
 export const actionsMenuItemsProps: {
-  products: ActionsMenuItemsProps,
+  products: ActionsMenuItemsProps;
+  categories: ActionsMenuItemsProps;
 } = {
   products: {
     infoPagePath: PagePath.PRODUCTS_INFO,
     editPagePath: PagePath.PRODUCTS_EDIT,
     controllerName: ControllerName.PRODUCTS,
   },
+  categories: {
+    infoPagePath: PagePath.EMPTY,
+    editPagePath: PagePath.EMPTY,
+    controllerName: ControllerName.CATEGORIES,
+  },
+};
+
+export const headerMenuItems: {
+  products: AppHeaderMenuItem[];
+  categories: AppHeaderMenuItem[];
+} = {
+  products: [
+    { label: 'Products', to: PagePath.PRODUCTS },
+    { label: 'Categories', to: PagePath.CATEGORIES },
+  ],
+  categories: [
+    { label: 'Products', to: PagePath.PRODUCTS },
+    { label: 'Categories', to: PagePath.CATEGORIES },
+  ],
 };

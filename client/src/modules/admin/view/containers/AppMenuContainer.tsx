@@ -1,21 +1,21 @@
 import type { MouseEvent } from 'react';
 import { type Location, type NavigateFunction, useLocation, useNavigate } from 'react-router';
 import classnames from 'classnames';
-import { PrimeIcons } from 'primereact/api';
 import { ScrollPanel } from 'primereact/scrollpanel';
 
-import { APP_NAME } from 'shared/constants';
-import { IconButton } from 'view/components/IconButton';
-
 import type { AppMenuItem as AppMenuItemType, AppComponentProps } from '@admin/shared/types';
+import { PagePath } from '@admin/shared/constants';
 import { appMenuItems } from '@admin/shared/configs/app-menu';
 import { AppMenuItem } from '@admin/view/components/AppMenuItem';
+import { AppHeaderLogo } from '@admin/view/components/AppHeaderLogo';
 
 export type Props = AppComponentProps;
 
-export function AppMenuContainer({ isAppMenuOpen, appController }: Props) {
+export function AppMenuContainer({ appStore, appController }: Props) {
 
-  const location: Location = useLocation();
+  const { isAppMenuOpen } = appStore.state;
+
+  const { pathname }: Location = useLocation();
   const navigate: NavigateFunction = useNavigate();
 
   function closeMenu(e?: MouseEvent): void {
@@ -49,15 +49,10 @@ export function AppMenuContainer({ isAppMenuOpen, appController }: Props) {
               'pl-8': !isAppMenuOpen,
             })}
           >
-            <div className="flex items-center">
-              <IconButton
-                className="mr-6"
-                icon={PrimeIcons.TIMES}
-                click={closeMenu}
-              />
-
-              <h1 className="app-name text-2xl">{ APP_NAME }</h1>
-            </div>
+            <AppHeaderLogo
+              isAppMenuOpen={isAppMenuOpen}
+              click={closeMenu}
+            />
           </div>
 
           <ScrollPanel style={{ width: '100%', height: 'calc(100% - 6rem)' }}>
@@ -72,7 +67,11 @@ export function AppMenuContainer({ isAppMenuOpen, appController }: Props) {
                   <AppMenuItem
                     key={index}
                     item={item}
-                    isItemActive={item.to === location.pathname}
+                    isActive={
+                      item.to === PagePath.HOME
+                        ? pathname === PagePath.HOME
+                        : pathname.startsWith(item.to)
+                    }
                     isAppMenuOpen={isAppMenuOpen}
                     click={handleItemClick}
                   />

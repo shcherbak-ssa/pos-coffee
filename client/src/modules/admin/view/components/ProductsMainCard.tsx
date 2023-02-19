@@ -23,7 +23,7 @@ export function ProductsMainCard({
     <CardWrapper>
       <CardHeading heading="Main" />
 
-      <div className="grid grid-cols-2 gap-x-4 gap-y-10 mb-10">
+      <div className="flex flex-col gap-10 mb-10">
         <InputWrapper
           label="Name"
           valueKey="name"
@@ -73,7 +73,7 @@ export function ProductsMainCard({
       <div className="grid grid-cols-2 gap-x-4 gap-y-10">
         <img
           className="rounded object-cover w-56 h-56"
-          src={product.photo}
+          src={product.image}
         />
 
         <div>

@@ -4,7 +4,7 @@ import { EmptyComponent } from 'view/components/EmptyComponent';
 
 import type { ProductsStore } from '@admin/shared/types';
 import { PagePath, PageTitle, StoreName, ControllerName } from '@admin/shared/constants';
-import { actionsMenuItemsProps } from '@admin/shared/configs/pages';
+import { actionsMenuItemsProps, headerMenuItems, pages } from '@admin/shared/configs/pages';
 import { type Return, useInfoPageContainer } from '@admin/view/hooks/info-page-container';
 import { PageLayout } from '@admin/view/layouts/PageLayout';
 import { ProductsInfoWrapper } from '@admin/view/components/ProductsInfoWrapper';
@@ -20,10 +20,11 @@ export function ProductsInfoPageContainer({ isEditMode }: Props) {
 
   const [ pageLayoutProps, validationError ]: Return<ProductSchema> = useInfoPageContainer({
     page: {
+      ...pages[PageTitle.PRODUCTS],
       to: PagePath.PRODUCTS,
       child: { title: selectedProduct.name },
+      headerMenuItem: headerMenuItems.products,
     },
-    pageTitle: PageTitle.PRODUCTS,
     storeName: StoreName.PRODUCTS,
     controllerName: ControllerName.PRODUCTS,
     infoPagePath: PagePath.PRODUCTS_INFO,

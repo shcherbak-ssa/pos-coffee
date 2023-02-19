@@ -9,34 +9,40 @@ export enum ApiEndpoint {
   PRODUCTS_ID = '/api/admin/products/:id',
   PRODUCTS_ARCHIVE = '/api/admin/products/:id/archive',
   PRODUCTS_RESTORE = '/api/admin/products/:id/restore',
+  CATEGORIES = '/api/admin/categories',
+  CATEGORIES_ARCHIVE = '/api/admin/categories/:id/archive',
+  CATEGORIES_RESTORE = '/api/admin/categories/:id/restore',
 }
 
 export enum ControllerName {
   APP = 'APP',
   USERS = 'USERS',
   PRODUCTS = 'PRODUCTS',
+  CATEGORIES = 'CATEGORIES',
 }
 
 export enum StoreName {
   APP = 'APP',
   USERS = 'USERS',
   PRODUCTS = 'PRODUCTS',
+  CATEGORIES = 'CATEGORIES',
 }
 
 export enum ValidationName {
   USERS = 'USERS',
   PRODUCTS = 'PRODUCTS',
+  CATEGORIES = 'CATEGORIES',
 }
 
 export enum PagePath {
+  EMPTY = '',
   HOME = '/admin',
   DASHBOARD = '/admin/dashboard',
   PRODUCTS = '/admin/products',
   PRODUCTS_INFO = '/admin/products/:id',
   PRODUCTS_CREATE = '/admin/products/create',
   PRODUCTS_EDIT = '/admin/products/:id/edit',
-  CATEGORIES = 'admin/products/categories',
-  STOCK = '/admin/products/stock',
+  CATEGORIES = '/admin/products/categories',
   ORDERS = '/admin/orders',
   USERS = '/admin/users',
   USERS_INFO = '/admin/users/:id',

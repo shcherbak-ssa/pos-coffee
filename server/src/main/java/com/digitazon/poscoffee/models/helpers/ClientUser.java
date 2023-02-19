@@ -15,12 +15,14 @@ import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.UsersConstants;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ClientUser {
 
   @NotNull(
@@ -91,7 +93,7 @@ public class ClientUser {
   )
   private String type;
 
-  private String photo;
+  private String image;
   private Address address;
   private Boolean isArchived;
   private Date createdAt;

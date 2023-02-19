@@ -10,12 +10,14 @@ import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.ProductsConstants;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ClientProduct {
 
   @NotNull(
@@ -51,7 +53,7 @@ public class ClientProduct {
   )
   private Byte price;
 
-  private String photo;
+  private String image;
   private Boolean isArchived;
   private Date createdAt;
   private Date updatedAt;

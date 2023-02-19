@@ -145,6 +145,16 @@
   }
 }
 
+.p-menubar {
+  @apply bg-transparent border-none;
+}
+
+.p-menuitem {
+  &.is-active &-link {
+    @apply font-semibold
+  }
+}
+
 .p-avatar img {
   object-fit: cover;
 }

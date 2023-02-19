@@ -18,6 +18,7 @@ const HomePage = lazy(() => import('@admin/view/pages/HomePage'));
 const DashboardPage = lazy(() => import('@admin/view/pages/DashboardPage'));
 const ProductsPage = lazy(() => import('@admin/view/pages/ProductsPage'));
 const ProductsInfoPage = lazy(() => import('@admin/view/pages/ProductsInfoPage'));
+const CategoriesPage = lazy(() => import('@admin/view/pages/CategoriesPage'));
 const OrdersPage = lazy(() => import('@admin/view/pages/OrdersPage'));
 const UsersPage = lazy(() => import('@admin/view/pages/UsersPage'));
 const UsersInfoPage = lazy(() => import('@admin/view/pages/UsersInfoPage'));
@@ -25,22 +26,22 @@ const SettingsPage = lazy(() => import('@admin/view/pages/SettingsPage'));
 
 export function AppLayout() {
 
-  const { state: { isAppMenuOpen, currentUser } } = useStore(StoreName.APP) as AppStore;
+  const appStore = useStore(StoreName.APP) as AppStore;
   const appController = useController(ControllerName.APP) as AppController;
 
-  const appProps: AppComponentProps = { isAppMenuOpen, appController };
+  const appProps: AppComponentProps = { appStore, appController };
 
   return (
     <div className="app-container full relative">
       <BrowserRouter>
-        <AppHeaderContainer currentUser={currentUser} {...appProps} />
+        <AppHeaderContainer {...appProps} />
         <AppMenuContainer {...appProps} />
 
         <ScrollPanel style={{ width: '100%', height: 'calc(100% - 6rem)' }}>
           <div
             className={classnames('p-12 duration-200', {
-              'lg:pl-72': isAppMenuOpen,
-              'lg:pl-36': !isAppMenuOpen,
+              'lg:pl-72': appStore.state.isAppMenuOpen,
+              'lg:pl-36': !appStore.state.isAppMenuOpen,
             })}
           >
             <Suspense fallback={<AppLoader />} >
@@ -69,6 +70,11 @@ export function AppLayout() {
                 <Route
                   path={PagePath.PRODUCTS_EDIT}
                   element={<ProductsInfoPage isEditMode />}
+                />
+
+                <Route
+                  path={PagePath.CATEGORIES}
+                  element={<CategoriesPage />}
                 />
 
                 <Route

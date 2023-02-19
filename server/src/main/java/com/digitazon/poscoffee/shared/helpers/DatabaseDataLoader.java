@@ -1,5 +1,6 @@
-package com.digitazon.poscoffee.shared.utils;
+package com.digitazon.poscoffee.shared.helpers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,13 +9,16 @@ import org.springframework.stereotype.Component;
 
 import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.Address;
+import com.digitazon.poscoffee.models.Category;
 import com.digitazon.poscoffee.models.Product;
 import com.digitazon.poscoffee.models.User;
 import com.digitazon.poscoffee.models.UserType;
 import com.digitazon.poscoffee.models.helpers.Config;
+import com.digitazon.poscoffee.models.helpers.ConfigCategory;
 import com.digitazon.poscoffee.models.helpers.ConfigProduct;
 import com.digitazon.poscoffee.models.helpers.ConfigUser;
 import com.digitazon.poscoffee.services.AddressService;
+import com.digitazon.poscoffee.services.CategoriesService;
 import com.digitazon.poscoffee.services.ProductsService;
 import com.digitazon.poscoffee.services.UserTypesService;
 import com.digitazon.poscoffee.services.UsersService;
@@ -40,12 +44,16 @@ public class DatabaseDataLoader {
   @Autowired
   private ProductsService productsService;
 
+  @Autowired
+  private CategoriesService categoriesService;
+
   public void loadConstants() {
     this.userTypesService.loadTypes();
   }
 
   public void loadConfigData(Config config) throws ProgerException, AlreadyExistException {
     this.loadUsers(config.getUsers());
+    this.loadCategories(config.getCategories());
     this.loadProducts(config.getProducts());
   }
 
@@ -61,6 +69,19 @@ public class DatabaseDataLoader {
 
       this.usersService.createUser(user);
     }
+  }
+
+  private List<Category> loadCategories(List<ConfigCategory> categories) throws AlreadyExistException {
+    final List<Category> createdCategories = new ArrayList<Category>();
+
+    for (ConfigCategory configCategory : categories) {
+      final Category category = (Category) this.context.getBean("categoryFromConfigCategory", configCategory);
+      final Category createdCategory = this.categoriesService.createCategory(category);
+
+      createdCategories.add(createdCategory);
+    }
+
+    return createdCategories;
   }
 
   private void loadProducts(List<ConfigProduct> products) throws AlreadyExistException {

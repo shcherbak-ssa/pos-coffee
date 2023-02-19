@@ -1,6 +1,6 @@
 import type { Entity, ProductSchema as BaseProductSchema } from 'shared/types';
 import { EntityName, ZERO } from 'shared/constants';
-import { CrudController } from 'controllers/crud-controller';
+import { CrudController } from 'lib/crud-controller';
 
 import type { ProductsController as BaseProductsController, ProductsFilter } from '@admin/shared/types';
 import { ApiEndpoint, StoreName, ValidationName } from '@admin/shared/constants';
@@ -9,7 +9,7 @@ import { createFilter, ProductSchema } from '@admin/models/product';
 export class ProductsController extends CrudController implements BaseProductsController {
 
   public static create(): ProductsController {
-    return new ProductsController(StoreName.PRODUCTS);
+    return new ProductsController(StoreName.PRODUCTS, EntityName.PRODUCT);
   }
 
   public async loadById(productId: number): Promise<boolean> {
@@ -34,7 +34,6 @@ export class ProductsController extends CrudController implements BaseProductsCo
       entity: copiedProduct as BaseProductSchema as Entity,
       isEntityNew: copiedProduct.isNewSchema(),
       validationName: ValidationName.PRODUCTS,
-      entityName: EntityName.PRODUCT,
     });
   }
 
@@ -42,7 +41,6 @@ export class ProductsController extends CrudController implements BaseProductsCo
     return await this.tryToChangeArchiveState({
       endpoint: ApiEndpoint.PRODUCTS_ARCHIVE,
       entityId: productId,
-      entityName: EntityName.PRODUCT,
       action: 'archive',
     });
   }
@@ -51,7 +49,6 @@ export class ProductsController extends CrudController implements BaseProductsCo
     return await this.tryToChangeArchiveState({
       endpoint: ApiEndpoint.PRODUCTS_RESTORE,
       entityId: productId,
-      entityName: EntityName.PRODUCT,
       action: 'restore',
     });
   }

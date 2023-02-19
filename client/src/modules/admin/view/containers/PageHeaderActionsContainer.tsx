@@ -10,6 +10,7 @@ import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/nav
 import { PagePathLabel, GO_BACK } from '@admin/shared/constants';
 import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-menu-items';
 import { EntityActionsMenuContainer } from '@admin/view/containers/EntityActionsMenuContainer';
+import { SaveButton } from '@admin/view/components/SaveButton';
 
 export type Props = {
   entity: Entity;
@@ -43,9 +44,7 @@ export function PageHeaderActionsContainer({
     );
   }, [location.pathname]);
 
-  function save(e: MouseEvent): void {
-    e.preventDefault();
-
+  function save(): void {
     if (isSaveProcessing || !isEditMode || !controller) {
       return;
     }
@@ -71,12 +70,9 @@ export function PageHeaderActionsContainer({
   function drawSaveButton(): React.ReactNode {
     if (isEditMode) {
       return (
-        <Button
-          className="p-button-sm"
-          icon={PrimeIcons.SAVE}
-          label="Save"
-          loading={isSaveProcessing}
-          onClick={save}
+        <SaveButton
+          isLoading={isSaveProcessing}
+          click={save}
         />
       );
     }

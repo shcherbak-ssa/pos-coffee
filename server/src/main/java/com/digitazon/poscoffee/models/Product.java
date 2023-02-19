@@ -1,7 +1,5 @@
 package com.digitazon.poscoffee.models;
 
-import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
@@ -12,22 +10,27 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.digitazon.poscoffee.models.base.BaseEntity;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.ProductsConstants;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = AppConstants.DatabaseTable.PRODUCTS)
 @EntityListeners(AuditingEntityListener.class)
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class Product {
+@AllArgsConstructor
+@SuperBuilder
+public class Product extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,16 +63,6 @@ public class Product {
   )
   private Byte price;
 
-  private String photo;
-
-  private Boolean isArchived;
-
-  @CreatedDate
-  private Date createdAt;
-
-  @LastModifiedDate
-  private Date updatedAt;
-
-  private Date archivedAt;
+  private String image;
 
 }

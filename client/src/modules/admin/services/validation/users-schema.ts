@@ -31,7 +31,7 @@ const baseSchema: Schema = Joi.object({
     'any.invalid': 'Type is invalid',
     'string.empty': 'Type cannot be empty',
   }),
-  photo: Joi.string().empty(EMPTY_STRING),
+  image: Joi.string().empty(EMPTY_STRING),
   isArchived: Joi.boolean(),
   address: addressSchema,
 });

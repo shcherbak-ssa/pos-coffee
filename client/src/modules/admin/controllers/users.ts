@@ -1,6 +1,6 @@
 import type { UserSchema as BaseUserSchema, Entity } from 'shared/types';
 import { EntityName, ZERO } from 'shared/constants';
-import { CrudController } from 'controllers/crud-controller';
+import { CrudController } from 'lib/crud-controller';
 
 import type { UsersController as BaseUsersController, UsersFilter, UsersStoreActions } from '@admin/shared/types';
 import { ApiEndpoint, ControllerName, StoreName, ValidationName } from '@admin/shared/constants';
@@ -11,7 +11,7 @@ import { Context } from 'shared/context';
 export class UsersController extends CrudController implements BaseUsersController {
 
   public static create(): UsersController {
-    return new UsersController(StoreName.USERS);
+    return new UsersController(StoreName.USERS, EntityName.USER);
   }
 
   public async loadById(userId: number): Promise<boolean> {
@@ -36,7 +36,6 @@ export class UsersController extends CrudController implements BaseUsersControll
       entity: copiedUser as BaseUserSchema as Entity,
       isEntityNew: copiedUser.isNewSchema(),
       validationName: ValidationName.USERS,
-      entityName: EntityName.USER,
     });
 
     if (savedUserId) {
@@ -49,7 +48,6 @@ export class UsersController extends CrudController implements BaseUsersControll
     return await this.tryToChangeArchiveState({
       endpoint: ApiEndpoint.USERS_ARCHIVE,
       entityId: userId,
-      entityName: EntityName.USER,
       action: 'archive',
     });
   }
@@ -58,7 +56,6 @@ export class UsersController extends CrudController implements BaseUsersControll
     return await this.tryToChangeArchiveState({
       endpoint: ApiEndpoint.USERS_RESTORE,
       entityId: userId,
-      entityName: EntityName.USER,
       action: 'restore',
     });
   }

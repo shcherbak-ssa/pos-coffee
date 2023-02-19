@@ -3,12 +3,12 @@ import { PrimeIcons } from 'primereact/api';
 import { Avatar } from 'primereact/avatar';
 
 export type Props = {
-  photo: string;
+  image: string;
   className?: string;
   size?: 'xlarge' | 'normal' | 'large';
 }
 
-export function UsersPhoto({ className, photo, size = 'large' }: Props) {
+export function UsersImage({ className, image, size = 'large' }: Props) {
 
   return (
     <Avatar
@@ -16,7 +16,7 @@ export function UsersPhoto({ className, photo, size = 'large' }: Props) {
       shape="circle"
       icon={PrimeIcons.USER}
       size={size}
-      image={photo || undefined}
+      image={image || undefined}
     />
   );
 

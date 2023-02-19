@@ -11,5 +11,6 @@ public class Config {
 
   private List<ConfigUser> users;
   private List<ConfigProduct> products;
+  private List<ConfigCategory> categories;
 
 }

@@ -12,6 +12,7 @@ import { UsersProfileCard } from '@admin/view/components/UsersProfileCard';
 import { UsersCard } from '@admin/view/components/UsersCard';
 import { UsersInfoWrapper } from '@admin/view/components/UsersInfoWrapper';
 import { Return, useInfoPageContainer } from '@admin/view/hooks/info-page-container';
+import { pages } from '@admin/shared/configs/pages';
 
 export type Props = {
   isEditMode: boolean;
@@ -24,10 +25,10 @@ export function UsersInfoPageContainer({ isEditMode }: Props) {
 
   const [ pageLayoutProps, validationError ]: Return<UserSchema> = useInfoPageContainer({
     page: {
+      ...pages[PageTitle.USERS],
       to: PagePath.USERS,
       child: { title: draftUser.fullname },
     },
-    pageTitle: PageTitle.USERS,
     storeName: StoreName.USERS,
     controllerName: ControllerName.USERS,
     infoPagePath: PagePath.USERS_INFO,

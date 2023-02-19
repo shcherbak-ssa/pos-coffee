@@ -1,6 +1,5 @@
 package com.digitazon.poscoffee.services;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,11 +22,13 @@ import com.digitazon.poscoffee.models.UserType;
 import com.digitazon.poscoffee.models.helpers.ClientUser;
 import com.digitazon.poscoffee.models.helpers.UsersFilter;
 import com.digitazon.poscoffee.repositories.UsersRepository;
+import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.UsersConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
 import com.digitazon.poscoffee.shared.exceptions.ProgerException;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
-import com.digitazon.poscoffee.shared.utils.Helpers;
+import com.digitazon.poscoffee.shared.helpers.Helpers;
+import com.digitazon.poscoffee.shared.helpers.ServiceHelpers;
 
 @Service
 public class UsersService {
@@ -36,7 +37,6 @@ public class UsersService {
   private AnnotationConfigApplicationContext context
     = new AnnotationConfigApplicationContext(AppConfig.class);
 
-  @Autowired
   private UsersRepository repository;
 
   @Autowired
@@ -44,6 +44,15 @@ public class UsersService {
 
   @Autowired
   private PasswordEncoder encoder;
+
+  private ServiceHelpers<User> helpers;
+
+  @SuppressWarnings("unchecked")
+  public UsersService(@Autowired UsersRepository repository) {
+    this.repository = repository;
+    this.helpers = (ServiceHelpers<User>)
+      this.context.getBean("serviceHelpers", repository, AppConstants.Entity.USER);
+  }
 
   public boolean isUserExist(String email) {
     return this.repository.existsByEmail(email);
@@ -103,55 +112,15 @@ public class UsersService {
   }
 
   public void updateUser(ClientUser updates) throws ResourceNotFoundException {
-    final Optional<User> foundUser = this.repository.findById(updates.getId());
-
-    if (foundUser.isPresent()) {
-      final User user = foundUser.get();
-      this.mergeWithUpdates(user, updates);
-
-      this.repository.save(user);
-
-      return;
-    }
-
-    throw new ResourceNotFoundException("User not found");
+    this.helpers.update(updates.getId(), (User user) -> this.mergeWithUpdates(user, updates));
   }
 
   public void archiveUserById(Long id) throws ResourceNotFoundException {
-    final Optional<User> foundUser = this.repository.findById(id);
-
-    if (foundUser.isPresent()) {
-      final User user = foundUser.get();
-      user.setIsArchived(true);
-      user.setArchivedAt(new Date());
-
-      this.repository.save(user);
-
-      return;
-    }
-
-    throw new ResourceNotFoundException("User not found");
+    this.helpers.archiveById(id);
   }
 
   public void restoreUserById(Long id) throws ResourceNotFoundException {
-    final Optional<User> foundUser = this.repository.findById(id);
-
-    if (foundUser.isPresent()) {
-      final User user = foundUser.get();
-
-      if (!user.getIsArchived()) {
-        return;
-      }
-
-      user.setIsArchived(false);
-      user.setArchivedAt(null);
-
-      this.repository.save(user);
-
-      return;
-    }
-
-    throw new ResourceNotFoundException("User not found");
+    this.helpers.restoreById(id);
   }
 
   private ClientUser convertToClientUser(User user, boolean loadAddress) {

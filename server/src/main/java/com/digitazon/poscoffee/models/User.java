@@ -1,7 +1,5 @@
 package com.digitazon.poscoffee.models;
 
-import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
@@ -20,22 +18,27 @@ import javax.validation.constraints.Null;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.digitazon.poscoffee.models.base.BaseEntity;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.UsersConstants;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = AppConstants.DatabaseTable.USERS)
 @EntityListeners(AuditingEntityListener.class)
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class User {
+@AllArgsConstructor
+@SuperBuilder
+public class User extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -108,19 +111,9 @@ public class User {
   )
   private UserType type;
 
-  private String photo;
+  private String image;
 
   @OneToOne(fetch = FetchType.EAGER)
   private Address address;
-
-  private Boolean isArchived;
-
-  @CreatedDate
-  private Date createdAt;
-
-  @LastModifiedDate
-  private Date updatedAt;
-
-  private Date archivedAt;
 
 }

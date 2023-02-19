@@ -55,4 +55,5 @@ export enum ApiResponseCode {
 export enum EntityName {
   USER = 'User',
   PRODUCT = 'Product',
+  CATEGORY = 'Category',
 }

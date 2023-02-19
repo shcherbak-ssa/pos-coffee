@@ -48,9 +48,9 @@ public class ProductsAdminController {
   @ResponseStatus(HttpStatus.CREATED)
   @PreAuthorize("hasAuthority('ADMIN')")
   public ClientProduct createProduct(
-    @RequestBody @Validated(AppConstants.ValidationGroups.ToCreate.class) ClientProduct userToCreate
+    @RequestBody @Validated(AppConstants.ValidationGroups.ToCreate.class) ClientProduct productToCreate
   ) throws AlreadyExistException {
-    return this.service.createProduct(userToCreate);
+    return this.service.createProduct(productToCreate);
   }
 
   @PutMapping(path = AppConstants.ApiEndpoint.Admin.PRODUCTS)

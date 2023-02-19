@@ -25,6 +25,12 @@ public class AppConstants {
 
   public static final String ACCESS_DENIED_ERROR = "AccessDeniedException";
 
+  public static final class Entity {
+    public static final String USER = "User";
+    public static final String PRODUCT = "Product";
+    public static final String CATEGORY = "Category";
+  }
+
   public static final class ApiEndpoint {
     public static final String AUTH_LOGIN = "/api/auth/login";
     public static final String USERS = "/api/users";
@@ -38,6 +44,9 @@ public class AppConstants {
       public static final String PRODUCTS_ID = "/api/admin/products/{id}";
       public static final String PRODUCTS_ARCHIVE = "/api/admin/products/{id}/archive";
       public static final String PRODUCTS_RESTORE = "/api/admin/products/{id}/restore";
+      public static final String CATEGORIES = "/api/admin/categories";
+      public static final String CATEGORIES_ARCHIVE = "/api/admin/categories/{id}/archive";
+      public static final String CATEGORIES_RESTORE = "/api/admin/categories/{id}/restore";
     }
   }
 
@@ -47,6 +56,7 @@ public class AppConstants {
     public static final String USER_TYPE_JOIN = "user_type_join";
     public static final String ADDRESSES = "addresses";
     public static final String PRODUCTS = "products";
+    public static final String CATEGORIES = "categories";
   }
 
   public static enum ErrorType {

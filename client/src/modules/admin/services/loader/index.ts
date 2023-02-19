@@ -29,6 +29,11 @@ export class LoaderService implements BaseLoaderService {
 
         return ProductsController.create();
       }
+      case ControllerName.CATEGORIES: {
+        const { CategoriesController } = await import('@admin/controllers/categories');
+
+        return CategoriesController.create();
+      }
     }
 
     throw new ProgerError(`[LOADER] Controller ${name} does not exist`);
@@ -51,6 +56,11 @@ export class LoaderService implements BaseLoaderService {
 
         return productsStore;
       }
+      case StoreName.CATEGORIES: {
+        const { categoriesStore } = await import('@admin/services/store/categories');
+
+        return categoriesStore;
+      }
     }
 
     throw new ProgerError(`[LOADER] Store ${name} does not exist`);
@@ -65,6 +75,11 @@ export class LoaderService implements BaseLoaderService {
       }
       case ValidationName.PRODUCTS: {
         const { schema } = await import('@admin/services/validation/products-schema');
+
+        return schema as ValidationSchema<T>;
+      }
+      case ValidationName.CATEGORIES: {
+        const { schema } = await import('@admin/services/validation/categories-schema');
 
         return schema as ValidationSchema<T>;
       }

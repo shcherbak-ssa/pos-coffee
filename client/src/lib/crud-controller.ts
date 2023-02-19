@@ -10,17 +10,20 @@ import type {
   ValidationService,
   PayloadToChangeArchiveState,
 } from 'shared/types';
+import type { EntityName } from 'shared/constants';
 import { Context } from 'shared/context';
 import { notifications } from 'shared/configs/notifications';
-import { BaseController } from 'controllers/base-controller';
+import { BaseController } from 'lib/base-controller';
 
 export class CrudController extends BaseController {
 
   private storeName: string;
+  private entityName: EntityName;
 
-  protected constructor(storeName: string) {
+  protected constructor(storeName: string, entityName: EntityName) {
     super();
     this.storeName = storeName;
+    this.entityName = entityName;
   }
 
   protected async tryToLoadById<T>({ endpoint, entityId }: PayloadToGetById): Promise<boolean> {
@@ -64,7 +67,6 @@ export class CrudController extends BaseController {
     entity,
     isEntityNew,
     validationName,
-    entityName,
   }: PayloadToSave<T>): Promise<number | undefined> {
     try {
       const store = await this.getStore() as StoreCrud<T>;
@@ -77,8 +79,8 @@ export class CrudController extends BaseController {
 
       notificationService.addNotification(
         isEntityNew
-          ? notifications.createProcess(entityName)
-          : notifications.updateProcess(entityName)
+          ? notifications.createProcess(this.entityName)
+          : notifications.updateProcess(this.entityName)
       );
 
       const updates: Partial<T> = store.selected.getUpdates();
@@ -101,8 +103,8 @@ export class CrudController extends BaseController {
 
       notificationService.addNotification(
         isEntityNew
-          ? notifications.created(entityName)
-          : notifications.updated(entityName)
+          ? notifications.created(this.entityName)
+          : notifications.updated(this.entityName)
       );
 
       return savedEntity.id;
@@ -115,14 +117,13 @@ export class CrudController extends BaseController {
     endpoint,
     action,
     entityId,
-    entityName,
   }: PayloadToChangeArchiveState): Promise<boolean> {
     try {
       const notificationService: NotificationService = await this.getNotificationService();
       notificationService.addNotification(
         action === 'archive'
-          ? notifications.archiveProcess(entityName)
-          : notifications.restoreProcess(entityName)
+          ? notifications.archiveProcess(this.entityName)
+          : notifications.restoreProcess(this.entityName)
       );
 
       const apiService: ApiService = await this.getApiService();
@@ -135,8 +136,8 @@ export class CrudController extends BaseController {
 
       notificationService.addNotification(
         action === 'archive'
-          ? notifications.archived(entityName)
-          : notifications.restored(entityName)
+          ? notifications.archived(this.entityName)
+          : notifications.restored(this.entityName)
       );
 
       return true;

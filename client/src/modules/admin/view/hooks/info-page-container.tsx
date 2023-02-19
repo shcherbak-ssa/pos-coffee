@@ -8,14 +8,12 @@ import { useController } from 'view/hooks/controller';
 import { useStore } from 'view/hooks/store';
 
 import type { AppPageSchema } from '@admin/shared/types';
-import { pages } from '@admin/shared/configs/pages';
 import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-menu-items';
 import type { Props as PageLayoutProps } from '@admin/view/layouts/PageLayout';
 import { ControllerName, PagePath, PagePathLabel, PageTitle, StoreName } from '@admin/shared/constants';
 
 export type Props = {
-  page: Partial<AppPageSchema>;
-  pageTitle: PageTitle,
+  page: AppPageSchema;
   isEditMode: boolean;
   storeName: StoreName;
   controllerName: ControllerName;
@@ -31,7 +29,6 @@ export type Return<T> = [
 
 export function useInfoPageContainer<T extends Entity>({
   page,
-  pageTitle,
   isEditMode,
   storeName,
   controllerName,
@@ -53,10 +50,7 @@ export function useInfoPageContainer<T extends Entity>({
 
   useEffect(() => {
     setPageLayoutProps({
-      page: {
-        ...pages[pageTitle],
-        ...page,
-      },
+      page: page,
       actionProps: {
         actionsMenuItemsProps,
         entity: selected as T,
@@ -103,6 +97,8 @@ export function useInfoPageContainer<T extends Entity>({
   useEffect(() => {
     cleanValidationError();
   }, [isEditMode]);
+
+  useEffect(() => () => cleanValidationError(), []);
 
   return [ pageLayoutProps, validationError];
 

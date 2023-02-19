@@ -26,7 +26,7 @@ export const appMenuItems: AppMenuItem[] = [
   },
   {
     label: PageTitle.USERS,
-    icon: PrimeIcons.USERS,
+    icon: PrimeIcons.USER,
     to: PagePath.USERS,
   },
   {

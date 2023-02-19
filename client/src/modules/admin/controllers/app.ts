@@ -1,7 +1,13 @@
 import type { Store, UserSchema } from 'shared/types';
 import { Context } from 'shared/context';
 
-import type { AppController as BaseAppController, AppStore, AppStoreActions, AppViewState } from '@admin/shared/types';
+import type {
+  AppController as BaseAppController,
+  AppPageSchema,
+  AppStore,
+  AppStoreActions,
+  AppViewState,
+} from '@admin/shared/types';
 import { StoreName } from '@admin/shared/constants';
 
 export class AppController implements BaseAppController {
@@ -15,6 +21,11 @@ export class AppController implements BaseAppController {
   public async getCurrentUser(): Promise<UserSchema> {
     const store = await this.getStore() as AppStore;
     return store.state.currentUser;
+  }
+
+  public async setCurrentPage(page: AppPageSchema): Promise<void> {
+    const store = await this.getStore() as AppStoreActions;
+    store.setCurrentPage(page);
   }
 
   public async setCurrentUser(user: UserSchema): Promise<void> {

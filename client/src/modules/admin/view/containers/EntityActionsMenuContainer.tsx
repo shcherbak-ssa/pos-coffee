@@ -42,7 +42,7 @@ export function EntityActionsMenuContainer<T extends Entity>({
       return (
         <Button
           className="p-button-sm p-button-rounded"
-          icon={PrimeIcons.ELLIPSIS_H}
+          icon={PrimeIcons.BARS}
           onClick={toggleMenu}
         />
       );

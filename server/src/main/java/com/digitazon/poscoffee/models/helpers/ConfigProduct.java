@@ -12,7 +12,7 @@ public class ConfigProduct {
   private String sku;
   private String name;
   private Byte price;
-  private String photo;
+  private String image;
   private Boolean isArchived;
 
 }

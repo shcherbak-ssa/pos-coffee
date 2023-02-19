@@ -9,6 +9,7 @@ import type {
   ProductSchema,
   StoreEntityState,
   ErrorObject,
+  CategorySchema,
 } from 'shared/types';
 import type { UserType } from 'shared/constants';
 
@@ -54,11 +55,12 @@ export type ActionMenuItem = {
 
 export type PageAddButtonProps = {
   label: string;
-  to: PagePath;
+  to?: PagePath;
+  command?: EmptyFunction;
 }
 
 export type AppComponentProps = {
-  isAppMenuOpen: boolean;
+  appStore: AppStore;
   appController: AppController;
 }
 
@@ -93,6 +95,12 @@ export type AppPageSchema = {
   icon?: string;
   to?: PagePath;
   child?: AppPageSchema;
+  headerMenuItem?: AppHeaderMenuItem[];
+}
+
+export type AppHeaderMenuItem = {
+  label: string;
+  to: PagePath;
 }
 
 export type AppViewState = {
@@ -102,6 +110,7 @@ export type AppViewState = {
 }
 
 export type AppState = {
+  currentPage: AppPageSchema;
   currentUser: UserSchema;
   isAppMenuOpen: boolean;
   view: AppViewState;
@@ -110,12 +119,14 @@ export type AppState = {
 export interface AppStore extends StoreState<AppState> {}
 
 export interface AppStoreActions extends AppStore {
+  setCurrentPage(page: AppPageSchema): void;
   setCurrentUser(user: UserSchema): void;
   setIsAppMenuOpen(isOpen: boolean): void;
   updateViewState<T extends keyof AppViewState>(state: T, value: AppViewState[T]): void;
 }
 
 export interface AppController {
+  setCurrentPage(page: AppPageSchema): Promise<void>;
   setCurrentUser(user: UserSchema): Promise<void>;
   setIsAppMenuOpen(isOpen: boolean): Promise<void>;
   updateViewState<T extends keyof AppViewState>(state: T, value: AppViewState[T]): Promise<void>;
@@ -139,7 +150,7 @@ export type UserDraft = {
   set name(name: string);
   set surname(surname: string);
   set email(email: string);
-  set phone(phone: string);
+  set image(image: string);
   set type(type: UserType);
 }
 
@@ -165,7 +176,7 @@ export type ProductDraft = {
   set sku(sku: string);
   set name(name: string);
   set price(price: number);
-  set photo(photo: string);
+  set image(image: string);
 }
 
 export type ProductsState = {}
@@ -175,3 +186,25 @@ export interface ProductsStore extends StoreEntityState<ProductsState, ProductSc
 export interface ProductsStoreActions extends StoreCrud<ProductSchema> {}
 
 export interface ProductsController extends CrudController<ProductSchema, ProductsFilter> {}
+
+/**
+ * Categories
+ */
+
+export type CategoryUpdates = Partial<CategorySchema>;
+
+export type CategoriesFilter = Partial<{
+  onlyArchived: boolean;
+}>
+
+export type CategoryDraft = {
+  set name(name: string);
+}
+
+export type CategoriesState = {}
+
+export interface CategoriesStore extends StoreEntityState<CategoriesState, CategorySchema, CategoryDraft> {}
+
+export interface CategoriesStoreActions extends StoreCrud<CategorySchema> {}
+
+export interface CategoriesController extends CrudController<CategorySchema, {}> {}
