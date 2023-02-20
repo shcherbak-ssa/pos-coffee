@@ -1,3 +1,4 @@
+import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
 
@@ -5,9 +6,10 @@ import type { ProductSchema } from 'shared/types';
 import { InputWrapper } from 'view/components/InputWrapper';
 
 import type { CardWithInputsProps, ProductDraft } from '@admin/shared/types';
+import { AvailableCheckbox } from '@admin/view/components/AvailableCheckbox';
 import { CardWrapper } from '@admin/view/components/CardWrapper';
 import { CardHeading } from '@admin/view/components/CardHeading';
-import { Button } from 'primereact/button';
+import { EntityName } from 'shared/constants';
 
 export type Props = CardWithInputsProps<ProductSchema, ProductDraft>;
 
@@ -24,6 +26,14 @@ export function ProductsMainCard({
       <CardHeading heading="Main" />
 
       <div className="flex flex-col gap-10 mb-10">
+        <AvailableCheckbox
+          className="mb-4"
+          entityName={EntityName.PRODUCT}
+          isEditMode={isEditMode}
+          checked={product.isAvailable}
+          change={(isAvailable: boolean) => productDraft.isAvailable = isAvailable}
+        />
+
         <InputWrapper
           label="Name"
           valueKey="name"

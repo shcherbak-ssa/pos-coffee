@@ -6,10 +6,12 @@ import type { CategoriesFilter, CategoryDraft, CategoryUpdates } from '@admin/sh
 
 export class CategorySchema extends BaseSchema<CategoryUpdates> implements BaseCategorySchema {
   public name: string;
+  public isAvailable: boolean;
 
   private constructor(schema?: BaseCategorySchema) {
     super(schema);
     this.name = schema?.name || EMPTY_STRING;
+    this.isAvailable = schema?.isAvailable || false;
   }
 
   public static create(schema?: BaseCategorySchema): CategorySchema {
@@ -26,6 +28,10 @@ export function createFilter({ onlyArchived = false }: CategoriesFilter): Catego
 export function createDraft(schema: BaseCategorySchema = CategorySchema.create()): CategoryDraft {
 
   return {
+    set isAvailable(isAvailable: boolean) {
+      schema.isAvailable = isAvailable;
+    },
+
     set name(name: string) {
       schema.name = name;
     },

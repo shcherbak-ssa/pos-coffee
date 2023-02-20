@@ -13,6 +13,7 @@ public class ConfigProduct {
   private String name;
   private Byte price;
   private String image;
+  private Boolean isAvailable;
   private Boolean isArchived;
 
 }

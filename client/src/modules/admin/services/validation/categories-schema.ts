@@ -9,6 +9,7 @@ const baseSchema: Schema = Joi.object({
   name: Joi.string().messages({
     'string.empty': 'Name cannot be empty',
   }),
+  isAvailable: Joi.boolean(),
   isArchived: Joi.boolean(),
 });
 

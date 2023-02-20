@@ -19,6 +19,7 @@ const baseSchema: Schema = Joi.object({
     'string.empty': 'Phone cannot be empty',
   }),
   image: Joi.string().empty(EMPTY_STRING),
+  isAvailable: Joi.boolean(),
   isArchived: Joi.boolean(),
 });
 

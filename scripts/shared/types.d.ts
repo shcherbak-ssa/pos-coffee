@@ -31,10 +31,12 @@ export type Product = {
   name: string;
   price: number;
   image: string;
+  isAvailable: boolean;
   isArchived: boolean;
 }
 
 export type Category = {
   name: string;
+  isAvailable: boolean;
   isArchived: boolean;
 }

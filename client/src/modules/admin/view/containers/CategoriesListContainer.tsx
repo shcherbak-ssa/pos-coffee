@@ -14,6 +14,7 @@ import { ControllerName, StoreName } from '@admin/shared/constants';
 import { CategoriesSelectCategoryMessage } from '@admin/view/components/CategoriesSelectCategoryMessage';
 import { useActionsMenuItems } from '@admin/view/hooks/actions-menu-items';
 import { CategoriesSelectedCategory } from '@admin/view/components/CategoriesSelectedCategory';
+import { AvailableLabel } from '@admin/view/components/AvailableLabel';
 
 export type Props = EntityViewComponentProps<CategorySchema> & {
   isEditMode: boolean;
@@ -55,6 +56,11 @@ export function CategoriesListContainer({
       field: 'products',
       header: 'Products',
       body: <div>@TODO</div>
+    },
+    {
+      field: 'isAvailable',
+      header: 'Available',
+      body: AvailableLabel,
     },
   ];
 

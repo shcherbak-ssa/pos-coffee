@@ -9,6 +9,7 @@ export class ProductSchema extends BaseSchema<ProductUpdates> implements BasePro
   public name: string;
   public price: number;
   public image: string;
+  public isAvailable: boolean;
 
   private constructor(schema?: BaseProductSchema) {
     super(schema);
@@ -16,6 +17,7 @@ export class ProductSchema extends BaseSchema<ProductUpdates> implements BasePro
     this.name = schema?.name || EMPTY_STRING;
     this.price = schema?.price || ZERO;
     this.image = schema?.image || EMPTY_STRING;
+    this.isAvailable = schema?.isAvailable || false;
   }
 
   public static create(schema?: BaseProductSchema): ProductSchema {
@@ -32,6 +34,10 @@ export function createFilter({ onlyArchived = false }: ProductsFilter): Products
 export function createDraft(schema: BaseProductSchema = ProductSchema.create()): ProductDraft {
 
   return {
+    set isAvailable(isAvailable: boolean) {
+      schema.isAvailable = isAvailable;
+    },
+
     set sku(sku: string) {
       schema.sku = sku;
     },

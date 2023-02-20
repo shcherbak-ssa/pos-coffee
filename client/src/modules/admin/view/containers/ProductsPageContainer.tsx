@@ -8,6 +8,7 @@ import { usePageContainer } from '@admin/view/hooks/page-container';
 import { type Props as PageLayoutProps, PageLayout } from '@admin/view/layouts/PageLayout';
 import { ProductsImage } from '@admin/view/components/ProductsImage';
 import { ProductsCard } from '@admin/view/components/ProductsCard';
+import { AvailableLabel } from '@admin/view/components/AvailableLabel';
 
 export function ProductsPageContainer() {
 
@@ -28,6 +29,11 @@ export function ProductsPageContainer() {
     {
       field: 'price',
       header: 'Price',
+    },
+    {
+      field: 'isAvailable',
+      header: 'Available',
+      body: AvailableLabel,
     },
   ];
 

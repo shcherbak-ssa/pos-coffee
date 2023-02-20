@@ -54,6 +54,7 @@ public class ClientProduct {
   private Byte price;
 
   private String image;
+  private Boolean isAvailable;
   private Boolean isArchived;
   private Date createdAt;
   private Date updatedAt;

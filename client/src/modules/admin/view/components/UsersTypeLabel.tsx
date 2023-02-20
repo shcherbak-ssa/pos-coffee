@@ -1,4 +1,4 @@
-import { Badge } from 'primereact/badge';
+import { Tag  } from 'primereact/tag';
 
 import type { ViewSeverity } from 'shared/types';
 import { UserType } from 'shared/constants';
@@ -20,6 +20,11 @@ export function UsersTypeLabel({ type }: Props) {
     }
   }
 
-  return <Badge value={type} severity={getSeverity()} />;
+  return (
+    <Tag
+      value={type}
+      severity={getSeverity()}
+    />
+  );
 
 }

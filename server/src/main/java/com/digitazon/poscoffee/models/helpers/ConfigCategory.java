@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class ConfigCategory {
 
   private String name;
+  private Boolean isAvailable;
   private Boolean isArchived;
 
 }

@@ -46,6 +46,12 @@
   }
 }
 
+.p-checkbox-box {
+  .p-disabled {
+    @apply opacity-90;
+  }
+}
+
 .p-invalid {
   color: var(--red-500);
 

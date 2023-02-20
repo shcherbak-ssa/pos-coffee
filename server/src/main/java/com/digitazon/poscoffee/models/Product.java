@@ -64,5 +64,6 @@ public class Product extends BaseEntity {
   private Byte price;
 
   private String image;
+  private Boolean isAvailable;
 
 }

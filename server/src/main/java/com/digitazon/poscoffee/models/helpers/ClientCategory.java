@@ -37,6 +37,7 @@ public class ClientCategory {
   )
   private String name;
 
+  private Boolean isAvailable;
   private Boolean isArchived;
   private Date createdAt;
   private Date updatedAt;

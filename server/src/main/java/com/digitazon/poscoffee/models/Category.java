@@ -46,4 +46,6 @@ public class Category extends BaseEntity {
   )
   private String name;
 
+  private Boolean isAvailable;
+
 }

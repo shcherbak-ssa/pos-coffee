@@ -9,7 +9,7 @@ import { CategorySchema, createFilter } from '@admin/models/category';
 export class CategoriesController extends CrudController implements BaseCategoriesController {
 
   public static create(): CategoriesController {
-    return new CategoriesController(StoreName.CATEGORIES, EntityName.PRODUCT);
+    return new CategoriesController(StoreName.CATEGORIES, EntityName.CATEGORY);
   }
 
   public async loadById(categoryId: number): Promise<boolean> {

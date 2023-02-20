@@ -93,6 +93,8 @@ public class CategoriesService {
 
   private void mergeWithUpdates(Category category, ClientCategory updates) {
     category.setName(updates.getName() == null ? category.getName() : updates.getName());
+    category
+      .setIsAvailable(updates.getIsAvailable() == null ? category.getIsAvailable() : updates.getIsAvailable());
   }
 
   private static Specification<Category> filter(CategoriesFilter filter) {

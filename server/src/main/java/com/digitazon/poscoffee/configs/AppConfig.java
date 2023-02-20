@@ -82,6 +82,7 @@ public class AppConfig {
       .name(product.getName())
       .price(product.getPrice())
       .image(product.getImage())
+      .isAvailable(product.getIsAvailable())
       .isArchived(product.getIsArchived())
       .createdAt(product.getCreatedAt())
       .updatedAt(product.getUpdatedAt())
@@ -95,6 +96,7 @@ public class AppConfig {
     return ClientCategory.builder()
       .id(category.getId())
       .name(category.getName())
+      .isAvailable(category.getIsAvailable())
       .isArchived(category.getIsArchived())
       .createdAt(category.getCreatedAt())
       .updatedAt(category.getUpdatedAt())
@@ -130,6 +132,7 @@ public class AppConfig {
       .name(clientProduct.getName())
       .price(clientProduct.getPrice())
       .image(clientProduct.getImage())
+      .isAvailable(clientProduct.getIsAvailable())
       .build();
   }
 
@@ -139,6 +142,7 @@ public class AppConfig {
     return Category.builder()
       .id(clientCategory.getId())
       .name(clientCategory.getName())
+      .isAvailable(clientCategory.getIsAvailable())
       .build();
   }
 
@@ -169,6 +173,7 @@ public class AppConfig {
       .name(configProduct.getName())
       .price(configProduct.getPrice())
       .image(configProduct.getImage())
+      .isAvailable(configProduct.getIsAvailable())
       .isArchived(configProduct.getIsArchived())
       .archivedAt(configProduct.getIsArchived() ? new Date() : null)
       .build();
@@ -179,6 +184,7 @@ public class AppConfig {
   public Category categoryFromConfigCategory(ConfigCategory configCategory) {
     return Category.builder()
       .name(configCategory.getName())
+      .isAvailable(configCategory.getIsAvailable())
       .isArchived(configCategory.getIsArchived())
       .archivedAt(configCategory.getIsArchived() ? new Date() : null)
       .build();

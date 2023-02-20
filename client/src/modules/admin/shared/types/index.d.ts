@@ -173,6 +173,7 @@ export type ProductsFilter = Partial<{
 }>
 
 export type ProductDraft = {
+  set isAvailable(isAvailable: boolean);
   set sku(sku: string);
   set name(name: string);
   set price(price: number);
@@ -198,6 +199,7 @@ export type CategoriesFilter = Partial<{
 }>
 
 export type CategoryDraft = {
+  set isAvailable(isAvailable: boolean);
   set name(name: string);
 }
 

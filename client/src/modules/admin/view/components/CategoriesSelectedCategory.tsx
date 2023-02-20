@@ -9,10 +9,11 @@ import type { CategorySchema, EmptyFunction } from 'shared/types';
 import { InputWrapper } from 'view/components/InputWrapper';
 
 import type { CardWithInputsProps, CategoryDraft } from '@admin/shared/types';
-
+import { AvailableCheckbox } from '@admin/view/components/AvailableCheckbox';
 import { CardHeading } from '@admin/view/components/CardHeading';
 import { CardWrapper } from '@admin/view/components/CardWrapper';
 import { SaveButton } from '@admin/view/components/SaveButton';
+import { EntityName } from 'shared/constants';
 
 export type Props = CardWithInputsProps<CategorySchema, CategoryDraft> & {
   isLoading: boolean;
@@ -99,6 +100,14 @@ export function CategoriesSelectedCategory({
             </div>
 
             <div>
+              <AvailableCheckbox
+                className="mb-10"
+                entityName={EntityName.CATEGORY}
+                isEditMode={isEditMode}
+                checked={category.isAvailable}
+                change={(isAvailable: boolean) => draftCategory.isAvailable = isAvailable}
+              />
+
               <InputWrapper
                 label="Name"
                 valueKey="name"

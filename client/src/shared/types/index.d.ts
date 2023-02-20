@@ -82,10 +82,12 @@ export type ProductSchema = BaseSchema & {
   name: string;
   price: number;
   image: string;
+  isAvailable: boolean;
 }
 
 export type CategorySchema = BaseSchema & {
   name: string;
+  isAvailable: boolean;
 }
 
 /**

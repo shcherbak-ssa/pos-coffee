@@ -107,6 +107,8 @@ public class ProductsService {
     product.setName(updates.getName() == null ? product.getName() : updates.getName());
     product.setPrice(updates.getPrice() == null ? product.getPrice() : updates.getPrice());
     product.setImage(updates.getImage() == null ? product.getImage() : updates.getImage());
+    product
+      .setIsAvailable(updates.getIsAvailable() == null ? product.getIsAvailable() : updates.getIsAvailable());
   }
 
   private static Specification<Product> filter(ProductsFilter filter) {
