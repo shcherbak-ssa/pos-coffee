@@ -2,9 +2,11 @@ package com.digitazon.poscoffee.models;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -41,7 +43,7 @@ public class Product extends BaseEntity {
     groups = AppConstants.ValidationGroups.ToCreate.class
   )
   @Size(
-    min = ProductsConstants.MIN_SKU_LENGTH,
+    min = AppConstants.MIN_UPDATE_LENGTH,
     message = ProductsConstants.SKU_EMPTY_MESSAGE
   )
   private String sku;
@@ -62,6 +64,9 @@ public class Product extends BaseEntity {
     groups = AppConstants.ValidationGroups.ToCreate.class
   )
   private Byte price;
+
+  @ManyToOne(fetch = FetchType.EAGER)
+  private Category category;
 
   private String image;
   private Boolean isAvailable;

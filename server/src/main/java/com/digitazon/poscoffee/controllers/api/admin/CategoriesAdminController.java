@@ -15,10 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.digitazon.poscoffee.models.Category;
 import com.digitazon.poscoffee.models.helpers.CategoriesFilter;
 import com.digitazon.poscoffee.models.helpers.ClientCategory;
 import com.digitazon.poscoffee.services.CategoriesService;
+import com.digitazon.poscoffee.services.ProductsService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
+import com.digitazon.poscoffee.shared.constants.CategoriesConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
 
@@ -30,11 +33,17 @@ public class CategoriesAdminController {
   @Autowired
   private CategoriesService service;
 
+  @Autowired
+  private ProductsService productsService;
+
   @GetMapping(path = AppConstants.ApiEndpoint.Admin.CATEGORIES)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('ADMIN')")
   public List<ClientCategory> getCategories(CategoriesFilter filter) {
-    return this.service.getCategories(filter);
+    final List<ClientCategory> categories = this.service.getCategories(filter);
+    this.productsService.countProductsByCategories(categories);
+
+    return categories;
   }
 
   @PostMapping(path = AppConstants.ApiEndpoint.Admin.CATEGORIES)
@@ -60,6 +69,11 @@ public class CategoriesAdminController {
   @PreAuthorize("hasAuthority('ADMIN')")
   public void archiveCategory(@PathVariable Long id) throws ResourceNotFoundException {
     this.service.archiveCategoryById(id);
+
+    final Category currentCategory = this.createCategoryById(id);
+    final Category defaultCategory = this.createCategoryById(CategoriesConstants.DEFAULT_CATEGORY_ID);
+
+    this.productsService.moveProductsToDefaultCategory(currentCategory, defaultCategory);
   }
 
   @PutMapping(path = AppConstants.ApiEndpoint.Admin.CATEGORIES_RESTORE)
@@ -67,6 +81,12 @@ public class CategoriesAdminController {
   @PreAuthorize("hasAuthority('ADMIN')")
   public void restoreCategory(@PathVariable Long id) throws ResourceNotFoundException {
     this.service.restoreCategoryById(id);
+  }
+
+  private Category createCategoryById(Long id) {
+    return Category.builder()
+      .id(id)
+      .build();
   }
 
 }

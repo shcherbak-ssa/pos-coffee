@@ -46,33 +46,42 @@ function generateConfig(): Config {
       generateUser('male', { type: UserType.WAITER, isArchived: true }),
     ],
     categories: [
+      generateCategory({ name: 'DEFAULT' }),
       generateCategory({ name: 'Coffee bar' }),
       generateCategory({ name: 'Drinks' }),
       generateCategory({ name: 'Strongdrink' }),
-      generateCategory({ name: 'Tea', isArchived: true }),
-      generateCategory({ name: 'Shorts' }),
-      generateCategory({ name: 'Sandwiches' }),
-      generateCategory({ name: 'Test category', isAvailable: false }),
+      generateCategory({ name: 'Shorts', isArchived: true  }),
+      generateCategory({ name: 'Food' }),
+      generateCategory({ name: 'Tea', isAvailable: false }),
     ],
     // @TODO: refactor
     products: [
-      // Coffee
-      generateProduct({ image: 'https://images.unsplash.com/photo-1580600160741-4556fe4413b5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }),
-      generateProduct({ image: 'https://images.unsplash.com/photo-1595434091143-b375ced5fe5c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80' }),
-      generateProduct({ image: 'https://images.unsplash.com/photo-1544787219-2c5077fcfcf1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=871&q=80', isAvailable: false }),
-      generateProduct({ image: 'https://images.unsplash.com/photo-1559275117-d096eb5d85b2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80', isArchived: true }),
-      generateProduct({ image: 'https://images.unsplash.com/photo-1458819757519-7581bade511d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=872&q=80' }),
-      // Cappuccino
-      generateProduct({ image: 'https://images.unsplash.com/photo-1538587888044-79f13ddd7e49?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80' }),
-      generateProduct({ image: 'https://images.unsplash.com/photo-1517256064527-09c73fc73e38?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }),
-      generateProduct({ isArchived: true }),
-      generateProduct({ image: 'https://images.unsplash.com/photo-1561882468-9110e03e0f78?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }),
-      generateProduct({ image: 'https://images.unsplash.com/photo-1413745094207-a01b234cc32f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1032&q=80', isAvailable: false }),
-      // Tea
-      generateProduct({ image: 'https://images.unsplash.com/photo-1605773202042-63ef5f7f5883?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }),
-      generateProduct({ image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }),
-      generateProduct({ image: 'https://images.unsplash.com/photo-1594136604897-29f7e564db27?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80' }),
-      generateProduct({ image: 'https://images.unsplash.com/photo-1610823455970-fa109c9cb643?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80', isArchived: true }),
+      // Coffee bar
+      generateProduct({ name: 'Caffe', category: 2 }),
+      generateProduct({ name: 'Cappuccino', category: 2 }),
+      generateProduct({ name: 'Hot chocolate', category: 2 }),
+      generateProduct({ name: 'Tea', category: 2 }),
+      // Drinks
+      generateProduct({ name: 'Coca-Cola', category: 3 }),
+      generateProduct({ name: 'Coca-Cola Zero', category: 3 }),
+      generateProduct({ name: 'Fanta', category: 3 }),
+      generateProduct({ name: 'Sprite', category: 3 }),
+      generateProduct({ name: 'Pepsi', category: 3 }),
+      generateProduct({ name: 'Water (Gas)', category: 3 }),
+      generateProduct({ name: 'Water (Still)', category: 3 }),
+      // Strongdrink
+      generateProduct({ name: 'Beer', category: 4 }),
+      generateProduct({ name: 'Wine', category: 4 }),
+      generateProduct({ name: 'Whiskey', category: 4 }),
+      generateProduct({ name: 'Cognac', category: 4 }),
+      generateProduct({ name: 'Rum', category: 4 }),
+      generateProduct({ name: 'Vodka', category: 4 }),
+      // Food
+      generateProduct({ name: 'Cake', category: 6 }),
+      generateProduct({ name: 'Toast', category: 6 }),
+      generateProduct({ name: 'Focaccia', category: 6 }),
+      generateProduct({ name: 'Hot Dog', category: 6 }),
+      generateProduct({ name: 'Hamburger', category: 6 }),
     ],
   };
 }
@@ -116,17 +125,21 @@ function generateCategory({
 }
 
 function generateProduct({
-  image: photo = EMPTY_STRING,
+  name = faker.commerce.productName(),
+  category = 1,
+  image = EMPTY_STRING,
   isAvailable = true,
   isArchived = false,
 }: Partial<Product>): Product {
-  const name: string = faker.commerce.productName();
-
   return {
-    sku: name.toUpperCase().replace(/\s/g, '_'),
+    sku: name
+      .toUpperCase()
+      .replace(/[\s|-]/g, '_')
+      .replace(/[\(\)]/g, ''),
     price: Number(faker.commerce.price(1, 127)),
-    image: photo,
+    image,
     name,
+    category,
     isAvailable,
     isArchived,
   };

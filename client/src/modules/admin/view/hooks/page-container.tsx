@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { ColumnProps } from 'primereact/column';
 
 import type { CrudController, Entity, EntityComponentProps, StoreEntityState } from 'shared/types';
+import type { EntityName } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/navigate';
@@ -17,6 +18,7 @@ import { EntityCardsContainer } from '@admin/view/containers/EntityCardsContaine
 
 export type Props<T> = {
   page: AppPageSchema;
+  entityName: EntityName;
   storeName: StoreName;
   controllerName: ControllerName;
   addButton: PageAddButtonProps;
@@ -30,6 +32,7 @@ export type Props<T> = {
 
 export function usePageContainer<T extends Entity>({
   page,
+  entityName,
   storeName,
   controllerName,
   addButton,
@@ -90,7 +93,7 @@ export function usePageContainer<T extends Entity>({
       isLoading,
       messageProps: list.length ? undefined : {
         type: 'info',
-        message: 'No users found',
+        message: `No ${entityName.toLowerCase()} found`,
       },
     });
   }, [isLoading, list]);

@@ -18,6 +18,7 @@ import com.digitazon.poscoffee.models.UserType;
 import com.digitazon.poscoffee.models.base.BaseEntity;
 import com.digitazon.poscoffee.models.helpers.ClientCategory;
 import com.digitazon.poscoffee.models.helpers.ClientProduct;
+import com.digitazon.poscoffee.models.helpers.ClientProductCategory;
 import com.digitazon.poscoffee.models.helpers.ClientUser;
 import com.digitazon.poscoffee.models.helpers.ConfigCategory;
 import com.digitazon.poscoffee.models.helpers.ConfigProduct;
@@ -76,17 +77,33 @@ public class AppConfig {
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
   public ClientProduct clientProduct(Product product) {
+    final Category category = product.getCategory();
+    final ClientProductCategory clientCategory = ClientProductCategory.builder()
+      .id(category.getId())
+      .name(category.getName())
+      .build();
+
     return ClientProduct.builder()
       .id(product.getId())
       .sku(product.getSku())
       .name(product.getName())
       .price(product.getPrice())
       .image(product.getImage())
+      .category(clientCategory)
       .isAvailable(product.getIsAvailable())
       .isArchived(product.getIsArchived())
       .createdAt(product.getCreatedAt())
       .updatedAt(product.getUpdatedAt())
       .archivedAt(product.getArchivedAt())
+      .build();
+  }
+
+  @Bean
+  @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+  public ClientProductCategory clientProductCategory(Category category) {
+    return ClientProductCategory.builder()
+      .id(category.getId())
+      .name(category.getName())
       .build();
   }
 
@@ -126,12 +143,17 @@ public class AppConfig {
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
   public Product product(ClientProduct clientProduct) {
+    final Category category = Category.builder()
+      .id(clientProduct.getCategory().getId())
+      .build();
+
     return Product.builder()
       .id(clientProduct.getId())
       .sku(clientProduct.getSku())
       .name(clientProduct.getName())
       .price(clientProduct.getPrice())
       .image(clientProduct.getImage())
+      .category(category)
       .isAvailable(clientProduct.getIsAvailable())
       .build();
   }
@@ -153,6 +175,8 @@ public class AppConfig {
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
   public User userFromConfigUser(ConfigUser configUser) {
+    final boolean isArchived = configUser.getIsArchived();
+
     return User.builder()
       .name(configUser.getName())
       .surname(configUser.getSurname())
@@ -160,33 +184,38 @@ public class AppConfig {
       .phone(configUser.getPhone())
       .password(configUser.getPassword())
       .image(configUser.getImage())
-      .isArchived(configUser.getIsArchived())
-      .archivedAt(configUser.getIsArchived() ? new Date() : null)
+      .isArchived(isArchived)
+      .archivedAt(isArchived ? new Date() : null)
       .build();
   }
 
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-  public Product productFromConfigProduct(ConfigProduct configProduct) {
+  public Product productFromConfigProduct(ConfigProduct configProduct, Category category) {
+    final boolean isArchived = configProduct.getIsArchived();
+
     return Product.builder()
       .sku(configProduct.getSku())
       .name(configProduct.getName())
       .price(configProduct.getPrice())
+      .category(category)
       .image(configProduct.getImage())
       .isAvailable(configProduct.getIsAvailable())
-      .isArchived(configProduct.getIsArchived())
-      .archivedAt(configProduct.getIsArchived() ? new Date() : null)
+      .isArchived(isArchived)
+      .archivedAt(isArchived ? new Date() : null)
       .build();
   }
 
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
   public Category categoryFromConfigCategory(ConfigCategory configCategory) {
+    final boolean isArchived = configCategory.getIsArchived();
+
     return Category.builder()
       .name(configCategory.getName())
       .isAvailable(configCategory.getIsAvailable())
-      .isArchived(configCategory.getIsArchived())
-      .archivedAt(configCategory.getIsArchived() ? new Date() : null)
+      .isArchived(isArchived)
+      .archivedAt(isArchived ? new Date() : null)
       .build();
   }
 

@@ -47,7 +47,7 @@
 }
 
 .p-checkbox-box {
-  .p-disabled {
+  &.p-disabled {
     @apply opacity-90;
   }
 }

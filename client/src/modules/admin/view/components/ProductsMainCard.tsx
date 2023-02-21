@@ -1,25 +1,44 @@
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
+import { Dropdown } from 'primereact/dropdown';
 
-import type { ProductSchema } from 'shared/types';
+import type { ProductCategory, ProductSchema } from 'shared/types';
+import { EntityName } from 'shared/constants';
 import { InputWrapper } from 'view/components/InputWrapper';
 
 import type { CardWithInputsProps, ProductDraft } from '@admin/shared/types';
 import { AvailableCheckbox } from '@admin/view/components/AvailableCheckbox';
 import { CardWrapper } from '@admin/view/components/CardWrapper';
 import { CardHeading } from '@admin/view/components/CardHeading';
-import { EntityName } from 'shared/constants';
+import { ProductsImage } from '@admin/view/components/ProductsImage';
 
-export type Props = CardWithInputsProps<ProductSchema, ProductDraft>;
+export type Props = CardWithInputsProps<ProductSchema, ProductDraft> & {
+  productCategories: ProductCategory[];
+  selectedProductCategory: ProductCategory;
+};
 
 export function ProductsMainCard({
   entity: product,
   entityDraft: productDraft,
   validationError,
   isEditMode,
-  className,
+  productCategories,
+  selectedProductCategory,
 }: Props) {
+
+  function drawProductImage(): React.ReactNode {
+    if (product.image) {
+      return (
+        <img
+          className="rounded object-cover w-60 h-60"
+          src={product.image}
+        />
+      );
+    }
+
+    return <ProductsImage image="" size="xlarge" />;
+  }
 
   return (
     <CardWrapper>
@@ -76,15 +95,29 @@ export function ProductsMainCard({
             onValueChange={(e) => productDraft.price = Number(e.value)}
           />
         </InputWrapper>
+
+        <InputWrapper
+          label="Category"
+          valueKey="price"
+          validationError={validationError}
+        >
+          <Dropdown
+            inputId="category"
+            disabled={!isEditMode}
+            value={selectedProductCategory}
+            onChange={(e) => productDraft.category = e.value}
+            options={productCategories}
+            optionLabel="name"
+          />
+        </InputWrapper>
       </div>
 
       <CardHeading heading="Image" />
 
-      <div className="grid grid-cols-2 gap-x-4 gap-y-10">
-        <img
-          className="rounded object-cover w-56 h-56"
-          src={product.image}
-        />
+      <div className="">
+        <div className="mb-4">
+          { drawProductImage() }
+        </div>
 
         <div>
           <Button label="Change image" />

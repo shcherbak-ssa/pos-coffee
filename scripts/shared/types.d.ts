@@ -31,6 +31,7 @@ export type Product = {
   name: string;
   price: number;
   image: string;
+  category: number;
   isAvailable: boolean;
   isArchived: boolean;
 }

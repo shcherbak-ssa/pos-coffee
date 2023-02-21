@@ -1,8 +1,12 @@
-import type { ProductSchema } from 'shared/types';
+import { useEffect, useState } from 'react';
+
+import type { ProductCategory, ProductSchema } from 'shared/types';
+import { ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
+import { useController } from 'view/hooks/controller';
 import { EmptyComponent } from 'view/components/EmptyComponent';
 
-import type { ProductsStore } from '@admin/shared/types';
+import type { AppController, AppStore, ProductsStore } from '@admin/shared/types';
 import { PagePath, PageTitle, StoreName, ControllerName } from '@admin/shared/constants';
 import { actionsMenuItemsProps, headerMenuItems, pages } from '@admin/shared/configs/pages';
 import { type Return, useInfoPageContainer } from '@admin/view/hooks/info-page-container';
@@ -17,6 +21,10 @@ export type Props = {
 export function ProductsInfoPageContainer({ isEditMode }: Props) {
 
   const { state: { selected: selectedProduct }, draft: draftProduct } = useStore(StoreName.PRODUCTS) as ProductsStore;
+  const { state: { productCategories } } = useStore(StoreName.APP) as AppStore;
+
+  const [ selectedProductCategory, setSelectedProductCategory ] = useState<ProductCategory>(productCategories[ZERO]);
+  const appController = useController(ControllerName.APP) as AppController;
 
   const [ pageLayoutProps, validationError ]: Return<ProductSchema> = useInfoPageContainer({
     page: {
@@ -33,6 +41,22 @@ export function ProductsInfoPageContainer({ isEditMode }: Props) {
     isEditMode,
   });
 
+  useEffect(() => {
+    appController.loadProductCategories();
+  }, []);
+
+  useEffect(() => {
+    if (selectedProduct.category.id === ZERO) {
+      draftProduct.category = productCategories[ZERO];
+    }
+  }, [productCategories]);
+
+  useEffect(() => {
+    setSelectedProductCategory(
+      productCategories.find(({ id }) => id === selectedProduct.category.id) || selectedProductCategory
+    );
+  }, [selectedProduct.category]);
+
   if (pageLayoutProps) {
     return (
       <PageLayout {...pageLayoutProps}>
@@ -42,6 +66,8 @@ export function ProductsInfoPageContainer({ isEditMode }: Props) {
             entityDraft={draftProduct}
             validationError={validationError}
             isEditMode={isEditMode}
+            productCategories={productCategories}
+            selectedProductCategory={selectedProductCategory}
           />
         </ProductsInfoWrapper>
       </PageLayout>

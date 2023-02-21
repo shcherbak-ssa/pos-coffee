@@ -70,7 +70,7 @@ export const productsStore: ProductsStore & ProductsStoreActions = {
 
 };
 
-function updateSelectedProduct(user: BaseProductSchema): void {
-  productsStore.state.selected = ProductSchema.create(user);
+function updateSelectedProduct(product: BaseProductSchema): void {
+  productsStore.state.selected = ProductSchema.create(product);
   productsStore.draft = createDraft(productsStore.state.selected);
 }

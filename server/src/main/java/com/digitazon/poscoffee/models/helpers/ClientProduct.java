@@ -31,7 +31,7 @@ public class ClientProduct {
     groups = AppConstants.ValidationGroups.ToCreate.class
   )
   @Size(
-    min = ProductsConstants.MIN_SKU_LENGTH,
+    min = AppConstants.MIN_UPDATE_LENGTH,
     message = ProductsConstants.SKU_EMPTY_MESSAGE
   )
   private String sku;
@@ -54,6 +54,7 @@ public class ClientProduct {
   private Byte price;
 
   private String image;
+  private ClientProductCategory category;
   private Boolean isAvailable;
   private Boolean isArchived;
   private Date createdAt;

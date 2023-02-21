@@ -15,7 +15,7 @@ import type {
   PageComponentProps,
   TabItem,
 } from '@admin/shared/types';
-import { ControllerName, StoreName } from '@admin/shared/constants';
+import { ControllerName, ListTab, StoreName } from '@admin/shared/constants';
 import { PageSubHeaderContainer } from '@admin/view/containers/PageSubHeaderContainer';
 import { PageHeaderTabsContainer } from '@admin/view/containers/PageHeaderTabsContainer';
 import { PageHeaderHeadingContainer } from '@admin/view/containers/PageHeaderHeadingContainer';
@@ -58,7 +58,7 @@ export function PageLayout({
 
   useEffect(() => {
     appController.setCurrentPage(page);
-  }, [page]);
+  }, [page.title]);
 
   function handleAddButonClick(e: MouseEvent): void {
     e.preventDefault();

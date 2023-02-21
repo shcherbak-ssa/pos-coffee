@@ -1,16 +1,18 @@
 import type { CategorySchema as BaseCategorySchema } from 'shared/types';
-import { EMPTY_STRING } from 'shared/constants';
+import { EMPTY_STRING, ZERO } from 'shared/constants';
 import { BaseSchema } from 'lib/base-schema';
 
 import type { CategoriesFilter, CategoryDraft, CategoryUpdates } from '@admin/shared/types';
 
 export class CategorySchema extends BaseSchema<CategoryUpdates> implements BaseCategorySchema {
   public name: string;
+  public productsCount: number;
   public isAvailable: boolean;
 
   private constructor(schema?: BaseCategorySchema) {
     super(schema);
     this.name = schema?.name || EMPTY_STRING;
+    this.productsCount = schema?.productsCount || ZERO;
     this.isAvailable = schema?.isAvailable || false;
   }
 

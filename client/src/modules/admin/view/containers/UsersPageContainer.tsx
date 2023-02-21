@@ -1,5 +1,6 @@
 import type { ColumnProps } from 'primereact/column';
 
+import { EntityName } from 'shared/constants';
 import { EmptyComponent } from 'view/components/EmptyComponent';
 
 import { ControllerName, PagePath, PageTitle, StoreName } from '@admin/shared/constants';
@@ -47,6 +48,7 @@ export function UsersPageContainer() {
 
   const pageLayoutProps: PageLayoutProps | undefined = usePageContainer({
     page: pages[PageTitle.USERS],
+    entityName: EntityName.USER,
     storeName: StoreName.USERS,
     controllerName: ControllerName.USERS,
     infoPagePath: PagePath.USERS_INFO,

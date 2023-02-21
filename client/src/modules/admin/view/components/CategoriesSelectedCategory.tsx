@@ -4,11 +4,13 @@ import { PrimeIcons } from 'primereact/api';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Menu } from 'primereact/menu';
+import { Message } from 'primereact/message';
 
 import type { CategorySchema, EmptyFunction } from 'shared/types';
 import { InputWrapper } from 'view/components/InputWrapper';
 
 import type { CardWithInputsProps, CategoryDraft } from '@admin/shared/types';
+import { DEFAULT_CATEGORY_NAME } from '@admin/shared/constants';
 import { AvailableCheckbox } from '@admin/view/components/AvailableCheckbox';
 import { CardHeading } from '@admin/view/components/CardHeading';
 import { CardWrapper } from '@admin/view/components/CardWrapper';
@@ -43,6 +45,10 @@ export function CategoriesSelectedCategory({
     }
   }
 
+  function isDefaultCategory(): boolean {
+    return category.name === DEFAULT_CATEGORY_NAME;
+  }
+
   function handleRemoveEditModeButtonClick(e: MouseEvent): void {
     e.preventDefault();
 
@@ -50,6 +56,10 @@ export function CategoriesSelectedCategory({
   }
 
   function drawHeaderButton(): React.ReactNode {
+    if (isDefaultCategory()) {
+      return;
+    }
+
     if (isEditMode) {
       return (
         <Button
@@ -77,6 +87,17 @@ export function CategoriesSelectedCategory({
     );
   }
 
+  function drawDefaultCategoryMessage(): React.ReactNode {
+    if (isDefaultCategory()) {
+      return (
+        <Message
+          severity="warn"
+          text="The default category cannot be modified"
+        />
+      );
+    }
+  }
+
   function drawSaveButton(): React.ReactNode {
     if (isEditMode) {
       return (
@@ -93,7 +114,7 @@ export function CategoriesSelectedCategory({
       <CardWrapper className="full">
         <div className="flex flex-col justify-between full">
           <div>
-            <div className="flex items-center justify-between mb-10">
+            <div className="flex items-center justify-between mb-5">
               <CardHeading className="mb-0" heading="Category" />
 
               { drawHeaderButton() }
@@ -109,6 +130,7 @@ export function CategoriesSelectedCategory({
               />
 
               <InputWrapper
+                className="mb-10"
                 label="Name"
                 valueKey="name"
                 validationError={validationError}
@@ -121,9 +143,23 @@ export function CategoriesSelectedCategory({
                   onChange={(e) => draftCategory.name = e.target.value}
                 />
               </InputWrapper>
+
+              <InputWrapper
+                label="Products"
+                valueKey="productsCount"
+                validationError={validationError}
+              >
+                <InputText
+                  id="name"
+                  type="text"
+                  disabled={true}
+                  value={category.productsCount.toString()}
+                />
+              </InputWrapper>
             </div>
           </div>
 
+          { drawDefaultCategoryMessage() }
           { drawSaveButton() }
         </div>
       </CardWrapper>

@@ -1,5 +1,6 @@
 import type { ColumnProps } from 'primereact/column';
 
+import { EntityName } from 'shared/constants';
 import { EmptyComponent } from 'view/components/EmptyComponent';
 
 import { ControllerName, PagePath, PageTitle, StoreName } from '@admin/shared/constants';
@@ -9,6 +10,7 @@ import { type Props as PageLayoutProps, PageLayout } from '@admin/view/layouts/P
 import { ProductsImage } from '@admin/view/components/ProductsImage';
 import { ProductsCard } from '@admin/view/components/ProductsCard';
 import { AvailableLabel } from '@admin/view/components/AvailableLabel';
+import { CategoryLabel } from '@admin/view/components/CategoryLabel';
 
 export function ProductsPageContainer() {
 
@@ -31,6 +33,11 @@ export function ProductsPageContainer() {
       header: 'Price',
     },
     {
+      field: 'category',
+      header: 'Category',
+      body: CategoryLabel,
+    },
+    {
       field: 'isAvailable',
       header: 'Available',
       body: AvailableLabel,
@@ -42,6 +49,7 @@ export function ProductsPageContainer() {
       ...pages[PageTitle.PRODUCTS],
       headerMenuItem: headerMenuItems.products,
     },
+    entityName: EntityName.PRODUCT,
     storeName: StoreName.PRODUCTS,
     controllerName: ControllerName.PRODUCTS,
     infoPagePath: PagePath.PRODUCTS_INFO,

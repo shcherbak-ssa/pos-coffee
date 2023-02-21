@@ -1,6 +1,9 @@
 export const GO_BACK: number = -1;
 
+export const DEFAULT_CATEGORY_NAME: string = 'DEFAULT';
+
 export enum ApiEndpoint {
+  APP_PRODUCT_CATEGORIES = '/api/admin/app/productCategories',
   USERS = '/api/admin/users',
   USERS_ID = '/api/admin/users/:id',
   USERS_ARCHIVE = '/api/admin/users/:id/archive',

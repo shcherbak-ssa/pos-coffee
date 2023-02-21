@@ -19,10 +19,10 @@ export function AvailableLabel({ isAvailable, isArchived }: Props) {
 
   function getSeverity(): ViewSeverity {
     if (isArchived) {
-      return;
+      return 'warning';
     }
 
-    return isAvailable ? 'success' : 'danger';
+    return isAvailable ? undefined : 'danger';
   }
 
   return (

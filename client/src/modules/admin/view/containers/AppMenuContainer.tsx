@@ -57,7 +57,7 @@ export function AppMenuContainer({ appStore, appController }: Props) {
 
           <ScrollPanel style={{ width: '100%', height: 'calc(100% - 6rem)' }}>
             <div
-              className={classnames('flex flex-col gap-3 py-10 duration-200', {
+              className={classnames('flex flex-col py-10 duration-200', {
                 'px-4': isAppMenuOpen,
                 'px-6': !isAppMenuOpen,
               })}

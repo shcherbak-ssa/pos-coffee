@@ -36,6 +36,7 @@ public class AppConstants {
     public static final String USERS = "/api/users";
 
     public static final class Admin {
+      public static final String APP_PRODUCT_CATEGORIES = "/api/admin/app/productCategories";
       public static final String USERS = "/api/admin/users";
       public static final String USERS_ID = "/api/admin/users/{id}";
       public static final String USERS_ARCHIVE = "/api/admin/users/{id}/archive";

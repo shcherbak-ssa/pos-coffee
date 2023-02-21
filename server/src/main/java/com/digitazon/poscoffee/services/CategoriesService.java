@@ -18,6 +18,7 @@ import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.Category;
 import com.digitazon.poscoffee.models.helpers.CategoriesFilter;
 import com.digitazon.poscoffee.models.helpers.ClientCategory;
+import com.digitazon.poscoffee.models.helpers.ClientProductCategory;
 import com.digitazon.poscoffee.repositories.CategoriesRepository;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.CategoriesConstants;
@@ -33,7 +34,6 @@ public class CategoriesService {
     = new AnnotationConfigApplicationContext(AppConfig.class);
 
   private CategoriesRepository repository;
-
   private ServiceHelpers<Category> helpers;
 
   @SuppressWarnings("unchecked")
@@ -53,6 +53,16 @@ public class CategoriesService {
     return categories
       .stream()
       .map(this::convertToClientCategory)
+      .collect(Collectors.toList());
+  }
+
+  public List<ClientProductCategory> getProductCategories() {
+    final List<Category> categories = this.repository.findAll();
+
+    return categories
+      .stream()
+      .filter((category) -> !category.getIsArchived())
+      .map(this::convertToClientProductCategory)
       .collect(Collectors.toList());
   }
 
@@ -89,6 +99,10 @@ public class CategoriesService {
 
   private Category convertToCategory(ClientCategory category) {
     return (Category) this.context.getBean("category", category);
+  }
+
+  private ClientProductCategory convertToClientProductCategory(Category category) {
+    return (ClientProductCategory) this.context.getBean("clientProductCategory", category);
   }
 
   private void mergeWithUpdates(Category category, ClientCategory updates) {

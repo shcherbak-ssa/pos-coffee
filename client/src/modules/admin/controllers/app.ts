@@ -1,5 +1,6 @@
-import type { Store, UserSchema } from 'shared/types';
+import type { ApiService, ProductCategory, Store, UserSchema } from 'shared/types';
 import { Context } from 'shared/context';
+import { BaseController } from 'lib/base-controller';
 
 import type {
   AppController as BaseAppController,
@@ -8,14 +9,24 @@ import type {
   AppStoreActions,
   AppViewState,
 } from '@admin/shared/types';
-import { StoreName } from '@admin/shared/constants';
+import { ApiEndpoint, StoreName } from '@admin/shared/constants';
 
-export class AppController implements BaseAppController {
-
-  private constructor() {}
+export class AppController extends BaseController implements BaseAppController {
 
   public static create(): AppController {
     return new AppController();
+  }
+
+  public async loadProductCategories(): Promise<void> {
+    try {
+      const apiService: ApiService = await this.getApiService();
+      const productCategories: ProductCategory[] = await apiService.get(ApiEndpoint.APP_PRODUCT_CATEGORIES);
+
+      const appStore = await this.getStore() as AppStoreActions;
+      appStore.setProductCategories(productCategories);
+    } catch (e: any) {
+      this.parseError(e);
+    }
   }
 
   public async getCurrentUser(): Promise<UserSchema> {

@@ -10,6 +10,7 @@ import type {
   StoreEntityState,
   ErrorObject,
   CategorySchema,
+  ProductCategory,
 } from 'shared/types';
 import type { UserType } from 'shared/constants';
 
@@ -110,6 +111,7 @@ export type AppViewState = {
 }
 
 export type AppState = {
+  productCategories: ProductCategory[];
   currentPage: AppPageSchema;
   currentUser: UserSchema;
   isAppMenuOpen: boolean;
@@ -119,6 +121,7 @@ export type AppState = {
 export interface AppStore extends StoreState<AppState> {}
 
 export interface AppStoreActions extends AppStore {
+  setProductCategories(productCategories: ProductCategory[]): void;
   setCurrentPage(page: AppPageSchema): void;
   setCurrentUser(user: UserSchema): void;
   setIsAppMenuOpen(isOpen: boolean): void;
@@ -126,6 +129,7 @@ export interface AppStoreActions extends AppStore {
 }
 
 export interface AppController {
+  loadProductCategories(): Promise<void>;
   setCurrentPage(page: AppPageSchema): Promise<void>;
   setCurrentUser(user: UserSchema): Promise<void>;
   setIsAppMenuOpen(isOpen: boolean): Promise<void>;
@@ -173,11 +177,12 @@ export type ProductsFilter = Partial<{
 }>
 
 export type ProductDraft = {
-  set isAvailable(isAvailable: boolean);
   set sku(sku: string);
   set name(name: string);
   set price(price: number);
   set image(image: string);
+  set category(category: ProductCategory);
+  set isAvailable(isAvailable: boolean);
 }
 
 export type ProductsState = {}
@@ -209,4 +214,4 @@ export interface CategoriesStore extends StoreEntityState<CategoriesState, Categ
 
 export interface CategoriesStoreActions extends StoreCrud<CategorySchema> {}
 
-export interface CategoriesController extends CrudController<CategorySchema, {}> {}
+export interface CategoriesController extends CrudController<CategorySchema, CategoriesFilter> {}

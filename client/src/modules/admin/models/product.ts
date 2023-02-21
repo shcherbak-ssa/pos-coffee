@@ -1,4 +1,4 @@
-import type { ProductSchema as BaseProductSchema } from 'shared/types';
+import type { ProductCategory, ProductSchema as BaseProductSchema } from 'shared/types';
 import { EMPTY_STRING, ZERO } from 'shared/constants';
 import { BaseSchema } from 'lib/base-schema';
 
@@ -9,6 +9,7 @@ export class ProductSchema extends BaseSchema<ProductUpdates> implements BasePro
   public name: string;
   public price: number;
   public image: string;
+  public category: ProductCategory;
   public isAvailable: boolean;
 
   private constructor(schema?: BaseProductSchema) {
@@ -17,6 +18,7 @@ export class ProductSchema extends BaseSchema<ProductUpdates> implements BasePro
     this.name = schema?.name || EMPTY_STRING;
     this.price = schema?.price || ZERO;
     this.image = schema?.image || EMPTY_STRING;
+    this.category = schema?.category ? { ...schema.category } : { id: ZERO, name: EMPTY_STRING };
     this.isAvailable = schema?.isAvailable || false;
   }
 
@@ -34,10 +36,6 @@ export function createFilter({ onlyArchived = false }: ProductsFilter): Products
 export function createDraft(schema: BaseProductSchema = ProductSchema.create()): ProductDraft {
 
   return {
-    set isAvailable(isAvailable: boolean) {
-      schema.isAvailable = isAvailable;
-    },
-
     set sku(sku: string) {
       schema.sku = sku;
     },
@@ -52,6 +50,14 @@ export function createDraft(schema: BaseProductSchema = ProductSchema.create()):
 
     set image(photo: string) {
       schema.image = photo;
+    },
+
+    set category(category: ProductCategory) {
+      schema.category = { ...category };
+    },
+
+    set isAvailable(isAvailable: boolean) {
+      schema.isAvailable = isAvailable;
     },
   };
 

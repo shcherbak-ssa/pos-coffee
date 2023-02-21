@@ -1,12 +1,14 @@
-import type { ErrorType, EntityName, UserType } from 'shared/constants';
+import type { ErrorType, UserType } from 'shared/constants';
 
 /**
  * Helpers
  */
 
 export type AnyType = {
-  [key: string]: string | number | boolean | object | AnyType | AnyType[] | null | undefined;
+  [key: string]: AnyValue;
 }
+
+export type AnyValue = string | number | boolean | object | AnyType | AnyType[] | null | undefined;
 
 export type EmptyFunction<T = void> = () => T;
 
@@ -82,11 +84,18 @@ export type ProductSchema = BaseSchema & {
   name: string;
   price: number;
   image: string;
+  category: ProductCategory;
   isAvailable: boolean;
+}
+
+export type ProductCategory = {
+  id: number;
+  name: string;
 }
 
 export type CategorySchema = BaseSchema & {
   name: string;
+  productsCount: number;
   isAvailable: boolean;
 }
 

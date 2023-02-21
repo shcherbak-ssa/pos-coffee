@@ -16,7 +16,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.digitazon.poscoffee.configs.AppConfig;
+import com.digitazon.poscoffee.models.Category;
 import com.digitazon.poscoffee.models.Product;
+import com.digitazon.poscoffee.models.helpers.ClientCategory;
 import com.digitazon.poscoffee.models.helpers.ClientProduct;
 import com.digitazon.poscoffee.models.helpers.ProductsFilter;
 import com.digitazon.poscoffee.repositories.ProductsRepository;
@@ -67,6 +69,17 @@ public class ProductsService {
       .collect(Collectors.toList());
   }
 
+  public void countProductsByCategories(List<ClientCategory> categories) {
+    for (ClientCategory clientCategory : categories) {
+      final Category category = Category.builder()
+        .id(clientCategory.getId())
+        .build();
+
+      final long productsCount = this.repository.countByCategory(category);
+      clientCategory.setProductsCount(productsCount);
+    }
+  }
+
   public ClientProduct createProduct(ClientProduct productToCreate) throws AlreadyExistException {
     final Product product = this.convertToProduct(productToCreate);
     final Product createdProduct = this.createProduct(product);
@@ -94,6 +107,16 @@ public class ProductsService {
     this.helpers.restoreById(id);
   }
 
+  public void moveProductsToDefaultCategory(Category currentCategory, Category defaultCategory) {
+    final List<Product> products = this.repository.findAllByCategory(currentCategory);
+
+    for (Product product : products) {
+      product.setCategory(defaultCategory);
+
+      this.repository.save(product);
+    }
+  }
+
   private ClientProduct convertToClientProduct(Product product) {
     return (ClientProduct) this.context.getBean("clientProduct", product);
   }
@@ -107,8 +130,17 @@ public class ProductsService {
     product.setName(updates.getName() == null ? product.getName() : updates.getName());
     product.setPrice(updates.getPrice() == null ? product.getPrice() : updates.getPrice());
     product.setImage(updates.getImage() == null ? product.getImage() : updates.getImage());
-    product
-      .setIsAvailable(updates.getIsAvailable() == null ? product.getIsAvailable() : updates.getIsAvailable());
+    product.setIsAvailable(
+      updates.getIsAvailable() == null ? product.getIsAvailable() : updates.getIsAvailable()
+    );
+
+    if (updates.getCategory() != null) {
+      product.setCategory(
+        Category.builder()
+          .id(updates.getCategory().getId())
+          .build()
+      );
+    }
   }
 
   private static Specification<Product> filter(ProductsFilter filter) {

@@ -35,7 +35,7 @@ export function AvailableCheckbox({ entityName, className, isEditMode, checked, 
 
       <div
         className="available-help-icon"
-        data-pr-tooltip={`Determines if the ${entityName.toLowerCase()} is available in the application`}
+        data-pr-tooltip={`Define if the ${entityName.toLowerCase()} is available in the application`}
         data-pr-position="right"
         data-pr-at="right+5 center"
         data-pr-my="left center-2"

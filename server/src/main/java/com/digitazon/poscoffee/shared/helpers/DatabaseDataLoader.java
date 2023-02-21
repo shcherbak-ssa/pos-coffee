@@ -53,8 +53,9 @@ public class DatabaseDataLoader {
 
   public void loadConfigData(Config config) throws ProgerException, AlreadyExistException {
     this.loadUsers(config.getUsers());
-    this.loadCategories(config.getCategories());
-    this.loadProducts(config.getProducts());
+
+    final List<Category> categories = this.loadCategories(config.getCategories());
+    this.loadProducts(config.getProducts(), categories);
   }
 
   private void loadUsers(List<ConfigUser> users) throws ProgerException, AlreadyExistException {
@@ -84,9 +85,16 @@ public class DatabaseDataLoader {
     return createdCategories;
   }
 
-  private void loadProducts(List<ConfigProduct> products) throws AlreadyExistException {
+  private void loadProducts(List<ConfigProduct> products, List<Category> categories) throws AlreadyExistException {
     for (ConfigProduct configProduct : products) {
-      final Product product = (Product) this.context.getBean("productFromConfigProduct", configProduct);
+      final Category productCategory = categories
+        .stream()
+        .filter((category) -> category.getId() == configProduct.getCategory())
+        .findFirst()
+        .orElse(categories.get(0));
+
+      final Product product = (Product)
+        this.context.getBean("productFromConfigProduct", configProduct, productCategory);
 
       this.productsService.createProduct(product);
     }

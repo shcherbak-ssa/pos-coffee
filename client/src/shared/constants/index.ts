@@ -1,7 +1,7 @@
 export const APP_NAME: string = 'POS`Coffee';
 
 export const ZERO: number = 0;
-export const NOTIFICATION_LIFE: number = 10000;
+export const NOTIFICATION_LIFE: number = 7000;
 
 export const EMPTY_STRING: string = '';
 export const PAGE_TITLE_DIVIDER: string = ' | ';

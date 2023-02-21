@@ -3,6 +3,7 @@ import { PrimeIcons } from 'primereact/api';
 import type { AppHeaderMenuItem, AppPageSchema } from '@admin/shared/types';
 import { ControllerName, PagePath, PageTitle } from '@admin/shared/constants';
 import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-menu-items';
+import { EntityName } from 'shared/constants';
 
 export const pages: { [key in PageTitle]: AppPageSchema } = {
   [PageTitle.HOME]: {
@@ -44,11 +45,13 @@ export const actionsMenuItemsProps: {
   categories: ActionsMenuItemsProps;
 } = {
   products: {
+    entityName: EntityName.PRODUCT,
     infoPagePath: PagePath.PRODUCTS_INFO,
     editPagePath: PagePath.PRODUCTS_EDIT,
     controllerName: ControllerName.PRODUCTS,
   },
   categories: {
+    entityName: EntityName.CATEGORY,
     infoPagePath: PagePath.EMPTY,
     editPagePath: PagePath.EMPTY,
     controllerName: ControllerName.CATEGORIES,

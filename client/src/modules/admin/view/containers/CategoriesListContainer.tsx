@@ -53,9 +53,8 @@ export function CategoriesListContainer({
       header: 'Name',
     },
     {
-      field: 'products',
+      field: 'productsCount',
       header: 'Products',
-      body: <div>@TODO</div>
     },
     {
       field: 'isAvailable',
@@ -127,7 +126,7 @@ export function CategoriesListContainer({
         { columnsProps.map((props) => <Column key={props.field} {...props} />) }
       </DataTable>
 
-      <div className="border-l-2 w-80 min-h-full">
+      <div className="border-l-2 w-96 min-h-full">
         { drawSelectedCategory() }
       </div>
     </div>

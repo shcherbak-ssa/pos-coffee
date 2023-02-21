@@ -3,14 +3,17 @@ import { PrimeIcons } from 'primereact/api';
 import { confirmDialog } from 'primereact/confirmdialog';
 
 import type { Entity, CrudController } from 'shared/types';
+import type { EntityName } from 'shared/constants';
 import { useController } from 'view/hooks/controller';
 import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/navigate';
 
 import { Action, ControllerName, PagePath } from '@admin/shared/constants';
+import { confirmDialogConfig } from '@admin/shared/configs/confirm-dialog';
 
 export type OverrideFunction = (item: MenuItem, entity: Entity) => MenuItem
 
 export type Props = {
+  entityName: EntityName;
   infoPagePath: PagePath;
   editPagePath: PagePath;
   controllerName: ControllerName;
@@ -18,6 +21,7 @@ export type Props = {
 }
 
 export function useActionsMenuItems({
+  entityName,
   infoPagePath,
   editPagePath,
   controllerName,
@@ -59,15 +63,13 @@ export function useActionsMenuItems({
       data: { action: Action.ARCHIVE },
       command: () => {
         confirmDialog({
-          header: 'Confirmation',
-          message: 'Are you sure you want to archive this user?',
-          icon: PrimeIcons.EXCLAMATION_TRIANGLE,
-          acceptClassName: 'p-button-danger',
+          ...confirmDialogConfig.archive,
+          message: `Are you sure you want to archive this ${entityName.toLowerCase()}?`,
           accept: () => {
             controller.archive(entity.id);
           },
         });
-      }
+      },
     },
     {
       label: 'Restore',
@@ -76,14 +78,13 @@ export function useActionsMenuItems({
       data: { action: Action.RESTORE },
       command: () => {
         confirmDialog({
-          header: 'Confirmation',
-          message: 'Are you sure you want to restore this user?',
-          icon: PrimeIcons.INFO_CIRCLE,
+          ...confirmDialogConfig.restore,
+          message: `Are you sure you want to restore this ${entityName.toLowerCase()}?`,
           accept: () => {
             controller.restore(entity.id);
           },
         });
-      }
+      },
     },
   ].map((item) => {
     const overrideItem: OverrideFunction | undefined = overrides[item.data.action];
