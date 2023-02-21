@@ -1,4 +1,4 @@
-import type { ErrorType, UserType } from 'shared/constants';
+import type { EntityName, ErrorType, UserType } from 'shared/constants';
 
 /**
  * Helpers
@@ -99,6 +99,14 @@ export type CategorySchema = BaseSchema & {
   isAvailable: boolean;
 }
 
+export type ProductVariantSchema = {
+  id: number;
+  sku: string;
+  name: string;
+  price: number;
+  useProductPrice: boolean;
+}
+
 /**
  * Notifications and errors
  */
@@ -125,6 +133,7 @@ export type ErrorObject<T> = {
   type: ErrorType;
   message: string;
   errors: Errors<T>;
+  entityName?: EntityName;
 }
 
 /**
@@ -153,11 +162,12 @@ export type PayloadToGetAll<T> = {
   filter: T;
 }
 
-export type PayloadToSave<T> = {
+export type PayloadToSave<T, Q> = {
   endpoint: string;
   entity: T;
   isEntityNew: boolean;
   validationName: string;
+  query?: Q;
 }
 
 export type PayloadToChangeArchiveState = {
@@ -172,14 +182,14 @@ export type PayloadToChangeArchiveState = {
 
 export type Store = {}
 export type StoreList = Map<string, Store>;
-export type JoinedStore<T, E, D> = StoreEntityState<T, E, D> & StoreCrud<E>;
+export type JoinedStore<S, E, D> = StoreEntityState<S, E, D> & StoreCrud<E>;
 
 export interface StoreState<T = AnyType> extends Store {
   readonly state: T;
 }
 
-export interface StoreEntityState<T = AnyType, E = AnyType, D = AnyType> extends Store {
-  readonly state: T & {
+export interface StoreEntityState<S = AnyType, E = AnyType, D = AnyType> extends Store {
+  readonly state: S & {
     list: E[];
     selected: E;
   };
@@ -229,10 +239,13 @@ export interface LoaderService {
   loadValidationSchema<T>(schemaName: string): Promise<ValidationSchema<T>>;
 }
 
-export interface StoreService<T, E, D> {
-  save(store: JoinedStore<T, E, D>, entity: E): void;
-  remove(store: JoinedStore<T, E, D>, entityId: number): void;
-  getSelectedUpdates(store: JoinedStore<T, E, D>): Partial<E> | undefined;
+export interface StoreService<E> {
+  add(entities: E[]): void;
+  save(entity: E): void;
+  remove(entityId: number): void;
+  setSelected(entityId: number): void;
+  getSelectedUpdates(): Partial<E> | undefined;
+  updateSelected(entity: E): void;
 }
 
 export interface ValidationService {

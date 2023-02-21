@@ -1,12 +1,10 @@
 import { proxy } from 'valtio';
 
-import type { UserSchema as BaseUserSchema } from 'shared/types';
-import { ZERO } from 'shared/constants';
-import { AppError } from 'shared/errors';
-import { findById } from 'shared/utils/by-id';
+import type { UserSchema as BaseUserSchema, StoreService as BaseStoreService } from 'shared/types';
+import { EntityName } from 'shared/constants';
 import { StoreService } from 'services/store';
 
-import type { UsersStore, UsersStoreActions, UserUpdates } from '@admin/shared/types';
+import type { UserDraft, UsersState, UsersStore, UsersStoreActions, UserUpdates } from '@admin/shared/types';
 import { createDraft, UserSchema } from '@admin/models/user';
 
 export const usersStore: UsersStore & UsersStoreActions = {
@@ -18,40 +16,22 @@ export const usersStore: UsersStore & UsersStoreActions = {
 
   draft: createDraft(),
 
-  /**
-   * CrudStore implementation
-   */
-
   add(users: BaseUserSchema[]): void {
-    usersStore.state.list = users.map(UserSchema.create);
+    createStoreService().add(users);
   },
 
   save(user: BaseUserSchema): void {
-    StoreService.create().save(usersStore, user);
+    createStoreService().save(user);
   },
 
   remove(userId: number): void {
-    StoreService.create().remove(usersStore, userId);
-
-    updateSelectedUser({
-      ...usersStore.state.selected,
-      isArchived: !usersStore.state.selected.isArchived,
-    });
+    createStoreService().remove(userId);
   },
 
   selected: {
 
     set(userId: number): void {
-      const user: BaseUserSchema | undefined = userId === ZERO
-        ? UserSchema.create()
-        : findById(usersStore.state.list, userId);
-
-      if (user) {
-        updateSelectedUser(user);
-        return;
-      }
-
-      throw new AppError(`User with id ${userId} not found`);
+      createStoreService().setSelected(userId);
     },
 
     hadUpdates(): boolean {
@@ -64,16 +44,20 @@ export const usersStore: UsersStore & UsersStoreActions = {
     // @TODO: fix
     // @ts-ignore
     getUpdates(): UserUpdates {
-      const updates: UserUpdates | undefined = StoreService.create().getSelectedUpdates(usersStore);
+      const updates: Partial<BaseUserSchema> | undefined = createStoreService().getSelectedUpdates();
 
-      return updates || (usersStore.state.selected as UserSchema).getUpdates();
+      return updates as UserUpdates || (usersStore.state.selected as UserSchema).getUpdates();
     },
 
   },
 
 };
 
-function updateSelectedUser(user: BaseUserSchema): void {
-  usersStore.state.selected = UserSchema.create(user);
-  usersStore.draft = createDraft(usersStore.state.selected);
+function createStoreService(): BaseStoreService<BaseUserSchema> {
+  return StoreService.create<UsersState, BaseUserSchema, UserDraft>(
+    EntityName.USER,
+    usersStore,
+    (user?: BaseUserSchema) => createDraft(user),
+    (user?: BaseUserSchema) => UserSchema.create(user),
+  );
 }

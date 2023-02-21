@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digitazon.poscoffee.models.helpers.ClientProduct;
-import com.digitazon.poscoffee.models.helpers.ProductsFilter;
+import com.digitazon.poscoffee.models.helpers.EntityFilter;
 import com.digitazon.poscoffee.services.ProductsService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
@@ -33,7 +34,11 @@ public class ProductsAdminController {
   @GetMapping(path = AppConstants.ApiEndpoint.Admin.PRODUCTS)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('ADMIN')")
-  public List<ClientProduct> getProducts(ProductsFilter filter) {
+  public List<ClientProduct> getProducts(@RequestParam(AppConstants.PARAM_ONLY_ARCHIVED) boolean onlyArchived) {
+    final EntityFilter filter = EntityFilter.builder()
+      .onlyArchived(onlyArchived)
+      .build();
+
     return this.service.getProducts(filter);
   }
 
@@ -58,7 +63,7 @@ public class ProductsAdminController {
   @PreAuthorize("hasAuthority('ADMIN')")
   public void updateProduct(
     @RequestBody @Validated(AppConstants.ValidationGroups.ToUpdate.class) ClientProduct updates
-  ) throws ResourceNotFoundException {
+  ) throws AlreadyExistException, ResourceNotFoundException {
     this.service.updateProduct(updates);
   }
 

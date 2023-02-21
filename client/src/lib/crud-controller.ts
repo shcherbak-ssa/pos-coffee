@@ -18,12 +18,10 @@ import { BaseController } from 'lib/base-controller';
 export class CrudController extends BaseController {
 
   private storeName: string;
-  private entityName: EntityName;
 
   protected constructor(storeName: string, entityName: EntityName) {
-    super();
+    super(entityName);
     this.storeName = storeName;
-    this.entityName = entityName;
   }
 
   protected async tryToLoadById<T>({ endpoint, entityId }: PayloadToGetById): Promise<boolean> {
@@ -62,12 +60,13 @@ export class CrudController extends BaseController {
     }
   }
 
-  protected async tryToSave<T extends Entity>({
+  protected async tryToSave<T extends Entity, Q>({
     endpoint,
     entity,
     isEntityNew,
     validationName,
-  }: PayloadToSave<T>): Promise<number | undefined> {
+    query,
+  }: PayloadToSave<T, Q>): Promise<number | undefined> {
     try {
       const store = await this.getStore() as StoreCrud<T>;
 
@@ -91,6 +90,10 @@ export class CrudController extends BaseController {
 
       const apiService: ApiService = await this.getApiService();
       apiService.addBody(updates);
+
+      if (query) {
+        apiService.addQuery(query);
+      }
 
       if (isEntityNew) {
         savedEntity = await apiService.post(endpoint);

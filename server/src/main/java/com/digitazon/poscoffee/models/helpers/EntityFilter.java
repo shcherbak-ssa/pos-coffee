@@ -1,12 +1,15 @@
 package com.digitazon.poscoffee.models.helpers;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class CategoriesFilter {
+@Builder
+public class EntityFilter {
 
+  @Builder.Default
   private Boolean onlyArchived = false;
 
 }

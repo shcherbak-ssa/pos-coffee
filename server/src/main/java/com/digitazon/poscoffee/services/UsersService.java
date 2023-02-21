@@ -20,7 +20,7 @@ import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.User;
 import com.digitazon.poscoffee.models.UserType;
 import com.digitazon.poscoffee.models.helpers.ClientUser;
-import com.digitazon.poscoffee.models.helpers.UsersFilter;
+import com.digitazon.poscoffee.models.helpers.EntityFilter;
 import com.digitazon.poscoffee.repositories.UsersRepository;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.UsersConstants;
@@ -37,14 +37,13 @@ public class UsersService {
   private AnnotationConfigApplicationContext context
     = new AnnotationConfigApplicationContext(AppConfig.class);
 
-  private UsersRepository repository;
-
   @Autowired
   private UserTypesService userTypesService;
 
   @Autowired
   private PasswordEncoder encoder;
 
+  private UsersRepository repository;
   private ServiceHelpers<User> helpers;
 
   @SuppressWarnings("unchecked")
@@ -78,7 +77,7 @@ public class UsersService {
     throw new ResourceNotFoundException("User not found");
   }
 
-  public List<ClientUser> getUsers(UsersFilter filter) {
+  public List<ClientUser> getUsers(EntityFilter filter) {
     final List<User> users = this.repository.findAll(UsersService.filter(filter));
 
     return users
@@ -99,9 +98,7 @@ public class UsersService {
   }
 
   public User createUser(User userToCreate) throws AlreadyExistException {
-    if (this.isUserExist(userToCreate.getEmail())) {
-      throw new AlreadyExistException(UsersConstants.UNIQUE_FIELD, UsersConstants.ALREADY_EXIST_MESSAGE);
-    }
+    this.checkIfUserExists(userToCreate.getEmail());
 
     String password = userToCreate.getPassword();
     password = this.encoder.encode(password);
@@ -111,8 +108,13 @@ public class UsersService {
     return this.repository.save(userToCreate);
   }
 
-  public void updateUser(ClientUser updates) throws ResourceNotFoundException {
-    this.helpers.update(updates.getId(), (User user) -> this.mergeWithUpdates(user, updates));
+  public void updateUser(ClientUser updates) throws AlreadyExistException, ResourceNotFoundException {
+    this.checkIfUserExists(updates.getEmail());
+
+    this.helpers.update(
+      updates.getId(),
+      (User user) -> this.mergeWithUpdates(user, updates)
+    );
   }
 
   public void archiveUserById(Long id) throws ResourceNotFoundException {
@@ -121,6 +123,12 @@ public class UsersService {
 
   public void restoreUserById(Long id) throws ResourceNotFoundException {
     this.helpers.restoreById(id);
+  }
+
+  private void checkIfUserExists(String email) throws AlreadyExistException {
+    if (email != null && this.isUserExist(email)) {
+      throw new AlreadyExistException(UsersConstants.UNIQUE_FIELD, UsersConstants.ALREADY_EXIST_MESSAGE);
+    }
   }
 
   private ClientUser convertToClientUser(User user, boolean loadAddress) {
@@ -141,7 +149,7 @@ public class UsersService {
     user.setPhone(updates.getPhone() == null ? user.getPhone() : updates.getPhone());
   }
 
-  private static Specification<User> filter(UsersFilter filter) {
+  private static Specification<User> filter(EntityFilter filter) {
     return new Specification<User>() {
 
       @Override

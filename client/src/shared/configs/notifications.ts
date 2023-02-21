@@ -2,14 +2,16 @@ import type { Notification } from 'shared/types';
 import type { EntityName } from 'shared/constants';
 
 export const notifications: {
-  created: (entity: EntityName) => Notification,
-  updated: (entity: EntityName) => Notification,
-  archived: (entity: EntityName) => Notification,
-  restored: (entity: EntityName) => Notification,
-  createProcess: (entity: EntityName) => Notification,
-  updateProcess: (entity: EntityName) => Notification,
-  archiveProcess: (entity: EntityName) => Notification,
-  restoreProcess: (entity: EntityName) => Notification,
+  created: (entity: EntityName) => Notification;
+  updated: (entity: EntityName) => Notification;
+  archived: (entity: EntityName) => Notification;
+  restored: (entity: EntityName) => Notification;
+  deleted: (entity: EntityName) => Notification;
+  createProcess: (entity: EntityName) => Notification;
+  updateProcess: (entity: EntityName) => Notification;
+  archiveProcess: (entity: EntityName) => Notification;
+  restoreProcess: (entity: EntityName) => Notification;
+  deleteProcess: (entity: EntityName) => Notification;
 } = {
   created: (entity: EntityName) => ({
     severity: 'success',
@@ -30,6 +32,11 @@ export const notifications: {
     severity: 'success',
     heading: 'Restored',
     message: `${entity} restored successfully`,
+  }),
+  deleted: (entity: EntityName) => ({
+    severity: 'success',
+    heading: 'Deleted',
+    message: `${entity} deleted successfully`,
   }),
   createProcess: (entity: EntityName) => ({
     type: 'process',
@@ -54,5 +61,11 @@ export const notifications: {
     severity: 'info',
     heading: 'Restoring...',
     message: `A new ${entity.toLowerCase()} is being restored`,
+  }),
+  deleteProcess: (entity: EntityName) => ({
+    type: 'process',
+    severity: 'info',
+    heading: 'Deleting...',
+    message: `A new ${entity.toLowerCase()} is being deleted`,
   }),
 };

@@ -1,9 +1,9 @@
 import Joi from 'joi';
 
-import type { ProductSchema, ValidationSchema } from 'shared/types';
+import type { ProductVariantSchema, ValidationSchema } from 'shared/types';
 import { EMPTY_STRING, ZERO } from 'shared/constants';
 
-type Schema = Joi.ObjectSchema<ProductSchema>;
+type Schema = Joi.ObjectSchema<ProductVariantSchema>;
 
 const baseSchema: Schema = Joi.object({
   id: Joi.number(),
@@ -18,21 +18,12 @@ const baseSchema: Schema = Joi.object({
     'string.max': 'Price must be between 0 and 127',
     'string.empty': 'Price cannot be empty',
   }),
-  image: Joi.string().empty(EMPTY_STRING),
-  category: Joi.object({
-    id: Joi.number().invalid(ZERO),
-    name: Joi.string(),
-  }).messages({
-    'number.invalid': 'Category is required',
-  }),
-  isAvailable: Joi.boolean(),
-  isArchived: Joi.boolean(),
+  useProductPrice: Joi.boolean(),
 });
 
 const schemaToCreate: Schema = baseSchema.keys({
   sku: baseSchema.extract('sku').required(),
   name: baseSchema.extract('name').required(),
-  price: baseSchema.extract('price').required(),
 });
 
 const schemaToUpdate: Schema = baseSchema.keys();

@@ -7,14 +7,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ConfigProduct {
+public class ConfigProductVariant {
 
   private String sku;
   private String name;
   private Short price;
-  private String image;
-  private Long category;
-  private Boolean isAvailable;
-  private Boolean isArchived;
+  private Boolean useProductPrice;
+  private Long product;
 
 }

@@ -4,12 +4,14 @@ import type {
   ValidationService as BaseValidationService,
   NotificationService as BaseNotificationService,
 } from 'shared/types';
-import { ErrorType } from 'shared/constants';
+import { EntityName, ErrorType } from 'shared/constants';
 import { ApiError, AuthError, ValidationError } from 'shared/errors';
 
 export class BaseController implements Controller {
 
-  protected constructor() {}
+  protected constructor(
+    protected entityName: EntityName,
+  ) {}
 
   protected async getApiService(): Promise<BaseApiService> {
     const { ApiService } = await import('services/api');
@@ -46,6 +48,7 @@ export class BaseController implements Controller {
         type: ErrorType.VALIDATION,
         message: e.message,
         errors: e.errors,
+        entityName: this.entityName,
       });
 
       return;

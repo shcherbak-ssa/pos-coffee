@@ -16,9 +16,9 @@ import org.springframework.stereotype.Service;
 
 import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.Category;
-import com.digitazon.poscoffee.models.helpers.CategoriesFilter;
 import com.digitazon.poscoffee.models.helpers.ClientCategory;
 import com.digitazon.poscoffee.models.helpers.ClientProductCategory;
+import com.digitazon.poscoffee.models.helpers.EntityFilter;
 import com.digitazon.poscoffee.repositories.CategoriesRepository;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.CategoriesConstants;
@@ -47,7 +47,7 @@ public class CategoriesService {
     return this.repository.existsByName(name);
   }
 
-  public List<ClientCategory> getCategories(CategoriesFilter filter) {
+  public List<ClientCategory> getCategories(EntityFilter filter) {
     final List<Category> categories = this.repository.findAll(CategoriesService.filter(filter));
 
     return categories
@@ -81,7 +81,13 @@ public class CategoriesService {
     return this.repository.save(categoryToCreate);
   }
 
-  public void updateCategory(ClientCategory updates) throws ResourceNotFoundException {
+  public void updateCategory(ClientCategory updates) throws AlreadyExistException, ResourceNotFoundException {
+    final String updatedName = updates.getName();
+
+    if (updatedName != null && this.isCategoryExist(updatedName)) {
+      throw new AlreadyExistException(CategoriesConstants.UNIQUE_FIELD, CategoriesConstants.ALREADY_EXIST_MESSAGE);
+    }
+
     this.helpers.update(updates.getId(), (Category category) -> this.mergeWithUpdates(category, updates));
   }
 
@@ -111,7 +117,7 @@ public class CategoriesService {
       .setIsAvailable(updates.getIsAvailable() == null ? category.getIsAvailable() : updates.getIsAvailable());
   }
 
-  private static Specification<Category> filter(CategoriesFilter filter) {
+  private static Specification<Category> filter(EntityFilter filter) {
     return new Specification<Category>() {
 
       @Override

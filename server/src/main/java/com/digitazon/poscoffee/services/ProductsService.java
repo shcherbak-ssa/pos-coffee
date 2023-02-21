@@ -20,7 +20,7 @@ import com.digitazon.poscoffee.models.Category;
 import com.digitazon.poscoffee.models.Product;
 import com.digitazon.poscoffee.models.helpers.ClientCategory;
 import com.digitazon.poscoffee.models.helpers.ClientProduct;
-import com.digitazon.poscoffee.models.helpers.ProductsFilter;
+import com.digitazon.poscoffee.models.helpers.EntityFilter;
 import com.digitazon.poscoffee.repositories.ProductsRepository;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.ProductsConstants;
@@ -36,7 +36,6 @@ public class ProductsService {
     = new AnnotationConfigApplicationContext(AppConfig.class);
 
   private ProductsRepository repository;
-
   private ServiceHelpers<Product> helpers;
 
   @SuppressWarnings("unchecked")
@@ -60,7 +59,7 @@ public class ProductsService {
     throw new ResourceNotFoundException("Product not found");
   }
 
-  public List<ClientProduct> getProducts(ProductsFilter filter) {
+  public List<ClientProduct> getProducts(EntityFilter filter) {
     final List<Product> products = this.repository.findAll(ProductsService.filter(filter));
 
     return products
@@ -88,15 +87,18 @@ public class ProductsService {
   }
 
   public Product createProduct(Product productToCreate) throws AlreadyExistException {
-    if (this.isProductExist(productToCreate.getSku())) {
-      throw new AlreadyExistException(ProductsConstants.UNIQUE_FIELD, ProductsConstants.ALREADY_EXIST_MESSAGE);
-    }
+    this.checkIfProductExists(productToCreate.getSku());
 
     return this.repository.save(productToCreate);
   }
 
-  public void updateProduct(ClientProduct updates) throws ResourceNotFoundException {
-    this.helpers.update(updates.getId(), (Product product) -> this.mergeWithUpdates(product, updates));
+  public void updateProduct(ClientProduct updates) throws AlreadyExistException, ResourceNotFoundException {
+    this.checkIfProductExists(updates.getSku());
+
+    this.helpers.update(
+      updates.getId(),
+      (Product product) -> this.mergeWithUpdates(product, updates)
+    );
   }
 
   public void archiveProductById(Long id) throws ResourceNotFoundException {
@@ -114,6 +116,12 @@ public class ProductsService {
       product.setCategory(defaultCategory);
 
       this.repository.save(product);
+    }
+  }
+
+  private void checkIfProductExists(String sku) throws AlreadyExistException {
+    if (sku != null && this.isProductExist(sku)) {
+      throw new AlreadyExistException(ProductsConstants.UNIQUE_FIELD, ProductsConstants.ALREADY_EXIST_MESSAGE);
     }
   }
 
@@ -143,7 +151,7 @@ public class ProductsService {
     }
   }
 
-  private static Specification<Product> filter(ProductsFilter filter) {
+  private static Specification<Product> filter(EntityFilter filter) {
     return new Specification<Product>() {
 
       @Override

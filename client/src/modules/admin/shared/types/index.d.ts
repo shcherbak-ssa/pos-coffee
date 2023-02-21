@@ -11,6 +11,7 @@ import type {
   ErrorObject,
   CategorySchema,
   ProductCategory,
+  ProductVariantSchema,
 } from 'shared/types';
 import type { UserType } from 'shared/constants';
 
@@ -24,7 +25,9 @@ import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-m
 export type Controllers =
   | UsersController
   | AppController
-  | ProductsController;
+  | ProductsController
+  | CategoriesController
+  | ProductVariantsController;
 
 export type AppMenuItem = {
   label: string;
@@ -215,3 +218,34 @@ export interface CategoriesStore extends StoreEntityState<CategoriesState, Categ
 export interface CategoriesStoreActions extends StoreCrud<CategorySchema> {}
 
 export interface CategoriesController extends CrudController<CategorySchema, CategoriesFilter> {}
+
+/**
+ * Product Variants
+ */
+
+export type ProductVariantUpdates = Partial<ProductVariantSchema>;
+
+export type ProductVariantsFilter = Partial<{
+  productId: number;
+}>
+
+export type ProductVariantDraft = {
+  set sku(sku: string);
+  set name(name: string);
+  set price(price: number);
+  set useProductPrice(useProductPrice: boolean);
+}
+
+export type ProductVariantsState = {}
+
+export interface ProductVariantsStore
+  extends StoreEntityState<ProductVariantsState, ProductVariantSchema, ProductVariantDraft> {}
+
+export interface ProductVariantsStoreActions extends StoreCrud<ProductVariantSchema> {}
+
+export interface ProductVariantsController {
+  loadAll(productId: number): Promise<boolean>;
+  save(productId: number, variant: ProductVariantSchema): Promise<number | undefined>;
+  delete(entityId: number): Promise<boolean>;
+  select(entityId?: number): Promise<void>;
+}

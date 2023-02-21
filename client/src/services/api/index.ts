@@ -7,7 +7,7 @@ import {
   LocalStorageKey,
   AUTHORIZATION_HEADER,
 } from 'shared/constants';
-import { ApiError, AuthError } from 'shared/errors';
+import { ApiError, AuthError, ValidationError } from 'shared/errors';
 import { setParamsToUrl } from 'shared/utils/url-params';
 import { LocalStorage } from 'shared/helpers/local-storage';
 
@@ -108,10 +108,14 @@ export class ApiService implements BaseApiService {
       return await response.json() as T;
     }
 
-    const error = await response.json() as ErrorObject<{}>;
+    const error = await response.json() as ErrorObject<T>;
 
     if (response.status === ApiResponseCode.UNAUTHORIZED) {
       throw new AuthError(error.message);
+    }
+
+    if (response.status === ApiResponseCode.BAD_REQUEST) {
+      throw new ValidationError(response.statusText, error.errors);
     }
 
     throw new ApiError(error);

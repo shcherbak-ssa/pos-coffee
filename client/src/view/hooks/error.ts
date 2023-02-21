@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
 
 import type { EmptyFunction, ErrorObject, NotificationService as BaseNotificationService } from 'shared/types';
-import type { ErrorType } from 'shared/constants';
+import { EntityName, ErrorType } from 'shared/constants';
 import { NotificationService } from 'services/notification';
 
 export type ErrorObjectHook<T> = ErrorObject<T> | undefined;
 
-export function useError<T>(errorType: ErrorType): [ErrorObjectHook<T>, EmptyFunction] {
+export function useError<T>(
+  errorType: ErrorType,
+  entityName: EntityName = EntityName.ANY,
+): [ErrorObjectHook<T>, EmptyFunction] {
   const [ error, setError ] = useState<ErrorObject<T>>();
 
   useEffect(() => {
@@ -19,6 +22,14 @@ export function useError<T>(errorType: ErrorType): [ErrorObjectHook<T>, EmptyFun
   }, []);
 
   function handleError(errorObject: ErrorObject<T>): void {
+    if (errorObject.type === ErrorType.VALIDATION && entityName !== EntityName.ANY) {
+      if (errorObject.entityName === entityName) {
+        setError(errorObject);
+      }
+
+      return;
+    }
+
     setError(errorObject);
   }
 

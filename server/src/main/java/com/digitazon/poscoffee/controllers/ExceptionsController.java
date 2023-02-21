@@ -77,7 +77,10 @@ public class ExceptionsController {
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorResponse> handleException(Exception exception) {
     log.error(exception.getMessage());
-    log.error(exception.getCause().getMessage());
+
+    if (exception.getCause() != null) {
+      log.error(exception.getCause().getMessage());
+    }
 
     final ErrorResponse errorResponse = new ErrorResponse(); // @TODO: add context
     String message = exception.getMessage();

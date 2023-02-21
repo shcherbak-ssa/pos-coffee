@@ -1,12 +1,16 @@
 import { proxy } from 'valtio';
 
-import type { ProductSchema as BaseProductSchema } from 'shared/types';
-import { ZERO } from 'shared/constants';
-import { AppError } from 'shared/errors';
-import { findById } from 'shared/utils/by-id';
+import type { ProductSchema as BaseProductSchema, StoreService as BaseStoreService } from 'shared/types';
+import { EntityName } from 'shared/constants';
 import { StoreService } from 'services/store';
 
-import type { ProductsStore, ProductsStoreActions, ProductUpdates } from '@admin/shared/types';
+import type {
+  ProductDraft,
+  ProductsState,
+  ProductsStore,
+  ProductsStoreActions,
+  ProductUpdates,
+} from '@admin/shared/types';
 import { createDraft, ProductSchema } from '@admin/models/product';
 
 export const productsStore: ProductsStore & ProductsStoreActions = {
@@ -18,40 +22,22 @@ export const productsStore: ProductsStore & ProductsStoreActions = {
 
   draft: createDraft(),
 
-  /**
-   * CrudStore implementation
-   */
-
   add(products: BaseProductSchema[]): void {
-    productsStore.state.list = products.map(ProductSchema.create);
+    createStoreService().add(products);
   },
 
   save(product: BaseProductSchema): void {
-    StoreService.create().save(productsStore, product);
+    createStoreService().save(product);
   },
 
   remove(productId: number): void {
-    StoreService.create().remove(productsStore, productId);
-
-    updateSelectedProduct({
-      ...productsStore.state.selected,
-      isArchived: !productsStore.state.selected.isArchived,
-    });
+    createStoreService().remove(productId);
   },
 
   selected: {
 
     set(productId: number): void {
-      const product: BaseProductSchema | undefined = productId === ZERO
-        ? ProductSchema.create()
-        : findById(productsStore.state.list, productId);
-
-      if (product) {
-        updateSelectedProduct(product);
-        return;
-      }
-
-      throw new AppError(`Product with id ${productId} not found`);
+      createStoreService().setSelected(productId);
     },
 
     hadUpdates(): boolean {
@@ -61,7 +47,7 @@ export const productsStore: ProductsStore & ProductsStoreActions = {
     },
 
     getUpdates(): ProductUpdates {
-      const updates: ProductUpdates | undefined = StoreService.create().getSelectedUpdates(productsStore);
+      const updates: ProductUpdates | undefined = createStoreService().getSelectedUpdates();
 
       return updates || (productsStore.state.selected as ProductSchema).getUpdates();
     },
@@ -70,7 +56,11 @@ export const productsStore: ProductsStore & ProductsStoreActions = {
 
 };
 
-function updateSelectedProduct(product: BaseProductSchema): void {
-  productsStore.state.selected = ProductSchema.create(product);
-  productsStore.draft = createDraft(productsStore.state.selected);
+function createStoreService(): BaseStoreService<BaseProductSchema> {
+  return StoreService.create<ProductsState, BaseProductSchema, ProductDraft>(
+    EntityName.PRODUCT,
+    productsStore,
+    (product?: BaseProductSchema) => createDraft(product),
+    (product?: BaseProductSchema) => ProductSchema.create(product),
+  );
 }

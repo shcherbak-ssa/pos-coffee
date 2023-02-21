@@ -8,8 +8,14 @@ export type Props = {
 }
 
 const ProductsInfoPage = loadContext(Page, {
-  stores: [ StoreName.PRODUCTS ],
-  controllers: [ ControllerName.PRODUCTS ],
+  stores: [
+    StoreName.PRODUCTS,
+    StoreName.PRODUCT_VARIANTS,
+  ],
+  controllers: [
+    ControllerName.PRODUCTS,
+    ControllerName.PRODUCT_VARIANTS,
+  ],
 });
 
 export default ProductsInfoPage;

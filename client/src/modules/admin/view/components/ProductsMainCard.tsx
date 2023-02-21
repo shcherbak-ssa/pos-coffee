@@ -1,4 +1,3 @@
-import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
 import { Dropdown } from 'primereact/dropdown';
@@ -11,7 +10,6 @@ import type { CardWithInputsProps, ProductDraft } from '@admin/shared/types';
 import { AvailableCheckbox } from '@admin/view/components/AvailableCheckbox';
 import { CardWrapper } from '@admin/view/components/CardWrapper';
 import { CardHeading } from '@admin/view/components/CardHeading';
-import { ProductsImage } from '@admin/view/components/ProductsImage';
 
 export type Props = CardWithInputsProps<ProductSchema, ProductDraft> & {
   productCategories: ProductCategory[];
@@ -27,32 +25,19 @@ export function ProductsMainCard({
   selectedProductCategory,
 }: Props) {
 
-  function drawProductImage(): React.ReactNode {
-    if (product.image) {
-      return (
-        <img
-          className="rounded object-cover w-60 h-60"
-          src={product.image}
-        />
-      );
-    }
-
-    return <ProductsImage image="" size="xlarge" />;
-  }
-
   return (
-    <CardWrapper>
+    <CardWrapper className="col-span-2">
       <CardHeading heading="Main" />
 
-      <div className="flex flex-col gap-10 mb-10">
-        <AvailableCheckbox
-          className="mb-4"
-          entityName={EntityName.PRODUCT}
-          isEditMode={isEditMode}
-          checked={product.isAvailable}
-          change={(isAvailable: boolean) => productDraft.isAvailable = isAvailable}
-        />
+      <AvailableCheckbox
+        className="mb-10"
+        entityName={EntityName.PRODUCT}
+        isEditMode={isEditMode}
+        checked={product.isAvailable}
+        change={(isAvailable: boolean) => productDraft.isAvailable = isAvailable}
+      />
 
+      <div className="grid grid-cols-2 gap-x-4 gap-y-10">
         <InputWrapper
           label="Name"
           valueKey="name"
@@ -110,18 +95,6 @@ export function ProductsMainCard({
             optionLabel="name"
           />
         </InputWrapper>
-      </div>
-
-      <CardHeading heading="Image" />
-
-      <div className="">
-        <div className="mb-4">
-          { drawProductImage() }
-        </div>
-
-        <div>
-          <Button label="Change image" />
-        </div>
       </div>
     </CardWrapper>
   );

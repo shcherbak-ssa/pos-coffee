@@ -13,15 +13,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.digitazon.poscoffee.models.Category;
 import com.digitazon.poscoffee.models.Product;
+import com.digitazon.poscoffee.models.ProductVariant;
 import com.digitazon.poscoffee.models.User;
 import com.digitazon.poscoffee.models.UserType;
 import com.digitazon.poscoffee.models.base.BaseEntity;
 import com.digitazon.poscoffee.models.helpers.ClientCategory;
 import com.digitazon.poscoffee.models.helpers.ClientProduct;
 import com.digitazon.poscoffee.models.helpers.ClientProductCategory;
+import com.digitazon.poscoffee.models.helpers.ClientProductVariant;
 import com.digitazon.poscoffee.models.helpers.ClientUser;
 import com.digitazon.poscoffee.models.helpers.ConfigCategory;
 import com.digitazon.poscoffee.models.helpers.ConfigProduct;
+import com.digitazon.poscoffee.models.helpers.ConfigProductVariant;
 import com.digitazon.poscoffee.models.helpers.ConfigUser;
 import com.digitazon.poscoffee.models.helpers.ErrorResponse;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
@@ -121,6 +124,18 @@ public class AppConfig {
       .build();
   }
 
+  @Bean
+  @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+  public ClientProductVariant clientProductVariant(ProductVariant variant) {
+    return ClientProductVariant.builder()
+      .id(variant.getId())
+      .sku(variant.getSku())
+      .name(variant.getName())
+      .price(variant.getPrice())
+      .useProductPrice(variant.getUseProductPrice())
+      .build();
+  }
+
   /**
    * Client to Entity
    */
@@ -165,6 +180,18 @@ public class AppConfig {
       .id(clientCategory.getId())
       .name(clientCategory.getName())
       .isAvailable(clientCategory.getIsAvailable())
+      .build();
+  }
+
+  @Bean
+  @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+  public ProductVariant productVariant(ClientProductVariant clientVariant) {
+    return ProductVariant.builder()
+      .id(clientVariant.getId())
+      .sku(clientVariant.getSku())
+      .name(clientVariant.getName())
+      .price(clientVariant.getPrice())
+      .useProductPrice(clientVariant.getUseProductPrice())
       .build();
   }
 
@@ -216,6 +243,18 @@ public class AppConfig {
       .isAvailable(configCategory.getIsAvailable())
       .isArchived(isArchived)
       .archivedAt(isArchived ? new Date() : null)
+      .build();
+  }
+
+  @Bean
+  @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+  public ProductVariant variantFromConfigVariant(ConfigProductVariant variant, Product product) {
+    return ProductVariant.builder()
+      .sku(variant.getSku())
+      .name(variant.getName())
+      .price(variant.getPrice())
+      .useProductPrice(variant.getUseProductPrice())
+      .product(product)
       .build();
   }
 

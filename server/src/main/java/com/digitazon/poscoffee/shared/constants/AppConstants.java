@@ -22,8 +22,9 @@ public class AppConstants {
   public static final String VALIDATION_ERROR_MESSAGE = "Validation error";
   public static final String BAD_CREDENTIALS_MESSAGE = "Invalid email or password";
   public static final String ACCESS_DENY_MESSAGE = "Access denied";
-
   public static final String ACCESS_DENIED_ERROR = "AccessDeniedException";
+
+  public static final String PARAM_ONLY_ARCHIVED = "onlyArchived";
 
   public static final class Entity {
     public static final String USER = "User";
@@ -48,6 +49,8 @@ public class AppConstants {
       public static final String CATEGORIES = "/api/admin/categories";
       public static final String CATEGORIES_ARCHIVE = "/api/admin/categories/{id}/archive";
       public static final String CATEGORIES_RESTORE = "/api/admin/categories/{id}/restore";
+      public static final String PRODUCT_VARIANTS = "/api/admin/products/variants";
+      public static final String PRODUCT_VARIANTS_ID = "/api/admin/products/variants/{id}";
     }
   }
 
@@ -58,6 +61,7 @@ public class AppConstants {
     public static final String ADDRESSES = "addresses";
     public static final String PRODUCTS = "products";
     public static final String CATEGORIES = "categories";
+    public static final String PRODUCT_VARIANTS = "product_variants";
   }
 
   public static enum ErrorType {

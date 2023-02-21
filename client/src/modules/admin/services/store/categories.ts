@@ -1,12 +1,16 @@
 import { proxy } from 'valtio';
 
-import type { CategorySchema as BaseCategorySchema } from 'shared/types';
-import { ZERO } from 'shared/constants';
-import { AppError } from 'shared/errors';
-import { findById } from 'shared/utils/by-id';
+import type { CategorySchema as BaseCategorySchema, StoreService as BaseStoreService } from 'shared/types';
+import { EntityName } from 'shared/constants';
 import { StoreService } from 'services/store';
 
-import type { CategoriesStore, CategoriesStoreActions, CategoryUpdates } from '@admin/shared/types';
+import type {
+  CategoriesState,
+  CategoriesStore,
+  CategoriesStoreActions,
+  CategoryDraft,
+  CategoryUpdates,
+} from '@admin/shared/types';
 import { createDraft, CategorySchema } from '@admin/models/category';
 
 export const categoriesStore: CategoriesStore & CategoriesStoreActions = {
@@ -18,40 +22,22 @@ export const categoriesStore: CategoriesStore & CategoriesStoreActions = {
 
   draft: createDraft(),
 
-  /**
-   * CrudStore implementation
-   */
-
-  add(products: BaseCategorySchema[]): void {
-    categoriesStore.state.list = products.map(CategorySchema.create);
+  add(categories: BaseCategorySchema[]): void {
+    createStoreService().add(categories)
   },
 
-  save(product: BaseCategorySchema): void {
-    StoreService.create().save(categoriesStore, product);
+  save(category: BaseCategorySchema): void {
+    createStoreService().save(category);
   },
 
-  remove(productId: number): void {
-    StoreService.create().remove(categoriesStore, productId);
-
-    updateSelectedProduct({
-      ...categoriesStore.state.selected,
-      isArchived: !categoriesStore.state.selected.isArchived,
-    });
+  remove(categoryId: number): void {
+    createStoreService().remove(categoryId);
   },
 
   selected: {
 
-    set(productId: number): void {
-      const product: BaseCategorySchema | undefined = productId === ZERO
-        ? CategorySchema.create()
-        : findById(categoriesStore.state.list, productId);
-
-      if (product) {
-        updateSelectedProduct(product);
-        return;
-      }
-
-      throw new AppError(`Product with id ${productId} not found`);
+    set(categoryId: number): void {
+      createStoreService().setSelected(categoryId);
     },
 
     hadUpdates(): boolean {
@@ -61,7 +47,7 @@ export const categoriesStore: CategoriesStore & CategoriesStoreActions = {
     },
 
     getUpdates(): CategoryUpdates {
-      const updates: CategoryUpdates | undefined = StoreService.create().getSelectedUpdates(categoriesStore);
+      const updates: CategoryUpdates | undefined = createStoreService().getSelectedUpdates();
 
       return updates || (categoriesStore.state.selected as CategorySchema).getUpdates();
     },
@@ -70,7 +56,11 @@ export const categoriesStore: CategoriesStore & CategoriesStoreActions = {
 
 };
 
-function updateSelectedProduct(user: BaseCategorySchema): void {
-  categoriesStore.state.selected = CategorySchema.create(user);
-  categoriesStore.draft = createDraft(categoriesStore.state.selected);
+function createStoreService(): BaseStoreService<BaseCategorySchema> {
+  return StoreService.create<CategoriesState, BaseCategorySchema, CategoryDraft>(
+    EntityName.CATEGORY,
+    categoriesStore,
+    (category?: BaseCategorySchema) => createDraft(category),
+    (category?: BaseCategorySchema) => CategorySchema.create(category),
+  );
 }

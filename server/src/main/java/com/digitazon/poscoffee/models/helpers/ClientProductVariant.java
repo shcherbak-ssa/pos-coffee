@@ -1,13 +1,11 @@
 package com.digitazon.poscoffee.models.helpers;
 
-import java.util.Date;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.digitazon.poscoffee.shared.constants.AppConstants;
-import com.digitazon.poscoffee.shared.constants.ProductsConstants;
+import com.digitazon.poscoffee.shared.constants.ProductVariantsConstants;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ClientProduct {
+public class ClientProductVariant {
 
   @NotNull(
     message = AppConstants.ID_EMPTY_MESSAGE,
@@ -27,38 +25,27 @@ public class ClientProduct {
   private Long id;
 
   @NotBlank(
-    message = ProductsConstants.SKU_EMPTY_MESSAGE,
+    message = ProductVariantsConstants.SKU_EMPTY_MESSAGE,
     groups = AppConstants.ValidationGroups.ToCreate.class
   )
   @Size(
     min = AppConstants.MIN_UPDATE_LENGTH,
-    message = ProductsConstants.SKU_EMPTY_MESSAGE
+    message = ProductVariantsConstants.SKU_EMPTY_MESSAGE
   )
   private String sku;
 
   @NotBlank(
-    message = ProductsConstants.NAME_EMPTY_MESSAGE,
+    message = ProductVariantsConstants.NAME_EMPTY_MESSAGE,
     groups = AppConstants.ValidationGroups.ToCreate.class
   )
   @Size(
     min = AppConstants.MIN_UPDATE_LENGTH,
-    message = ProductsConstants.NAME_EMPTY_MESSAGE,
+    message = ProductVariantsConstants.NAME_EMPTY_MESSAGE,
     groups = AppConstants.ValidationGroups.ToUpdate.class
   )
   private String name;
 
-  @NotNull(
-    message = ProductsConstants.PRICE_EMPTY_MESSAGE,
-    groups = AppConstants.ValidationGroups.ToCreate.class
-  )
   private Short price;
-
-  private String image;
-  private ClientProductCategory category;
-  private Boolean isAvailable;
-  private Boolean isArchived;
-  private Date createdAt;
-  private Date updatedAt;
-  private Date archivedAt;
+  private Boolean useProductPrice;
 
 }

@@ -12,12 +12,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digitazon.poscoffee.models.Address;
 import com.digitazon.poscoffee.models.helpers.ClientUser;
-import com.digitazon.poscoffee.models.helpers.UsersFilter;
+import com.digitazon.poscoffee.models.helpers.EntityFilter;
 import com.digitazon.poscoffee.services.AddressService;
 import com.digitazon.poscoffee.services.UsersService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
@@ -39,7 +40,11 @@ public class UsersAdminController {
   @GetMapping(path = AppConstants.ApiEndpoint.Admin.USERS)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('ADMIN')")
-  public List<ClientUser> getUsers(UsersFilter filter) {
+  public List<ClientUser> getUsers(@RequestParam(AppConstants.PARAM_ONLY_ARCHIVED) boolean onlyArchived) {
+    final EntityFilter filter = EntityFilter.builder()
+      .onlyArchived(onlyArchived)
+      .build();
+
     return this.service.getUsers(filter);
   }
 
@@ -67,7 +72,7 @@ public class UsersAdminController {
   @PreAuthorize("hasAuthority('ADMIN')")
   public void updateUser(
     @RequestBody @Validated(AppConstants.ValidationGroups.ToUpdate.class) ClientUser updates
-  ) throws ResourceNotFoundException {
+  ) throws AlreadyExistException, ResourceNotFoundException {
     final Address addressUpdates = updates.getAddress();
 
     if (addressUpdates != null) {

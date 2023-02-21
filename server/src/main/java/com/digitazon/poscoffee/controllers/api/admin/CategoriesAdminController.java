@@ -12,12 +12,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digitazon.poscoffee.models.Category;
-import com.digitazon.poscoffee.models.helpers.CategoriesFilter;
 import com.digitazon.poscoffee.models.helpers.ClientCategory;
+import com.digitazon.poscoffee.models.helpers.EntityFilter;
 import com.digitazon.poscoffee.services.CategoriesService;
 import com.digitazon.poscoffee.services.ProductsService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
@@ -39,7 +40,11 @@ public class CategoriesAdminController {
   @GetMapping(path = AppConstants.ApiEndpoint.Admin.CATEGORIES)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('ADMIN')")
-  public List<ClientCategory> getCategories(CategoriesFilter filter) {
+  public List<ClientCategory> getCategories(@RequestParam(AppConstants.PARAM_ONLY_ARCHIVED) boolean onlyArchived) {
+    final EntityFilter filter = EntityFilter.builder()
+      .onlyArchived(onlyArchived)
+      .build();
+
     final List<ClientCategory> categories = this.service.getCategories(filter);
     this.productsService.countProductsByCategories(categories);
 
@@ -60,7 +65,7 @@ public class CategoriesAdminController {
   @PreAuthorize("hasAuthority('ADMIN')")
   public void updateCategory(
     @RequestBody @Validated(AppConstants.ValidationGroups.ToUpdate.class) ClientCategory updates
-  ) throws ResourceNotFoundException {
+  ) throws AlreadyExistException, ResourceNotFoundException {
     this.service.updateCategory(updates);
   }
 

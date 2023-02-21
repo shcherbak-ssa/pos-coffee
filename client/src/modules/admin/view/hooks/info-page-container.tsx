@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { type Location, useLocation, useParams, Params } from 'react-router';
 
 import type { CrudController, Entity, StoreEntityState } from 'shared/types';
-import { ErrorType } from 'shared/constants';
+import { EntityName, ErrorType } from 'shared/constants';
 import { ErrorObjectHook, useError } from 'view/hooks/error';
 import { useController } from 'view/hooks/controller';
 import { useStore } from 'view/hooks/store';
@@ -10,7 +10,7 @@ import { useStore } from 'view/hooks/store';
 import type { AppPageSchema } from '@admin/shared/types';
 import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-menu-items';
 import type { Props as PageLayoutProps } from '@admin/view/layouts/PageLayout';
-import { ControllerName, PagePath, PagePathLabel, PageTitle, StoreName } from '@admin/shared/constants';
+import { ControllerName, PagePath, PagePathLabel, StoreName } from '@admin/shared/constants';
 
 export type Props = {
   page: AppPageSchema;
@@ -19,7 +19,7 @@ export type Props = {
   controllerName: ControllerName;
   actionsMenuItemsProps: ActionsMenuItemsProps;
   infoPagePath: PagePath;
-  errorMessage: string;
+  entityName: EntityName;
 }
 
 export type Return<T> = [
@@ -34,7 +34,7 @@ export function useInfoPageContainer<T extends Entity>({
   controllerName,
   actionsMenuItemsProps,
   infoPagePath,
-  errorMessage,
+  entityName,
 }: Props): Return<T> {
 
   const [ isLoading, setIsLoading ] = useState<boolean>(true);
@@ -46,7 +46,7 @@ export function useInfoPageContainer<T extends Entity>({
 
   const { state: { selected } } = useStore(storeName) as StoreEntityState;
   const controller = useController(controllerName) as CrudController;
-  const [ validationError, cleanValidationError ] = useError<T>(ErrorType.VALIDATION);
+  const [ validationError, cleanValidationError ] = useError<T>(ErrorType.VALIDATION, entityName);
 
   useEffect(() => {
     setPageLayoutProps({
@@ -62,7 +62,7 @@ export function useInfoPageContainer<T extends Entity>({
       isLoading: isLoading && !isError,
       messageProps: !isError ? undefined : {
         type: 'error',
-        message: errorMessage,
+        message: `${entityName}(s) not found`,
       },
     });
   }, [isLoading, isError, selected]);

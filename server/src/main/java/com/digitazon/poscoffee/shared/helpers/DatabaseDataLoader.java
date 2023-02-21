@@ -11,14 +11,17 @@ import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.Address;
 import com.digitazon.poscoffee.models.Category;
 import com.digitazon.poscoffee.models.Product;
+import com.digitazon.poscoffee.models.ProductVariant;
 import com.digitazon.poscoffee.models.User;
 import com.digitazon.poscoffee.models.UserType;
 import com.digitazon.poscoffee.models.helpers.Config;
 import com.digitazon.poscoffee.models.helpers.ConfigCategory;
 import com.digitazon.poscoffee.models.helpers.ConfigProduct;
+import com.digitazon.poscoffee.models.helpers.ConfigProductVariant;
 import com.digitazon.poscoffee.models.helpers.ConfigUser;
 import com.digitazon.poscoffee.services.AddressService;
 import com.digitazon.poscoffee.services.CategoriesService;
+import com.digitazon.poscoffee.services.ProductVariantsService;
 import com.digitazon.poscoffee.services.ProductsService;
 import com.digitazon.poscoffee.services.UserTypesService;
 import com.digitazon.poscoffee.services.UsersService;
@@ -47,6 +50,9 @@ public class DatabaseDataLoader {
   @Autowired
   private CategoriesService categoriesService;
 
+  @Autowired
+  private ProductVariantsService productVariantsService;
+
   public void loadConstants() {
     this.userTypesService.loadTypes();
   }
@@ -55,7 +61,8 @@ public class DatabaseDataLoader {
     this.loadUsers(config.getUsers());
 
     final List<Category> categories = this.loadCategories(config.getCategories());
-    this.loadProducts(config.getProducts(), categories);
+    final List<Product> products = this.loadProducts(config.getProducts(), categories);
+    this.loadProductVariants(config.getProductVariants(), products);
   }
 
   private void loadUsers(List<ConfigUser> users) throws ProgerException, AlreadyExistException {
@@ -85,7 +92,12 @@ public class DatabaseDataLoader {
     return createdCategories;
   }
 
-  private void loadProducts(List<ConfigProduct> products, List<Category> categories) throws AlreadyExistException {
+  private List<Product> loadProducts(
+    List<ConfigProduct> products,
+    List<Category> categories
+  ) throws AlreadyExistException {
+    final List<Product> createdProducts = new ArrayList<Product>();
+
     for (ConfigProduct configProduct : products) {
       final Category productCategory = categories
         .stream()
@@ -96,7 +108,28 @@ public class DatabaseDataLoader {
       final Product product = (Product)
         this.context.getBean("productFromConfigProduct", configProduct, productCategory);
 
-      this.productsService.createProduct(product);
+      final Product createdProduct = this.productsService.createProduct(product);
+      createdProducts.add(createdProduct);
+    }
+
+    return createdProducts;
+  }
+
+  private void loadProductVariants(
+    List<ConfigProductVariant> variants,
+    List<Product> products
+  ) throws AlreadyExistException {
+    for (ConfigProductVariant configVariant : variants) {
+      final Product product = products
+        .stream()
+        .filter((variant) -> variant.getId() == configVariant.getProduct())
+        .findFirst()
+        .orElse(products.get(0));
+
+      final ProductVariant productVariant = (ProductVariant)
+        this.context.getBean("variantFromConfigVariant", configVariant, product);
+
+      this.productVariantsService.createVariant(productVariant);
     }
   }
 

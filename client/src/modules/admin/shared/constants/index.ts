@@ -15,6 +15,8 @@ export enum ApiEndpoint {
   CATEGORIES = '/api/admin/categories',
   CATEGORIES_ARCHIVE = '/api/admin/categories/:id/archive',
   CATEGORIES_RESTORE = '/api/admin/categories/:id/restore',
+  PRODUCT_VARIANTS = '/api/admin/products/variants',
+  PRODUCT_VARIANTS_ID = '/api/admin/products/variants/:id',
 }
 
 export enum ControllerName {
@@ -22,6 +24,7 @@ export enum ControllerName {
   USERS = 'USERS',
   PRODUCTS = 'PRODUCTS',
   CATEGORIES = 'CATEGORIES',
+  PRODUCT_VARIANTS = 'PRODUCT_VARIANTS',
 }
 
 export enum StoreName {
@@ -29,12 +32,14 @@ export enum StoreName {
   USERS = 'USERS',
   PRODUCTS = 'PRODUCTS',
   CATEGORIES = 'CATEGORIES',
+  PRODUCT_VARIANTS = 'PRODUCT_VARIANTS',
 }
 
 export enum ValidationName {
   USERS = 'USERS',
   PRODUCTS = 'PRODUCTS',
   CATEGORIES = 'CATEGORIES',
+  PRODUCT_VARIANTS = 'PRODUCT_VARIANTS',
 }
 
 export enum PagePath {

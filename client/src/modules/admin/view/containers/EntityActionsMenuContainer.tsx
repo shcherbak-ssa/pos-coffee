@@ -50,7 +50,6 @@ export function EntityActionsMenuContainer<T extends Entity>({
 
     return (
       <IconButton
-        className="on-white"
         icon={PrimeIcons.ELLIPSIS_H}
         click={toggleMenu}
       />

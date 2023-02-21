@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import type { ProductCategory, ProductSchema } from 'shared/types';
-import { ZERO } from 'shared/constants';
+import { EntityName, ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 import { EmptyComponent } from 'view/components/EmptyComponent';
@@ -13,6 +13,8 @@ import { type Return, useInfoPageContainer } from '@admin/view/hooks/info-page-c
 import { PageLayout } from '@admin/view/layouts/PageLayout';
 import { ProductsInfoWrapper } from '@admin/view/components/ProductsInfoWrapper';
 import { ProductsMainCard } from '@admin/view/components/ProductsMainCard';
+import { ProductsVariantsContainer } from '@admin/view/containers/ProductsVariantsContainer';
+import { ProductsImageCard } from '../components/ProductsImageCard';
 
 export type Props = {
   isEditMode: boolean;
@@ -37,7 +39,7 @@ export function ProductsInfoPageContainer({ isEditMode }: Props) {
     controllerName: ControllerName.PRODUCTS,
     infoPagePath: PagePath.PRODUCTS_INFO,
     actionsMenuItemsProps: actionsMenuItemsProps.products,
-    errorMessage: 'Product not found',
+    entityName: EntityName.PRODUCT,
     isEditMode,
   });
 
@@ -61,6 +63,8 @@ export function ProductsInfoPageContainer({ isEditMode }: Props) {
     return (
       <PageLayout {...pageLayoutProps}>
         <ProductsInfoWrapper>
+          <ProductsImageCard product={selectedProduct} />
+
           <ProductsMainCard
             entity={selectedProduct}
             entityDraft={draftProduct}
@@ -69,6 +73,8 @@ export function ProductsInfoPageContainer({ isEditMode }: Props) {
             productCategories={productCategories}
             selectedProductCategory={selectedProductCategory}
           />
+
+          <ProductsVariantsContainer product={selectedProduct} />
         </ProductsInfoWrapper>
       </PageLayout>
     );

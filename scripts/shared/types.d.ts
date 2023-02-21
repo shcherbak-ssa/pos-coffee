@@ -4,6 +4,7 @@ export type Config = {
   users: User[];
   categories: Category[];
   products: Product[];
+  productVariants: ProductVariant[];
 }
 
 export type User = {
@@ -40,4 +41,12 @@ export type Category = {
   name: string;
   isAvailable: boolean;
   isArchived: boolean;
+}
+
+export type ProductVariant = {
+  sku: string;
+  name: string;
+  price: number;
+  useProductPrice: boolean;
+  product: number;
 }

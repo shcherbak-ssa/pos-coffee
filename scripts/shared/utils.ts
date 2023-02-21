@@ -20,3 +20,10 @@ export function getRandomNumber(min: number, max: number): number {
 
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+export function getSku(name: string): string {
+  return name
+    .toUpperCase()
+    .replace(/[\s|-]/g, '_')
+    .replace(/[\(\)]/g, '')
+}

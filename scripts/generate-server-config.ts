@@ -1,9 +1,9 @@
 import fs from 'fs';
 import { faker } from '@faker-js/faker';
 
-import type { Address, Category, Config, Product, User } from './shared/types';
+import type { Address, Category, Config, Product, ProductVariant, User } from './shared/types';
 import { EMPTY_STRING, SERVER_CONFIG_FILENAME, UserType } from './shared/constants';
-import { generateRundomAvatar } from './shared/utils';
+import { generateRundomAvatar, getSku } from './shared/utils';
 
 const adminUser: User = {
   name: 'Stanislav',
@@ -83,6 +83,11 @@ function generateConfig(): Config {
       generateProduct({ name: 'Hot Dog', category: 6 }),
       generateProduct({ name: 'Hamburger', category: 6 }),
     ],
+    productVariants: [
+      generateProductVariant({ name: 'Expressed', product: 1 }),
+      generateProductVariant({ name: 'Double coffee', product: 1 }),
+      generateProductVariant({ name: 'American coffee', product: 1 }),
+    ],
   };
 }
 
@@ -132,15 +137,26 @@ function generateProduct({
   isArchived = false,
 }: Partial<Product>): Product {
   return {
-    sku: name
-      .toUpperCase()
-      .replace(/[\s|-]/g, '_')
-      .replace(/[\(\)]/g, ''),
-    price: Number(faker.commerce.price(1, 127)),
+    sku: getSku(name),
+    price: Number(faker.commerce.price(1, 200)),
     image,
     name,
     category,
     isAvailable,
     isArchived,
+  };
+}
+
+function generateProductVariant({
+  name = faker.commerce.productName(),
+  useProductPrice = false,
+  product = 1,
+}: Partial<ProductVariant>): ProductVariant {
+  return {
+    sku: getSku(name),
+    price: Number(faker.commerce.price(1, 200)),
+    useProductPrice,
+    name,
+    product,
   };
 }

@@ -1,4 +1,5 @@
 import type { UserSchema } from 'shared/types';
+import { EntityName } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { EmptyComponent } from 'view/components/EmptyComponent';
 
@@ -32,7 +33,7 @@ export function UsersInfoPageContainer({ isEditMode }: Props) {
     storeName: StoreName.USERS,
     controllerName: ControllerName.USERS,
     infoPagePath: PagePath.USERS_INFO,
-    errorMessage: 'User not found',
+    entityName: EntityName.USER,
     actionsMenuItemsProps,
     isEditMode,
   });
