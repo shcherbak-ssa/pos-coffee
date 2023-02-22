@@ -11,7 +11,7 @@ public class ConfigProductVariant {
 
   private String sku;
   private String name;
-  private Short price;
+  private Float price;
   private Boolean useProductPrice;
   private Long product;
 

@@ -51,7 +51,7 @@ public class ClientProduct {
     message = ProductsConstants.PRICE_EMPTY_MESSAGE,
     groups = AppConstants.ValidationGroups.ToCreate.class
   )
-  private Short price;
+  private Float price;
 
   private String image;
   private ClientProductCategory category;

@@ -11,7 +11,7 @@ public class ConfigProduct {
 
   private String sku;
   private String name;
-  private Short price;
+  private Float price;
   private String image;
   private Long category;
   private Boolean isAvailable;

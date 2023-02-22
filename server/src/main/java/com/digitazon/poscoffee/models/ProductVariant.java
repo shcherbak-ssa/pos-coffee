@@ -59,7 +59,7 @@ public class ProductVariant {
   )
   private String name;
 
-  private Short price;
+  private Float price;
   private Boolean useProductPrice;
 
   @ManyToOne(fetch = FetchType.EAGER)

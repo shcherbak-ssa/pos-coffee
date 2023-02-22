@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 
 import type { Address, Category, Config, Product, ProductVariant, User } from './shared/types';
 import { EMPTY_STRING, SERVER_CONFIG_FILENAME, UserType } from './shared/constants';
-import { generateRundomAvatar, getSku } from './shared/utils';
+import { generatePrice, generateRundomAvatar, getSku } from './shared/utils';
 
 const adminUser: User = {
   name: 'Stanislav',
@@ -138,7 +138,7 @@ function generateProduct({
 }: Partial<Product>): Product {
   return {
     sku: getSku(name),
-    price: Number(faker.commerce.price(1, 200)),
+    price: generatePrice(),
     image,
     name,
     category,
@@ -154,7 +154,7 @@ function generateProductVariant({
 }: Partial<ProductVariant>): ProductVariant {
   return {
     sku: getSku(name),
-    price: Number(faker.commerce.price(1, 200)),
+    price: generatePrice(),
     useProductPrice,
     name,
     product,

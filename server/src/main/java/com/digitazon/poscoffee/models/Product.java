@@ -63,12 +63,13 @@ public class Product extends BaseEntity {
     message = ProductsConstants.PRICE_EMPTY_MESSAGE,
     groups = AppConstants.ValidationGroups.ToCreate.class
   )
-  private Short price;
+  private Float price;
 
   @ManyToOne(fetch = FetchType.EAGER)
   private Category category;
 
   private String image;
+  private Integer stock;
   private Boolean isAvailable;
 
 }

@@ -1,3 +1,5 @@
+import { faker } from '@faker-js/faker';
+
 import { AVATART_GENERATOR_URL } from './constants';
 
 const alreadyGeneratedAvatarIds: number[] = [];
@@ -26,4 +28,12 @@ export function getSku(name: string): string {
     .toUpperCase()
     .replace(/[\s|-]/g, '_')
     .replace(/[\(\)]/g, '')
+}
+
+export function generatePrice(): number {
+  const { price } = faker.commerce;
+  const whole: string = price(1, 50, 0);
+  const decimal: string = price(1, 10, 0);
+
+  return Number(`${whole}.${decimal}`);
 }

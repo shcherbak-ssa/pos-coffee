@@ -45,7 +45,7 @@ public class ClientProductVariant {
   )
   private String name;
 
-  private Short price;
+  private Float price;
   private Boolean useProductPrice;
 
 }
