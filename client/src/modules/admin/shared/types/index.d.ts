@@ -183,6 +183,8 @@ export type ProductDraft = {
   set sku(sku: string);
   set name(name: string);
   set price(price: number);
+  set stock(stock: number);
+  set useStockForVariants(useStockForVariants: boolean);
   set image(image: string);
   set category(category: ProductCategory);
   set isAvailable(isAvailable: boolean);
@@ -233,6 +235,8 @@ export type ProductVariantDraft = {
   set sku(sku: string);
   set name(name: string);
   set price(price: number);
+  set stock(stock: number);
+  set stockPerTime(stockPerTime: number);
   set useProductPrice(useProductPrice: boolean);
 }
 

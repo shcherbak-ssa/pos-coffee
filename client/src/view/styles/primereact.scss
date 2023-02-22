@@ -153,6 +153,18 @@
 
 .p-menubar {
   @apply bg-transparent border-none;
+
+  & &-button {
+    @apply hidden;
+  }
+
+  & &-root-list {
+    @apply flex bg-transparent shadow-none w-auto;
+
+    & > .p-menuitem > .p-menuitem-link {
+      @apply rounded;
+    }
+  }
 }
 
 .p-menuitem {

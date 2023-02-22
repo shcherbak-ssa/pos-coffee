@@ -91,8 +91,10 @@ public class AppConfig {
       .sku(product.getSku())
       .name(product.getName())
       .price(product.getPrice())
+      .stock(product.getStock())
       .image(product.getImage())
       .category(clientCategory)
+      .useStockForVariants(product.getUseStockForVariants())
       .isAvailable(product.getIsAvailable())
       .isArchived(product.getIsArchived())
       .createdAt(product.getCreatedAt())
@@ -132,6 +134,8 @@ public class AppConfig {
       .sku(variant.getSku())
       .name(variant.getName())
       .price(variant.getPrice())
+      .stock(variant.getStock())
+      .stockPerTime(variant.getStockPerTime())
       .useProductPrice(variant.getUseProductPrice())
       .build();
   }
@@ -167,8 +171,10 @@ public class AppConfig {
       .sku(clientProduct.getSku())
       .name(clientProduct.getName())
       .price(clientProduct.getPrice())
+      .stock(clientProduct.getStock())
       .image(clientProduct.getImage())
       .category(category)
+      .useStockForVariants(clientProduct.getUseStockForVariants())
       .isAvailable(clientProduct.getIsAvailable())
       .build();
   }
@@ -191,6 +197,8 @@ public class AppConfig {
       .sku(clientVariant.getSku())
       .name(clientVariant.getName())
       .price(clientVariant.getPrice())
+      .stock(clientVariant.getStock())
+      .stockPerTime(clientVariant.getStockPerTime())
       .useProductPrice(clientVariant.getUseProductPrice())
       .build();
   }
@@ -225,8 +233,10 @@ public class AppConfig {
       .sku(configProduct.getSku())
       .name(configProduct.getName())
       .price(configProduct.getPrice())
+      .stock(configProduct.getStock())
       .category(category)
       .image(configProduct.getImage())
+      .useStockForVariants(configProduct.getUseStockForVariants())
       .isAvailable(configProduct.getIsAvailable())
       .isArchived(isArchived)
       .archivedAt(isArchived ? new Date() : null)
@@ -253,6 +263,8 @@ public class AppConfig {
       .sku(variant.getSku())
       .name(variant.getName())
       .price(variant.getPrice())
+      .stock(variant.getStock())
+      .stockPerTime(variant.getStockPerTime())
       .useProductPrice(variant.getUseProductPrice())
       .product(product)
       .build();

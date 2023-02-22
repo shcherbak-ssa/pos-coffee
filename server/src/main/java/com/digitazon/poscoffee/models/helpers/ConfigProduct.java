@@ -12,8 +12,10 @@ public class ConfigProduct {
   private String sku;
   private String name;
   private Float price;
+  private Integer stock;
   private String image;
   private Long category;
+  private Boolean useStockForVariants;
   private Boolean isAvailable;
   private Boolean isArchived;
 

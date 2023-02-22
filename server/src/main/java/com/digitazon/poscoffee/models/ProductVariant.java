@@ -60,6 +60,8 @@ public class ProductVariant {
   private String name;
 
   private Float price;
+  private Integer stock;
+  private Integer stockPerTime;
   private Boolean useProductPrice;
 
   @ManyToOne(fetch = FetchType.EAGER)

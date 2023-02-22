@@ -9,6 +9,7 @@ import { LocalStorageKey, ROOT_PAGE_PATH } from 'shared/constants';
 import { LocalStorage } from 'shared/helpers/local-storage';
 import { replaceLocation } from 'shared/utils/replace-location';
 import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/navigate';
+import { IconButton } from 'view/components/IconButton';
 
 import type { AppComponentProps } from '@admin/shared/types';
 import { PagePath } from '@admin/shared/constants';
@@ -105,11 +106,18 @@ export function AppHeaderContainer({ appStore, appController }: Props) {
         </div>
       </div>
 
-      <div className="flex items-center click" onClick={toggleUserMenu}>
-        <UsersImage
-          size="large"
-          image={currentUser.image}
+      <div className="flex items-center gap-6">
+        <IconButton
+          icon={PrimeIcons.SEARCH}
+          click={() => {}}
         />
+
+        <div className="flex items-center click" onClick={toggleUserMenu}>
+          <UsersImage
+            size="large"
+            image={currentUser.image}
+          />
+        </div>
       </div>
 
       <Menu

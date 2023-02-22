@@ -10,6 +10,7 @@ import type { CardWithInputsProps, ProductDraft } from '@admin/shared/types';
 import { AvailableCheckbox } from '@admin/view/components/AvailableCheckbox';
 import { CardWrapper } from '@admin/view/components/CardWrapper';
 import { CardHeading } from '@admin/view/components/CardHeading';
+import { BaseCheckbox } from 'view/components/BaseCheckbox';
 
 export type Props = CardWithInputsProps<ProductSchema, ProductDraft> & {
   productCategories: ProductCategory[];
@@ -93,6 +94,29 @@ export function ProductsMainCard({
             onChange={(e) => productDraft.category = e.value}
             options={productCategories}
             optionLabel="name"
+          />
+        </InputWrapper>
+
+        <BaseCheckbox
+          inputId="useStockForVariants"
+          label="Use stock for variants"
+          disabled={!isEditMode}
+          checked={product.useStockForVariants}
+          onChange={(e) => productDraft.useStockForVariants = e.checked || false}
+        />
+
+        <div></div>
+
+        <InputWrapper
+          label="Stock"
+          valueKey="stock"
+          validationError={validationError}
+        >
+          <InputNumber
+            id="stock"
+            disabled={!isEditMode}
+            value={product.stock}
+            onValueChange={(e) => productDraft.stock = Number(e.value)}
           />
         </InputWrapper>
       </div>

@@ -8,6 +8,8 @@ export class ProductVariantSchema implements BaseProductVariantSchema {
   public sku: string;
   public name: string;
   public price: number;
+  public stock: number;
+  public stockPerTime: number;
   public useProductPrice: boolean;
 
   private constructor(schema?: BaseProductVariantSchema) {
@@ -15,6 +17,8 @@ export class ProductVariantSchema implements BaseProductVariantSchema {
     this.sku = schema?.sku || EMPTY_STRING;
     this.name = schema?.name || EMPTY_STRING;
     this.price = schema?.price || ZERO;
+    this.stock = schema?.stock || ZERO;
+    this.stockPerTime = schema?.stockPerTime || ZERO;
     this.useProductPrice = schema?.useProductPrice || false;
   }
 
@@ -46,6 +50,14 @@ export function createDraft(schema: BaseProductVariantSchema = ProductVariantSch
 
     set price(price: number) {
       schema.price = price;
+    },
+
+    set stock(stock: number) {
+      schema.stock = stock;
+    },
+
+    set stockPerTime(stockPerTime: number) {
+      schema.stockPerTime = stockPerTime;
     },
 
     set useProductPrice(useProductPrice: boolean) {

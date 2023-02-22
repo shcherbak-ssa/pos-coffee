@@ -18,6 +18,7 @@ const baseSchema: Schema = Joi.object({
     'string.max': 'Price must be between 0 and 127',
     'string.empty': 'Price cannot be empty',
   }),
+  stock: Joi.number(),
   image: Joi.string().empty(EMPTY_STRING),
   category: Joi.object({
     id: Joi.number().invalid(ZERO),
@@ -25,6 +26,7 @@ const baseSchema: Schema = Joi.object({
   }).messages({
     'number.invalid': 'Category is required',
   }),
+  useStockForVariants: Joi.boolean(),
   isAvailable: Joi.boolean(),
   isArchived: Joi.boolean(),
 });

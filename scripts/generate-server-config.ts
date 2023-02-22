@@ -57,7 +57,7 @@ function generateConfig(): Config {
     // @TODO: refactor
     products: [
       // Coffee bar
-      generateProduct({ name: 'Caffe', category: 2 }),
+      generateProduct({ name: 'Caffe', category: 2, stock: 0 }),
       generateProduct({ name: 'Cappuccino', category: 2 }),
       generateProduct({ name: 'Hot chocolate', category: 2 }),
       generateProduct({ name: 'Tea', category: 2 }),
@@ -133,15 +133,18 @@ function generateProduct({
   name = faker.commerce.productName(),
   category = 1,
   image = EMPTY_STRING,
+  useStockForVariants = false,
   isAvailable = true,
   isArchived = false,
 }: Partial<Product>): Product {
   return {
     sku: getSku(name),
     price: generatePrice(),
+    stock: Number(faker.random.numeric(2)),
     image,
     name,
     category,
+    useStockForVariants,
     isAvailable,
     isArchived,
   };
@@ -149,12 +152,16 @@ function generateProduct({
 
 function generateProductVariant({
   name = faker.commerce.productName(),
+  stock = Number(faker.random.numeric(2)),
+  stockPerTime = 1,
   useProductPrice = false,
   product = 1,
 }: Partial<ProductVariant>): ProductVariant {
   return {
     sku: getSku(name),
     price: generatePrice(),
+    stock,
+    stockPerTime,
     useProductPrice,
     name,
     product,

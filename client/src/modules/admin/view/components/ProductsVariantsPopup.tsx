@@ -2,13 +2,14 @@ import { Dialog } from 'primereact/dialog';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
 
-import type { EmptyFunction, ProductVariantSchema } from 'shared/types';
+import type { EmptyFunction, ProductSchema, ProductVariantSchema } from 'shared/types';
 import { InputWrapper } from 'view/components/InputWrapper';
 import { BaseCheckbox } from 'view/components/BaseCheckbox';
 
 import type { CardWithInputsProps, ProductVariantDraft } from '@admin/shared/types';
 
 export type Props = CardWithInputsProps<ProductVariantSchema, ProductVariantDraft> & {
+  product: ProductSchema;
   isVisible: boolean;
   hide: EmptyFunction;
   footer: React.ReactNode;
@@ -19,6 +20,7 @@ export function ProductsVariantsPopup({
   entityDraft: variantDraft,
   validationError,
   isEditMode,
+  product,
   isVisible,
   hide,
   footer,
@@ -30,18 +32,43 @@ export function ProductsVariantsPopup({
     }
 
     return (
+      <>
+        <InputWrapper
+          label="Price"
+          valueKey="price"
+          validationError={validationError}
+        >
+          <InputNumber
+            id="price"
+            mode="currency"
+            currency="EUR"
+            disabled={!isEditMode}
+            value={variant.price}
+            onValueChange={(e) => variantDraft.price = Number(e.value)}
+          />
+        </InputWrapper>
+
+        <div></div>
+      </>
+    );
+  }
+
+  function drawStockInputs(): React.ReactNode {
+    if (product.useStockForVariants) {
+      return;
+    }
+
+    return (
       <InputWrapper
-        label="Price"
-        valueKey="price"
+        label="Stock"
+        valueKey="stock"
         validationError={validationError}
       >
         <InputNumber
-          id="price"
-          mode="currency"
-          currency="EUR"
+          id="stock"
           disabled={!isEditMode}
-          value={variant.price}
-          onValueChange={(e) => variantDraft.price = Number(e.value)}
+          value={variant.stock}
+          onValueChange={(e) => variantDraft.stock = Number(e.value)}
         />
       </InputWrapper>
     );
@@ -94,6 +121,21 @@ export function ProductsVariantsPopup({
           </InputWrapper>
 
           { drawPriceInput() }
+
+          { drawStockInputs() }
+
+          <InputWrapper
+            label="Stock per time"
+            valueKey="stockPerTime"
+            validationError={validationError}
+          >
+            <InputNumber
+              id="stockPerTime"
+              disabled={!isEditMode}
+              value={variant.stockPerTime}
+              onValueChange={(e) => variantDraft.stockPerTime = Number(e.value)}
+            />
+          </InputWrapper>
         </div>
       </div>
     </Dialog>

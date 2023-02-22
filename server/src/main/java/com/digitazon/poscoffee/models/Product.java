@@ -70,6 +70,7 @@ public class Product extends BaseEntity {
 
   private String image;
   private Integer stock;
+  private Boolean useStockForVariants;
   private Boolean isAvailable;
 
 }

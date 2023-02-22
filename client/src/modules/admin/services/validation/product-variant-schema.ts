@@ -18,6 +18,8 @@ const baseSchema: Schema = Joi.object({
     'string.max': 'Price must be between 0 and 127',
     'string.empty': 'Price cannot be empty',
   }),
+  stock: Joi.number(),
+  stockPerTime: Joi.number(),
   useProductPrice: Joi.boolean(),
 });
 

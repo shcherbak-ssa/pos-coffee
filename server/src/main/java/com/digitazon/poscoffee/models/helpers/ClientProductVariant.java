@@ -46,6 +46,8 @@ public class ClientProductVariant {
   private String name;
 
   private Float price;
+  private Integer stock;
+  private Integer stockPerTime;
   private Boolean useProductPrice;
 
 }

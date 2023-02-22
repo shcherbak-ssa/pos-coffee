@@ -137,7 +137,13 @@ public class ProductsService {
     product.setSku(updates.getSku() == null ? product.getSku() : updates.getSku());
     product.setName(updates.getName() == null ? product.getName() : updates.getName());
     product.setPrice(updates.getPrice() == null ? product.getPrice() : updates.getPrice());
+    product.setStock(updates.getStock() == null ? product.getStock() : updates.getStock());
     product.setImage(updates.getImage() == null ? product.getImage() : updates.getImage());
+
+    product.setUseStockForVariants(
+      updates.getUseStockForVariants() == null
+        ? product.getUseStockForVariants() : updates.getUseStockForVariants()
+    );
     product.setIsAvailable(
       updates.getIsAvailable() == null ? product.getIsAvailable() : updates.getIsAvailable()
     );

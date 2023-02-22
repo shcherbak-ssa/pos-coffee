@@ -162,6 +162,14 @@ export function ProductsVariantsContainer({ product }: Props) {
               />
 
               <Column
+                header="Stock"
+                field="stock"
+                body={({ stock }: ProductVariantSchema) => (
+                  <div>{ product.useStockForVariants ? LONG_MINUS : stock }</div>
+                )}
+              />
+
+              <Column
                 header="Actions"
                 field="actions"
                 body={(variant: ProductVariantSchema) => (
@@ -177,6 +185,7 @@ export function ProductsVariantsContainer({ product }: Props) {
           entityDraft={variantDraft}
           validationError={validationError}
           isEditMode={isEditMode}
+          product={product}
           isVisible={isPopupVisible}
           hide={hidePopup}
           footer={(

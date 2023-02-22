@@ -53,8 +53,10 @@ public class ClientProduct {
   )
   private Float price;
 
+  private Integer stock;
   private String image;
   private ClientProductCategory category;
+  private Boolean useStockForVariants;
   private Boolean isAvailable;
   private Boolean isArchived;
   private Date createdAt;

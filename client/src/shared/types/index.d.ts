@@ -83,8 +83,10 @@ export type ProductSchema = BaseSchema & {
   sku: string;
   name: string;
   price: number;
+  stock: number;
   image: string;
   category: ProductCategory;
+  useStockForVariants: boolean;
   isAvailable: boolean;
 }
 
@@ -104,6 +106,8 @@ export type ProductVariantSchema = {
   sku: string;
   name: string;
   price: number;
+  stock: number;
+  stockPerTime: number;
   useProductPrice: boolean;
 }
 
