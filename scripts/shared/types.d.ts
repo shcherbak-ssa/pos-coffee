@@ -5,6 +5,8 @@ export type Config = {
   categories: Category[];
   products: Product[];
   productVariants: ProductVariant[];
+  orders: Order[];
+  orderLines: OrderLine[];
 }
 
 export type User = {
@@ -53,4 +55,14 @@ export type ProductVariant = {
   stockPerTime: number;
   useProductPrice: boolean;
   product: number;
+}
+
+export type Order = {
+  lines: number[];
+  user: number,
+}
+
+export type OrderLine = {
+  count: number;
+  variant: number;
 }

@@ -17,6 +17,8 @@ export enum ApiEndpoint {
   CATEGORIES_RESTORE = '/api/admin/categories/:id/restore',
   PRODUCT_VARIANTS = '/api/admin/products/variants',
   PRODUCT_VARIANTS_ID = '/api/admin/products/variants/:id',
+  ORDERS = '/api/admin/orders',
+  ORDERS_ID = '/api/admin/orders/:id',
 }
 
 export enum ControllerName {
@@ -25,6 +27,7 @@ export enum ControllerName {
   PRODUCTS = 'PRODUCTS',
   CATEGORIES = 'CATEGORIES',
   PRODUCT_VARIANTS = 'PRODUCT_VARIANTS',
+  ORDERS = 'ORDERS',
 }
 
 export enum StoreName {
@@ -33,6 +36,7 @@ export enum StoreName {
   PRODUCTS = 'PRODUCTS',
   CATEGORIES = 'CATEGORIES',
   PRODUCT_VARIANTS = 'PRODUCT_VARIANTS',
+  ORDERS = 'ORDERS',
 }
 
 export enum ValidationName {
@@ -52,6 +56,7 @@ export enum PagePath {
   PRODUCTS_EDIT = '/admin/products/:id/edit',
   CATEGORIES = '/admin/products/categories',
   ORDERS = '/admin/orders',
+  ORDERS_INFO = '/admin/orders/:id',
   USERS = '/admin/users',
   USERS_INFO = '/admin/users/:id',
   USERS_CREATE = '/admin/users/create',
@@ -69,7 +74,6 @@ export enum PageTitle {
   DASHBOARD = 'Dashboard',
   PRODUCTS = 'Products',
   CATEGORIES = 'Categories',
-  STOCK = 'Stock',
   ORDERS = 'Orders',
   USERS = 'Users',
   SETTINGS = 'Settings',
@@ -87,7 +91,7 @@ export enum ListAction {
 
 export enum ListTab {
   ACTIVE = 'ACTIVE',
-  ARCHIVE = 'ARCHIVE',
+  ARCHIVED = 'ARCHIVED',
 }
 
 export enum Action {
@@ -97,4 +101,9 @@ export enum Action {
   UPDATE = 'UPDATE',
   ARCHIVE = 'ARCHIVE',
   RESTORE = 'RESTORE',
+}
+
+export enum ControlGroup {
+  ACTIONS = 'ACTIONS',
+  VIEWS = 'VIEWS',
 }

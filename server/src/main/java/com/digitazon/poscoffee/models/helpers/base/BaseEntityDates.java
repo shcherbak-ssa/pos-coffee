@@ -1,4 +1,4 @@
-package com.digitazon.poscoffee.models.base;
+package com.digitazon.poscoffee.models.helpers.base;
 
 import java.util.Date;
 
@@ -17,7 +17,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 @MappedSuperclass
-public class BaseEntity {
+public class BaseEntityDates {
 
   private Boolean isArchived;
   private Date archivedAt;

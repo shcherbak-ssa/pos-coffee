@@ -6,6 +6,7 @@ import {
   EMPTY_STRING,
   LocalStorageKey,
   AUTHORIZATION_HEADER,
+  ErrorType,
 } from 'shared/constants';
 import { ApiError, AuthError, ValidationError } from 'shared/errors';
 import { setParamsToUrl } from 'shared/utils/url-params';
@@ -114,7 +115,7 @@ export class ApiService implements BaseApiService {
       throw new AuthError(error.message);
     }
 
-    if (response.status === ApiResponseCode.BAD_REQUEST) {
+    if (response.status === ApiResponseCode.BAD_REQUEST && error.type !== ErrorType.CLIENT) {
       throw new ValidationError(response.statusText, error.errors);
     }
 

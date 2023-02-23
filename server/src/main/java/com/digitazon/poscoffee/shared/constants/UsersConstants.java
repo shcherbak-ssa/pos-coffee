@@ -18,6 +18,8 @@ public class UsersConstants {
   public static final String CANNOT_CHANGE_TYPE_MESSAGE = "Cannot change the type of an existing user";
 
   public static final String UNIQUE_FIELD = "email";
+  public static final String USER_JOIN_COLUMN = "user_id";
+  public static final String USER_TYPE_JOIN_COLUMN = "type_id";
 
   public static enum UserType {
     ADMIN,

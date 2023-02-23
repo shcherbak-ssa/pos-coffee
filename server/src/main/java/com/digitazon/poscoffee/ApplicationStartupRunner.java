@@ -5,7 +5,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import com.digitazon.poscoffee.models.helpers.Config;
+import com.digitazon.poscoffee.models.helpers.config.Config;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.helpers.DatabaseDataLoader;
 import com.digitazon.poscoffee.shared.helpers.LocalResourceLoader;

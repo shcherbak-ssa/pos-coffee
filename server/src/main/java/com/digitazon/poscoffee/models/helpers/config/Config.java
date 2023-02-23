@@ -1,4 +1,4 @@
-package com.digitazon.poscoffee.models.helpers;
+package com.digitazon.poscoffee.models.helpers.config;
 
 import java.util.List;
 
@@ -13,5 +13,7 @@ public class Config {
   private List<ConfigCategory> categories;
   private List<ConfigProduct> products;
   private List<ConfigProductVariant> productVariants;
+  private List<ConfigOrder> orders;
+  private List<ConfigOrderLine> orderLines;
 
 }

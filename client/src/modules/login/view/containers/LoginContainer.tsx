@@ -12,7 +12,7 @@ import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 import { InputWrapper } from 'view/components/InputWrapper';
 
-import type { LoginStore, LoginController, LoginSchema, LoginState } from '@login/shared/types';
+import type { LoginStore, LoginController, LoginSchema } from '@login/shared/types';
 import { LOGIN_CONTROLLER, LOGIN_PAGE_PATH, LOGIN_PAGE_TITLE, LOGIN_STORE } from '@login/shared/constants';
 import { LoginWrapper } from '@login/view/components/LoginWrapper';
 import { LoginErrorMessage } from '@login/view/components/LoginErrorMessage';
@@ -28,7 +28,7 @@ function Container() {
   const [ validationError, cleanValidationError ] = useError<LoginSchema>(ErrorType.VALIDATION);
   const [ clientError, cleanClientError ] = useError<{}>(ErrorType.CLIENT);
 
-  const { state, login } = useStore<LoginState>(LOGIN_STORE) as LoginStore;
+  const { state, login } = useStore(LOGIN_STORE) as LoginStore;
   const loginController = useController(LOGIN_CONTROLLER) as LoginController;
 
   useEffect(() => {

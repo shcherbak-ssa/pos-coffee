@@ -1,4 +1,4 @@
-import { type MouseEvent, useEffect } from 'react';
+import { type MouseEvent, useEffect, useState } from 'react';
 import { type NavigateFunction, useNavigate } from 'react-router';
 import { Button } from 'primereact/button';
 import { PrimeIcons } from 'primereact/api';
@@ -13,9 +13,8 @@ import type {
   AppStore,
   PageAddButtonProps,
   PageComponentProps,
-  TabItem,
 } from '@admin/shared/types';
-import { ControllerName, ListTab, StoreName } from '@admin/shared/constants';
+import { ControlGroup, ControllerName, StoreName } from '@admin/shared/constants';
 import { PageSubHeaderContainer } from '@admin/view/containers/PageSubHeaderContainer';
 import { PageHeaderTabsContainer } from '@admin/view/containers/PageHeaderTabsContainer';
 import { PageHeaderHeadingContainer } from '@admin/view/containers/PageHeaderHeadingContainer';
@@ -30,9 +29,10 @@ export type Props = {
   showSubHeader: boolean;
   isEntityPage: boolean;
   children: React.ReactNode;
+  controlGroups?: ControlGroup[];
   actionProps?: ActionsProps,
   addButton?: PageAddButtonProps;
-  tabs?: TabItem[];
+  showTabs?: boolean;
   isLoading?: boolean;
   messageProps?: PageMessageProps;
 }
@@ -44,17 +44,19 @@ export function PageLayout({
   isEntityPage,
   actionProps,
   children,
-  tabs = [],
-  isLoading = false,
   messageProps,
+  showTabs = true,
+  isLoading = false,
+  controlGroups = [ ControlGroup.ACTIONS, ControlGroup.VIEWS ],
 }: Props) {
 
   const navigate: NavigateFunction = useNavigate();
+  const [ isHookProcessing, setIsHookProcessing ] = useState<boolean>(false);
 
-  const { state: { view } } = useStore(StoreName.APP) as AppStore;
+  const appStore = useStore(StoreName.APP) as AppStore;
   const appController = useController(ControllerName.APP) as AppController;
 
-  const pageComponentProps: PageComponentProps = { view, appController };
+  const pageComponentProps: PageComponentProps = { appStore, appController };
 
   useEffect(() => {
     appController.setCurrentPage(page);
@@ -75,39 +77,49 @@ export function PageLayout({
     }
   }
 
+  function drawTabs(): React.ReactNode {
+    if (showTabs) {
+      return <PageHeaderTabsContainer {...pageComponentProps} />;
+    }
+  }
+
   function drawActions(): React.ReactNode {
     if (isEntityPage && actionProps) {
+      return <PageHeaderActionsContainer {...actionProps} />;
+    } else
+      if (addButton) {
+        return (
+          <Button
+            className="p-button-sm"
+            icon={PrimeIcons.PLUS}
+            label={addButton.label}
+            onClick={handleAddButonClick}
+          />
+        );
+      }
+  }
+
+  function drawSubHeader(): React.ReactNode {
+    if (showSubHeader) {
       return (
-        <PageHeaderActionsContainer {...actionProps} />
-      );
-    } else {
-      return (
-        <Button
-          className="p-button-sm"
-          icon={PrimeIcons.PLUS}
-          label={addButton?.label || 'Add'}
-          onClick={handleAddButonClick}
+        <PageSubHeaderContainer
+          groups={controlGroups}
+          {...pageComponentProps}
         />
       );
     }
   }
 
-  function drawSubHeader(): React.ReactNode {
-    if (showSubHeader) {
-      return <PageSubHeaderContainer {...pageComponentProps} />;
-    }
-  }
-
   function drawContent(): React.ReactNode {
-    if (isLoading) {
-      return <AppLoader />;
-    }
-
     if (messageProps) {
       return <PageMessage {...messageProps} />;
     }
 
     return children;
+  }
+
+  if (isHookProcessing || isLoading) {
+    return <AppLoader />;
   }
 
   return (
@@ -118,10 +130,7 @@ export function PageLayout({
           navigate={navigate}
         />
 
-        <PageHeaderTabsContainer
-          tabs={tabs}
-          {...pageComponentProps}
-        />
+        { drawTabs() }
 
         { drawActions() }
       </div>

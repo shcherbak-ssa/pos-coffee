@@ -9,7 +9,7 @@ import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/nav
 import { EmptyComponent } from 'view/components/EmptyComponent';
 
 import type { AppPageSchema, AppStore, EntityViewComponentProps, PageAddButtonProps } from '@admin/shared/types';
-import { ControllerName, ListTab, ListView, PagePath, StoreName } from '@admin/shared/constants';
+import { ControlGroup, ControllerName, ListTab, ListView, PagePath, StoreName } from '@admin/shared/constants';
 import { useSelectedEntities } from '@admin/view/hooks/select-entities';
 import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-menu-items';
 import type { Props as PageLayoutProps } from '@admin/view/layouts/PageLayout';
@@ -21,13 +21,15 @@ export type Props<T> = {
   entityName: EntityName;
   storeName: StoreName;
   controllerName: ControllerName;
-  addButton: PageAddButtonProps;
+  addButton?: PageAddButtonProps;
   infoPagePath: PagePath;
-  actionsMenuItemsProps: ActionsMenuItemsProps;
+  actionsMenuItemsProps?: ActionsMenuItemsProps;
   EntityComponent?: React.ComponentType<EntityComponentProps<T>>;
-  tableColums?: ColumnProps[];
+  tableColumns?: ColumnProps[];
   showSubHeader?: boolean;
   pageContent?: (props: EntityViewComponentProps<T>) => React.ReactNode;
+  showTabs?: boolean;
+  controlGroups?: ControlGroup[];
 }
 
 export function usePageContainer<T extends Entity>({
@@ -39,9 +41,11 @@ export function usePageContainer<T extends Entity>({
   infoPagePath,
   actionsMenuItemsProps,
   EntityComponent,
-  tableColums = [],
-  showSubHeader = true,
   pageContent,
+  controlGroups,
+  tableColumns = [],
+  showSubHeader = true,
+  showTabs = true,
 }: Props<T>): PageLayoutProps | undefined {
 
   const [ isLoading, setIsLoading ] = useState<boolean>(true);
@@ -65,35 +69,21 @@ export function usePageContainer<T extends Entity>({
   };
 
   useEffect(() => {
-    loadEntities(view.listTab === ListTab.ARCHIVE);
-  }, []);
+    loadEntities(view.listTab === ListTab.ARCHIVED);
+  }, [view.listTab]);
 
   useEffect(() => {
     setPageLayoutProps({
       page,
       showSubHeader,
       addButton,
-      isEntityPage: false,
-      tabs: [
-        {
-          label: 'Active',
-          listTab: ListTab.ACTIVE,
-          command: () => {
-            loadEntities(false);
-          },
-        },
-        {
-          label: 'Archived',
-          listTab: ListTab.ARCHIVE,
-          command: () => {
-            loadEntities(true);
-          },
-        },
-      ],
+      showTabs,
       isLoading,
+      controlGroups,
+      isEntityPage: false,
       messageProps: list.length ? undefined : {
         type: 'info',
-        message: `No ${entityName.toLowerCase()} found`,
+        message: `No ${entityName.toLowerCase()}(s) found`,
       },
     });
   }, [isLoading, list]);
@@ -121,7 +111,7 @@ export function usePageContainer<T extends Entity>({
     if (view.listView === ListView.TABLE) {
       return (
         <EntityTableContainer
-          columns={tableColums}
+          columns={tableColumns}
           { ...entityViewComponentProps }
         />
       );

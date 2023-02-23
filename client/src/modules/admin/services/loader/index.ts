@@ -39,6 +39,11 @@ export class LoaderService implements BaseLoaderService {
 
         return ProductVariantsController.create();
       }
+      case ControllerName.ORDERS: {
+        const { OrdersController } = await import('@admin/controllers/orders');
+
+        return OrdersController.create();
+      }
     }
 
     throw new ProgerError(`[LOADER] Controller ${name} does not exist`);
@@ -70,6 +75,11 @@ export class LoaderService implements BaseLoaderService {
         const { productVariantsStore } = await import('@admin/services/store/product-variants');
 
         return productVariantsStore;
+      }
+      case StoreName.ORDERS: {
+        const { ordersStore } = await import('@admin/services/store/orders');
+
+        return ordersStore;
       }
     }
 

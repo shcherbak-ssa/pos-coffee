@@ -14,7 +14,7 @@ import { SaveButton } from '@admin/view/components/SaveButton';
 
 export type Props = {
   entity: Entity;
-  actionsMenuItemsProps: ActionsMenuItemsProps;
+  actionsMenuItemsProps?: ActionsMenuItemsProps;
   controllerName: string;
   infoPagePath: string;
 }
@@ -101,13 +101,15 @@ export function PageHeaderActionsContainer({
       );
     }
 
-    return (
-      <EntityActionsMenuContainer
-        entity={entity}
-        actionsMenuItemsProps={actionsMenuItemsProps}
-        isEntityPage
-      />
-    );
+    if (actionsMenuItemsProps) {
+      return (
+        <EntityActionsMenuContainer
+          entity={entity}
+          actionsMenuItemsProps={actionsMenuItemsProps}
+          isEntityPage
+        />
+      );
+    }
   }
 
   return (

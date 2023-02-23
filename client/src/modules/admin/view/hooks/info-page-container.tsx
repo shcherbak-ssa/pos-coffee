@@ -17,9 +17,9 @@ export type Props = {
   isEditMode: boolean;
   storeName: StoreName;
   controllerName: ControllerName;
-  actionsMenuItemsProps: ActionsMenuItemsProps;
   infoPagePath: PagePath;
   entityName: EntityName;
+  actionsMenuItemsProps?: ActionsMenuItemsProps;
 }
 
 export type Return<T> = [
@@ -58,6 +58,7 @@ export function useInfoPageContainer<T extends Entity>({
         infoPagePath,
       },
       showSubHeader: false,
+      showTabs: false,
       isEntityPage: true,
       isLoading: isLoading && !isError,
       messageProps: !isError ? undefined : {

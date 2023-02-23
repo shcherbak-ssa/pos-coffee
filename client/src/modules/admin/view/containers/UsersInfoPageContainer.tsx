@@ -5,15 +5,15 @@ import { EmptyComponent } from 'view/components/EmptyComponent';
 
 import type { UsersStore } from '@admin/shared/types';
 import { ControllerName, PagePath, PageTitle, StoreName } from '@admin/shared/constants';
+import { pages } from '@admin/shared/configs/pages';
 import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-menu-items';
 import { useUsersActionsMenuItemsProps } from '@admin/view/hooks/users-actions-menu-items';
 import { PageLayout } from '@admin/view/layouts/PageLayout';
 import { AddressCard } from '@admin/view/components/AddressCard';
 import { UsersProfileCard } from '@admin/view/components/UsersProfileCard';
 import { UsersCard } from '@admin/view/components/UsersCard';
-import { UsersInfoWrapper } from '@admin/view/components/UsersInfoWrapper';
 import { Return, useInfoPageContainer } from '@admin/view/hooks/info-page-container';
-import { pages } from '@admin/shared/configs/pages';
+import { InfoPageWrapper } from '@admin/view/components/InfoPageWrapper';
 
 export type Props = {
   isEditMode: boolean;
@@ -55,7 +55,7 @@ export function UsersInfoPageContainer({ isEditMode }: Props) {
   if (pageLayoutProps) {
     return (
       <PageLayout {...pageLayoutProps}>
-        <UsersInfoWrapper>
+        <InfoPageWrapper className="grid-cols-4">
           <UsersCard entity={selectedUser} />
 
           <UsersProfileCard
@@ -67,7 +67,7 @@ export function UsersInfoPageContainer({ isEditMode }: Props) {
           />
 
           { drawAddressCard() }
-        </UsersInfoWrapper>
+        </InfoPageWrapper>
       </PageLayout>
     );
   }

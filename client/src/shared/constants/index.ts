@@ -59,4 +59,5 @@ export enum EntityName {
   PRODUCT = 'Product',
   CATEGORY = 'Category',
   PRODUCT_VARIANT = 'Product variant',
+  ORDER = 'Order',
 }

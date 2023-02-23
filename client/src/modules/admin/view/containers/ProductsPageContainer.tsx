@@ -54,7 +54,7 @@ export function ProductsPageContainer() {
     controllerName: ControllerName.PRODUCTS,
     infoPagePath: PagePath.PRODUCTS_INFO,
     actionsMenuItemsProps: actionsMenuItemsProps.products,
-    tableColums: productsTableColumns,
+    tableColumns: productsTableColumns,
     EntityComponent: ProductsCard,
     addButton: {
       label: 'Create new product',

@@ -111,6 +111,35 @@ export type ProductVariantSchema = {
   useProductPrice: boolean;
 }
 
+export type OrderSchema = {
+  id: number;
+  number: string;
+  total: number;
+  lines: OrderLineSchema[];
+  user: OrderUserSchema;
+  createdAt: Date | null;
+}
+
+export type OrderLineSchema = {
+  id: number;
+  count: number;
+  price: number;
+  variant: OrderLineVariantSchema;
+}
+
+export type OrderUserSchema = {
+  id: number;
+  name: string;
+  surname: string;
+}
+
+export type OrderLineVariantSchema = {
+  id: number;
+  productName: string;
+  variantName: string;
+  image: string;
+}
+
 /**
  * Notifications and errors
  */

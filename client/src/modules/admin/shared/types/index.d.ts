@@ -12,6 +12,7 @@ import type {
   CategorySchema,
   ProductCategory,
   ProductVariantSchema,
+  OrderSchema,
 } from 'shared/types';
 import type { UserType } from 'shared/constants';
 
@@ -27,7 +28,8 @@ export type Controllers =
   | AppController
   | ProductsController
   | CategoriesController
-  | ProductVariantsController;
+  | ProductVariantsController
+  | OrdersController;
 
 export type AppMenuItem = {
   label: string;
@@ -39,12 +41,6 @@ export type OptionItem = {
   value: string;
   icon: string;
   label?: string;
-}
-
-export type TabItem = {
-  label: string;
-  listTab: ListTab;
-  command: EmptyFunction;
 }
 
 export type ActionMenuItem = {
@@ -69,7 +65,7 @@ export type AppComponentProps = {
 }
 
 export type PageComponentProps = {
-  view: AppViewState;
+  appStore: AppStore;
   appController: AppController;
 }
 
@@ -79,7 +75,7 @@ export type EntityViewComponentProps<T> = {
   isSelectEnable: boolean;
   selectedEntities: T[];
   setSelectedEntities: (entities: T[]) => void;
-  actionsMenuItemsProps: ActionsMenuItemsProps;
+  actionsMenuItemsProps?: ActionsMenuItemsProps;
 }
 
 export type CardWithInputsProps<T, D> = {
@@ -92,6 +88,8 @@ export type CardWithInputsProps<T, D> = {
 
 /**
  * App
+ *
+ * (ProductCategory)
  */
 
 export type AppPageSchema = {
@@ -253,3 +251,13 @@ export interface ProductVariantsController {
   delete(entityId: number): Promise<boolean>;
   select(entityId?: number): Promise<void>;
 }
+
+/**
+ * Orders
+ */
+
+export interface OrdersStore extends StoreEntityState<{}, OrderSchema, {}> {}
+
+export interface OrdersStoreActions extends StoreCrud<OrderSchema> {}
+
+export interface OrdersController extends CrudController<OrderSchema, {}> {}

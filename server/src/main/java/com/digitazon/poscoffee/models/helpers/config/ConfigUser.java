@@ -1,4 +1,4 @@
-package com.digitazon.poscoffee.models.helpers;
+package com.digitazon.poscoffee.models.helpers.config;
 
 import com.digitazon.poscoffee.models.Address;
 

@@ -1,4 +1,5 @@
 import type { MouseEvent } from 'react';
+import classnames from 'classnames';
 import { PrimeIcons } from 'primereact/api';
 import { Button } from 'primereact/button';
 
@@ -7,9 +8,10 @@ import type { EmptyFunction } from 'shared/types';
 export type Props = {
   isLoading: boolean;
   click: EmptyFunction;
+  className?: string;
 }
 
-export function SaveButton({ isLoading, click }: Props) {
+export function SaveButton({ className, isLoading, click }: Props) {
 
   function handleClick(e: MouseEvent): void {
     e.preventDefault();
@@ -19,7 +21,7 @@ export function SaveButton({ isLoading, click }: Props) {
 
   return (
     <Button
-      className="p-button-sm"
+      className={classnames('p-button-sm', className)}
       icon={PrimeIcons.SAVE}
       label="Save"
       loading={isLoading}

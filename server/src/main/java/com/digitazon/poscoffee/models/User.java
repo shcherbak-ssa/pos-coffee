@@ -20,7 +20,8 @@ import javax.validation.constraints.Size;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.digitazon.poscoffee.models.base.BaseEntity;
+import com.digitazon.poscoffee.models.helpers.base.BaseEntityDates;
+import com.digitazon.poscoffee.models.helpers.base.BaseEntityId;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.UsersConstants;
 
@@ -38,7 +39,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class User extends BaseEntity {
+public class User extends BaseEntityDates implements BaseEntityId {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -98,8 +99,8 @@ public class User extends BaseEntity {
   @ManyToOne
   @JoinTable(
     name = AppConstants.DatabaseTable.USER_TYPE_JOIN,
-    joinColumns = @JoinColumn(name = "user_id"),
-    inverseJoinColumns = @JoinColumn(name = "type_id")
+    joinColumns = @JoinColumn(name = UsersConstants.USER_JOIN_COLUMN),
+    inverseJoinColumns = @JoinColumn(name = UsersConstants.USER_TYPE_JOIN_COLUMN)
   )
   @NotNull(
     message = UsersConstants.TYPE_EMPTY_MESSAGE,

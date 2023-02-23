@@ -3,6 +3,7 @@ import type { MenuItem } from 'primereact/menuitem';
 import { Button } from 'primereact/button';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import { InputNumber } from 'primereact/inputnumber';
 import { PrimeIcons } from 'primereact/api';
 import { confirmDialog } from 'primereact/confirmdialog';
 
@@ -12,8 +13,15 @@ import { useStore } from 'view/hooks/store';
 import { useError } from 'view/hooks/error';
 import { useController } from 'view/hooks/controller';
 import { AppLoader } from 'view/components/AppLoader';
+import { BaseCheckbox } from 'view/components/BaseCheckbox';
+import { InputWrapper } from 'view/components/InputWrapper';
 
-import type { ProductVariantsController, ProductVariantsStore } from '@admin/shared/types';
+import type {
+  CardWithInputsProps,
+  ProductDraft,
+  ProductVariantsController,
+  ProductVariantsStore,
+} from '@admin/shared/types';
 import { ControllerName, StoreName } from '@admin/shared/constants';
 import { confirmDialogConfig } from '@admin/shared/configs/confirm-dialog';
 import { ProductsVariantsPopupFooter } from '@admin/view/components/ProductsVariantsPopupFooter';
@@ -22,11 +30,14 @@ import { CardWrapper } from '@admin/view/components/CardWrapper';
 import { CardHeading } from '@admin/view/components/CardHeading';
 import { ProductVariantMenu } from '@admin/view/components/ProductVariantMenu';
 
-export type Props = {
-  product: ProductSchema;
-}
+export type Props = CardWithInputsProps<ProductSchema, ProductDraft>;
 
-export function ProductsVariantsContainer({ product }: Props) {
+export function ProductsVariantsContainer({
+  entity: product,
+  entityDraft: productDraft,
+  validationError: productValidationError,
+  isEditMode: isProductEditMode,
+}: Props) {
 
   const [ isVariantsLoaded, setIsVariantsLoaded ] = useState<boolean>(false);
   const [ isPopupVisible, setIsPopupVisible ] = useState<boolean>(false);
@@ -143,6 +154,31 @@ export function ProductsVariantsContainer({ product }: Props) {
               onClick={openPopupToCreateVariant}
             />
           </div>
+
+          <BaseCheckbox
+            className="mb-10"
+            inputId="useStockForVariants"
+            label="Use stock for variants"
+            disabled={!isProductEditMode}
+            checked={product.useStockForVariants}
+            onChange={(e) => productDraft.useStockForVariants = e.checked || false}
+          />
+
+          <div className="grid grid-cols-3 mb-10">
+            <InputWrapper
+              label="Stock"
+              valueKey="stock"
+              validationError={productValidationError}
+            >
+              <InputNumber
+                id="stock"
+                disabled={!isProductEditMode}
+                value={product.stock}
+                onValueChange={(e) => productDraft.stock = Number(e.value)}
+              />
+            </InputWrapper>
+          </div>
+
 
           <div className="overflow-hidden rounded-xl border-2">
             <DataTable

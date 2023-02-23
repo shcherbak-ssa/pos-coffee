@@ -29,11 +29,18 @@ export function EntityTableContainer<T extends Entity>({
   const [ columnsProps, setColumnsProps ] = useState<ColumnProps[]>([]);
 
   useEffect(() => {
-    setColumnsProps([
+    const columnsProps: ColumnProps[] = [
       getSelectionColumn(),
       ...columns,
-      getActionsColumn(),
-    ]);
+    ];
+
+    const actionsColumn: ColumnProps | undefined = getActionsColumn();
+
+    if (actionsColumn) {
+      columnsProps.push(actionsColumn);
+    }
+
+    setColumnsProps(columnsProps);
   }, [columns, isSelectEnable]);
 
   function selectEntities({ value }: DataTableSelectionChangeEvent<T[]>): void {
@@ -54,18 +61,20 @@ export function EntityTableContainer<T extends Entity>({
     };
   }
 
-  function getActionsColumn(): ColumnProps {
-    return {
-      field: 'actions',
-      header: 'Actions',
-      body: (entity: T) => (
-        <EntityActionsMenuContainer
-          entity={entity}
-          isEntityPage={false}
-          actionsMenuItemsProps={actionsMenuItemsProps}
-        />
-      ),
-    };
+  function getActionsColumn(): ColumnProps | undefined {
+    if (actionsMenuItemsProps) {
+      return {
+        field: 'actions',
+        header: 'Actions',
+        body: (entity: T) => (
+          <EntityActionsMenuContainer
+            entity={entity}
+            isEntityPage={false}
+            actionsMenuItemsProps={actionsMenuItemsProps}
+          />
+        ),
+      };
+    }
   }
 
   return (

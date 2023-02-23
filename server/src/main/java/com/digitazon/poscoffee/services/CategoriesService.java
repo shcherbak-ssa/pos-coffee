@@ -16,9 +16,9 @@ import org.springframework.stereotype.Service;
 
 import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.Category;
-import com.digitazon.poscoffee.models.helpers.ClientCategory;
-import com.digitazon.poscoffee.models.helpers.ClientProductCategory;
 import com.digitazon.poscoffee.models.helpers.EntityFilter;
+import com.digitazon.poscoffee.models.helpers.client.ClientCategory;
+import com.digitazon.poscoffee.models.helpers.client.ClientProductCategory;
 import com.digitazon.poscoffee.repositories.CategoriesRepository;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.CategoriesConstants;

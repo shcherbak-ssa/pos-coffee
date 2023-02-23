@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digitazon.poscoffee.models.Product;
-import com.digitazon.poscoffee.models.helpers.ClientProductVariant;
+import com.digitazon.poscoffee.models.helpers.client.ClientProductVariant;
 import com.digitazon.poscoffee.services.ProductVariantsService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.ProductVariantsConstants;
@@ -30,7 +30,7 @@ import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
 @RestController
 @CrossOrigin
 @Validated
-public class ProductVariantsAdminController {
+public class AdminProductVariantsController {
 
   @Autowired
   private ProductVariantsService service;

@@ -1,7 +1,17 @@
-export default function OrdersPage() {
+import { loadContext } from 'shared/helpers/load-context';
 
-  return (
-    <div>@TODO: implement ORDERS</div>
-  );
+import { ControllerName, StoreName } from '@admin/shared/constants';
+import { OrdersPageContainer } from '@admin/view/containers/OrdersPageContainer';
+
+const OrdersPage = loadContext(Page, {
+  stores: [ StoreName.ORDERS ],
+  controllers: [ ControllerName.ORDERS ],
+});
+
+export default OrdersPage;
+
+function Page() {
+
+  return <OrdersPageContainer />;
 
 }
