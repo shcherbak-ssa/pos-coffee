@@ -1,6 +1,8 @@
 package com.digitazon.poscoffee.configs;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
@@ -12,22 +14,32 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.digitazon.poscoffee.models.Category;
+import com.digitazon.poscoffee.models.Order;
+import com.digitazon.poscoffee.models.OrderLine;
 import com.digitazon.poscoffee.models.Product;
 import com.digitazon.poscoffee.models.ProductVariant;
 import com.digitazon.poscoffee.models.User;
 import com.digitazon.poscoffee.models.UserType;
-import com.digitazon.poscoffee.models.base.BaseEntity;
+import com.digitazon.poscoffee.models.base.BaseEntityDates;
 import com.digitazon.poscoffee.models.helpers.ClientCategory;
+import com.digitazon.poscoffee.models.helpers.ClientOrder;
+import com.digitazon.poscoffee.models.helpers.ClientOrderLine;
+import com.digitazon.poscoffee.models.helpers.ClientOrderLineVariant;
+import com.digitazon.poscoffee.models.helpers.ClientOrderUser;
 import com.digitazon.poscoffee.models.helpers.ClientProduct;
 import com.digitazon.poscoffee.models.helpers.ClientProductCategory;
 import com.digitazon.poscoffee.models.helpers.ClientProductVariant;
 import com.digitazon.poscoffee.models.helpers.ClientUser;
 import com.digitazon.poscoffee.models.helpers.ConfigCategory;
+import com.digitazon.poscoffee.models.helpers.ConfigOrder;
+import com.digitazon.poscoffee.models.helpers.ConfigOrderLine;
 import com.digitazon.poscoffee.models.helpers.ConfigProduct;
 import com.digitazon.poscoffee.models.helpers.ConfigProductVariant;
 import com.digitazon.poscoffee.models.helpers.ConfigUser;
 import com.digitazon.poscoffee.models.helpers.ErrorResponse;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
+import com.digitazon.poscoffee.shared.constants.OrdersConstants;
+import com.digitazon.poscoffee.shared.helpers.Helpers;
 import com.digitazon.poscoffee.shared.helpers.ServiceHelpers;
 
 @Configuration
@@ -48,7 +60,7 @@ public class AppConfig {
 
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-  public <T extends BaseEntity> ServiceHelpers<T> serviceHelpers(
+  public <T extends BaseEntityDates> ServiceHelpers<T> serviceHelpers(
     JpaRepository<T, Long> repository, String entityName
   ) {
     return new ServiceHelpers<T>(repository, entityName);
@@ -137,6 +149,57 @@ public class AppConfig {
       .stock(variant.getStock())
       .stockPerTime(variant.getStockPerTime())
       .useProductPrice(variant.getUseProductPrice())
+      .createdAt(variant.getCreatedAt())
+      .updatedAt(variant.getUpdatedAt())
+      .build();
+  }
+
+  @Bean
+  @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+  public ClientOrder clientOrder(Order order) {
+    final Long orderId = order.getId();
+    final User user = order.getUser();
+
+    final String number = (orderId + OrdersConstants.ORDER_NUMBER_BASE) + AppConstants.EMPTY_STRING;
+    final ClientOrderUser clientOrderUser = ClientOrderUser.builder()
+      .id(user.getId())
+      .name(user.getName())
+      .surname(user.getSurname())
+      .build();
+
+    final List<ClientOrderLine> lines = order.getLines()
+      .stream()
+      .map(this::clientOrderLine)
+      .collect(Collectors.toList());
+
+    return ClientOrder.builder()
+      .id(orderId)
+      .number(number)
+      .total(order.getTotal())
+      .lines(lines)
+      .user(clientOrderUser)
+      .createdAt(order.getCreatedAt())
+      .build();
+  }
+
+  @Bean
+  @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+  public ClientOrderLine clientOrderLine(OrderLine line) {
+    final ProductVariant variant = line.getVariant();
+    final Product product = variant.getProduct();
+
+    final ClientOrderLineVariant lineVariant = ClientOrderLineVariant.builder()
+      .id(variant.getId())
+      .variantName(variant.getName())
+      .productName(product.getName())
+      .image(product.getImage())
+      .build();
+
+    return ClientOrderLine.builder()
+      .id(line.getId())
+      .count(line.getCount())
+      .price(line.getPrice())
+      .variant(lineVariant)
       .build();
   }
 
@@ -267,6 +330,27 @@ public class AppConfig {
       .stockPerTime(variant.getStockPerTime())
       .useProductPrice(variant.getUseProductPrice())
       .product(product)
+      .build();
+  }
+
+  @Bean
+  @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+  public Order orderFromConfigOrder(ConfigOrder order, List<OrderLine> lines, User user) {
+    return Order.builder()
+      .lines(lines)
+      .user(user)
+      .build();
+  }
+
+  @Bean
+  @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+  public OrderLine orderLineFromConfigOrderLine(ConfigOrderLine line, ProductVariant variant) {
+    final float price = Helpers.getProductVariantPrice(variant);
+
+    return OrderLine.builder()
+      .count(line.getCount())
+      .price(price)
+      .variant(variant)
       .build();
   }
 

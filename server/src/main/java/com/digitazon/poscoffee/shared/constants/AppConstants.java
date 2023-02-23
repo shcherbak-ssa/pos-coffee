@@ -4,6 +4,7 @@ import javax.validation.groups.Default;
 
 public class AppConstants {
 
+  public static final int ZERO = 0;
   public static final int MIN_UPDATE_LENGTH = 1;
 
   public static final String EMPTY_STRING = "";
@@ -51,6 +52,7 @@ public class AppConstants {
       public static final String CATEGORIES_RESTORE = "/api/admin/categories/{id}/restore";
       public static final String PRODUCT_VARIANTS = "/api/admin/products/variants";
       public static final String PRODUCT_VARIANTS_ID = "/api/admin/products/variants/{id}";
+      public static final String ORDERS = "/api/admin/orders";
     }
   }
 
@@ -62,6 +64,9 @@ public class AppConstants {
     public static final String PRODUCTS = "products";
     public static final String CATEGORIES = "categories";
     public static final String PRODUCT_VARIANTS = "product_variants";
+    public static final String ORDERS = "orders";
+    public static final String ORDER_LINES = "order_lines";
+    public static final String ORDER_LINE_JOIN = "order_line_join";
   }
 
   public static enum ErrorType {

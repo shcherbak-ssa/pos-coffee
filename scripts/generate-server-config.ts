@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { faker } from '@faker-js/faker';
 
-import type { Address, Category, Config, Product, ProductVariant, User } from './shared/types';
+import type { Address, Category, Config, Order, OrderLine, Product, ProductVariant, User } from './shared/types';
 import { EMPTY_STRING, SERVER_CONFIG_FILENAME, UserType } from './shared/constants';
 import { generatePrice, generateRundomAvatar, getSku } from './shared/utils';
 
@@ -57,7 +57,7 @@ function generateConfig(): Config {
     // @TODO: refactor
     products: [
       // Coffee bar
-      generateProduct({ name: 'Caffe', category: 2, stock: 0 }),
+      generateProduct({ name: 'Caffe', category: 2, stock: 10000, useStockForVariants: true }),
       generateProduct({ name: 'Cappuccino', category: 2 }),
       generateProduct({ name: 'Hot chocolate', category: 2 }),
       generateProduct({ name: 'Tea', category: 2 }),
@@ -84,9 +84,27 @@ function generateConfig(): Config {
       generateProduct({ name: 'Hamburger', category: 6 }),
     ],
     productVariants: [
-      generateProductVariant({ name: 'Expressed', product: 1 }),
-      generateProductVariant({ name: 'Double coffee', product: 1 }),
-      generateProductVariant({ name: 'American coffee', product: 1 }),
+      // Caffee
+      generateProductVariant({ name: 'Expressed', product: 1, stockPerTime: 20 }),
+      generateProductVariant({ name: 'Double coffee', product: 1, stockPerTime: 20 }),
+      generateProductVariant({ name: 'American coffee', product: 1, stockPerTime: 20 }),
+      // Tea
+      generateProductVariant({ name: 'Green', product: 4 }),
+      generateProductVariant({ name: 'Black', product: 4 }),
+    ],
+    orders: [
+      generateOrder({ lines: [1], user: 3 }),
+      generateOrder({ lines: [2], user: 5 }),
+      generateOrder({ lines: [3, 4, 5], user: 3 }),
+      generateOrder({ lines: [6], user: 4 }),
+    ],
+    orderLines: [
+      generateOrderLine({ count: 2, variant: 1 }),
+      generateOrderLine({ count: 1, variant: 3 }),
+      generateOrderLine({ count: 1, variant: 5 }),
+      generateOrderLine({ count: 2, variant: 2 }),
+      generateOrderLine({ count: 1, variant: 3 }),
+      generateOrderLine({ count: 3, variant: 4 }),
     ],
   };
 }
@@ -165,5 +183,19 @@ function generateProductVariant({
     useProductPrice,
     name,
     product,
+  };
+}
+
+function generateOrder({ lines = [], user = 3 }: Partial<Order>): Order {
+  return {
+    lines,
+    user,
+  };
+}
+
+function generateOrderLine({ count = 1, variant = 1 }: Partial<OrderLine>): OrderLine {
+  return {
+    count,
+    variant,
   };
 }

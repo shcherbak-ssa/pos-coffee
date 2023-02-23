@@ -1,8 +1,12 @@
 package com.digitazon.poscoffee.shared.helpers;
 
+import java.util.List;
 import java.util.Random;
 
+import com.digitazon.poscoffee.models.Product;
+import com.digitazon.poscoffee.models.ProductVariant;
 import com.digitazon.poscoffee.models.UserType;
+import com.digitazon.poscoffee.models.base.BaseEntityId;
 import com.digitazon.poscoffee.services.UserTypesService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.UsersConstants;
@@ -50,6 +54,25 @@ public class Helpers {
     }
 
     return builder.toString();
+  }
+
+  public static <T extends BaseEntityId> T findEntityById(List<T> entities, Long id) {
+    return entities
+      .stream()
+      .filter((e) -> e.getId() == id)
+      .findFirst()
+      .orElse(entities.get(AppConstants.ZERO));
+  }
+
+  public static float getProductVariantPrice(ProductVariant variant) {
+    float price = variant.getPrice();
+
+    if (variant.getUseProductPrice()) {
+      final Product product = variant.getProduct();
+      price = product.getPrice();
+    }
+
+    return price;
   }
 
 }

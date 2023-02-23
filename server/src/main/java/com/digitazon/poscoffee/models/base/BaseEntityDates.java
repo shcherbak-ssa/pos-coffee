@@ -17,7 +17,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 @MappedSuperclass
-public class BaseEntity {
+public class BaseEntityDates {
 
   private Boolean isArchived;
   private Date archivedAt;

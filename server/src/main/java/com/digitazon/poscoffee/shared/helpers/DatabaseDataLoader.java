@@ -2,6 +2,7 @@ package com.digitazon.poscoffee.shared.helpers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -10,17 +11,22 @@ import org.springframework.stereotype.Component;
 import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.Address;
 import com.digitazon.poscoffee.models.Category;
+import com.digitazon.poscoffee.models.Order;
+import com.digitazon.poscoffee.models.OrderLine;
 import com.digitazon.poscoffee.models.Product;
 import com.digitazon.poscoffee.models.ProductVariant;
 import com.digitazon.poscoffee.models.User;
 import com.digitazon.poscoffee.models.UserType;
 import com.digitazon.poscoffee.models.helpers.Config;
 import com.digitazon.poscoffee.models.helpers.ConfigCategory;
+import com.digitazon.poscoffee.models.helpers.ConfigOrder;
+import com.digitazon.poscoffee.models.helpers.ConfigOrderLine;
 import com.digitazon.poscoffee.models.helpers.ConfigProduct;
 import com.digitazon.poscoffee.models.helpers.ConfigProductVariant;
 import com.digitazon.poscoffee.models.helpers.ConfigUser;
 import com.digitazon.poscoffee.services.AddressService;
 import com.digitazon.poscoffee.services.CategoriesService;
+import com.digitazon.poscoffee.services.OrdersService;
 import com.digitazon.poscoffee.services.ProductVariantsService;
 import com.digitazon.poscoffee.services.ProductsService;
 import com.digitazon.poscoffee.services.UserTypesService;
@@ -53,19 +59,30 @@ public class DatabaseDataLoader {
   @Autowired
   private ProductVariantsService productVariantsService;
 
+  @Autowired
+  private OrdersService ordersService;
+
   public void loadConstants() {
     this.userTypesService.loadTypes();
   }
 
   public void loadConfigData(Config config) throws ProgerException, AlreadyExistException {
-    this.loadUsers(config.getUsers());
-
+    final List<User> users = this.loadUsers(config.getUsers());
     final List<Category> categories = this.loadCategories(config.getCategories());
     final List<Product> products = this.loadProducts(config.getProducts(), categories);
-    this.loadProductVariants(config.getProductVariants(), products);
+    final List<ProductVariant> variants = this.loadProductVariants(config.getProductVariants(), products);
+
+    this.loadOrders(
+      config.getOrders(),
+      config.getOrderLines(),
+      variants,
+      users
+    );
   }
 
-  private void loadUsers(List<ConfigUser> users) throws ProgerException, AlreadyExistException {
+  private List<User> loadUsers(List<ConfigUser> users) throws ProgerException, AlreadyExistException {
+    final List<User> createdUsers = new ArrayList<User>();
+
     for (ConfigUser configUser : users) {
       final User user = (User) this.context.getBean("userFromConfigUser", configUser);
 
@@ -75,8 +92,11 @@ public class DatabaseDataLoader {
       final Address address = this.addressService.createAddress(configUser.getAddress());
       user.setAddress(address);
 
-      this.usersService.createUser(user);
+      final User created = this.usersService.createUser(user);
+      createdUsers.add(created);
     }
+
+    return createdUsers;
   }
 
   private List<Category> loadCategories(List<ConfigCategory> categories) throws AlreadyExistException {
@@ -84,9 +104,9 @@ public class DatabaseDataLoader {
 
     for (ConfigCategory configCategory : categories) {
       final Category category = (Category) this.context.getBean("categoryFromConfigCategory", configCategory);
-      final Category createdCategory = this.categoriesService.createCategory(category);
 
-      createdCategories.add(createdCategory);
+      final Category created = this.categoriesService.createCategory(category);
+      createdCategories.add(created);
     }
 
     return createdCategories;
@@ -99,38 +119,73 @@ public class DatabaseDataLoader {
     final List<Product> createdProducts = new ArrayList<Product>();
 
     for (ConfigProduct configProduct : products) {
-      final Category productCategory = categories
-        .stream()
-        .filter((category) -> category.getId() == configProduct.getCategory())
-        .findFirst()
-        .orElse(categories.get(0));
+      final Category productCategory = Helpers.findEntityById(categories, configProduct.getCategory());
 
       final Product product = (Product)
         this.context.getBean("productFromConfigProduct", configProduct, productCategory);
 
-      final Product createdProduct = this.productsService.createProduct(product);
-      createdProducts.add(createdProduct);
+      final Product created = this.productsService.createProduct(product);
+      createdProducts.add(created);
     }
 
     return createdProducts;
   }
 
-  private void loadProductVariants(
+  private List<ProductVariant> loadProductVariants(
     List<ConfigProductVariant> variants,
     List<Product> products
   ) throws AlreadyExistException {
+    final List<ProductVariant> createdVariants = new ArrayList<ProductVariant>();
+
     for (ConfigProductVariant configVariant : variants) {
-      final Product product = products
-        .stream()
-        .filter((variant) -> variant.getId() == configVariant.getProduct())
-        .findFirst()
-        .orElse(products.get(0));
+      final Product product = Helpers.findEntityById(products, configVariant.getProduct());
 
       final ProductVariant productVariant = (ProductVariant)
         this.context.getBean("variantFromConfigVariant", configVariant, product);
 
-      this.productVariantsService.createVariant(productVariant);
+      final ProductVariant created = this.productVariantsService.createVariant(productVariant);
+      createdVariants.add(created);
     }
+
+    return createdVariants;
+  }
+
+  private void loadOrders(
+    List<ConfigOrder> orders,
+    List<ConfigOrderLine> lines,
+    List<ProductVariant> variants,
+    List<User> users
+  ) {
+    final List<OrderLine> orderLines = this.loadOrderLines(lines, variants);
+
+    for (ConfigOrder configOrder : orders) {
+      final User user = Helpers.findEntityById(users, configOrder.getUser());
+
+      final List<Long> lineIds = configOrder.getLines();
+      final List<OrderLine> currentOrderLines = orderLines
+        .stream()
+        .filter((line) -> lineIds.contains(line.getId()))
+        .collect(Collectors.toList());
+
+      final Order order = (Order)
+        this.context.getBean("orderFromConfigOrder", configOrder, currentOrderLines, user);
+
+      this.ordersService.createOrder(order);
+    }
+  }
+
+  private List<OrderLine> loadOrderLines(List<ConfigOrderLine> lines, List<ProductVariant> variants) {
+    final List<OrderLine> createdLines = new ArrayList<OrderLine>();
+
+    for (ConfigOrderLine configLine : lines) {
+      final ProductVariant variant = Helpers.findEntityById(variants, configLine.getVariant());
+      final OrderLine line = (OrderLine) this.context.getBean("orderLineFromConfigOrderLine", configLine, variant);
+
+      final OrderLine created = this.ordersService.createOrderLine(line);
+      createdLines.add(created);
+    }
+
+    return createdLines;
   }
 
 }

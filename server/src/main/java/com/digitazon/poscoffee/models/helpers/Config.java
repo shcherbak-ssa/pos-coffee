@@ -13,5 +13,7 @@ public class Config {
   private List<ConfigCategory> categories;
   private List<ConfigProduct> products;
   private List<ConfigProductVariant> productVariants;
+  private List<ConfigOrder> orders;
+  private List<ConfigOrderLine> orderLines;
 
 }

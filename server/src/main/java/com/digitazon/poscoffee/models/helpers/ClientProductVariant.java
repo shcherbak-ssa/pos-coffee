@@ -1,5 +1,7 @@
 package com.digitazon.poscoffee.models.helpers;
 
+import java.util.Date;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -49,5 +51,7 @@ public class ClientProductVariant {
   private Integer stock;
   private Integer stockPerTime;
   private Boolean useProductPrice;
+  private Date createdAt;
+  private Date updatedAt;
 
 }
