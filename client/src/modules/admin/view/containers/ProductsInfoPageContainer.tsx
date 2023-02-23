@@ -6,15 +6,15 @@ import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 import { EmptyComponent } from 'view/components/EmptyComponent';
 
-import type { AppController, AppStore, ProductsStore } from '@admin/shared/types';
+import type { AppController, AppStore, CardWithInputsProps, ProductDraft, ProductsStore } from '@admin/shared/types';
 import { PagePath, PageTitle, StoreName, ControllerName } from '@admin/shared/constants';
 import { actionsMenuItemsProps, headerMenuItems, pages } from '@admin/shared/configs/pages';
 import { type Return, useInfoPageContainer } from '@admin/view/hooks/info-page-container';
 import { PageLayout } from '@admin/view/layouts/PageLayout';
-import { ProductsInfoWrapper } from '@admin/view/components/ProductsInfoWrapper';
 import { ProductsMainCard } from '@admin/view/components/ProductsMainCard';
 import { ProductsVariantsContainer } from '@admin/view/containers/ProductsVariantsContainer';
-import { ProductsImageCard } from '../components/ProductsImageCard';
+import { ProductsImageCard } from '@admin/view/components/ProductsImageCard';
+import { InfoPageWrapper } from '@admin/view/components/InfoPageWrapper';
 
 export type Props = {
   isEditMode: boolean;
@@ -43,6 +43,13 @@ export function ProductsInfoPageContainer({ isEditMode }: Props) {
     isEditMode,
   });
 
+  const cardProps: CardWithInputsProps<ProductSchema, ProductDraft> = {
+    entity: selectedProduct,
+    entityDraft: draftProduct,
+    validationError,
+    isEditMode,
+  };
+
   useEffect(() => {
     appController.loadProductCategories();
   }, []);
@@ -62,20 +69,17 @@ export function ProductsInfoPageContainer({ isEditMode }: Props) {
   if (pageLayoutProps) {
     return (
       <PageLayout {...pageLayoutProps}>
-        <ProductsInfoWrapper>
+        <InfoPageWrapper className="grid-cols-3">
           <ProductsImageCard product={selectedProduct} />
 
           <ProductsMainCard
-            entity={selectedProduct}
-            entityDraft={draftProduct}
-            validationError={validationError}
-            isEditMode={isEditMode}
             productCategories={productCategories}
             selectedProductCategory={selectedProductCategory}
+            {...cardProps}
           />
 
-          <ProductsVariantsContainer product={selectedProduct} />
-        </ProductsInfoWrapper>
+          <ProductsVariantsContainer {...cardProps} />
+        </InfoPageWrapper>
       </PageLayout>
     );
   }

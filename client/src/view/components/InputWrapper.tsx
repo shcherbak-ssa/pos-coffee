@@ -5,8 +5,8 @@ import type { ErrorObjectHook } from 'view/hooks/error';
 export type Props<T> = {
   label: string;
   children: React.ReactElement;
-  valueKey: keyof T;
-  validationError: ErrorObjectHook<T>;
+  valueKey?: keyof T;
+  validationError?: ErrorObjectHook<T>;
   description?: string;
   className?: string;
 }

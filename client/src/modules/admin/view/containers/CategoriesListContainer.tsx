@@ -1,26 +1,25 @@
 import { useEffect } from 'react';
-import type { MenuItem } from 'primereact/menuitem';
 import { DataTable, type DataTableSelectionChangeEvent } from 'primereact/datatable';
 import { Column, type ColumnProps } from 'primereact/column';
 
 import type { CategorySchema, EmptyFunction } from 'shared/types';
-import { ErrorType } from 'shared/constants';
+import { ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
-import { useError } from 'view/hooks/error';
 
 import type { CategoriesController, CategoriesStore, EntityViewComponentProps } from '@admin/shared/types';
 import { ControllerName, StoreName } from '@admin/shared/constants';
 import { CategoriesSelectCategoryMessage } from '@admin/view/components/CategoriesSelectCategoryMessage';
-import { useActionsMenuItems } from '@admin/view/hooks/actions-menu-items';
-import { CategoriesSelectedCategory } from '@admin/view/components/CategoriesSelectedCategory';
+import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-menu-items';
+import { CategoriesSelectedContainer } from '@admin/view/containers/CategoriesSelectedContainer';
 import { AvailableLabel } from '@admin/view/components/AvailableLabel';
 
-export type Props = EntityViewComponentProps<CategorySchema> & {
+export type Props = Omit<EntityViewComponentProps<CategorySchema>, 'actionsMenuItemsProps'> & {
+  actionsMenuItemsProps: ActionsMenuItemsProps;
   isEditMode: boolean;
   isLoading: boolean;
   saveCategory: (category: CategorySchema) => void;
-  removeEditMode: EmptyFunction;
+  cancel: EmptyFunction;
 };
 
 export function CategoriesListContainer({
@@ -31,20 +30,11 @@ export function CategoriesListContainer({
   isEditMode,
   isLoading,
   saveCategory,
-  removeEditMode,
+  cancel,
 }: Props) {
 
-  const { state: { selected: selectedCategory }, draft: draftCategory }
-    = useStore(StoreName.CATEGORIES) as CategoriesStore;
-
+  const { state: { selected: selectedCategory } } = useStore(StoreName.CATEGORIES) as CategoriesStore;
   const categoriesController = useController(ControllerName.CATEGORIES) as CategoriesController;
-  const [ validationError, cleanValidationError ] = useError<CategorySchema>(ErrorType.VALIDATION);
-
-  const actionsMenuItems: MenuItem[] = useActionsMenuItems({
-    ...actionsMenuItemsProps,
-    isEntityPage: false,
-    entity: selectedCategory,
-  });
 
   const columnsProps: ColumnProps[] = [
     getSelectionColumn(),
@@ -63,12 +53,6 @@ export function CategoriesListContainer({
     },
   ];
 
-  useEffect(() => () => cleanValidationError(), []);
-
-  useEffect(() => {
-    cleanValidationError();
-  }, []);
-
   useEffect(() => {
     if (!categories.map(({ id }) => id).includes(selectedCategory.id)) {
       setSelectedEntities([]);
@@ -82,7 +66,7 @@ export function CategoriesListContainer({
     // @ts-ignore
     categoriesController.select(value.id);
 
-    removeEditMode();
+    cancel();
   }
 
   function getSelectionColumn(): ColumnProps {
@@ -94,17 +78,15 @@ export function CategoriesListContainer({
   }
 
   function drawSelectedCategory(): React.ReactNode {
-    if (selectedCategory && (selectedEntities.length || isEditMode)) {
+    if (selectedCategory && selectedCategory.id !== ZERO && (selectedEntities.length || isEditMode)) {
       return (
-        <CategoriesSelectedCategory
-          entity={selectedCategory}
-          entityDraft={draftCategory}
-          validationError={validationError}
+        <CategoriesSelectedContainer
+          mode="edit"
+          actionsMenuItemsProps={actionsMenuItemsProps}
           isEditMode={isEditMode}
           isLoading={isLoading}
-          actionsMenuItems={actionsMenuItems}
           saveCategory={saveCategory}
-          removeEditMode={removeEditMode}
+          cancel={cancel}
         />
       );
     }

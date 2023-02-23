@@ -22,10 +22,6 @@ export const pages: { [key in PageTitle]: AppPageSchema } = {
     title: PageTitle.CATEGORIES,
     icon: PrimeIcons.BOX,
   },
-  [PageTitle.STOCK]: {
-    title: PageTitle.STOCK,
-    icon: PrimeIcons.SHOPPING_CART,
-  },
   [PageTitle.ORDERS]: {
     title: PageTitle.ORDERS,
     icon: PrimeIcons.SHOPPING_BAG,

@@ -28,7 +28,6 @@ export const productVariantsStore: ProductVariantsStore & ProductVariantsStoreAc
 
   add(variants: BaseProductVariantSchema[]): void {
     createStoreService().add(variants);
-    productVariantsStore.state.list = variants.map(ProductVariantSchema.create);
   },
 
   save(variant: BaseProductVariantSchema): void {

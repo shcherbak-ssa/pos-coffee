@@ -53,6 +53,7 @@ public class AppConstants {
       public static final String PRODUCT_VARIANTS = "/api/admin/products/variants";
       public static final String PRODUCT_VARIANTS_ID = "/api/admin/products/variants/{id}";
       public static final String ORDERS = "/api/admin/orders";
+      public static final String ORDERS_ID = "/api/admin/orders/{id}";
     }
   }
 

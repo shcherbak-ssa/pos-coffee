@@ -53,7 +53,7 @@ export function UsersPageContainer() {
     controllerName: ControllerName.USERS,
     infoPagePath: PagePath.USERS_INFO,
     actionsMenuItemsProps,
-    tableColums: usersTableColumns,
+    tableColumns: usersTableColumns,
     EntityComponent: UsersCard,
     addButton: {
       label: 'Create new user',

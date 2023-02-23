@@ -1,17 +1,17 @@
 import { loadContext } from 'shared/helpers/load-context';
 
 import { ControllerName, StoreName } from '@admin/shared/constants';
-import { OrdersPageContainer } from '@admin/view/containers/OrdersPageContainer';
+import { OrdersInfoPageContainer } from '@admin/view/containers/OrdersInfoPageContainer';
 
-const OrdersPage = loadContext(Page, {
+const OrdersInfoPage = loadContext(Page, {
   stores: [ StoreName.ORDERS ],
   controllers: [ ControllerName.ORDERS ],
 });
 
-export default OrdersPage;
+export default OrdersInfoPage;
 
 function Page() {
 
-  return <OrdersPageContainer />;
+  return <OrdersInfoPageContainer />;
 
 }

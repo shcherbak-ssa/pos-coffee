@@ -3,51 +3,49 @@ import type { MenuItem } from 'primereact/menuitem';
 import { TabMenu } from 'primereact/tabmenu';
 
 import { ZERO } from 'shared/constants';
-import { EmptyComponent } from 'view/components/EmptyComponent';
 
-import type { PageComponentProps, TabItem } from '@admin/shared/types';
+import type { PageComponentProps } from '@admin/shared/types';
+import { ListTab } from '@admin/shared/constants';
 
-export type Props = PageComponentProps & {
-  tabs: TabItem[];
-}
+export type Props = PageComponentProps;
 
-export function PageHeaderTabsContainer({ view, appController, tabs }: Props) {
+export function PageHeaderTabsContainer({ appStore, appController }: Props) {
 
-  const [ tabItems, setTabItems ] = useState<MenuItem[]>([]);
   const [ currentTabIndex, setCurrentTabIndex ] = useState<number>(ZERO);
 
+  const tabs: MenuItem[] =  [
+    {
+      label: 'Active',
+      data: { listTab: ListTab.ACTIVE },
+      command: () => {
+        appController.updateViewState('listTab', ListTab.ACTIVE);
+      },
+    },
+    {
+      label: 'Archived',
+      data: { listTab: ListTab.ARCHIVED },
+      command: () => {
+        appController.updateViewState('listTab', ListTab.ARCHIVED);
+      },
+    },
+  ];
+
   useEffect(() => {
-    setTabItems([
-      ...tabs.map(({ label, listTab, command }, index) => ({
-        label,
-        command: () => {
-          setCurrentTabIndex(index);
-
-          if (view.listTab === listTab) return;
-
-          appController.updateViewState('listTab', listTab);
-          command();
-        },
-      }))
-    ]);
-  }, [tabs]);
-
-  useEffect(() => {
-    const index: number = tabs.findIndex(({ listTab }) => listTab === view.listTab);
+    const index: number = tabs.findIndex(({ data }) => data.listTab === appStore.state.view.listTab);
 
     if (index >= ZERO) {
       setCurrentTabIndex(index);
     }
-  }, []);
+  }, [appStore.state.currentPage.title]);
 
-  if (tabItems.length) {
-    return (
-      <div className="page-tabs absolute top-0 left-1/2 -translate-x-1/2 h-full">
-        <TabMenu model={tabItems} activeIndex={currentTabIndex} />
-      </div>
-    );
-  }
-
-  return <EmptyComponent />;
+  return (
+    <div className="page-tabs absolute top-0 left-1/2 -translate-x-1/2 h-full">
+      <TabMenu
+        model={tabs}
+        activeIndex={currentTabIndex}
+        onTabChange={(e) => setCurrentTabIndex(e.index)}
+      />
+    </div>
+  );
 
 }

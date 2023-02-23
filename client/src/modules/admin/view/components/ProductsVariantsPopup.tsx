@@ -76,7 +76,7 @@ export function ProductsVariantsPopup({
 
   return (
     <Dialog
-      className="products-variants-popup"
+      className="popup"
       header={variant.name || 'Variant'}
       visible={isVisible}
       onHide={hide}

@@ -20,6 +20,7 @@ const ProductsPage = lazy(() => import('@admin/view/pages/ProductsPage'));
 const ProductsInfoPage = lazy(() => import('@admin/view/pages/ProductsInfoPage'));
 const CategoriesPage = lazy(() => import('@admin/view/pages/CategoriesPage'));
 const OrdersPage = lazy(() => import('@admin/view/pages/OrdersPage'));
+const OrdersInfoPage = lazy(() => import('@admin/view/pages/OrdersInfoPage'));
 const UsersPage = lazy(() => import('@admin/view/pages/UsersPage'));
 const UsersInfoPage = lazy(() => import('@admin/view/pages/UsersInfoPage'));
 const SettingsPage = lazy(() => import('@admin/view/pages/SettingsPage'));
@@ -80,6 +81,10 @@ export function AppLayout() {
                 <Route
                   path={PagePath.ORDERS}
                   element={<OrdersPage />}
+                />
+                <Route
+                  path={PagePath.ORDERS_INFO}
+                  element={<OrdersInfoPage />}
                 />
 
                 <Route

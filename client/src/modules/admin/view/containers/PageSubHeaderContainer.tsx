@@ -3,12 +3,15 @@ import { SelectButton, type SelectButtonChangeEvent } from 'primereact/selectbut
 import { SimpleIcon } from 'view/components/SimpleIcon';
 
 import type { PageComponentProps } from '@admin/shared/types';
+import { ControlGroup } from '@admin/shared/constants';
 import { listActionOptions, listViewOptions } from '@admin/shared/configs/view';
 import { PageSubHeaderOption } from '@admin/view/components/PageSubHeaderOption';
 
-export type Props = PageComponentProps;
+export type Props = PageComponentProps & {
+  groups: ControlGroup[];
+};
 
-export function PageSubHeaderContainer({ view, appController }: Props) {
+export function PageSubHeaderContainer({ appStore, appController, groups }: Props) {
 
   function selectListView(event: SelectButtonChangeEvent): void {
     if (event.value !== null) {
@@ -20,23 +23,39 @@ export function PageSubHeaderContainer({ view, appController }: Props) {
     appController.updateViewState('listAction', event.value);
   }
 
+  function drawActions(): React.ReactNode {
+    if (groups.includes(ControlGroup.ACTIONS)) {
+      return (
+        <SelectButton
+          value={appStore.state.view.listAction}
+          options={listActionOptions}
+          itemTemplate={PageSubHeaderOption}
+          onChange={selectListAction}
+          multiple
+        />
+      );
+    }
+  }
+
+  function drawViews(): React.ReactNode {
+    if (groups.includes(ControlGroup.VIEWS)) {
+      return (
+        <SelectButton
+          value={appStore.state.view.listView}
+          optionLabel="value"
+          options={listViewOptions}
+          itemTemplate={SimpleIcon}
+          onChange={selectListView}
+        />
+      );
+    }
+  }
+
   return (
     <div className="border-b-2 px-6 py-4 flex items-center justify-between">
-      <SelectButton
-        value={view.listAction}
-        options={listActionOptions}
-        itemTemplate={PageSubHeaderOption}
-        onChange={selectListAction}
-        multiple
-      />
+      { drawActions() }
 
-      <SelectButton
-        value={view.listView}
-        optionLabel="value"
-        options={listViewOptions}
-        itemTemplate={SimpleIcon}
-        onChange={selectListView}
-      />
+      { drawViews() }
     </div>
   );
 

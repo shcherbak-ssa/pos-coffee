@@ -76,6 +76,18 @@ export function EntityCardsContainer<T extends Entity>({
     }
   }
 
+  function drawActionsMenu(entity: T): React.ReactNode {
+    if (actionsMenuItemsProps) {
+      return (
+        <EntityActionsMenuContainer
+          entity={entity}
+          isEntityPage={false}
+          actionsMenuItemsProps={actionsMenuItemsProps}
+        />
+      );
+    }
+  }
+
   function drawCheckbox(entity: T): React.ReactNode {
     if (isSelectEnable) {
       return (
@@ -102,11 +114,7 @@ export function EntityCardsContainer<T extends Entity>({
             </div>
 
             <div className="card-menu absolute top-4 right-4">
-              <EntityActionsMenuContainer
-                entity={entity}
-                isEntityPage={false}
-                actionsMenuItemsProps={actionsMenuItemsProps}
-              />
+              { drawActionsMenu(entity) }
             </div>
 
             <div className="absolute top-4 left-4">

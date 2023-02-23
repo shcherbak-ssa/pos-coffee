@@ -1,6 +1,7 @@
 package com.digitazon.poscoffee.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import com.digitazon.poscoffee.models.helpers.client.ClientOrder;
 import com.digitazon.poscoffee.repositories.OrderLinesRepository;
 import com.digitazon.poscoffee.repositories.OrdersRepository;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
+import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
 import com.digitazon.poscoffee.shared.helpers.Helpers;
 
 @Service
@@ -29,6 +31,16 @@ public class OrdersService {
 
   @Autowired
   private OrderLinesRepository liensRepository;
+
+  public ClientOrder getOrderById(Long id) throws ResourceNotFoundException {
+    final Optional<Order> foundOrder = this.repository.findById(id);
+
+    if (foundOrder.isPresent()) {
+      return this.convertToClientOrder(foundOrder.get());
+    }
+
+    throw new ResourceNotFoundException("Order not found");
+  }
 
   public List<ClientOrder> getOrders() {
     final List<Order> orders = this.repository.findAll();
