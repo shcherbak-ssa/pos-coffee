@@ -1,0 +1,22 @@
+:root {
+  --wripper-color: #F7F8FA;
+}
+
+@import "./app.scss";
+@import "./card.scss";
+@import "./page.scss";
+@import "./user.scss";
+
+.button-label {
+  &.p-disabled {
+    @apply opacity-100;
+  }
+}
+
+.popup {
+  min-width: 320px;
+
+  &.p-dialog .p-dialog-footer button {
+    @apply m-0;
+  }
+}

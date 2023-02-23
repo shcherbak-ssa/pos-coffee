@@ -4,7 +4,7 @@
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
-    "skipLibCheck": true,
+    "skipLibCheck": false,
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "strict": true,
@@ -15,8 +15,15 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "importsNotUsedAsValues": "error",
     "paths": {
-      "view/*": ["./src/view/*"]
+      "lib/*": ["./src/lib/*"],
+      "services/*": ["./src/services/*"],
+      "shared/*": ["./src/shared/*"],
+      "view/*": ["./src/view/*"],
+      "@admin/*": ["./src/modules/admin/*"],
+      "@app/*": ["./src/modules/app/*"],
+      "@login/*": ["./src/modules/login/*"],
     }
   },
   "include": ["src"],

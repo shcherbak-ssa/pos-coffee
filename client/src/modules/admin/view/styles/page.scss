@@ -1,0 +1,31 @@
+.page {
+  &-header {
+    background-color: var(--wripper-color, --surface-ground);
+  }
+
+  &-tabs {
+    height: calc(100% + 2px);
+
+    .p-tabmenu {
+      @apply h-full;
+
+      .p-tabmenu-nav {
+        @apply bg-transparent h-full flex gap-10;
+
+        .p-tabmenuitem {
+          &,
+          &.p-highlight,
+          &:not(.p-highlight):not(.p-disabled):hover {
+            .p-menuitem-link {
+              @apply bg-transparent p-0;
+            }
+          }
+
+          .p-menuitem-link:not(.p-disabled):focus {
+            @apply shadow-none;
+          }
+        }
+      }
+    }
+  }
+}

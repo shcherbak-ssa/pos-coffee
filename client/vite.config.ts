@@ -6,9 +6,21 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
 
+  server: {
+    proxy: {
+      '/api': 'http://localhost:3333',
+    },
+  },
+
   resolve: {
     alias: {
-      view: `${path.resolve(__dirname, 'src', 'view')}`,
+      lib: path.join(__dirname, 'src', 'lib'),
+      services: path.join(__dirname, 'src', 'services'),
+      shared: path.join(__dirname, 'src', 'shared'),
+      view: path.join(__dirname, 'src', 'view'),
+      '@admin': path.join(__dirname, 'src', 'modules', 'admin'),
+      '@app': path.join(__dirname, 'src', 'modules', 'app'),
+      '@login': path.join(__dirname, 'src', 'modules', 'login'),
     },
   },
 });
