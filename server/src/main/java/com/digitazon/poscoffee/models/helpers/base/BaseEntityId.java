@@ -1,4 +1,4 @@
-package com.digitazon.poscoffee.models.base;
+package com.digitazon.poscoffee.models.helpers.base;
 
 public interface BaseEntityId {
 

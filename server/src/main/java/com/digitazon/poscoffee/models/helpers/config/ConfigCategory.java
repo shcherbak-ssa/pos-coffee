@@ -1,18 +1,16 @@
-package com.digitazon.poscoffee.models.helpers;
+package com.digitazon.poscoffee.models.helpers.config;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class ClientOrderUser {
+public class ConfigCategory {
 
-  private Long id;
   private String name;
-  private String surname;
+  private Boolean isAvailable;
+  private Boolean isArchived;
 
 }

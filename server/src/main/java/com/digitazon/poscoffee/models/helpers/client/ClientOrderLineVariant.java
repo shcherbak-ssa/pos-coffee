@@ -1,4 +1,4 @@
-package com.digitazon.poscoffee.models.helpers;
+package com.digitazon.poscoffee.models.helpers.client;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ClientProductCategory {
+public class ClientOrderLineVariant {
 
   private Long id;
-  private String name;
+  private String productName;
+  private String variantName;
+  private String image;
 
 }

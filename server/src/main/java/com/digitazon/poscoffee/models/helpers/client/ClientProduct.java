@@ -1,4 +1,4 @@
-package com.digitazon.poscoffee.models.helpers;
+package com.digitazon.poscoffee.models.helpers.client;
 
 import java.util.Date;
 
@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.digitazon.poscoffee.shared.constants.AppConstants;
-import com.digitazon.poscoffee.shared.constants.ProductVariantsConstants;
+import com.digitazon.poscoffee.shared.constants.ProductsConstants;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ClientProductVariant {
+public class ClientProduct {
 
   @NotNull(
     message = AppConstants.ID_EMPTY_MESSAGE,
@@ -27,31 +27,40 @@ public class ClientProductVariant {
   private Long id;
 
   @NotBlank(
-    message = ProductVariantsConstants.SKU_EMPTY_MESSAGE,
+    message = ProductsConstants.SKU_EMPTY_MESSAGE,
     groups = AppConstants.ValidationGroups.ToCreate.class
   )
   @Size(
     min = AppConstants.MIN_UPDATE_LENGTH,
-    message = ProductVariantsConstants.SKU_EMPTY_MESSAGE
+    message = ProductsConstants.SKU_EMPTY_MESSAGE
   )
   private String sku;
 
   @NotBlank(
-    message = ProductVariantsConstants.NAME_EMPTY_MESSAGE,
+    message = ProductsConstants.NAME_EMPTY_MESSAGE,
     groups = AppConstants.ValidationGroups.ToCreate.class
   )
   @Size(
     min = AppConstants.MIN_UPDATE_LENGTH,
-    message = ProductVariantsConstants.NAME_EMPTY_MESSAGE,
+    message = ProductsConstants.NAME_EMPTY_MESSAGE,
     groups = AppConstants.ValidationGroups.ToUpdate.class
   )
   private String name;
 
+  @NotNull(
+    message = ProductsConstants.PRICE_EMPTY_MESSAGE,
+    groups = AppConstants.ValidationGroups.ToCreate.class
+  )
   private Float price;
+
   private Integer stock;
-  private Integer stockPerTime;
-  private Boolean useProductPrice;
+  private String image;
+  private ClientProductCategory category;
+  private Boolean useStockForVariants;
+  private Boolean isAvailable;
+  private Boolean isArchived;
   private Date createdAt;
   private Date updatedAt;
+  private Date archivedAt;
 
 }

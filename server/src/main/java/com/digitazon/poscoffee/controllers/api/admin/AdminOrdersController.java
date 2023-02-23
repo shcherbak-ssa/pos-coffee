@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.digitazon.poscoffee.models.helpers.ClientOrder;
+import com.digitazon.poscoffee.models.helpers.client.ClientOrder;
 import com.digitazon.poscoffee.services.OrdersService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.Product;
 import com.digitazon.poscoffee.models.ProductVariant;
-import com.digitazon.poscoffee.models.helpers.ClientProductVariant;
+import com.digitazon.poscoffee.models.helpers.client.ClientProductVariant;
 import com.digitazon.poscoffee.repositories.ProductVariantsRepository;
 import com.digitazon.poscoffee.shared.constants.ProductVariantsConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;

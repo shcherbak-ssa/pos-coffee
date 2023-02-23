@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.digitazon.poscoffee.models.base.BaseEntityDates;
+import com.digitazon.poscoffee.models.helpers.base.BaseEntityDates;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
 
 public class ServiceHelpers<T extends BaseEntityDates> {

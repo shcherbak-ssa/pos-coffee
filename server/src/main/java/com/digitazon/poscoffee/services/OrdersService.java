@@ -11,7 +11,7 @@ import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.Order;
 import com.digitazon.poscoffee.models.OrderLine;
 import com.digitazon.poscoffee.models.ProductVariant;
-import com.digitazon.poscoffee.models.helpers.ClientOrder;
+import com.digitazon.poscoffee.models.helpers.client.ClientOrder;
 import com.digitazon.poscoffee.repositories.OrderLinesRepository;
 import com.digitazon.poscoffee.repositories.OrdersRepository;
 import com.digitazon.poscoffee.shared.constants.AppConstants;

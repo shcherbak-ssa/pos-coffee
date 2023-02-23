@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.digitazon.poscoffee.models.helpers.ClientProductCategory;
+import com.digitazon.poscoffee.models.helpers.client.ClientProductCategory;
 import com.digitazon.poscoffee.services.CategoriesService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 
