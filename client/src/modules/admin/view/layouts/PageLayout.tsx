@@ -14,7 +14,7 @@ import type {
   PageAddButtonProps,
   PageComponentProps,
 } from '@admin/shared/types';
-import { ControlGroup, ControllerName, ListView, StoreName } from '@admin/shared/constants';
+import { ControlGroup, ControllerName, StoreName } from '@admin/shared/constants';
 import { PageSubHeaderContainer } from '@admin/view/containers/PageSubHeaderContainer';
 import { PageHeaderTabsContainer } from '@admin/view/containers/PageHeaderTabsContainer';
 import { PageHeaderHeadingContainer } from '@admin/view/containers/PageHeaderHeadingContainer';
@@ -59,12 +59,7 @@ export function PageLayout({
   const pageComponentProps: PageComponentProps = { appStore, appController };
 
   useEffect(() => {
-    setIsHookProcessing(true);
-
-    appController.setCurrentPage(page)
-      // .then(() => appController.updateViewState('listTab', ListTab.ACTIVE))
-      .then(() => appController.updateViewState('listView', ListView.TABLE))
-      .then(() => setIsHookProcessing(false));
+    appController.setCurrentPage(page);
   }, [page.title]);
 
   function handleAddButonClick(e: MouseEvent): void {

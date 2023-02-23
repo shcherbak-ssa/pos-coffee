@@ -1,4 +1,5 @@
 import type { ApiService, ProductCategory, Store, UserSchema } from 'shared/types';
+import { EntityName } from 'shared/constants';
 import { Context } from 'shared/context';
 import { BaseController } from 'lib/base-controller';
 
@@ -14,7 +15,7 @@ import { ApiEndpoint, StoreName } from '@admin/shared/constants';
 export class AppController extends BaseController implements BaseAppController {
 
   public static create(): AppController {
-    return new AppController();
+    return new AppController(EntityName.ANY);
   }
 
   public async loadProductCategories(): Promise<void> {
