@@ -1,12 +1,14 @@
-import type { ErrorType, EntityName, UserType } from 'shared/constants';
+import type { EntityName, ErrorType, UserType } from 'shared/constants';
 
 /**
  * Helpers
  */
 
 export type AnyType = {
-  [key: string]: string | number | boolean | object | AnyType | AnyType[] | null | undefined;
+  [key: string]: AnyValue;
 }
+
+export type AnyValue = string | number | boolean | object | AnyType | AnyType[] | null | undefined;
 
 export type EmptyFunction<T = void> = () => T;
 
@@ -29,6 +31,14 @@ export type ArchiveAction = 'archive' | 'restore';
  * Entities
  */
 
+export type BaseSchema = {
+  id: number;
+  isArchived: boolean;
+  createdAt: Date | null;
+  updatedAt: Date | null;
+  archivedAt: Date | null;
+}
+
 export type ValidationSchema<T> = {
   [key in ValidationType]: T;
 }
@@ -38,19 +48,14 @@ export type Token = {
   type: string;
 }
 
-export type UserSchema = {
-  id: number;
+export type UserSchema = BaseSchema & {
   name: string;
   surname: string;
   email: string;
   phone: string;
   type: UserType;
-  photo: string;
+  image: string;
   address: AddressSchema | null;
-  isArchived: boolean;
-  createdAt: Date | null;
-  updatedAt: Date | null;
-  archivedAt: Date | null;
 }
 
 export type AddressSchema = {
@@ -72,6 +77,38 @@ export type AddressDraft = {
   set city(city: string);
   set zipCode(zipCode: string);
   set address(address: string);
+}
+
+export type ProductSchema = BaseSchema & {
+  sku: string;
+  name: string;
+  price: number;
+  stock: number;
+  image: string;
+  category: ProductCategory;
+  useStockForVariants: boolean;
+  isAvailable: boolean;
+}
+
+export type ProductCategory = {
+  id: number;
+  name: string;
+}
+
+export type CategorySchema = BaseSchema & {
+  name: string;
+  productsCount: number;
+  isAvailable: boolean;
+}
+
+export type ProductVariantSchema = {
+  id: number;
+  sku: string;
+  name: string;
+  price: number;
+  stock: number;
+  stockPerTime: number;
+  useProductPrice: boolean;
 }
 
 /**
@@ -100,6 +137,7 @@ export type ErrorObject<T> = {
   type: ErrorType;
   message: string;
   errors: Errors<T>;
+  entityName?: EntityName;
 }
 
 /**
@@ -113,8 +151,9 @@ export interface CrudController<T = Entity, F = {}> extends Controller {
   loadById(entityId: number): Promise<boolean>;
   loadAll(filter?: F): Promise<boolean>;
   save(entity: T): Promise<number | undefined>;
-  delete(entityId: number): Promise<boolean>;
+  archive(entityId: number): Promise<boolean>;
   restore(entityId: number): Promise<boolean>;
+  select(entityId?: number): Promise<void>;
 }
 
 export type PayloadToGetById = {
@@ -127,19 +166,18 @@ export type PayloadToGetAll<T> = {
   filter: T;
 }
 
-export type PayloadToSave<T> = {
+export type PayloadToSave<T, Q> = {
   endpoint: string;
   entity: T;
   isEntityNew: boolean;
   validationName: string;
-  entityName: EntityName;
+  query?: Q;
 }
 
 export type PayloadToChangeArchiveState = {
   endpoint: string;
   action: ArchiveAction;
   entityId: number;
-  entityName: EntityName;
 }
 
 /**
@@ -148,9 +186,19 @@ export type PayloadToChangeArchiveState = {
 
 export type Store = {}
 export type StoreList = Map<string, Store>;
+export type JoinedStore<S, E, D> = StoreEntityState<S, E, D> & StoreCrud<E>;
 
 export interface StoreState<T = AnyType> extends Store {
   readonly state: T;
+}
+
+export interface StoreEntityState<S = AnyType, E = AnyType, D = AnyType> extends Store {
+  readonly state: S & {
+    list: E[];
+    selected: E;
+  };
+
+  draft: D;
 }
 
 export interface StoreCrud<T = AnyType> extends Store {
@@ -193,6 +241,15 @@ export interface LoaderService {
   loadController(name: string): Promise<Controller>;
   loadStore(name: string): Promise<Store>;
   loadValidationSchema<T>(schemaName: string): Promise<ValidationSchema<T>>;
+}
+
+export interface StoreService<E> {
+  add(entities: E[]): void;
+  save(entity: E): void;
+  remove(entityId: number): void;
+  setSelected(entityId: number): void;
+  getSelectedUpdates(): Partial<E> | undefined;
+  updateSelected(entity: E): void;
 }
 
 export interface ValidationService {

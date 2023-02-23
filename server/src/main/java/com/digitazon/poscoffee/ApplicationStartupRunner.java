@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 
 import com.digitazon.poscoffee.models.helpers.Config;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
-import com.digitazon.poscoffee.shared.utils.DatabaseDataLoader;
-import com.digitazon.poscoffee.shared.utils.LocalResourceLoader;
+import com.digitazon.poscoffee.shared.helpers.DatabaseDataLoader;
+import com.digitazon.poscoffee.shared.helpers.LocalResourceLoader;
 
 @Component
 public class ApplicationStartupRunner implements CommandLineRunner {
@@ -26,13 +26,13 @@ public class ApplicationStartupRunner implements CommandLineRunner {
   public void run(String... args) throws Exception {
     this.addConsoleSpace();
 
-    this.dataLoader.loadConstants();
-    this.log("# Constants loaded");
-
     Config config = this.localResourceLoader
       .loadJSONResource(AppConstants.POSCOFFEE_CONFIG_FILENAME, Config.class);
 
-    this.dataLoader.loadUsers(config.getUsers());
+    this.dataLoader.loadConstants();
+    this.log("# Constants loaded");
+
+    this.dataLoader.loadConfigData(config);
     this.log("# Config loaded");
 
     this.logStartedMessage();

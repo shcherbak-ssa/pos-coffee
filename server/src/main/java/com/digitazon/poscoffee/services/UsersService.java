@@ -1,6 +1,5 @@
 package com.digitazon.poscoffee.services;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,13 +20,15 @@ import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.User;
 import com.digitazon.poscoffee.models.UserType;
 import com.digitazon.poscoffee.models.helpers.ClientUser;
-import com.digitazon.poscoffee.models.helpers.UserFilter;
+import com.digitazon.poscoffee.models.helpers.EntityFilter;
 import com.digitazon.poscoffee.repositories.UsersRepository;
+import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.UsersConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
 import com.digitazon.poscoffee.shared.exceptions.ProgerException;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
-import com.digitazon.poscoffee.shared.utils.Helpers;
+import com.digitazon.poscoffee.shared.helpers.Helpers;
+import com.digitazon.poscoffee.shared.helpers.ServiceHelpers;
 
 @Service
 public class UsersService {
@@ -37,18 +38,23 @@ public class UsersService {
     = new AnnotationConfigApplicationContext(AppConfig.class);
 
   @Autowired
-  private UsersRepository repository;
-
-  @Autowired
   private UserTypesService userTypesService;
 
   @Autowired
   private PasswordEncoder encoder;
 
-  public boolean isUserExist(String email) {
-    final Optional<User> foundUser = this.repository.findByEmail(email);
+  private UsersRepository repository;
+  private ServiceHelpers<User> helpers;
 
-    return foundUser.isPresent();
+  @SuppressWarnings("unchecked")
+  public UsersService(@Autowired UsersRepository repository) {
+    this.repository = repository;
+    this.helpers = (ServiceHelpers<User>)
+      this.context.getBean("serviceHelpers", repository, AppConstants.Entity.USER);
+  }
+
+  public boolean isUserExist(String email) {
+    return this.repository.existsByEmail(email);
   }
 
   public User findByEmail(String email) throws ResourceNotFoundException {
@@ -71,7 +77,7 @@ public class UsersService {
     throw new ResourceNotFoundException("User not found");
   }
 
-  public List<ClientUser> getUsers(UserFilter filter) {
+  public List<ClientUser> getUsers(EntityFilter filter) {
     final List<User> users = this.repository.findAll(UsersService.filter(filter));
 
     return users
@@ -92,9 +98,7 @@ public class UsersService {
   }
 
   public User createUser(User userToCreate) throws AlreadyExistException {
-    if (this.isUserExist(userToCreate.getEmail())) {
-      throw new AlreadyExistException(UsersConstants.UNIQUE_FIELD, UsersConstants.USER_ALREADY_EXIST_MESSAGE);
-    }
+    this.checkIfUserExists(userToCreate.getEmail());
 
     String password = userToCreate.getPassword();
     password = this.encoder.encode(password);
@@ -104,56 +108,27 @@ public class UsersService {
     return this.repository.save(userToCreate);
   }
 
-  public void updateUser(ClientUser updates) throws ResourceNotFoundException {
-    final Optional<User> foundUser = this.repository.findById(updates.getId());
+  public void updateUser(ClientUser updates) throws AlreadyExistException, ResourceNotFoundException {
+    this.checkIfUserExists(updates.getEmail());
 
-    if (foundUser.isPresent()) {
-      final User user = foundUser.get();
-      this.mergeWithUpdates(user, updates);
-
-      this.repository.save(user);
-
-      return;
-    }
-
-    throw new ResourceNotFoundException("User not found");
+    this.helpers.update(
+      updates.getId(),
+      (User user) -> this.mergeWithUpdates(user, updates)
+    );
   }
 
-  public void deleteUserById(Long id) throws ResourceNotFoundException {
-    final Optional<User> foundUser = this.repository.findById(id);
-
-    if (foundUser.isPresent()) {
-      final User user = foundUser.get();
-      user.setIsArchived(true);
-      user.setArchivedAt(new Date());
-
-      this.repository.save(user);
-
-      return;
-    }
-
-    throw new ResourceNotFoundException("User not found");
+  public void archiveUserById(Long id) throws ResourceNotFoundException {
+    this.helpers.archiveById(id);
   }
 
   public void restoreUserById(Long id) throws ResourceNotFoundException {
-    final Optional<User> foundUser = this.repository.findById(id);
+    this.helpers.restoreById(id);
+  }
 
-    if (foundUser.isPresent()) {
-      final User user = foundUser.get();
-
-      if (!user.getIsArchived()) {
-        return;
-      }
-
-      user.setIsArchived(false);
-      user.setArchivedAt(null);
-
-      this.repository.save(user);
-
-      return;
+  private void checkIfUserExists(String email) throws AlreadyExistException {
+    if (email != null && this.isUserExist(email)) {
+      throw new AlreadyExistException(UsersConstants.UNIQUE_FIELD, UsersConstants.ALREADY_EXIST_MESSAGE);
     }
-
-    throw new ResourceNotFoundException("User not found");
   }
 
   private ClientUser convertToClientUser(User user, boolean loadAddress) {
@@ -174,7 +149,7 @@ public class UsersService {
     user.setPhone(updates.getPhone() == null ? user.getPhone() : updates.getPhone());
   }
 
-  private static Specification<User> filter(UserFilter filter) {
+  private static Specification<User> filter(EntityFilter filter) {
     return new Specification<User>() {
 
       @Override

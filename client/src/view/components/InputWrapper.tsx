@@ -1,38 +1,67 @@
 import classnames from 'classnames';
 
-import { EMPTY_STRING } from 'shared/constants';
+import type { ErrorObjectHook } from 'view/hooks/error';
 
-export type Props = {
+export type Props<T> = {
   label: string;
   children: React.ReactElement;
+  valueKey: keyof T;
+  validationError: ErrorObjectHook<T>;
   description?: string;
-  errorMessage?: string;
   className?: string;
 }
 
-export function InputWrapper({ label, errorMessage, description, children, className }: Props) {
+export function InputWrapper<T>({ label, description, children, className, validationError, valueKey }: Props<T>) {
 
   const { props: childrenProps } = children;
+
+  const inputComponent: typeof children = {
+    ...children,
+    props: {
+      ...children.props,
+      className: classnames(children.props.className, {
+        'p-invalid': isError(),
+      }),
+    },
+  };
+
+  function getErrorMessage(): string | undefined {
+    if (validationError) {
+      return validationError.errors[valueKey];
+    }
+  }
+
+  function isError(): boolean {
+    return !!getErrorMessage();
+  }
+
+  function drawErrorMessage(): React.ReactNode {
+    const errorMessage: string | undefined = getErrorMessage();
+
+    if (errorMessage) {
+      return <small className="p-invalid mt-1 px-2">{ errorMessage }</small>;
+    }
+  }
+
+  function drawDescription(): React.ReactNode {
+    const errorMessage: string | undefined = getErrorMessage();
+
+    if (description && !errorMessage) {
+      return <small className="mt-1 px-2">{ description }</small>;
+    }
+  }
 
   return (
     <div
       className={classnames('p-float-label flex flex-col w-full', className, {
-        'p-invalid': !!errorMessage,
+        'p-invalid': isError(),
       })}
     >
-      { children }
+      { inputComponent }
 
-      {
-        errorMessage
-          ? <small className="p-invalid mt-1 px-2">{ errorMessage }</small>
-          : EMPTY_STRING
-      }
+      { drawErrorMessage() }
 
-      {
-        description && !errorMessage
-          ? <small className="mt-1 px-2">{ description }</small>
-          : EMPTY_STRING
-      }
+      { drawDescription() }
 
       <label htmlFor={ childrenProps.id || childrenProps.inputId }>
         { label }

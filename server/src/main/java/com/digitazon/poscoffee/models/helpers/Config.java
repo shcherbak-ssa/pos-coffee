@@ -10,5 +10,8 @@ import lombok.NoArgsConstructor;
 public class Config {
 
   private List<ConfigUser> users;
+  private List<ConfigCategory> categories;
+  private List<ConfigProduct> products;
+  private List<ConfigProductVariant> productVariants;
 
 }

@@ -3,7 +3,7 @@ import type { NavigateFunction } from 'react-router-dom';
 import type { MenuItem } from 'primereact/menuitem';
 import { BreadCrumb } from 'primereact/breadcrumb';
 
-import { updatePageTitle } from 'shared/utils';
+import { updatePageTitle } from 'shared/utils/page-title';
 
 import type { AppPageSchema } from '@admin/shared/types';
 

@@ -2,10 +2,10 @@ import '@admin/view/styles/admin.scss';
 
 import type { UserSchema } from 'shared/types';
 import { Context } from 'shared/context';
-import { replaceLocation } from 'shared/utils';
+import { replaceLocation } from 'shared/utils/replace-location';
 import { setupPrimeReact, render } from 'shared/helpers/setup-view';
 
-import type { UsersController } from '@admin/shared/types';
+import type { AppController } from '@admin/shared/types';
 import { ControllerName, PagePath, StoreName } from '@admin/shared/constants';
 import { LoaderService } from '@admin/services/loader';
 import { AppLayout } from '@admin/view/layouts/AppLayout';
@@ -26,10 +26,8 @@ async function setup(currentUser: UserSchema): Promise<void> {
   Context.setLoader(LoaderService.create());
 
   await Context.loadController(ControllerName.APP);
-  await Context.loadController(ControllerName.USERS);
-
   await Context.loadStore(StoreName.APP);
 
-  const usersController = Context.getController(ControllerName.USERS) as UsersController;
-  await usersController.setCurrentUser(currentUser);
+  const appController = Context.getController(ControllerName.APP) as AppController;
+  await appController.setCurrentUser(currentUser);
 }

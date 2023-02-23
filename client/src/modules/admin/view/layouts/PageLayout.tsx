@@ -1,4 +1,4 @@
-import type { MouseEvent } from 'react';
+import { type MouseEvent, useEffect } from 'react';
 import { type NavigateFunction, useNavigate } from 'react-router';
 import { Button } from 'primereact/button';
 import { PrimeIcons } from 'primereact/api';
@@ -7,8 +7,15 @@ import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 import { AppLoader } from 'view/components/AppLoader';
 
-import type { AppController, AppPageSchema, AppStore, PageComponentProps, TabItem } from '@admin/shared/types';
-import { ControllerName, PagePath, StoreName } from '@admin/shared/constants';
+import type {
+  AppController,
+  AppPageSchema,
+  AppStore,
+  PageAddButtonProps,
+  PageComponentProps,
+  TabItem,
+} from '@admin/shared/types';
+import { ControllerName, ListTab, StoreName } from '@admin/shared/constants';
 import { PageSubHeaderContainer } from '@admin/view/containers/PageSubHeaderContainer';
 import { PageHeaderTabsContainer } from '@admin/view/containers/PageHeaderTabsContainer';
 import { PageHeaderHeadingContainer } from '@admin/view/containers/PageHeaderHeadingContainer';
@@ -24,7 +31,7 @@ export type Props = {
   isEntityPage: boolean;
   children: React.ReactNode;
   actionProps?: ActionsProps,
-  addButton?: { label: string; to: PagePath };
+  addButton?: PageAddButtonProps;
   tabs?: TabItem[];
   isLoading?: boolean;
   messageProps?: PageMessageProps;
@@ -49,11 +56,22 @@ export function PageLayout({
 
   const pageComponentProps: PageComponentProps = { view, appController };
 
+  useEffect(() => {
+    appController.setCurrentPage(page);
+  }, [page.title]);
+
   function handleAddButonClick(e: MouseEvent): void {
     e.preventDefault();
 
     if (addButton) {
-      navigate(addButton.to);
+      if (addButton.to) {
+        navigate(addButton.to);
+        return;
+      }
+
+      if (addButton.command) {
+        addButton.command();
+      }
     }
   }
 

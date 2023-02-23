@@ -11,6 +11,12 @@
   }
 }
 
+.p-inputnumber {
+  &-input {
+    @apply w-full;
+  }
+}
+
 .p-float-label {
   label {
     @apply opacity-60;
@@ -35,6 +41,12 @@
 }
 
 .p-dropdown {
+  &.p-disabled {
+    @apply opacity-90;
+  }
+}
+
+.p-checkbox-box {
   &.p-disabled {
     @apply opacity-90;
   }
@@ -137,4 +149,30 @@
   .p-disabled {
     @apply opacity-100;
   }
+}
+
+.p-menubar {
+  @apply bg-transparent border-none;
+
+  & &-button {
+    @apply hidden;
+  }
+
+  & &-root-list {
+    @apply flex bg-transparent shadow-none w-auto;
+
+    & > .p-menuitem > .p-menuitem-link {
+      @apply rounded;
+    }
+  }
+}
+
+.p-menuitem {
+  &.is-active &-link {
+    @apply font-semibold
+  }
+}
+
+.p-avatar img {
+  object-fit: cover;
 }

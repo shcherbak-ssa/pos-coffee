@@ -9,6 +9,7 @@ import com.digitazon.poscoffee.models.User;
 
 public interface UsersRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
 
+  public boolean existsByEmail(String email);
   public Optional<User> findByEmail(String email);
 
 }

@@ -15,17 +15,15 @@
 }
 
 .icon-button.p-button {
-  &.p-button-raised {
-    @apply bg-white shadow;
-    color: var(--primary-color);
-  }
-
-  &.on-white {
-    @apply shadow-none;
-  }
+  @apply duration-200;
+  color: var(--primary-color);
 
   &.is-active, &:enabled:hover {
-    @apply bg-transparent;
+    @apply bg-white;
     box-shadow: inset 0 0 0 0.1rem #81a1c1;
+  }
+
+  &.p-button-icon-only.p-button-rounded {
+    @apply w-12 h-12;
   }
 }

@@ -17,6 +17,8 @@ import { AppMenuContainer } from '@admin/view/containers/AppMenuContainer';
 const HomePage = lazy(() => import('@admin/view/pages/HomePage'));
 const DashboardPage = lazy(() => import('@admin/view/pages/DashboardPage'));
 const ProductsPage = lazy(() => import('@admin/view/pages/ProductsPage'));
+const ProductsInfoPage = lazy(() => import('@admin/view/pages/ProductsInfoPage'));
+const CategoriesPage = lazy(() => import('@admin/view/pages/CategoriesPage'));
 const OrdersPage = lazy(() => import('@admin/view/pages/OrdersPage'));
 const UsersPage = lazy(() => import('@admin/view/pages/UsersPage'));
 const UsersInfoPage = lazy(() => import('@admin/view/pages/UsersInfoPage'));
@@ -27,8 +29,7 @@ export function AppLayout() {
   const appStore = useStore(StoreName.APP) as AppStore;
   const appController = useController(ControllerName.APP) as AppController;
 
-  const { isAppMenuOpen } = appStore.state;
-  const appProps: AppComponentProps = { isAppMenuOpen, appController };
+  const appProps: AppComponentProps = { appStore, appController };
 
   return (
     <div className="app-container full relative">
@@ -39,8 +40,8 @@ export function AppLayout() {
         <ScrollPanel style={{ width: '100%', height: 'calc(100% - 6rem)' }}>
           <div
             className={classnames('p-12 duration-200', {
-              'lg:pl-72': isAppMenuOpen,
-              'lg:pl-36': !isAppMenuOpen,
+              'lg:pl-72': appStore.state.isAppMenuOpen,
+              'lg:pl-36': !appStore.state.isAppMenuOpen,
             })}
           >
             <Suspense fallback={<AppLoader />} >
@@ -53,14 +54,34 @@ export function AppLayout() {
                   path={PagePath.DASHBOARD}
                   element={<DashboardPage />}
                 />
+
                 <Route
                   path={PagePath.PRODUCTS}
                   element={<ProductsPage />}
                 />
                 <Route
+                  path={PagePath.PRODUCTS_INFO}
+                  element={<ProductsInfoPage />}
+                />
+                <Route
+                  path={PagePath.PRODUCTS_CREATE}
+                  element={<ProductsInfoPage isEditMode />}
+                />
+                <Route
+                  path={PagePath.PRODUCTS_EDIT}
+                  element={<ProductsInfoPage isEditMode />}
+                />
+
+                <Route
+                  path={PagePath.CATEGORIES}
+                  element={<CategoriesPage />}
+                />
+
+                <Route
                   path={PagePath.ORDERS}
                   element={<OrdersPage />}
                 />
+
                 <Route
                   path={PagePath.USERS}
                   element={<UsersPage />}
@@ -77,6 +98,7 @@ export function AppLayout() {
                   path={PagePath.USERS_EDIT}
                   element={<UsersInfoPage isEditMode />}
                 />
+
                 <Route
                   path={PagePath.SETTINGS}
                   element={<SettingsPage />}

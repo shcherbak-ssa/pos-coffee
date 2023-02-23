@@ -1,40 +1,18 @@
-import type { UserSchema as BaseUserSchema, ApiService, NotificationService, ValidationService, Store, Entity } from 'shared/types';
+import type { UserSchema as BaseUserSchema, Entity } from 'shared/types';
 import { EntityName, ZERO } from 'shared/constants';
-import { CrudController } from 'controllers/crud-controller';
+import { CrudController } from 'lib/crud-controller';
 
-import type {
-  UsersController as BaseUsersController,
-  UsersFilter,
-  UsersStore,
-  UsersStoreActions,
-  UserUpdates,
-} from '@admin/shared/types';
-import { ApiEndpoint, StoreName, ValidationName } from '@admin/shared/constants';
-import { UserSchema, createUsersFilter } from '@admin/models/user';
+import type { UsersController as BaseUsersController, UsersFilter, UsersStoreActions } from '@admin/shared/types';
+import { ApiEndpoint, ControllerName, StoreName, ValidationName } from '@admin/shared/constants';
+import { UserSchema, createFilter } from '@admin/models/user';
+import type { AppController } from './app';
+import { Context } from 'shared/context';
 
 export class UsersController extends CrudController implements BaseUsersController {
 
   public static create(): UsersController {
-    return new UsersController(StoreName.USERS);
+    return new UsersController(StoreName.USERS, EntityName.USER);
   }
-
-  public async setCurrentUser(user: BaseUserSchema): Promise<void> {
-    const store = await this.getStore() as UsersStoreActions;
-    store.setCurrentUser(user);
-  }
-
-  public async selectUser(userId: number = ZERO): Promise<void> {
-    try {
-      const store = await this.getStore() as UsersStoreActions;
-      store.selected.set(userId);
-    } catch (e: any) {
-      await this.parseError(e);
-    }
-  }
-
-  /**
-   * Crud implementation
-   */
 
   public async loadById(userId: number): Promise<boolean> {
     return await this.tryToLoadById({
@@ -46,27 +24,30 @@ export class UsersController extends CrudController implements BaseUsersControll
   public async loadAll(filter?: UsersFilter): Promise<boolean> {
     return await this.tryToLoadAll({
       endpoint: ApiEndpoint.USERS,
-      filter: createUsersFilter(filter || {}),
+      filter: createFilter(filter || {}),
     });
   }
 
   public async save(user: BaseUserSchema): Promise<number | undefined> {
     const copiedUser: UserSchema = UserSchema.create(user);
 
-    return await this.tryToSave({
+    const savedUserId: number | undefined = await this.tryToSave({
       endpoint: ApiEndpoint.USERS,
       entity: copiedUser as BaseUserSchema as Entity,
       isEntityNew: copiedUser.isNewSchema(),
       validationName: ValidationName.USERS,
-      entityName: EntityName.USER,
     });
+
+    if (savedUserId) {
+      this.updateCurrentUser(user);
+      return savedUserId;
+    }
   }
 
-  public async delete(userId: number): Promise<boolean> {
+  public async archive(userId: number): Promise<boolean> {
     return await this.tryToChangeArchiveState({
-      endpoint: ApiEndpoint.USERS_DELETE,
+      endpoint: ApiEndpoint.USERS_ARCHIVE,
       entityId: userId,
-      entityName: EntityName.USER,
       action: 'archive',
     });
   }
@@ -75,33 +56,21 @@ export class UsersController extends CrudController implements BaseUsersControll
     return await this.tryToChangeArchiveState({
       endpoint: ApiEndpoint.USERS_RESTORE,
       entityId: userId,
-      entityName: EntityName.USER,
       action: 'restore',
     });
   }
 
-  /**
-   * Private
-   */
-
-  private async createUser(updates: UserUpdates): Promise<BaseUserSchema> {
-    const validationService: ValidationService = await this.getValidationService();
-    await validationService.validateToCreate(ValidationName.USERS, updates);
-
-    const apiService: ApiService = await this.getApiService();
-    return await apiService
-      .addBody(updates)
-      .post(ApiEndpoint.USERS);
+  public async select(userId: number = ZERO): Promise<void> {
+    await this.tryToSelect(userId);
   }
 
-  private async updateUser(updates: UserUpdates): Promise<void> {
-    const validationService: ValidationService = await this.getValidationService();
-    await validationService.validateToUpdate(ValidationName.USERS, updates);
+  private async updateCurrentUser(user: BaseUserSchema): Promise<void> {
+    const appController = Context.getController(ControllerName.APP) as AppController;
+    const currentUser: BaseUserSchema = await appController.getCurrentUser();
 
-    const apiService: ApiService = await this.getApiService();
-    await apiService
-      .addBody(updates)
-      .put(ApiEndpoint.USERS);
+    if (currentUser.id === user.id) {
+      await appController.setCurrentUser(user);
+    }
   }
 
 }

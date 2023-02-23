@@ -17,7 +17,7 @@ public class ConfigUser {
   private String phone;
   private String password;
   private String type;
-  private String photo;
+  private String image;
   private Address address;
   private Boolean isArchived;
 

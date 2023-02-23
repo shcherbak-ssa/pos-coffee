@@ -1,32 +1,56 @@
 export const GO_BACK: number = -1;
 
+export const DEFAULT_CATEGORY_NAME: string = 'DEFAULT';
+
 export enum ApiEndpoint {
+  APP_PRODUCT_CATEGORIES = '/api/admin/app/productCategories',
   USERS = '/api/admin/users',
   USERS_ID = '/api/admin/users/:id',
-  USERS_DELETE = '/api/admin/users/:id/delete',
+  USERS_ARCHIVE = '/api/admin/users/:id/archive',
   USERS_RESTORE = '/api/admin/users/:id/restore',
+  PRODUCTS = '/api/admin/products',
+  PRODUCTS_ID = '/api/admin/products/:id',
+  PRODUCTS_ARCHIVE = '/api/admin/products/:id/archive',
+  PRODUCTS_RESTORE = '/api/admin/products/:id/restore',
+  CATEGORIES = '/api/admin/categories',
+  CATEGORIES_ARCHIVE = '/api/admin/categories/:id/archive',
+  CATEGORIES_RESTORE = '/api/admin/categories/:id/restore',
+  PRODUCT_VARIANTS = '/api/admin/products/variants',
+  PRODUCT_VARIANTS_ID = '/api/admin/products/variants/:id',
 }
 
 export enum ControllerName {
   APP = 'APP',
   USERS = 'USERS',
+  PRODUCTS = 'PRODUCTS',
+  CATEGORIES = 'CATEGORIES',
+  PRODUCT_VARIANTS = 'PRODUCT_VARIANTS',
 }
 
 export enum StoreName {
   APP = 'APP',
   USERS = 'USERS',
+  PRODUCTS = 'PRODUCTS',
+  CATEGORIES = 'CATEGORIES',
+  PRODUCT_VARIANTS = 'PRODUCT_VARIANTS',
 }
 
 export enum ValidationName {
   USERS = 'USERS',
+  PRODUCTS = 'PRODUCTS',
+  CATEGORIES = 'CATEGORIES',
+  PRODUCT_VARIANTS = 'PRODUCT_VARIANTS',
 }
 
 export enum PagePath {
+  EMPTY = '',
   HOME = '/admin',
   DASHBOARD = '/admin/dashboard',
   PRODUCTS = '/admin/products',
-  CATEGORIES = 'admin/products/categories',
-  STOCK = '/admin/products/stock',
+  PRODUCTS_INFO = '/admin/products/:id',
+  PRODUCTS_CREATE = '/admin/products/create',
+  PRODUCTS_EDIT = '/admin/products/:id/edit',
+  CATEGORIES = '/admin/products/categories',
   ORDERS = '/admin/orders',
   USERS = '/admin/users',
   USERS_INFO = '/admin/users/:id',

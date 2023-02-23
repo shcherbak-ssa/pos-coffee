@@ -3,7 +3,7 @@ import { SelectButton, type SelectButtonChangeEvent } from 'primereact/selectbut
 import { SimpleIcon } from 'view/components/SimpleIcon';
 
 import type { PageComponentProps } from '@admin/shared/types';
-import { listActionOptions, listViewOptions } from '@admin/shared/configs';
+import { listActionOptions, listViewOptions } from '@admin/shared/configs/view';
 import { PageSubHeaderOption } from '@admin/view/components/PageSubHeaderOption';
 
 export type Props = PageComponentProps;

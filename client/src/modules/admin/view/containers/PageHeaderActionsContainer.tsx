@@ -10,6 +10,7 @@ import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/nav
 import { PagePathLabel, GO_BACK } from '@admin/shared/constants';
 import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-menu-items';
 import { EntityActionsMenuContainer } from '@admin/view/containers/EntityActionsMenuContainer';
+import { SaveButton } from '@admin/view/components/SaveButton';
 
 export type Props = {
   entity: Entity;
@@ -43,9 +44,7 @@ export function PageHeaderActionsContainer({
     );
   }, [location.pathname]);
 
-  function save(e: MouseEvent): void {
-    e.preventDefault();
-
+  function save(): void {
     if (isSaveProcessing || !isEditMode || !controller) {
       return;
     }
@@ -71,23 +70,20 @@ export function PageHeaderActionsContainer({
   function drawSaveButton(): React.ReactNode {
     if (isEditMode) {
       return (
-        <Button
-          className="p-button-sm"
-          icon={PrimeIcons.SAVE}
-          label="Save"
-          loading={isSaveProcessing}
-          onClick={save}
+        <SaveButton
+          isLoading={isSaveProcessing}
+          click={save}
         />
       );
     }
   }
 
-  function drawDeleteLabel(): React.ReactNode {
+  function drawArchivedLabel(): React.ReactNode {
     if (entity.isArchived) {
       return (
         <Button
           className="button-label p-button-text p-button-danger"
-          label="DELETED"
+          label="ARCHIVED"
           disabled
         />
       );
@@ -98,7 +94,7 @@ export function PageHeaderActionsContainer({
     if (isEditMode) {
       return (
         <Button
-          className="p-button-sm"
+          className="p-button-sm p-button-rounded"
           icon={PrimeIcons.TIMES}
           onClick={goBack}
         />
@@ -118,7 +114,7 @@ export function PageHeaderActionsContainer({
     <div className="flex gap-4">
       { drawSaveButton() }
 
-      { drawDeleteLabel() }
+      { drawArchivedLabel() }
 
       { drawMenuButton() }
     </div>

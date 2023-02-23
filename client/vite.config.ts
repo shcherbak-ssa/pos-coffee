@@ -14,8 +14,7 @@ export default defineConfig({
 
   resolve: {
     alias: {
-      controllers: path.join(__dirname, 'src', 'controllers'),
-      models: path.join(__dirname, 'src', 'models'),
+      lib: path.join(__dirname, 'src', 'lib'),
       services: path.join(__dirname, 'src', 'services'),
       shared: path.join(__dirname, 'src', 'shared'),
       view: path.join(__dirname, 'src', 'view'),

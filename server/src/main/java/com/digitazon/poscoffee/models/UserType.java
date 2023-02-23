@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.UsersConstants;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 @Table(name = AppConstants.DatabaseTable.USER_TYPES)
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserType {
 
   @Id

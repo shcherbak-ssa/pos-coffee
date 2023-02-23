@@ -2,6 +2,9 @@ import type { UserType } from './constants';
 
 export type Config = {
   users: User[];
+  categories: Category[];
+  products: Product[];
+  productVariants: ProductVariant[];
 }
 
 export type User = {
@@ -11,7 +14,7 @@ export type User = {
   phone: string;
   password: string;
   type: UserType;
-  photo: string;
+  image: string;
   address: Address;
   isArchived: boolean;
 }
@@ -22,4 +25,32 @@ export type Address = {
   city: string;
   zipCode: string;
   address: string;
+}
+
+export type Product = {
+  sku: string;
+  name: string;
+  price: number;
+  stock: number;
+  image: string;
+  category: number;
+  useStockForVariants: boolean;
+  isAvailable: boolean;
+  isArchived: boolean;
+}
+
+export type Category = {
+  name: string;
+  isAvailable: boolean;
+  isArchived: boolean;
+}
+
+export type ProductVariant = {
+  sku: string;
+  name: string;
+  price: number;
+  stock: number
+  stockPerTime: number;
+  useProductPrice: boolean;
+  product: number;
 }

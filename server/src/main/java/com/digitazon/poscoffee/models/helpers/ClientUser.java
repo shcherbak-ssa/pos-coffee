@@ -15,16 +15,18 @@ import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.UsersConstants;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ClientUser {
 
   @NotNull(
-    message = UsersConstants.ID_EMPTY_MESSAGE,
+    message = AppConstants.ID_EMPTY_MESSAGE,
     groups = AppConstants.ValidationGroups.ToUpdate.class
   )
   private Long id;
@@ -91,11 +93,11 @@ public class ClientUser {
   )
   private String type;
 
-  private String photo;
+  private String image;
   private Address address;
   private Boolean isArchived;
   private Date createdAt;
   private Date updatedAt;
-  private Date deletedAt;
+  private Date archivedAt;
 
 }

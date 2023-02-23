@@ -12,12 +12,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digitazon.poscoffee.models.Address;
 import com.digitazon.poscoffee.models.helpers.ClientUser;
-import com.digitazon.poscoffee.models.helpers.UserFilter;
+import com.digitazon.poscoffee.models.helpers.EntityFilter;
 import com.digitazon.poscoffee.services.AddressService;
 import com.digitazon.poscoffee.services.UsersService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
@@ -39,7 +40,11 @@ public class UsersAdminController {
   @GetMapping(path = AppConstants.ApiEndpoint.Admin.USERS)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('ADMIN')")
-  public List<ClientUser> getUsers(UserFilter filter) {
+  public List<ClientUser> getUsers(@RequestParam(AppConstants.PARAM_ONLY_ARCHIVED) boolean onlyArchived) {
+    final EntityFilter filter = EntityFilter.builder()
+      .onlyArchived(onlyArchived)
+      .build();
+
     return this.service.getUsers(filter);
   }
 
@@ -67,7 +72,7 @@ public class UsersAdminController {
   @PreAuthorize("hasAuthority('ADMIN')")
   public void updateUser(
     @RequestBody @Validated(AppConstants.ValidationGroups.ToUpdate.class) ClientUser updates
-  ) throws ResourceNotFoundException {
+  ) throws AlreadyExistException, ResourceNotFoundException {
     final Address addressUpdates = updates.getAddress();
 
     if (addressUpdates != null) {
@@ -77,11 +82,11 @@ public class UsersAdminController {
     this.service.updateUser(updates);
   }
 
-  @PutMapping(path = AppConstants.ApiEndpoint.Admin.USERS_DELETE)
+  @PutMapping(path = AppConstants.ApiEndpoint.Admin.USERS_ARCHIVE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasAuthority('ADMIN')")
-  public void deleteUser(@PathVariable Long id) throws ResourceNotFoundException {
-    this.service.deleteUserById(id);
+  public void archiveUser(@PathVariable Long id) throws ResourceNotFoundException {
+    this.service.archiveUserById(id);
   }
 
   @PutMapping(path = AppConstants.ApiEndpoint.Admin.USERS_RESTORE)

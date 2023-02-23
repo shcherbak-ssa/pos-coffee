@@ -1,13 +1,22 @@
-import type { AnyType } from 'shared/types';
+import type { AnyType, AnyValue } from 'shared/types';
+import { ZERO } from 'shared/constants';
+
+const NO_UPDATE_KEYS_COUNT: number = 1;
 
 export function getUpdates(originalObject: AnyType, objectWithUpdates: AnyType): Partial<AnyType> {
+  const objectId: AnyValue = objectWithUpdates.id;
   objectWithUpdates = removeUntrackedFields(objectWithUpdates);
 
-  const updates: Partial<AnyType> = { id: originalObject.id };
+  const updates: Partial<AnyType> = { id: objectId || originalObject.id };
 
   for (const [ key, value ] of Object.entries(objectWithUpdates)) {
     if (isNestedObject(value)) {
-      updates[key] = getUpdates(originalObject[key] as AnyType, value as AnyType);
+      const nestedUpdates: Partial<AnyType> = getUpdates(originalObject[key] as AnyType, value as AnyType);
+
+      if (!isEmptyObject(nestedUpdates)) {
+        updates[key] = nestedUpdates;
+      }
+
       continue;
     }
 
@@ -16,15 +25,21 @@ export function getUpdates(originalObject: AnyType, objectWithUpdates: AnyType):
     }
   }
 
+  if (Object.keys(updates).length === NO_UPDATE_KEYS_COUNT) {
+    return {};
+  }
+
   return updates;
 }
 
-function removeUntrackedFields(obj: AnyType): AnyType {
-  const { id, createdAt, updatedAt, deletedAt, ...updatedObject } = obj;
-
-  return updatedObject;
+function removeUntrackedFields({ id, createdAt, updatedAt, deletedAt, ...updates }: AnyType): AnyType {
+  return updates;
 }
 
-function isNestedObject<T>(value: T): boolean {
-  return typeof value === 'object' && value !== null && !(value instanceof Date);
+function isNestedObject<T>(obj: T): boolean {
+  return typeof obj === 'object' && obj !== null && !(obj instanceof Date);
+}
+
+function isEmptyObject<T extends object>(obj: T): boolean {
+  return Object.keys(obj).length === ZERO;
 }

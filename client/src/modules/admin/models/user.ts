@@ -1,48 +1,36 @@
 import type { AddressDraft, AddressSchema as BaseAddressSchema, UserSchema as BaseUserSchema } from 'shared/types';
-import { EMPTY_STRING, UserType, ZERO } from 'shared/constants';
+import { EMPTY_STRING, UserType } from 'shared/constants';
 
 import type { UsersFilter, UserDraft, UserUpdates } from '@admin/shared/types';
 import { AddressSchema, createAddressDraft } from '@admin/models/address';
+import { BaseSchema } from 'lib/base-schema';
 
-export class UserSchema implements BaseUserSchema {
-  public id: number;
+export class UserSchema extends BaseSchema<UserUpdates> implements BaseUserSchema {
   public name: string;
   public surname: string;
   public email: string;
   public phone: string;
   public type: UserType;
-  public photo: string;
+  public image: string;
   public address: BaseAddressSchema | null;
-  public isArchived: boolean;
-  public createdAt: Date | null;
-  public updatedAt: Date | null;
-  public archivedAt: Date | null;
 
   private constructor(schema?: BaseUserSchema) {
-    this.id = schema?.id || ZERO;
+    super(schema);
     this.name = schema?.name || EMPTY_STRING;
     this.surname = schema?.surname || EMPTY_STRING;
     this.email = schema?.email || EMPTY_STRING;
     this.phone = schema?.phone || EMPTY_STRING;
     this.type = schema?.type || UserType.ADMIN;
-    this.photo = schema?.photo || EMPTY_STRING;
+    this.image = schema?.image || EMPTY_STRING;
     this.address = AddressSchema.create(schema?.address || undefined);
-    this.isArchived = schema?.isArchived || false;
-    this.createdAt = schema?.createdAt ? new Date(schema.createdAt) : null;
-    this.updatedAt = schema?.updatedAt ? new Date(schema.updatedAt) : null;
-    this.archivedAt = schema?.archivedAt ? new Date(schema.archivedAt) : null;
   }
 
   public static create(schema?: BaseUserSchema): UserSchema {
     return new UserSchema(schema);
   }
 
-  public isNewSchema(): boolean {
-    return this.id === ZERO;
-  }
-
   public getUpdates(): UserUpdates {
-    const { id, createdAt, updatedAt, archivedAt: deletedAt, address, ...updates } = this;
+    const { address, ...updates }: UserUpdates = super.getUpdates();
 
     return {
       ...updates,
@@ -51,15 +39,13 @@ export class UserSchema implements BaseUserSchema {
   }
 }
 
-export function createUsersFilter({
-  onlyArchived: onlyDeleted = false,
-}: UsersFilter): UsersFilter {
+export function createFilter({ onlyArchived = false }: UsersFilter): UsersFilter {
   return {
-    onlyArchived: onlyDeleted,
+    onlyArchived,
   };
 }
 
-export function createUserDraft(schema: BaseUserSchema = UserSchema.create()): UserDraft {
+export function createDraft(schema: BaseUserSchema = UserSchema.create()): UserDraft {
 
   return {
     get fullname(): string {
@@ -82,7 +68,7 @@ export function createUserDraft(schema: BaseUserSchema = UserSchema.create()): U
       schema.email = email;
     },
 
-    set phone(phone: string) {
+    set image(phone: string) {
       schema.phone = phone;
     },
 

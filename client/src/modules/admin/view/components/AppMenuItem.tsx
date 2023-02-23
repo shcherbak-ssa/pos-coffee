@@ -9,12 +9,12 @@ import type { AppMenuItem } from '@admin/shared/types';
 
 export type Props = {
   item: AppMenuItem;
-  isItemActive: boolean;
+  isActive: boolean;
   isAppMenuOpen: boolean;
   click: (item: AppMenuItem) => void;
 }
 
-export function AppMenuItem({ item, isItemActive, isAppMenuOpen, click }: Props) {
+export function AppMenuItem({ item, isActive, isAppMenuOpen, click }: Props) {
 
   function handleClick(e: MouseEvent): void {
     e.preventDefault();
@@ -24,10 +24,10 @@ export function AppMenuItem({ item, isItemActive, isAppMenuOpen, click }: Props)
 
   return (
     <div
-      className={classnames('app-menu-item rounded flex items-center py-2 duration-200 select-none', {
-        'is-active': isItemActive && isAppMenuOpen,
-        'click px-2 gap-2': isAppMenuOpen,
-        'is-close px-0 gap-0': !isAppMenuOpen,
+      className={classnames('app-menu-item hover:bg-white rounded flex items-center py-1 select-none', {
+        'is-active': isActive && isAppMenuOpen,
+        'click': isAppMenuOpen,
+        'is-close': !isAppMenuOpen,
       })}
       onClick={handleClick}
       data-pr-tooltip={item.label}
@@ -36,16 +36,17 @@ export function AppMenuItem({ item, isItemActive, isAppMenuOpen, click }: Props)
     >
       <IconButton
         className={classnames({
-          'is-active': isItemActive && !isAppMenuOpen,
+          'is-active font-semibold': isActive && !isAppMenuOpen,
         })}
         icon={item.icon}
         click={() => {}}
       />
 
       <div
-        className={classnames('font-semibold overflow-hidden duration-200', {
-          'w-32': isAppMenuOpen,
-          'w-0': !isAppMenuOpen,
+        className={classnames('overflow-hidden duration-200', {
+          'font-semibold': isActive,
+          'w-32 ml-2': isAppMenuOpen,
+          'w-0 ml-0': !isAppMenuOpen,
         })}
       >
         { item.label }

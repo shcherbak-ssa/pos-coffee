@@ -1,10 +1,11 @@
 export const APP_NAME: string = 'POS`Coffee';
 
 export const ZERO: number = 0;
-export const NOTIFICATION_LIFE: number = 10000;
+export const NOTIFICATION_LIFE: number = 7000;
 
 export const EMPTY_STRING: string = '';
 export const PAGE_TITLE_DIVIDER: string = ' | ';
+export const LONG_MINUS: string = '—';
 export const QUERY_URL_SEPARATOR: string = '?';
 export const AUTHORIZATION_HEADER: string = 'Authorization';
 export const ROOT_PAGE_PATH: string = '/';
@@ -53,5 +54,9 @@ export enum ApiResponseCode {
 }
 
 export enum EntityName {
+  ANY = 'ANY',
   USER = 'User',
+  PRODUCT = 'Product',
+  CATEGORY = 'Category',
+  PRODUCT_VARIANT = 'Product variant',
 }
