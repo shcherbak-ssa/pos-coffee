@@ -26,7 +26,7 @@ import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
 @RestController
 @CrossOrigin
 @Validated
-public class ProductsAdminController {
+public class AdminProductsController {
 
   @Autowired
   private ProductsService service;

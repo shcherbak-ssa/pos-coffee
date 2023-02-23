@@ -18,7 +18,7 @@ import com.digitazon.poscoffee.shared.constants.AppConstants;
 @RestController
 @CrossOrigin
 @Validated
-public class AppAdminController {
+public class AdminAppController {
 
   @Autowired
   private CategoriesService categoriesService;

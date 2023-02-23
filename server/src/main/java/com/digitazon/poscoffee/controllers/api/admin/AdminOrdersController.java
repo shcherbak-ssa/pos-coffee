@@ -14,7 +14,7 @@ import com.digitazon.poscoffee.services.OrdersService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 
 @RestController
-public class OrdersAdminController {
+public class AdminOrdersController {
 
   @Autowired
   private OrdersService service;

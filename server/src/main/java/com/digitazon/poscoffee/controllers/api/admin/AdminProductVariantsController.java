@@ -30,7 +30,7 @@ import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
 @RestController
 @CrossOrigin
 @Validated
-public class ProductVariantsAdminController {
+public class AdminProductVariantsController {
 
   @Autowired
   private ProductVariantsService service;

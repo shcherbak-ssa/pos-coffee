@@ -29,7 +29,7 @@ import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
 @RestController
 @CrossOrigin
 @Validated
-public class CategoriesAdminController {
+public class AdminCategoriesController {
 
   @Autowired
   private CategoriesService service;
