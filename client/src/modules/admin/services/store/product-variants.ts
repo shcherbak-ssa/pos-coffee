@@ -40,6 +40,10 @@ export const productVariantsStore: ProductVariantsStore & ProductVariantsStoreAc
 
   selected: {
 
+    get(): BaseProductVariantSchema {
+      return productVariantsStore.state.selected;
+    },
+
     set(variantId: number): void {
       createStoreService().setSelected(variantId);
     },

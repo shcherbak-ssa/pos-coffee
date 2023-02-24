@@ -1,4 +1,4 @@
-import { type MouseEvent, useState, useEffect } from 'react';
+import { type MouseEvent, useEffect, useRef } from 'react';
 import { Checkbox } from 'primereact/checkbox';
 
 import type { Entity, EntityComponentProps } from 'shared/types';
@@ -17,14 +17,14 @@ export type Props<T extends Entity> = EntityViewComponentProps<T> & {
 export function EntityCardsContainer<T extends Entity>({
   entities,
   selectEntity,
-  EntityComponent,
   isSelectEnable,
   selectedEntities,
   setSelectedEntities,
   actionsMenuItemsProps,
+  EntityComponent,
 }: Props<T>) {
 
-  const [ lastFocusedCard, setLastFocusedCard ] = useState<HTMLElement>();
+  const lastFocusedCard = useRef<HTMLElement>();
 
   useEffect(() => {
     const userCards: NodeListOf<HTMLElement> = document.querySelectorAll('.card .card-content');
@@ -66,13 +66,13 @@ export function EntityCardsContainer<T extends Entity>({
 
     if (classList.contains(CARD_CONTENT)) {
       classList.add(CARD_ACTIVE);
-      setLastFocusedCard(e.target as HTMLElement);
+      lastFocusedCard.current = e.target as HTMLElement;
     }
   }
 
   function removeLastFocus(): void {
-    if (lastFocusedCard) {
-      lastFocusedCard.classList.remove(CARD_ACTIVE);
+    if (lastFocusedCard.current) {
+      lastFocusedCard.current.classList.remove(CARD_ACTIVE);
     }
   }
 

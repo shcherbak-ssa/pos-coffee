@@ -13,6 +13,7 @@ import type {
   ProductCategory,
   ProductVariantSchema,
   OrderSchema,
+  Entity,
 } from 'shared/types';
 import type { UserType } from 'shared/constants';
 
@@ -64,12 +65,7 @@ export type AppComponentProps = {
   appController: AppController;
 }
 
-export type PageComponentProps = {
-  appStore: AppStore;
-  appController: AppController;
-}
-
-export type EntityViewComponentProps<T> = {
+export type EntityViewComponentProps<T extends Entity> = {
   entities: T[];
   selectEntity: (entity: T) => void;
   isSelectEnable: boolean;
@@ -89,7 +85,7 @@ export type CardWithInputsProps<T, D> = {
 /**
  * App
  *
- * (ProductCategory)
+ * + (ProductCategory)
  */
 
 export type AppPageSchema = {
@@ -115,7 +111,9 @@ export type AppState = {
   productCategories: ProductCategory[];
   currentPage: AppPageSchema;
   currentUser: UserSchema;
+  selectedEntityTitle: string;
   isAppMenuOpen: boolean;
+  isEditMode: boolean;
   view: AppViewState;
 }
 
@@ -125,7 +123,9 @@ export interface AppStoreActions extends AppStore {
   setProductCategories(productCategories: ProductCategory[]): void;
   setCurrentPage(page: AppPageSchema): void;
   setCurrentUser(user: UserSchema): void;
+  setSelectedEntityTitle(title: string): void;
   setIsAppMenuOpen(isOpen: boolean): void;
+  setIsEditMode(isEditMode: boolean): void;
   updateViewState<T extends keyof AppViewState>(state: T, value: AppViewState[T]): void;
 }
 
@@ -133,7 +133,9 @@ export interface AppController {
   loadProductCategories(): Promise<void>;
   setCurrentPage(page: AppPageSchema): Promise<void>;
   setCurrentUser(user: UserSchema): Promise<void>;
+  setSelectedEntityTitle(title: string): Promise<void>;
   setIsAppMenuOpen(isOpen: boolean): Promise<void>;
+  setIsEditMode(isEditMode: boolean): Promise<void>;
   updateViewState<T extends keyof AppViewState>(state: T, value: AppViewState[T]): Promise<void>;
 }
 
@@ -150,7 +152,6 @@ export type UsersFilter = Partial<{
 }>
 
 export type UserDraft = {
-  get fullname(): string;
   get address(): AddressDraft;
   set name(name: string);
   set surname(surname: string);
@@ -165,7 +166,7 @@ export interface UsersStore extends StoreEntityState<UsersState, UserSchema, Use
 
 export interface UsersStoreActions extends StoreCrud<UserSchema> {}
 
-export interface UsersController extends CrudController<UserSchema, UsersFilter> {}
+export interface UsersController extends CrudController<UsersFilter> {}
 
 /**
  * Products
@@ -194,7 +195,7 @@ export interface ProductsStore extends StoreEntityState<ProductsState, ProductSc
 
 export interface ProductsStoreActions extends StoreCrud<ProductSchema> {}
 
-export interface ProductsController extends CrudController<ProductSchema, ProductsFilter> {}
+export interface ProductsController extends CrudController<ProductsFilter> {}
 
 /**
  * Categories
@@ -211,13 +212,19 @@ export type CategoryDraft = {
   set name(name: string);
 }
 
-export type CategoriesState = {}
+export type CategoriesState = {
+  isPopupOpen: boolean;
+}
 
 export interface CategoriesStore extends StoreEntityState<CategoriesState, CategorySchema, CategoryDraft> {}
 
-export interface CategoriesStoreActions extends StoreCrud<CategorySchema> {}
+export interface CategoriesStoreActions extends StoreCrud<CategorySchema> {
+  setIsPopupOpen(isPopupOpen: boolean): void;
+}
 
-export interface CategoriesController extends CrudController<CategorySchema, CategoriesFilter> {}
+export interface CategoriesController extends CrudController<CategoriesFilter> {
+  setIsPopupOpen(isPopupOpen: boolean): Promise<void>;
+}
 
 /**
  * Product Variants
@@ -247,7 +254,7 @@ export interface ProductVariantsStoreActions extends StoreCrud<ProductVariantSch
 
 export interface ProductVariantsController {
   loadAll(productId: number): Promise<boolean>;
-  save(productId: number, variant: ProductVariantSchema): Promise<number | undefined>;
+  save(productId: number): Promise<boolean>;
   delete(entityId: number): Promise<boolean>;
   select(entityId?: number): Promise<void>;
 }
@@ -260,4 +267,4 @@ export interface OrdersStore extends StoreEntityState<{}, OrderSchema, {}> {}
 
 export interface OrdersStoreActions extends StoreCrud<OrderSchema> {}
 
-export interface OrdersController extends CrudController<OrderSchema, {}> {}
+export interface OrdersController extends CrudController<{}> {}

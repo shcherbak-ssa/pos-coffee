@@ -1,14 +1,15 @@
-import type { UserSchema as BaseUserSchema, Entity } from 'shared/types';
+import type { UserSchema as BaseUserSchema } from 'shared/types';
 import { EntityName, ZERO } from 'shared/constants';
+import { Context } from 'shared/context';
 import { CrudController } from 'lib/crud-controller';
 
 import type { UsersController as BaseUsersController, UsersFilter, UsersStoreActions } from '@admin/shared/types';
 import { ApiEndpoint, ControllerName, StoreName, ValidationName } from '@admin/shared/constants';
-import { UserSchema, createFilter } from '@admin/models/user';
-import type { AppController } from './app';
-import { Context } from 'shared/context';
+import { updateSelectedEntityTitle } from '@admin/shared/helpers/selected-entity-title';
+import { createFilter } from '@admin/models/user';
+import type { AppController } from '@admin/controllers/app';
 
-export class UsersController extends CrudController implements BaseUsersController {
+export class UsersController extends CrudController<BaseUserSchema> implements BaseUsersController {
 
   public static create(): UsersController {
     return new UsersController(StoreName.USERS, EntityName.USER);
@@ -28,20 +29,18 @@ export class UsersController extends CrudController implements BaseUsersControll
     });
   }
 
-  public async save(user: BaseUserSchema): Promise<number | undefined> {
-    const copiedUser: UserSchema = UserSchema.create(user);
-
-    const savedUserId: number | undefined = await this.tryToSave({
+  public async save(): Promise<boolean> {
+    const success: boolean = await this.tryToSave({
       endpoint: ApiEndpoint.USERS,
-      entity: copiedUser as BaseUserSchema as Entity,
-      isEntityNew: copiedUser.isNewSchema(),
       validationName: ValidationName.USERS,
     });
 
-    if (savedUserId) {
-      this.updateCurrentUser(user);
-      return savedUserId;
+    if (success) {
+      await this.updateCurrentUser();
+      this.updateSelectedEntityTitle();
     }
+
+    return success;
   }
 
   public async archive(userId: number): Promise<boolean> {
@@ -62,15 +61,27 @@ export class UsersController extends CrudController implements BaseUsersControll
 
   public async select(userId: number = ZERO): Promise<void> {
     await this.tryToSelect(userId);
+
+    this.updateSelectedEntityTitle();
   }
 
-  private async updateCurrentUser(user: BaseUserSchema): Promise<void> {
+  private async updateCurrentUser(): Promise<void> {
+    const store = await this.getStore() as UsersStoreActions;
+    const selectedUser: BaseUserSchema = store.selected.get();
+
     const appController = Context.getController(ControllerName.APP) as AppController;
     const currentUser: BaseUserSchema = await appController.getCurrentUser();
 
-    if (currentUser.id === user.id) {
-      await appController.setCurrentUser(user);
+    if (currentUser.id === selectedUser.id) {
+      await appController.setCurrentUser(selectedUser);
     }
+  }
+
+  private updateSelectedEntityTitle(): void {
+    updateSelectedEntityTitle<BaseUserSchema>(
+      StoreName.USERS,
+      (user: BaseUserSchema) => `${user.name} ${user.surname}`,
+    );
   }
 
 }

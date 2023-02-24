@@ -1,61 +1,67 @@
-import { type MouseEvent, useEffect, useRef } from 'react';
+import { type MouseEvent, useRef, useState } from 'react';
 import type { MenuItem } from 'primereact/menuitem';
 import { Menu } from 'primereact/menu';
 import { PrimeIcons } from 'primereact/api';
 import { Button } from 'primereact/button';
 import { Message } from 'primereact/message';
 import { InputText } from 'primereact/inputtext';
+import { confirmDialog } from 'primereact/confirmdialog';
 
-import type { CategorySchema, EmptyFunction } from 'shared/types';
-import { EntityName, ErrorType, ZERO } from 'shared/constants';
+import type { CategorySchema, Entity } from 'shared/types';
+import { EntityName, ErrorType } from 'shared/constants';
 import { useError } from 'view/hooks/error';
 import { useStore } from 'view/hooks/store';
+import { useController } from 'view/hooks/controller';
 import { InputWrapper } from 'view/components/InputWrapper';
 
-import type { CategoriesStore } from '@admin/shared/types';
-import { DEFAULT_CATEGORY_NAME, StoreName } from '@admin/shared/constants';
-import { type Props as ActionsMenuItemsProps, useActionsMenuItems } from '@admin/view/hooks/actions-menu-items';
+import type { AppController, AppStore, CategoriesController, CategoriesStore } from '@admin/shared/types';
+import { Action, ControllerName, DEFAULT_CATEGORY_NAME, StoreName } from '@admin/shared/constants';
+import { confirmDialogConfig } from '@admin/shared/configs/confirm-dialog';
+import { useActionsMenuItems } from '@admin/view/hooks/actions-menu-items';
 import { SaveButton } from '@admin/view/components/SaveButton';
 import { AvailableCheckbox } from '@admin/view/components/AvailableCheckbox';
 import { CardHeading } from '@admin/view/components/CardHeading';
 import { CategoriesSelectedWrapper } from '@admin/view/components/CategoriesSelectedWrapper';
+import { actionsMenuItemsProps } from '@admin/shared/configs/pages';
+import { CategoriesArchiveMessage } from '@admin/view/components/CategoriesArchiveMessage';
 
 export type Props = {
   mode: 'edit' | 'create';
-  actionsMenuItemsProps: ActionsMenuItemsProps,
-  isEditMode: boolean;
-  isLoading: boolean;
-  saveCategory: (category: CategorySchema) => void;
-  cancel: EmptyFunction;
 }
 
-export function CategoriesSelectedContainer({
-  mode,
-  actionsMenuItemsProps,
-  isEditMode,
-  isLoading,
-  saveCategory,
-  cancel
-}: Props) {
+export function CategoriesSelectedContainer({ mode }: Props) {
+
+  const [ isSaveProcessing, setIsSaveProcessing ] = useState<boolean>(false);
+
+  const { state: { isEditMode } } = useStore(StoreName.APP) as AppStore;
+  const appController = useController(ControllerName.APP) as AppController;
 
   const { state: { selected: selectedCategory }, draft: draftCategory }
     = useStore(StoreName.CATEGORIES) as CategoriesStore;
+  const categoriesController = useController(ControllerName.CATEGORIES) as CategoriesController;
 
-  const [ validationError, cleanValidationError ] = useError<CategorySchema>(ErrorType.VALIDATION);
+  const [ validationError ] = useError<CategorySchema>(ErrorType.VALIDATION);
 
   const actionsMenuItems: MenuItem[] = useActionsMenuItems({
-    ...actionsMenuItemsProps,
+    ...actionsMenuItemsProps.categories,
     isEntityPage: false,
     entity: selectedCategory,
+    overrides: {
+      [Action.VIEW]: () => ({ visible: false }),
+      [Action.ARCHIVE]: (item: MenuItem, entity: Entity) => ({
+        ...item,
+        command: () => {
+          confirmDialog({
+            ...confirmDialogConfig.archive,
+            message: <CategoriesArchiveMessage category={entity as CategorySchema} />,
+            accept: () => {
+              categoriesController.archive(entity.id);
+            },
+          });
+        },
+      }),
+    },
   });
-
-  useEffect(() => {
-    return () => cleanValidationError();
-  }, []);
-
-  useEffect(() => {
-    cleanValidationError();
-  }, []);
 
   const menu = useRef<Menu>(null);
 
@@ -78,7 +84,21 @@ export function CategoriesSelectedContainer({
   function handleCancel(e: MouseEvent): void {
     e.preventDefault();
 
-    cancel();
+    appController.setIsEditMode(false);
+  }
+
+  function saveCategory(): void {
+    setIsSaveProcessing(true);
+
+    categoriesController.save()
+      .then((savedCategoryId) => {
+        if (savedCategoryId) {
+          appController.setIsEditMode(false);
+          categoriesController.setIsPopupOpen(false);
+        }
+
+        setIsSaveProcessing(false);
+      });
   }
 
   function drawHeader(): React.ReactNode {
@@ -150,6 +170,7 @@ export function CategoriesSelectedContainer({
     if (isDefaultCategory()) {
       return (
         <Message
+          className="mt-10"
           severity="warn"
           text="The default category cannot be modified"
         />
@@ -162,8 +183,8 @@ export function CategoriesSelectedContainer({
       return (
         <SaveButton
           className="w-full"
-          isLoading={isLoading}
-          click={() => saveCategory(selectedCategory)}
+          isLoading={isSaveProcessing}
+          click={() => saveCategory()}
         />
       );
     }
@@ -174,7 +195,7 @@ export function CategoriesSelectedContainer({
       <div className="full">
         { drawHeader() }
 
-        <div>
+        <div className="py-2">
           <AvailableCheckbox
             className="mb-10"
             entityName={EntityName.CATEGORY}
@@ -200,8 +221,6 @@ export function CategoriesSelectedContainer({
 
           { drawProductsInput() }
         </div>
-
-        { isCreateMode() ? <div></div> : <div className='mb-10' /> }
 
         { drawDefaultCategoryMessage() }
 

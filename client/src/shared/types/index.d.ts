@@ -176,10 +176,10 @@ export type ErrorObject<T> = {
 export type Controller = {}
 export type ControllerList = Map<string, Controller>;
 
-export interface CrudController<T = Entity, F = {}> extends Controller {
+export interface CrudController<F = {}> extends Controller {
   loadById(entityId: number): Promise<boolean>;
   loadAll(filter?: F): Promise<boolean>;
-  save(entity: T): Promise<number | undefined>;
+  save(): Promise<boolean>;
   archive(entityId: number): Promise<boolean>;
   restore(entityId: number): Promise<boolean>;
   select(entityId?: number): Promise<void>;
@@ -197,8 +197,6 @@ export type PayloadToGetAll<T> = {
 
 export type PayloadToSave<T, Q> = {
   endpoint: string;
-  entity: T;
-  isEntityNew: boolean;
   validationName: string;
   query?: Q;
 }
@@ -238,6 +236,7 @@ export interface StoreCrud<T = AnyType> extends Store {
 }
 
 export interface StoreSelected<T> {
+  get(): T;
   set(entityId: number): void;
   hadUpdates(): boolean;
   getUpdates(): Partial<T>;

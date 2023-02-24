@@ -36,6 +36,10 @@ export const productsStore: ProductsStore & ProductsStoreActions = {
 
   selected: {
 
+    get(): BaseProductSchema {
+      return productsStore.state.selected;
+    },
+
     set(productId: number): void {
       createStoreService().setSelected(productId);
     },

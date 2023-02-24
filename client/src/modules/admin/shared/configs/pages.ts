@@ -43,13 +43,11 @@ export const actionsMenuItemsProps: {
   products: {
     entityName: EntityName.PRODUCT,
     infoPagePath: PagePath.PRODUCTS_INFO,
-    editPagePath: PagePath.PRODUCTS_EDIT,
     controllerName: ControllerName.PRODUCTS,
   },
   categories: {
     entityName: EntityName.CATEGORY,
     infoPagePath: PagePath.EMPTY,
-    editPagePath: PagePath.EMPTY,
     controllerName: ControllerName.CATEGORIES,
   },
 };

@@ -30,6 +30,10 @@ export const usersStore: UsersStore & UsersStoreActions = {
 
   selected: {
 
+    get(): BaseUserSchema {
+      return usersStore.state.selected;
+    },
+
     set(userId: number): void {
       createStoreService().setSelected(userId);
     },

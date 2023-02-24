@@ -35,6 +35,10 @@ export const ordersStore: OrdersStore & OrdersStoreActions = {
 
   selected: {
 
+    get(): BaseOrderSchema {
+      return ordersStore.state.selected;
+    },
+
     set(orderId: number): void {
       createStoreService().setSelected(orderId);
     },

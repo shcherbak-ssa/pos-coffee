@@ -3,7 +3,7 @@ import '@admin/view/styles/admin.scss';
 import type { UserSchema } from 'shared/types';
 import { Context } from 'shared/context';
 import { replaceLocation } from 'shared/utils/replace-location';
-import { setupPrimeReact, render } from 'shared/helpers/setup-view';
+import { setupPrimeReact, render } from 'view/helpers/setup-view';
 
 import type { AppController } from '@admin/shared/types';
 import { ControllerName, PagePath, StoreName } from '@admin/shared/constants';

@@ -7,6 +7,7 @@ import type { EntityName } from 'shared/constants';
 import { useController } from 'view/hooks/controller';
 import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/navigate';
 
+import type { AppController } from '@admin/shared/types';
 import { Action, ControllerName, PagePath } from '@admin/shared/constants';
 import { confirmDialogConfig } from '@admin/shared/configs/confirm-dialog';
 
@@ -15,7 +16,6 @@ export type OverrideFunction = (item: MenuItem, entity: Entity) => MenuItem
 export type Props = {
   entityName: EntityName;
   infoPagePath: PagePath;
-  editPagePath: PagePath;
   controllerName: ControllerName;
   overrides?: { [key in Action]?: OverrideFunction };
 }
@@ -23,7 +23,6 @@ export type Props = {
 export function useActionsMenuItems({
   entityName,
   infoPagePath,
-  editPagePath,
   controllerName,
   overrides = {},
   entity,
@@ -33,9 +32,10 @@ export function useActionsMenuItems({
   isEntityPage: boolean
 }): MenuItem[] {
 
+  const appController = useController(ControllerName.APP) as AppController;
+
   const controller = useController(controllerName) as CrudController;
   const toInfoPage: NavigateFunctionHook = useNavigateWithParams(infoPagePath);
-  const toEditPage: NavigateFunctionHook = useNavigateWithParams(editPagePath);
 
   return [
     {
@@ -53,7 +53,7 @@ export function useActionsMenuItems({
       visible: !entity.isArchived,
       data: { action: Action.EDIT },
       command: () => {
-        toEditPage({ id: entity.id });
+        appController.setIsEditMode(true);
       },
     },
     {

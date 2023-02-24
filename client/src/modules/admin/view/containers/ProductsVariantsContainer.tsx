@@ -109,7 +109,7 @@ export function ProductsVariantsContainer({
   function saveVariant(): void {
     setIsSaveProcessing(true);
 
-    variantsController.save(product.id, selectedVariant)
+    variantsController.save(product.id)
       .then((id) => {
         if (id) {
           setIsEditMode(false);

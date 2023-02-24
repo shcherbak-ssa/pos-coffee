@@ -13,7 +13,9 @@ export const appStore: AppStore & AppStoreActions = {
     productCategories: [],
     currentPage: { title: EMPTY_STRING },
     currentUser: UserSchema.create(),
+    selectedEntityTitle: EMPTY_STRING,
     isAppMenuOpen: false,
+    isEditMode: false,
 
     view: {
       listView: ListView.TABLE,
@@ -34,8 +36,16 @@ export const appStore: AppStore & AppStoreActions = {
     appStore.state.currentUser = UserSchema.create(user);
   },
 
+  setSelectedEntityTitle(title: string): void {
+    appStore.state.selectedEntityTitle = title;
+  },
+
   setIsAppMenuOpen(isOpen: boolean): void {
     appStore.state.isAppMenuOpen = isOpen;
+  },
+
+  setIsEditMode(isEditMode: boolean): void {
+    appStore.state.isEditMode = isEditMode;
   },
 
   updateViewState<T extends keyof AppViewState>(state: T, value: AppViewState[T]): void {

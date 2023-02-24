@@ -10,6 +10,7 @@ export function useError<T>(
   errorType: ErrorType,
   entityName: EntityName = EntityName.ANY,
 ): [ErrorObjectHook<T>, EmptyFunction] {
+
   const [ error, setError ] = useState<ErrorObject<T>>();
 
   useEffect(() => {
@@ -19,6 +20,10 @@ export function useError<T>(
     return () => {
       notificationService.unsubscribeFromError(errorType, handleError);
     }
+  }, []);
+
+  useEffect(() => {
+    return () => cleanError();
   }, []);
 
   function handleError(errorObject: ErrorObject<T>): void {
@@ -38,4 +43,5 @@ export function useError<T>(
   }
 
   return [ error, cleanError ];
+
 }

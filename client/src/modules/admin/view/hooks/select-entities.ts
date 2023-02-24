@@ -26,7 +26,7 @@ export function useSelectedEntities<T>({ view }: Props): HookReturn<T> {
 
   useEffect(
     () => setSelectedEntities([]),
-    [view.listTab],
+    [view.listTab, view.listView],
   );
 
   return [ isSelectEnable, selectedEntities, setSelectedEntities ];

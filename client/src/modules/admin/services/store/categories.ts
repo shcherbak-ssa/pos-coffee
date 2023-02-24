@@ -18,9 +18,14 @@ export const categoriesStore: CategoriesStore & CategoriesStoreActions = {
   state: proxy({
     list: [],
     selected: CategorySchema.create(),
+    isPopupOpen: false,
   }),
 
   draft: createDraft(),
+
+  setIsPopupOpen(isPopupOpen: boolean): void {
+    categoriesStore.state.isPopupOpen = isPopupOpen;
+  },
 
   add(categories: BaseCategorySchema[]): void {
     createStoreService().add(categories)
@@ -35,6 +40,10 @@ export const categoriesStore: CategoriesStore & CategoriesStoreActions = {
   },
 
   selected: {
+
+    get(): BaseCategorySchema {
+      return categoriesStore.state.selected;
+    },
 
     set(categoryId: number): void {
       createStoreService().setSelected(categoryId);

@@ -1,6 +1,5 @@
-export const GO_BACK: number = -1;
-
 export const DEFAULT_CATEGORY_NAME: string = 'DEFAULT';
+export const NEW_ENTITY_LABEL: string = 'new';
 
 export enum ApiEndpoint {
   APP_PRODUCT_CATEGORIES = '/api/admin/app/productCategories',
@@ -52,21 +51,12 @@ export enum PagePath {
   DASHBOARD = '/admin/dashboard',
   PRODUCTS = '/admin/products',
   PRODUCTS_INFO = '/admin/products/:id',
-  PRODUCTS_CREATE = '/admin/products/create',
-  PRODUCTS_EDIT = '/admin/products/:id/edit',
   CATEGORIES = '/admin/products/categories',
   ORDERS = '/admin/orders',
   ORDERS_INFO = '/admin/orders/:id',
   USERS = '/admin/users',
   USERS_INFO = '/admin/users/:id',
-  USERS_CREATE = '/admin/users/create',
-  USERS_EDIT = '/admin/users/:id/edit',
   SETTINGS = '/admin/settings',
-}
-
-export enum PagePathLabel {
-  CREATE = 'create',
-  EDIT = 'edit',
 }
 
 export enum PageTitle {

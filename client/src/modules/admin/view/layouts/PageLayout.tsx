@@ -1,144 +1,65 @@
-import { type MouseEvent, useEffect, useState } from 'react';
-import { type NavigateFunction, useNavigate } from 'react-router';
-import { Button } from 'primereact/button';
-import { PrimeIcons } from 'primereact/api';
-
-import { useStore } from 'view/hooks/store';
-import { useController } from 'view/hooks/controller';
-import { AppLoader } from 'view/components/AppLoader';
-
-import type {
-  AppController,
-  AppPageSchema,
-  AppStore,
-  PageAddButtonProps,
-  PageComponentProps,
-} from '@admin/shared/types';
-import { ControlGroup, ControllerName, StoreName } from '@admin/shared/constants';
-import { PageSubHeaderContainer } from '@admin/view/containers/PageSubHeaderContainer';
-import { PageHeaderTabsContainer } from '@admin/view/containers/PageHeaderTabsContainer';
-import { PageHeaderHeadingContainer } from '@admin/view/containers/PageHeaderHeadingContainer';
-import {
-  type Props as ActionsProps,
-  PageHeaderActionsContainer,
-} from '@admin/view/containers/PageHeaderActionsContainer';
-import { type Props as PageMessageProps, PageMessage } from '@admin/view/components/PageMessage';
+import type { AppPageSchema, PageAddButtonProps } from '@admin/shared/types';
+import { ControlGroup } from '@admin/shared/constants';
+import { useCurrentPage } from '@admin/view/hooks/current-page';
+import { PageHeaderHeadingContainer } from '@admin/view/containers/PageHeaderContainer';
+import { PageSubHeaderActionsContainer } from '@admin/view/containers/PageSubHeaderActionsContainer';
+import { PageSubHeaderViewsContainer } from '@admin/view/containers/PageSubHeaderViewsContainer';
+import { PageWrapper } from '@admin/view/components/PageWrapper';
 
 export type Props = {
   page: AppPageSchema;
-  showSubHeader: boolean;
-  isEntityPage: boolean;
   children: React.ReactNode;
+  showSubHeader?: boolean;
   controlGroups?: ControlGroup[];
-  actionProps?: ActionsProps,
-  addButton?: PageAddButtonProps;
   showTabs?: boolean;
-  isLoading?: boolean;
-  messageProps?: PageMessageProps;
+  addButton?: PageAddButtonProps;
 }
 
 export function PageLayout({
   page,
-  addButton,
-  showSubHeader,
-  isEntityPage,
-  actionProps,
   children,
-  messageProps,
+  addButton,
+  showSubHeader = true,
   showTabs = true,
-  isLoading = false,
   controlGroups = [ ControlGroup.ACTIONS, ControlGroup.VIEWS ],
 }: Props) {
 
-  const navigate: NavigateFunction = useNavigate();
-  const [ isHookProcessing, setIsHookProcessing ] = useState<boolean>(false);
-
-  const appStore = useStore(StoreName.APP) as AppStore;
-  const appController = useController(ControllerName.APP) as AppController;
-
-  const pageComponentProps: PageComponentProps = { appStore, appController };
-
-  useEffect(() => {
-    appController.setCurrentPage(page);
-  }, [page.title]);
-
-  function handleAddButonClick(e: MouseEvent): void {
-    e.preventDefault();
-
-    if (addButton) {
-      if (addButton.to) {
-        navigate(addButton.to);
-        return;
-      }
-
-      if (addButton.command) {
-        addButton.command();
-      }
-    }
-  }
-
-  function drawTabs(): React.ReactNode {
-    if (showTabs) {
-      return <PageHeaderTabsContainer {...pageComponentProps} />;
-    }
-  }
-
-  function drawActions(): React.ReactNode {
-    if (isEntityPage && actionProps) {
-      return <PageHeaderActionsContainer {...actionProps} />;
-    } else
-      if (addButton) {
-        return (
-          <Button
-            className="p-button-sm"
-            icon={PrimeIcons.PLUS}
-            label={addButton.label}
-            onClick={handleAddButonClick}
-          />
-        );
-      }
-  }
+  useCurrentPage(page);
 
   function drawSubHeader(): React.ReactNode {
     if (showSubHeader) {
       return (
-        <PageSubHeaderContainer
-          groups={controlGroups}
-          {...pageComponentProps}
-        />
+        <div className="border-b-2 px-6 py-4 flex items-center justify-between">
+          { drawSubHeaderActions() }
+          { drawSubHeaderViews() }
+        </div>
       );
     }
   }
 
-  function drawContent(): React.ReactNode {
-    if (messageProps) {
-      return <PageMessage {...messageProps} />;
+  function drawSubHeaderActions(): React.ReactNode {
+    if (controlGroups.includes(ControlGroup.ACTIONS)) {
+      return <PageSubHeaderActionsContainer />;
     }
-
-    return children;
   }
 
-  if (isHookProcessing || isLoading) {
-    return <AppLoader />;
+  function drawSubHeaderViews(): React.ReactNode {
+    if (controlGroups.includes(ControlGroup.VIEWS)) {
+      return <PageSubHeaderViewsContainer />;
+    }
   }
 
   return (
-    <div className="bg-white rounded-xl shadow overflow-hidden">
-      <div className="page-header border-b-2 flex items-center justify-between p-6 relative">
-        <PageHeaderHeadingContainer
-          page={page}
-          navigate={navigate}
-        />
-
-        { drawTabs() }
-
-        { drawActions() }
-      </div>
+    <PageWrapper>
+      <PageHeaderHeadingContainer
+        showTabs={showTabs}
+        addButton={addButton}
+      />
 
       { drawSubHeader() }
 
-      { drawContent() }
-    </div>
+      { children }
+    </PageWrapper>
   );
 
 }
