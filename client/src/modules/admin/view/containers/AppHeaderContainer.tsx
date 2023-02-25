@@ -28,9 +28,7 @@ export function AppHeaderContainer({ appStore, appController }: Props) {
   const navigate: NavigateFunction = useNavigate();
 
   const [ headerMenuItems, setHeaderMenuItems ] = useState<MenuItem[]>([]);
-
   const toInfoPage: NavigateFunctionHook = useNavigateWithParams(PagePath.USERS_INFO);
-  const toEditPage: NavigateFunctionHook = useNavigateWithParams(PagePath.USERS_EDIT);
 
   const userMenuItems: MenuItem[] = [
     {
@@ -38,13 +36,6 @@ export function AppHeaderContainer({ appStore, appController }: Props) {
       icon: PrimeIcons.EYE,
       command: () => {
         toInfoPage({ id: currentUser.id });
-      },
-    },
-    {
-      label: 'Edit',
-      icon: PrimeIcons.PENCIL,
-      command: () => {
-        toEditPage({ id: currentUser.id });
       },
     },
     { separator: true },

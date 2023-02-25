@@ -1,13 +1,9 @@
 import type { ColumnProps } from 'primereact/column';
 
 import type { OrderSchema } from 'shared/types';
-import { EntityName } from 'shared/constants';
-import { EmptyComponent } from 'view/components/EmptyComponent';
 
-import { PageTitle, StoreName, ControllerName, PagePath, ControlGroup } from '@admin/shared/constants';
-import { pages } from '@admin/shared/configs/pages';
-import { usePageContainer } from '@admin/view/hooks/page-container';
-import { type Props as PageLayoutProps, PageLayout } from '@admin/view/layouts/PageLayout';
+import { StoreName, PagePath } from '@admin/shared/constants';
+import { PageDefaultContentContainer } from '@admin/view/containers/PageDefaultContentContainer';
 
 export function OrdersPageContainer() {
 
@@ -43,21 +39,12 @@ export function OrdersPageContainer() {
     },
   ];
 
-  const pageLayoutProps: PageLayoutProps | undefined = usePageContainer({
-    page: pages[PageTitle.ORDERS],
-    entityName: EntityName.ORDER,
-    storeName: StoreName.ORDERS,
-    controllerName: ControllerName.ORDERS,
-    infoPagePath: PagePath.ORDERS_INFO,
-    tableColumns: ordersTableColumns,
-    showTabs: false,
-    controlGroups: [ ControlGroup.ACTIONS ],
-  });
-
-  if (pageLayoutProps) {
-    return <PageLayout {...pageLayoutProps} />;
-  }
-
-  return <EmptyComponent />;
+  return (
+    <PageDefaultContentContainer
+      storeName={StoreName.ORDERS}
+      infoPagePath={PagePath.ORDERS_INFO}
+      tableColumns={ordersTableColumns}
+    />
+  );
 
 }

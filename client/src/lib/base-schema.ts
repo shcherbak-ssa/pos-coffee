@@ -16,10 +16,6 @@ export class BaseSchema<U> implements Schema {
     this.archivedAt = schema?.archivedAt ? new Date(schema.archivedAt) : null;
   }
 
-  public isNewSchema(): boolean {
-    return this.id === ZERO;
-  }
-
   public getUpdates(): U {
     const { id, createdAt, updatedAt, archivedAt, ...updates } = this;
 

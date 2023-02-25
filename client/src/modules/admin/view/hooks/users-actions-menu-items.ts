@@ -15,7 +15,6 @@ export function useUsersActionsMenuItemsProps(): ActionsMenuItemsProps {
   return {
     entityName: EntityName.USER,
     infoPagePath: PagePath.USERS_INFO,
-    editPagePath: PagePath.USERS_EDIT,
     controllerName: ControllerName.USERS,
     overrides: {
       [Action.ARCHIVE]: (item: MenuItem, entity: Entity): MenuItem => {

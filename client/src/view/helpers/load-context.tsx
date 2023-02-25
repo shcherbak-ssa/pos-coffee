@@ -9,7 +9,10 @@ export type Props = {
   controllers?: string[];
 }
 
-export function loadContext(Container: React.ComponentType<AnyType>, { stores = [], controllers = [] }: Props) {
+export function loadContext(
+  Container: React.ComponentType<AnyType>,
+  { stores = [], controllers = [] }: Props
+): (props: AnyType) => JSX.Element {
 
   return function (props: AnyType) {
 

@@ -9,13 +9,14 @@ import type {
   StoreCrud,
   ValidationService,
   PayloadToChangeArchiveState,
+  StoreEntityState,
 } from 'shared/types';
-import type { EntityName } from 'shared/constants';
+import { EntityName, ZERO } from 'shared/constants';
 import { Context } from 'shared/context';
 import { notifications } from 'shared/configs/notifications';
 import { BaseController } from 'lib/base-controller';
 
-export class CrudController extends BaseController {
+export class CrudController<T extends Entity> extends BaseController {
 
   private storeName: string;
 
@@ -24,7 +25,7 @@ export class CrudController extends BaseController {
     this.storeName = storeName;
   }
 
-  protected async tryToLoadById<T>({ endpoint, entityId }: PayloadToGetById): Promise<boolean> {
+  protected async tryToLoadById({ endpoint, entityId }: PayloadToGetById): Promise<boolean> {
     try {
       const apiService: ApiService = await this.getApiService();
 
@@ -42,7 +43,7 @@ export class CrudController extends BaseController {
     }
   }
 
-  protected async tryToLoadAll<T, F>({ endpoint, filter }: PayloadToGetAll<F>): Promise<boolean> {
+  protected async tryToLoadAll<F>({ endpoint, filter }: PayloadToGetAll<F>): Promise<boolean> {
     try {
       const apiService: ApiService = await this.getApiService();
 
@@ -60,19 +61,20 @@ export class CrudController extends BaseController {
     }
   }
 
-  protected async tryToSave<T extends Entity, Q>({
+  protected async tryToSave<Q>({
     endpoint,
-    entity,
-    isEntityNew,
     validationName,
     query,
-  }: PayloadToSave<T, Q>): Promise<number | undefined> {
+  }: PayloadToSave<T, Q>): Promise<boolean> {
     try {
       const store = await this.getStore() as StoreCrud<T>;
 
       if (!store.selected.hadUpdates()) {
-        return entity.id;
+        return true;
       }
+
+      const entity: T = store.selected.get();
+      const isEntityNew: boolean = this.isNewEntity(entity);
 
       const notificationService: NotificationService = await this.getNotificationService();
 
@@ -110,13 +112,14 @@ export class CrudController extends BaseController {
           : notifications.updated(this.entityName)
       );
 
-      return savedEntity.id;
+      return true;
     } catch (e: any) {
       await this.parseError(e);
+      return false;
     }
   }
 
-  protected async tryToChangeArchiveState<T>({
+  protected async tryToChangeArchiveState({
     endpoint,
     action,
     entityId,
@@ -152,7 +155,7 @@ export class CrudController extends BaseController {
 
   public async tryToSelect(entityId: number): Promise<void> {
     try {
-      const store = await this.getStore() as StoreCrud;
+      const store = await this.getStore() as StoreCrud & StoreEntityState<{}, T>;
       store.selected.set(entityId);
     } catch (e: any) {
       await this.parseError(e);
@@ -163,6 +166,10 @@ export class CrudController extends BaseController {
     await Context.loadStore(this.storeName);
 
     return Context.getStore(this.storeName);
+  }
+
+  private isNewEntity(entity: T): boolean {
+    return entity.id === ZERO;
   }
 
 }

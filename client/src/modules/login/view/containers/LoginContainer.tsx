@@ -4,7 +4,7 @@ import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
 
 import { ErrorType } from 'shared/constants';
-import { loadContext } from 'shared/helpers/load-context';
+import { loadContext } from 'view/helpers/load-context';
 import { replaceUrl } from 'shared/utils/replace-url';
 import { updatePageTitle } from 'shared/utils/page-title';
 import { useError } from 'view/hooks/error';

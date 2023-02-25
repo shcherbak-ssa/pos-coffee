@@ -1,47 +1,28 @@
 import { useEffect, useState } from 'react';
 
-import type { ProductCategory, ProductSchema } from 'shared/types';
-import { EntityName, ZERO } from 'shared/constants';
+import type { ErrorObject, ProductCategory, ProductSchema } from 'shared/types';
+import { ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
-import { EmptyComponent } from 'view/components/EmptyComponent';
 
 import type { AppController, AppStore, CardWithInputsProps, ProductDraft, ProductsStore } from '@admin/shared/types';
-import { PagePath, PageTitle, StoreName, ControllerName } from '@admin/shared/constants';
-import { actionsMenuItemsProps, headerMenuItems, pages } from '@admin/shared/configs/pages';
-import { type Return, useInfoPageContainer } from '@admin/view/hooks/info-page-container';
-import { PageLayout } from '@admin/view/layouts/PageLayout';
+import { StoreName, ControllerName } from '@admin/shared/constants';
 import { ProductsMainCard } from '@admin/view/components/ProductsMainCard';
 import { ProductsVariantsContainer } from '@admin/view/containers/ProductsVariantsContainer';
 import { ProductsImageCard } from '@admin/view/components/ProductsImageCard';
 import { InfoPageWrapper } from '@admin/view/components/InfoPageWrapper';
 
 export type Props = {
-  isEditMode: boolean;
+  validationError?: ErrorObject<ProductSchema>;
 }
 
-export function ProductsInfoPageContainer({ isEditMode }: Props) {
+export function ProductsInfoPageContainer({ validationError }: Props) {
 
+  const { state: { productCategories, isEditMode } } = useStore(StoreName.APP) as AppStore;
   const { state: { selected: selectedProduct }, draft: draftProduct } = useStore(StoreName.PRODUCTS) as ProductsStore;
-  const { state: { productCategories } } = useStore(StoreName.APP) as AppStore;
 
   const [ selectedProductCategory, setSelectedProductCategory ] = useState<ProductCategory>(productCategories[ZERO]);
   const appController = useController(ControllerName.APP) as AppController;
-
-  const [ pageLayoutProps, validationError ]: Return<ProductSchema> = useInfoPageContainer({
-    page: {
-      ...pages[PageTitle.PRODUCTS],
-      to: PagePath.PRODUCTS,
-      child: { title: selectedProduct.name },
-      headerMenuItem: headerMenuItems.products,
-    },
-    storeName: StoreName.PRODUCTS,
-    controllerName: ControllerName.PRODUCTS,
-    infoPagePath: PagePath.PRODUCTS_INFO,
-    actionsMenuItemsProps: actionsMenuItemsProps.products,
-    entityName: EntityName.PRODUCT,
-    isEditMode,
-  });
 
   const cardProps: CardWithInputsProps<ProductSchema, ProductDraft> = {
     entity: selectedProduct,
@@ -66,24 +47,18 @@ export function ProductsInfoPageContainer({ isEditMode }: Props) {
     );
   }, [selectedProduct.category]);
 
-  if (pageLayoutProps) {
-    return (
-      <PageLayout {...pageLayoutProps}>
-        <InfoPageWrapper className="grid-cols-3">
-          <ProductsImageCard product={selectedProduct} />
+  return (
+    <InfoPageWrapper className="grid-cols-3">
+      <ProductsImageCard product={selectedProduct} />
 
-          <ProductsMainCard
-            productCategories={productCategories}
-            selectedProductCategory={selectedProductCategory}
-            {...cardProps}
-          />
+      <ProductsMainCard
+        productCategories={productCategories}
+        selectedProductCategory={selectedProductCategory}
+        {...cardProps}
+      />
 
-          <ProductsVariantsContainer {...cardProps} />
-        </InfoPageWrapper>
-      </PageLayout>
-    );
-  }
-
-  return <EmptyComponent />;
+      <ProductsVariantsContainer {...cardProps} />
+    </InfoPageWrapper>
+  );
 
 }

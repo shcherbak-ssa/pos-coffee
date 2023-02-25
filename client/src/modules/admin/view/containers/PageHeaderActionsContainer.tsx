@@ -1,48 +1,36 @@
 import { MouseEvent, useEffect, useState } from 'react';
-import { type Location, type NavigateFunction, useLocation, useNavigate } from 'react-router';
 import { PrimeIcons } from 'primereact/api';
 import { Button } from 'primereact/button';
 
-import type { CrudController, Entity } from 'shared/types';
+import type { CrudController, Entity, StoreEntityState } from 'shared/types';
+import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
-import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/navigate';
 
-import { PagePathLabel, GO_BACK } from '@admin/shared/constants';
+import type { AppStore, AppController } from '@admin/shared/types';
+import { ControllerName, StoreName } from '@admin/shared/constants';
 import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-menu-items';
 import { EntityActionsMenuContainer } from '@admin/view/containers/EntityActionsMenuContainer';
 import { SaveButton } from '@admin/view/components/SaveButton';
 
 export type Props = {
-  entity: Entity;
-  actionsMenuItemsProps?: ActionsMenuItemsProps;
+  storeName: StoreName;
   controllerName: string;
-  infoPagePath: string;
+  actionsMenuItemsProps?: ActionsMenuItemsProps;
 }
 
 export function PageHeaderActionsContainer({
-  entity,
-  actionsMenuItemsProps,
+  storeName,
   controllerName,
-  infoPagePath,
+  actionsMenuItemsProps,
 }: Props) {
 
   const [ isSaveProcessing, setIsSaveProcessing ] = useState<boolean>(false);
-  const [ isEditMode, setIsEditMode ] = useState<boolean>(false);
 
-  const location: Location = useLocation();
-  const navigate: NavigateFunction = useNavigate();
-
+  const store = useStore(storeName) as StoreEntityState<{}, Entity>;
   const controller = useController(controllerName) as CrudController;
-  const toInfoPage: NavigateFunctionHook = useNavigateWithParams(infoPagePath);
 
-  useEffect(() => {
-    const { pathname } = location;
-
-    setIsEditMode(
-      pathname.endsWith(PagePathLabel.CREATE) ||
-      pathname.endsWith(PagePathLabel.EDIT)
-    );
-  }, [location.pathname]);
+  const { state: { isEditMode } } = useStore(StoreName.APP) as AppStore;
+  const appController = useController(ControllerName.APP) as AppController;
 
   function save(): void {
     if (isSaveProcessing || !isEditMode || !controller) {
@@ -51,20 +39,21 @@ export function PageHeaderActionsContainer({
 
     setIsSaveProcessing(true);
 
-    controller.save(entity)
-      .then((saveEntityId) => {
-        if (saveEntityId && toInfoPage) {
-          toInfoPage({ id: saveEntityId });
+    controller.save()
+      .then((success) => {
+        if (success) {
+          appController.setIsEditMode(false);
         }
 
         setIsSaveProcessing(false);
       });
   }
 
-  function goBack(e: MouseEvent): void {
+  function removeEditMode(e: MouseEvent): void {
     e.preventDefault();
 
-    navigate(GO_BACK);
+    appController.setIsEditMode(false);
+    controller.select(store.state.selected.id);
   }
 
   function drawSaveButton(): React.ReactNode {
@@ -79,7 +68,7 @@ export function PageHeaderActionsContainer({
   }
 
   function drawArchivedLabel(): React.ReactNode {
-    if (entity.isArchived) {
+    if (store.state.selected.isArchived) {
       return (
         <Button
           className="button-label p-button-text p-button-danger"
@@ -96,7 +85,7 @@ export function PageHeaderActionsContainer({
         <Button
           className="p-button-sm p-button-rounded"
           icon={PrimeIcons.TIMES}
-          onClick={goBack}
+          onClick={removeEditMode}
         />
       );
     }
@@ -104,7 +93,7 @@ export function PageHeaderActionsContainer({
     if (actionsMenuItemsProps) {
       return (
         <EntityActionsMenuContainer
-          entity={entity}
+          entity={store.state.selected}
           actionsMenuItemsProps={actionsMenuItemsProps}
           isEntityPage
         />

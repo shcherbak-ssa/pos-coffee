@@ -1,5 +1,5 @@
 import type { ApiService, ProductCategory, Store, UserSchema } from 'shared/types';
-import { EntityName } from 'shared/constants';
+import { EMPTY_STRING, EntityName } from 'shared/constants';
 import { Context } from 'shared/context';
 import { BaseController } from 'lib/base-controller';
 
@@ -45,9 +45,19 @@ export class AppController extends BaseController implements BaseAppController {
     store.setCurrentUser(user);
   }
 
+  public async setSelectedEntityTitle(title: string): Promise<void> {
+    const store = await this.getStore() as AppStoreActions;
+    store.setSelectedEntityTitle(title);
+  }
+
   public async setIsAppMenuOpen(isOpen: boolean): Promise<void> {
     const store = await this.getStore() as AppStoreActions;
     store.setIsAppMenuOpen(isOpen);
+  }
+
+  public async setIsEditMode(isEditMode: boolean): Promise<void> {
+    const store = await this.getStore() as AppStoreActions;
+    store.setIsEditMode(isEditMode);
   }
 
   public async updateViewState<T extends keyof AppViewState>(state: T, value: AppViewState[T]): Promise<void> {

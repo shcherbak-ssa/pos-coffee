@@ -64,14 +64,6 @@ export function AppLayout() {
                   path={PagePath.PRODUCTS_INFO}
                   element={<ProductsInfoPage />}
                 />
-                <Route
-                  path={PagePath.PRODUCTS_CREATE}
-                  element={<ProductsInfoPage isEditMode />}
-                />
-                <Route
-                  path={PagePath.PRODUCTS_EDIT}
-                  element={<ProductsInfoPage isEditMode />}
-                />
 
                 <Route
                   path={PagePath.CATEGORIES}
@@ -94,14 +86,6 @@ export function AppLayout() {
                 <Route
                   path={PagePath.USERS_INFO}
                   element={<UsersInfoPage />}
-                />
-                <Route
-                  path={PagePath.USERS_CREATE}
-                  element={<UsersInfoPage isEditMode />}
-                />
-                <Route
-                  path={PagePath.USERS_EDIT}
-                  element={<UsersInfoPage isEditMode />}
                 />
 
                 <Route

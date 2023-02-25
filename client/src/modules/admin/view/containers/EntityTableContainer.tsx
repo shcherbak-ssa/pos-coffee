@@ -30,14 +30,26 @@ export function EntityTableContainer<T extends Entity>({
 
   useEffect(() => {
     const columnsProps: ColumnProps[] = [
-      getSelectionColumn(),
+      {
+        field: 'selection',
+        selectionMode: isSelectEnable ? 'multiple' : undefined,
+        headerStyle: isSelectEnable ? { width: '3em' } : { width: '0', padding: '0' },
+      },
       ...columns,
     ];
 
-    const actionsColumn: ColumnProps | undefined = getActionsColumn();
-
-    if (actionsColumn) {
-      columnsProps.push(actionsColumn);
+    if (actionsMenuItemsProps) {
+      columnsProps.push({
+        field: 'actions',
+        header: 'Actions',
+        body: (entity: T) => (
+          <EntityActionsMenuContainer
+            entity={entity}
+            isEntityPage={false}
+            actionsMenuItemsProps={actionsMenuItemsProps}
+          />
+        ),
+      });
     }
 
     setColumnsProps(columnsProps);
@@ -51,30 +63,6 @@ export function EntityTableContainer<T extends Entity>({
   function handleRowDoubleClick(e: DataTableRowClickEvent): void {
     // @ts-ignore
     selectEntity(e.data);
-  }
-
-  function getSelectionColumn(): ColumnProps {
-    return {
-      field: 'selection',
-      selectionMode: isSelectEnable ? 'multiple' : undefined,
-      headerStyle: isSelectEnable ? { width: '3em' } : { width: '0', padding: '0' },
-    };
-  }
-
-  function getActionsColumn(): ColumnProps | undefined {
-    if (actionsMenuItemsProps) {
-      return {
-        field: 'actions',
-        header: 'Actions',
-        body: (entity: T) => (
-          <EntityActionsMenuContainer
-            entity={entity}
-            isEntityPage={false}
-            actionsMenuItemsProps={actionsMenuItemsProps}
-          />
-        ),
-      };
-    }
   }
 
   return (

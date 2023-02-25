@@ -3,7 +3,7 @@ import '@login/view/styles/login.scss';
 import { LocalStorageKey } from 'shared/constants';
 import { Context } from 'shared/context';
 import { LocalStorage } from 'shared/helpers/local-storage';
-import { setupPrimeReact, render } from 'shared/helpers/setup-view';
+import { setupPrimeReact, render } from 'view/helpers/setup-view';
 
 import { LOGIN_PAGE_PATH } from '@login/shared/constants';
 import { LoaderService } from '@login/services/loader';

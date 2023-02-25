@@ -48,10 +48,6 @@ export function createFilter({ onlyArchived = false }: UsersFilter): UsersFilter
 export function createDraft(schema: BaseUserSchema = UserSchema.create()): UserDraft {
 
   return {
-    get fullname(): string {
-      return `${schema.name} ${schema.surname}`;
-    },
-
     get address(): AddressDraft {
       return createAddressDraft(schema.address || undefined);
     },

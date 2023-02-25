@@ -7,7 +7,7 @@ import type { UserSchema } from 'shared/types';
 import { LocalStorageKey, UserType } from 'shared/constants';
 import { AuthError } from 'shared/errors';
 import { LocalStorage } from 'shared/helpers/local-storage';
-import { render } from 'shared/helpers/setup-view';
+import { render } from 'view/helpers/setup-view';
 
 renderLoader()
   .then(checkUserToken)
