@@ -32,7 +32,7 @@ export function getUpdates(originalObject: AnyType, objectWithUpdates: AnyType):
   return updates;
 }
 
-function removeUntrackedFields({ id, createdAt, updatedAt, deletedAt, ...updates }: AnyType): AnyType {
+function removeUntrackedFields({ id, createdAt, updatedAt, archivedAt, ...updates }: AnyType): AnyType {
   return updates;
 }
 

@@ -19,13 +19,6 @@ import { BaseController } from 'lib/base-controller';
 
 export class CrudController<T extends Entity> extends BaseController {
 
-  private storeName: string;
-
-  protected constructor(storeName: string, entityName: EntityName) {
-    super(entityName);
-    this.storeName = storeName;
-  }
-
   protected async tryToLoadById({ endpoint, entityId }: PayloadToGetById): Promise<boolean> {
     try {
       const apiService: ApiService = await this.getApiService();
@@ -183,12 +176,6 @@ export class CrudController<T extends Entity> extends BaseController {
     } catch (e: any) {
       await this.parseError(e);
     }
-  }
-
-  protected async getStore(): Promise<Store> {
-    await Context.loadStore(this.storeName);
-
-    return Context.getStore(this.storeName);
   }
 
   private isNewEntity(entity: T): boolean {

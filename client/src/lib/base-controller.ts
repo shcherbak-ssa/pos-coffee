@@ -3,15 +3,24 @@ import type {
   ApiService as BaseApiService,
   ValidationService as BaseValidationService,
   NotificationService as BaseNotificationService,
+  Store,
 } from 'shared/types';
 import { EntityName, ErrorType } from 'shared/constants';
+import { Context } from 'shared/context';
 import { ApiError, AuthError, ValidationError } from 'shared/errors';
 
 export class BaseController implements Controller {
 
   protected constructor(
+    private storeName: string,
     protected entityName: EntityName,
   ) {}
+
+  protected async getStore(): Promise<Store> {
+    await Context.loadStore(this.storeName);
+
+    return Context.getStore(this.storeName);
+  }
 
   protected async getApiService(): Promise<BaseApiService> {
     const { ApiService } = await import('services/api');

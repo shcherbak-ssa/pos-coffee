@@ -1,0 +1,54 @@
+import type { MouseEvent } from 'react';
+import { Location, NavigateFunction, useLocation, useNavigate } from 'react-router';
+import { PrimeIcons } from 'primereact/api';
+
+import { EMPTY_STRING } from 'shared/constants';
+import { AppLogo } from 'view/components/AppLogo';
+import { type Props as IconButtonProps, IconButton } from 'view/components/IconButton';
+
+import { PagePath } from '@app/shared/constants';
+
+export function AppHeaderContainer() {
+
+  const location: Location = useLocation();
+  const navigate: NavigateFunction = useNavigate();
+
+  const iconButtons: IconButtonProps[] = [
+    {
+      icon: PrimeIcons.HOME,
+      className: location.pathname === PagePath.HOME ? 'is-active' : EMPTY_STRING,
+      click(e: MouseEvent): void {
+        navigate(PagePath.HOME);
+      },
+    },
+    {
+      icon: PrimeIcons.TICKET,
+      className: location.pathname.startsWith(PagePath.NEW_ORDER) ? 'is-active' : EMPTY_STRING,
+      click(e: MouseEvent): void {
+        navigate(PagePath.NEW_ORDER);
+      },
+    },
+    {
+      icon: PrimeIcons.SHOPPING_BAG,
+      className: location.pathname === PagePath.ORDERS ? 'is-active' : EMPTY_STRING,
+      click(e: MouseEvent): void {
+        navigate(PagePath.ORDERS);
+      },
+    },
+  ];
+
+  return (
+    <header className="flex items-center justify-between p-6">
+      <div className="flex items-center">
+        <AppLogo />
+      </div>
+
+      <div className="flex items-center">
+        <div className="flex items-center gap-4">
+          { iconButtons.map((props, index) => <IconButton key={index} {...props} />) }
+        </div>
+      </div>
+    </header>
+  );
+
+}

@@ -6,12 +6,24 @@ import { EMPTY_STRING, SERVER_CONFIG_FILENAME, UserType } from './shared/constan
 import { generatePrice, generateRundomAvatar, getSku } from './shared/utils';
 
 const adminUser: User = {
-  name: 'Stanislav',
-  surname: 'Shcherbakov',
-  email: 'shcherbak.ssa@gmail.com',
+  name: 'Admin',
+  surname: 'Adminovic',
+  email: 'admin@gmail.com',
   phone: '375333081037',
   password: 'qwerty1234',
   type: UserType.ADMIN,
+  image: generateRundomAvatar(),
+  address: generateAddress(),
+  isArchived: false,
+};
+
+const managerUser: User = {
+  name: 'Manager',
+  surname: 'Managerkov',
+  email: 'manager@gmail.com',
+  phone: '375333081037',
+  password: 'qwerty1234',
+  type: UserType.MANAGER,
   image: generateRundomAvatar(),
   address: generateAddress(),
   isArchived: false,
@@ -32,8 +44,8 @@ function generateConfig(): Config {
   return {
     users: [
       adminUser,
+      managerUser,
       generateUser('female', {}),
-      generateUser('female', { type: UserType.MANAGER }),
       generateUser('male', { type: UserType.MANAGER }),
       generateUser('male', { type: UserType.MANAGER, image: EMPTY_STRING, isArchived: true }),
       generateUser('male', { type: UserType.WAITER, image: EMPTY_STRING, }),
