@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.digitazon.poscoffee.models.helpers.EntityFilter;
+import com.digitazon.poscoffee.models.helpers.ProductFilter;
 import com.digitazon.poscoffee.models.helpers.client.ClientProduct;
 import com.digitazon.poscoffee.services.ProductsService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
@@ -34,9 +34,9 @@ public class AdminProductsController {
   @GetMapping(path = AppConstants.ApiEndpoint.Admin.PRODUCTS)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('ADMIN')")
-  public List<ClientProduct> getProducts(@RequestParam(AppConstants.PARAM_ONLY_ARCHIVED) boolean onlyArchived) {
-    final EntityFilter filter = EntityFilter.builder()
-      .onlyArchived(onlyArchived)
+  public List<ClientProduct> getProducts(@RequestParam(AppConstants.PARAM_IS_ARCHIVED) boolean isArchived) {
+    final ProductFilter filter = ProductFilter.builder()
+      .isArchived(isArchived)
       .build();
 
     return this.service.getProducts(filter);

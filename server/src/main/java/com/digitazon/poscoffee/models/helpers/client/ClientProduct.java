@@ -1,6 +1,7 @@
 package com.digitazon.poscoffee.models.helpers.client;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -56,6 +57,7 @@ public class ClientProduct {
   private Integer stock;
   private String image;
   private ClientProductCategory category;
+  private List<ClientProductVariant> variants;
   private Boolean useStockForVariants;
   private Boolean isAvailable;
   private Boolean isArchived;

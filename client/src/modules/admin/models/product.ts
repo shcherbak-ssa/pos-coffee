@@ -31,9 +31,9 @@ export class ProductSchema extends BaseSchema<ProductUpdates> implements BasePro
   }
 }
 
-export function createFilter({ onlyArchived = false }: ProductsFilter): ProductsFilter {
+export function createFilter({ isArchived: onlyArchived = false }: ProductsFilter): ProductsFilter {
   return {
-    onlyArchived,
+    isArchived: onlyArchived,
   };
 }
 

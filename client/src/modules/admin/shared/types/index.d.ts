@@ -148,7 +148,7 @@ export type UserUpdates = Partial<Omit<UserSchema, 'address'> & {
 }>
 
 export type UsersFilter = Partial<{
-  onlyArchived: boolean;
+  isArchived: boolean;
 }>
 
 export type UserDraft = {
@@ -175,7 +175,7 @@ export interface UsersController extends CrudController<UsersFilter> {}
 export type ProductUpdates = Partial<ProductSchema>;
 
 export type ProductsFilter = Partial<{
-  onlyArchived: boolean;
+  isArchived: boolean;
 }>
 
 export type ProductDraft = {
@@ -203,10 +203,6 @@ export interface ProductsController extends CrudController<ProductsFilter> {}
 
 export type CategoryUpdates = Partial<CategorySchema>;
 
-export type CategoriesFilter = Partial<{
-  onlyArchived: boolean;
-}>
-
 export type CategoryDraft = {
   set isAvailable(isAvailable: boolean);
   set name(name: string);
@@ -222,7 +218,7 @@ export interface CategoriesStoreActions extends StoreCrud<CategorySchema> {
   setIsPopupOpen(isPopupOpen: boolean): void;
 }
 
-export interface CategoriesController extends CrudController<CategoriesFilter> {
+export interface CategoriesController extends CrudController<{}> {
   setIsPopupOpen(isPopupOpen: boolean): Promise<void>;
   delete(categoryId: number): Promise<boolean>;
 }

@@ -34,10 +34,10 @@ export function pageContainer<T extends Entity>(
       loadEntities(view.listTab === ListTab.ARCHIVED);
     }, [view.listTab]);
 
-    function loadEntities(onlyArchived: boolean): void {
+    function loadEntities(isArchived: boolean): void {
       setIsLoading(true);
 
-      controller.loadAll({ onlyArchived })
+      controller.loadAll({ isArchived })
         .then((success: boolean) => {
           if (success) {
             setIsLoading(false);

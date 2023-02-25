@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digitazon.poscoffee.models.Address;
-import com.digitazon.poscoffee.models.helpers.EntityFilter;
+import com.digitazon.poscoffee.models.helpers.UserFilter;
 import com.digitazon.poscoffee.models.helpers.client.ClientUser;
 import com.digitazon.poscoffee.services.AddressService;
 import com.digitazon.poscoffee.services.UsersService;
@@ -40,9 +40,9 @@ public class AdminUsersController {
   @GetMapping(path = AppConstants.ApiEndpoint.Admin.USERS)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('ADMIN')")
-  public List<ClientUser> getUsers(@RequestParam(AppConstants.PARAM_ONLY_ARCHIVED) boolean onlyArchived) {
-    final EntityFilter filter = EntityFilter.builder()
-      .onlyArchived(onlyArchived)
+  public List<ClientUser> getUsers(@RequestParam(AppConstants.PARAM_IS_ARCHIVED) boolean isArchived) {
+    final UserFilter filter = UserFilter.builder()
+      .isArchived(isArchived)
       .build();
 
     return this.service.getUsers(filter);

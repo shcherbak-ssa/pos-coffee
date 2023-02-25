@@ -1,6 +1,20 @@
+:root {
+  --wrapper-color: #F7F8FA;
+}
+
 .app {
   &-container {
-    @apply mx-auto;
+    @apply mx-auto h-screen overflow-hidden;
     width: 1024px;
   }
+}
+
+.card-wrapper {
+  background-color: var(--wrapper-color, --surface-ground);
+}
+
+/** Primereact */
+
+.p-menubar {
+  @apply bg-white px-0;
 }

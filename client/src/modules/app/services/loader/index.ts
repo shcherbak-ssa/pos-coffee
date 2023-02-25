@@ -19,6 +19,11 @@ export class LoaderService implements BaseLoaderService {
 
         return AppController.create();
       }
+      case ControllerName.MENU: {
+        const { MenuController } = await import('@app/controllers/menu');
+
+        return MenuController.create();
+      }
     }
 
     throw new ProgerError(`[LOADER] Controller ${name} does not exist`);
@@ -30,6 +35,11 @@ export class LoaderService implements BaseLoaderService {
         const { appStore } = await import('@app/services/store/app');
 
         return appStore;
+      }
+      case StoreName.MENU: {
+        const { menuStore } = await import('@app/services/store/menu');
+
+        return menuStore;
       }
     }
 

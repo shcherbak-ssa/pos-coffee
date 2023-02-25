@@ -6,6 +6,7 @@ import { AppLoader } from 'view/components/AppLoader';
 
 import { PagePath } from '@app/shared/constants';
 import { AppHeaderContainer } from '@app/view/containers/AppHeaderContainer';
+import { AppPageWrapper } from '@app/view/components/AppPageWrapper';
 
 const HomePage = lazy(() => import('@app/view/pages/HomePage'));
 const NewOrderPage = lazy(() => import('@app/view/pages/NewOrderPage'));
@@ -18,7 +19,7 @@ export function AppLayout() {
       <BrowserRouter>
         <AppHeaderContainer />
 
-        <div className="p-6">
+        <AppPageWrapper>
           <Suspense fallback={<AppLoader />} >
             <Routes>
               <Route
@@ -37,7 +38,7 @@ export function AppLayout() {
               />
             </Routes>
           </Suspense>
-        </div>
+        </AppPageWrapper>
 
         <NotificationContainer />
       </BrowserRouter>

@@ -6,7 +6,7 @@ import { EMPTY_STRING } from 'shared/constants';
 import { AppLogo } from 'view/components/AppLogo';
 import { type Props as IconButtonProps, IconButton } from 'view/components/IconButton';
 
-import { PagePath } from '@app/shared/constants';
+import { IS_ACTIVE_CLASSNAME, PagePath } from '@app/shared/constants';
 
 export function AppHeaderContainer() {
 
@@ -16,21 +16,21 @@ export function AppHeaderContainer() {
   const iconButtons: IconButtonProps[] = [
     {
       icon: PrimeIcons.HOME,
-      className: location.pathname === PagePath.HOME ? 'is-active' : EMPTY_STRING,
+      className: location.pathname === PagePath.HOME ? IS_ACTIVE_CLASSNAME : EMPTY_STRING,
       click(e: MouseEvent): void {
         navigate(PagePath.HOME);
       },
     },
     {
       icon: PrimeIcons.TICKET,
-      className: location.pathname.startsWith(PagePath.NEW_ORDER) ? 'is-active' : EMPTY_STRING,
+      className: location.pathname.startsWith(PagePath.NEW_ORDER) ? IS_ACTIVE_CLASSNAME : EMPTY_STRING,
       click(e: MouseEvent): void {
         navigate(PagePath.NEW_ORDER);
       },
     },
     {
       icon: PrimeIcons.SHOPPING_BAG,
-      className: location.pathname === PagePath.ORDERS ? 'is-active' : EMPTY_STRING,
+      className: location.pathname === PagePath.ORDERS ? IS_ACTIVE_CLASSNAME : EMPTY_STRING,
       click(e: MouseEvent): void {
         navigate(PagePath.ORDERS);
       },
@@ -38,7 +38,7 @@ export function AppHeaderContainer() {
   ];
 
   return (
-    <header className="flex items-center justify-between p-6">
+    <header className="flex items-center justify-between p-4">
       <div className="flex items-center">
         <AppLogo />
       </div>

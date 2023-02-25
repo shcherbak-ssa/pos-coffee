@@ -1,12 +1,12 @@
 package com.digitazon.poscoffee.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.Category;
 import com.digitazon.poscoffee.models.Product;
-import com.digitazon.poscoffee.models.helpers.EntityFilter;
+import com.digitazon.poscoffee.models.helpers.ProductFilter;
 import com.digitazon.poscoffee.models.helpers.client.ClientCategory;
 import com.digitazon.poscoffee.models.helpers.client.ClientProduct;
 import com.digitazon.poscoffee.repositories.ProductsRepository;
@@ -58,7 +58,7 @@ public class ProductsService {
     throw new ResourceNotFoundException("Product not found");
   }
 
-  public List<ClientProduct> getProducts(EntityFilter filter) {
+  public List<ClientProduct> getProducts(ProductFilter filter) {
     final List<Product> products = this.repository.findAll(ProductsService.filter(filter));
 
     return products
@@ -157,22 +157,26 @@ public class ProductsService {
     }
   }
 
-  private static Specification<Product> filter(EntityFilter filter) {
+  private static Specification<Product> filter(ProductFilter filter) {
     return new Specification<Product>() {
 
       @Override
       public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-        final Path<Product> isArchivedPath = root.get("isArchived");
-        final Boolean onlyArchived = filter.getOnlyArchived();
+        final List<Predicate> predicates = new ArrayList<Predicate>();
 
-        if (onlyArchived != null && onlyArchived) {
-          return builder.equal(isArchivedPath, true);
+        if (filter.getIsArchived() != null) {
+          predicates.add(
+            builder.equal(root.get("isArchived"), filter.getIsArchived())
+          );
         }
 
-        return builder.or(
-          builder.isNull(isArchivedPath),
-          builder.equal(isArchivedPath, false)
-        );
+        if (filter.getIsAvailable() != null) {
+          predicates.add(
+            builder.equal(root.get("isAvailable"), filter.getIsAvailable())
+          );
+        }
+
+        return builder.and(predicates.toArray(new Predicate[0]));
       }
 
     };

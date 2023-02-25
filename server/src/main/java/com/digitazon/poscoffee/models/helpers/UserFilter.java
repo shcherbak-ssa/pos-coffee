@@ -7,9 +7,8 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
-public class EntityFilter {
+public class UserFilter {
 
-  @Builder.Default
-  private Boolean onlyArchived = false;
+  private Boolean isArchived;
 
 }

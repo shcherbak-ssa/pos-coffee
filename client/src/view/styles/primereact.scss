@@ -159,11 +159,15 @@
   }
 
   & &-root-list {
-    @apply flex bg-transparent shadow-none w-auto;
+    @apply flex bg-transparent shadow-none w-auto gap-2;
 
     & > .p-menuitem > .p-menuitem-link {
-      @apply rounded;
+      @apply rounded px-2;
     }
+  }
+
+  .is-active .p-menuitem-link {
+    box-shadow: inset 0 0 0 0.1rem #81a1c1;
   }
 }
 

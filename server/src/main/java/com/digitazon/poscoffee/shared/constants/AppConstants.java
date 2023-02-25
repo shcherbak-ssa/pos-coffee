@@ -25,7 +25,7 @@ public class AppConstants {
   public static final String ACCESS_DENY_MESSAGE = "Access denied";
   public static final String ACCESS_DENIED_ERROR = "AccessDeniedException";
 
-  public static final String PARAM_ONLY_ARCHIVED = "onlyArchived";
+  public static final String PARAM_IS_ARCHIVED = "isArchived";
 
   public static final class Entity {
     public static final String USER = "User";
@@ -53,6 +53,11 @@ public class AppConstants {
       public static final String PRODUCT_VARIANTS_ID = "/api/admin/products/variants/{id}";
       public static final String ORDERS = "/api/admin/orders";
       public static final String ORDERS_ID = "/api/admin/orders/{id}";
+    }
+
+    public static final class App {
+      public static final String MENU_CATEGORIES = "/api/app/menu/categories";
+      public static final String MENU_PRODUCTS = "/api/app/menu/products";
     }
   }
 
