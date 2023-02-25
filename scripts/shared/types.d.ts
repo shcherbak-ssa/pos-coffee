@@ -44,7 +44,6 @@ export type Product = {
 export type Category = {
   name: string;
   isAvailable: boolean;
-  isArchived: boolean;
 }
 
 export type ProductVariant = {

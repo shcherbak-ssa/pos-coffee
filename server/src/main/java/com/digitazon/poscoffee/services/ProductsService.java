@@ -35,14 +35,13 @@ public class ProductsService {
   private AnnotationConfigApplicationContext context
     = new AnnotationConfigApplicationContext(AppConfig.class);
 
+  @Autowired
   private ProductsRepository repository;
-  private ServiceHelpers<Product> helpers;
 
-  @SuppressWarnings("unchecked")
-  public ProductsService(@Autowired ProductsRepository repository) {
-    this.repository = repository;
-    this.helpers = (ServiceHelpers<Product>)
-      this.context.getBean("serviceHelpers", repository, AppConstants.Entity.PRODUCT);
+  private ServiceHelpers helpers;
+
+  public ProductsService() {
+    this.helpers = (ServiceHelpers) this.context.getBean("serviceHelpers", AppConstants.Entity.PRODUCT);
   }
 
   public boolean isProductExist(String sku) {
@@ -97,16 +96,17 @@ public class ProductsService {
 
     this.helpers.update(
       updates.getId(),
+      this.repository,
       (Product product) -> this.mergeWithUpdates(product, updates)
     );
   }
 
   public void archiveProductById(Long id) throws ResourceNotFoundException {
-    this.helpers.archiveById(id);
+    this.helpers.archiveById(id, this.repository);
   }
 
   public void restoreProductById(Long id) throws ResourceNotFoundException {
-    this.helpers.restoreById(id);
+    this.helpers.restoreById(id, this.repository);
   }
 
   public void moveProductsToDefaultCategory(Category currentCategory, Category defaultCategory) {

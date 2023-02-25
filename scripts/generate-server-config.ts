@@ -50,7 +50,7 @@ function generateConfig(): Config {
       generateCategory({ name: 'Coffee bar' }),
       generateCategory({ name: 'Drinks' }),
       generateCategory({ name: 'Strongdrink' }),
-      generateCategory({ name: 'Shorts', isArchived: true  }),
+      generateCategory({ name: 'Shorts', isAvailable: false  }),
       generateCategory({ name: 'Food' }),
       generateCategory({ name: 'Tea', isAvailable: false }),
     ],
@@ -138,12 +138,10 @@ function generateAddress(): Address {
 function generateCategory({
   name = EMPTY_STRING,
   isAvailable = true,
-  isArchived = false,
 }: Partial<Category>): Category {
   return {
     name,
     isAvailable,
-    isArchived,
   };
 }
 

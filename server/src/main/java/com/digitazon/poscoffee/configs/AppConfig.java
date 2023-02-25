@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -21,7 +20,6 @@ import com.digitazon.poscoffee.models.ProductVariant;
 import com.digitazon.poscoffee.models.User;
 import com.digitazon.poscoffee.models.UserType;
 import com.digitazon.poscoffee.models.helpers.ErrorResponse;
-import com.digitazon.poscoffee.models.helpers.base.BaseEntityDates;
 import com.digitazon.poscoffee.models.helpers.client.ClientCategory;
 import com.digitazon.poscoffee.models.helpers.client.ClientOrder;
 import com.digitazon.poscoffee.models.helpers.client.ClientOrderLine;
@@ -60,10 +58,8 @@ public class AppConfig {
 
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-  public <T extends BaseEntityDates> ServiceHelpers<T> serviceHelpers(
-    JpaRepository<T, Long> repository, String entityName
-  ) {
-    return new ServiceHelpers<T>(repository, entityName);
+  public ServiceHelpers serviceHelpers(String entityName) {
+    return new ServiceHelpers(entityName);
   }
 
   /**
@@ -131,10 +127,8 @@ public class AppConfig {
       .id(category.getId())
       .name(category.getName())
       .isAvailable(category.getIsAvailable())
-      .isArchived(category.getIsArchived())
       .createdAt(category.getCreatedAt())
       .updatedAt(category.getUpdatedAt())
-      .archivedAt(category.getArchivedAt())
       .build();
   }
 
@@ -309,13 +303,9 @@ public class AppConfig {
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
   public Category categoryFromConfigCategory(ConfigCategory configCategory) {
-    final boolean isArchived = configCategory.getIsArchived();
-
     return Category.builder()
       .name(configCategory.getName())
       .isAvailable(configCategory.getIsAvailable())
-      .isArchived(isArchived)
-      .archivedAt(isArchived ? new Date() : null)
       .build();
   }
 

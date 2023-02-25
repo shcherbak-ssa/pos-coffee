@@ -8,13 +8,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.digitazon.poscoffee.models.helpers.base.BaseEntityDates;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
 
-public class ServiceHelpers<T extends BaseEntityDates> {
+public class ServiceHelpers {
 
-  private JpaRepository<T, Long> repository;
   private String entityName;
 
-  public ServiceHelpers(JpaRepository<T, Long> repository, String entityName) {
-    this.repository = repository;
+  public ServiceHelpers(String entityName) {
     this.entityName = entityName;
   }
 
@@ -22,14 +20,16 @@ public class ServiceHelpers<T extends BaseEntityDates> {
     public void mergeWithUpdates(T entity);
   }
 
-  public void update(Long id, MergeWithUpdates<T> merge) throws ResourceNotFoundException {
-    final Optional<T> foundEntity = this.repository.findById(id);
+  public <T> void update(
+    Long id, JpaRepository<T, Long> repository, MergeWithUpdates<T> merge
+  ) throws ResourceNotFoundException {
+    final Optional<T> foundEntity = repository.findById(id);
 
     if (foundEntity.isPresent()) {
       final T entity = foundEntity.get();
       merge.mergeWithUpdates(entity);
 
-      this.repository.save(entity);
+      repository.save(entity);
 
       return;
     }
@@ -37,15 +37,17 @@ public class ServiceHelpers<T extends BaseEntityDates> {
     this.throwResourceNotFoundException();
   }
 
-  public void archiveById(Long id) throws ResourceNotFoundException {
-    final Optional<T> foundEntity = this.repository.findById(id);
+  public <T extends BaseEntityDates> void archiveById(
+    Long id, JpaRepository<T, Long> repository
+  ) throws ResourceNotFoundException {
+    final Optional<T> foundEntity = repository.findById(id);
 
     if (foundEntity.isPresent()) {
       final T entity = foundEntity.get();
       entity.setIsArchived(true);
       entity.setArchivedAt(new Date());
 
-      this.repository.save(entity);
+      repository.save(entity);
 
       return;
     }
@@ -53,8 +55,10 @@ public class ServiceHelpers<T extends BaseEntityDates> {
     this.throwResourceNotFoundException();
   }
 
-  public void restoreById(Long id) throws ResourceNotFoundException {
-    final Optional<T> foundEntity = this.repository.findById(id);
+  public <T extends BaseEntityDates> void restoreById(
+    Long id, JpaRepository<T, Long> repository
+  ) throws ResourceNotFoundException {
+    final Optional<T> foundEntity = repository.findById(id);
 
     if (foundEntity.isPresent()) {
       final T entity = foundEntity.get();
@@ -66,7 +70,7 @@ public class ServiceHelpers<T extends BaseEntityDates> {
       entity.setIsArchived(false);
       entity.setArchivedAt(null);
 
-      this.repository.save(entity);
+      repository.save(entity);
 
       return;
     }

@@ -43,14 +43,13 @@ public class UsersService {
   @Autowired
   private PasswordEncoder encoder;
 
+  @Autowired
   private UsersRepository repository;
-  private ServiceHelpers<User> helpers;
 
-  @SuppressWarnings("unchecked")
-  public UsersService(@Autowired UsersRepository repository) {
-    this.repository = repository;
-    this.helpers = (ServiceHelpers<User>)
-      this.context.getBean("serviceHelpers", repository, AppConstants.Entity.USER);
+  private ServiceHelpers helpers;
+
+  public UsersService() {
+    this.helpers = (ServiceHelpers) this.context.getBean("serviceHelpers", AppConstants.Entity.USER);
   }
 
   public boolean isUserExist(String email) {
@@ -113,16 +112,17 @@ public class UsersService {
 
     this.helpers.update(
       updates.getId(),
+      this.repository,
       (User user) -> this.mergeWithUpdates(user, updates)
     );
   }
 
   public void archiveUserById(Long id) throws ResourceNotFoundException {
-    this.helpers.archiveById(id);
+    this.helpers.archiveById(id, this.repository);
   }
 
   public void restoreUserById(Long id) throws ResourceNotFoundException {
-    this.helpers.restoreById(id);
+    this.helpers.restoreById(id, this.repository);
   }
 
   private void checkIfUserExists(String email) throws AlreadyExistException {

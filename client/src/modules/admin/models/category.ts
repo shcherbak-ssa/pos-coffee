@@ -1,30 +1,34 @@
 import type { CategorySchema as BaseCategorySchema } from 'shared/types';
 import { EMPTY_STRING, ZERO } from 'shared/constants';
-import { BaseSchema } from 'lib/base-schema';
 
 import type { CategoriesFilter, CategoryDraft, CategoryUpdates } from '@admin/shared/types';
 
-export class CategorySchema extends BaseSchema<CategoryUpdates> implements BaseCategorySchema {
+export class CategorySchema implements BaseCategorySchema {
+  public id: number;
   public name: string;
   public productsCount: number;
   public isAvailable: boolean;
+  public createdAt: Date | null;
+  public updatedAt: Date | null;
 
   private constructor(schema?: BaseCategorySchema) {
-    super(schema);
+    this.id = schema?.id || ZERO;
     this.name = schema?.name || EMPTY_STRING;
     this.productsCount = schema?.productsCount || ZERO;
     this.isAvailable = schema?.isAvailable || false;
+    this.createdAt = schema?.createdAt ? new Date(schema.createdAt) : null;
+    this.updatedAt = schema?.updatedAt ? new Date(schema.updatedAt) : null;
   }
 
   public static create(schema?: BaseCategorySchema): CategorySchema {
     return new CategorySchema(schema);
   }
-}
 
-export function createFilter({ onlyArchived = false }: CategoriesFilter): CategoriesFilter {
-  return {
-    onlyArchived,
-  };
+  public getUpdates(): CategoryUpdates {
+    const { id, createdAt, updatedAt, ...updates } = this;
+
+    return updates;
+  }
 }
 
 export function createDraft(schema: BaseCategorySchema = CategorySchema.create()): CategoryDraft {

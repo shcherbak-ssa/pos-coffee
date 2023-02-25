@@ -224,6 +224,7 @@ export interface CategoriesStoreActions extends StoreCrud<CategorySchema> {
 
 export interface CategoriesController extends CrudController<CategoriesFilter> {
   setIsPopupOpen(isPopupOpen: boolean): Promise<void>;
+  delete(categoryId: number): Promise<boolean>;
 }
 
 /**
