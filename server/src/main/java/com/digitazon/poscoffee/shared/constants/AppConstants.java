@@ -48,8 +48,7 @@ public class AppConstants {
       public static final String PRODUCTS_ARCHIVE = "/api/admin/products/{id}/archive";
       public static final String PRODUCTS_RESTORE = "/api/admin/products/{id}/restore";
       public static final String CATEGORIES = "/api/admin/categories";
-      public static final String CATEGORIES_ARCHIVE = "/api/admin/categories/{id}/archive";
-      public static final String CATEGORIES_RESTORE = "/api/admin/categories/{id}/restore";
+      public static final String CATEGORIES_ID = "/api/admin/categories/{id}";
       public static final String PRODUCT_VARIANTS = "/api/admin/products/variants";
       public static final String PRODUCT_VARIANTS_ID = "/api/admin/products/variants/{id}";
       public static final String ORDERS = "/api/admin/orders";

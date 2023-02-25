@@ -12,8 +12,7 @@ export enum ApiEndpoint {
   PRODUCTS_ARCHIVE = '/api/admin/products/:id/archive',
   PRODUCTS_RESTORE = '/api/admin/products/:id/restore',
   CATEGORIES = '/api/admin/categories',
-  CATEGORIES_ARCHIVE = '/api/admin/categories/:id/archive',
-  CATEGORIES_RESTORE = '/api/admin/categories/:id/restore',
+  CATEGORIES_ID = '/api/admin/categories/:id',
   PRODUCT_VARIANTS = '/api/admin/products/variants',
   PRODUCT_VARIANTS_ID = '/api/admin/products/variants/:id',
   ORDERS = '/api/admin/orders',
@@ -91,6 +90,7 @@ export enum Action {
   UPDATE = 'UPDATE',
   ARCHIVE = 'ARCHIVE',
   RESTORE = 'RESTORE',
+  DELETE = 'DELETE',
 }
 
 export enum ControlGroup {

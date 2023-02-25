@@ -29,6 +29,7 @@ function Page() {
 
   const pageLayoutProps: Omit<PageLayoutProps, 'children'> = {
     showSubHeader: false,
+    showTabs: false,
     page: {
       ...pages[PageTitle.CATEGORIES],
       headerMenuItem: headerMenuItems.categories,

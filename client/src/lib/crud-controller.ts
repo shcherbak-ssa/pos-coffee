@@ -10,6 +10,7 @@ import type {
   ValidationService,
   PayloadToChangeArchiveState,
   StoreEntityState,
+  PayloadToDelete,
 } from 'shared/types';
 import { EntityName, ZERO } from 'shared/constants';
 import { Context } from 'shared/context';
@@ -149,6 +150,28 @@ export class CrudController<T extends Entity> extends BaseController {
       return true;
     } catch (e: any) {
       await this.parseError(e);
+      return false;
+    }
+  }
+
+  protected async tryToDelete({ endpoint, entityId }: PayloadToDelete): Promise<boolean> {
+    try {
+      const notificationService: NotificationService = await this.getNotificationService();
+      notificationService.addNotification(notifications.deleteProcess(this.entityName));
+
+      const apiService: ApiService = await this.getApiService();
+      await apiService
+        .addParams({ id: entityId })
+        .delete(endpoint);
+
+      const store = await this.getStore() as StoreCrud<T>;
+      store.remove(entityId);
+
+      notificationService.addNotification(notifications.deleted(this.entityName));
+
+      return true;
+    } catch (e: any) {
+      this.parseError(e);
       return false;
     }
   }

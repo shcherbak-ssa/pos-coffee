@@ -33,11 +33,11 @@ export function useActionsMenuItems({
 }): MenuItem[] {
 
   const appController = useController(ControllerName.APP) as AppController;
-
   const controller = useController(controllerName) as CrudController;
+
   const toInfoPage: NavigateFunctionHook = useNavigateWithParams(infoPagePath);
 
-  return [
+  const items: MenuItem[] = [
     {
       label: 'View',
       icon: PrimeIcons.EYE,
@@ -86,10 +86,19 @@ export function useActionsMenuItems({
         });
       },
     },
+    {
+      label: 'Delete',
+      icon: PrimeIcons.TRASH,
+      visible: false,
+      data: { action: Action.DELETE },
+      command: () => {},
+    },
   ].map((item) => {
     const overrideItem: OverrideFunction | undefined = overrides[item.data.action];
 
     return overrideItem ? overrideItem(item, entity) : item;
   });
+
+  return items;
 
 }

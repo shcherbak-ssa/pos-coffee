@@ -95,10 +95,13 @@ export type ProductCategory = {
   name: string;
 }
 
-export type CategorySchema = BaseSchema & {
+export type CategorySchema = {
+  id: number;
   name: string;
   productsCount: number;
   isAvailable: boolean;
+  createdAt: Date | null;
+  updatedAt: Date | null;
 }
 
 export type ProductVariantSchema = {
@@ -204,6 +207,11 @@ export type PayloadToSave<T, Q> = {
 export type PayloadToChangeArchiveState = {
   endpoint: string;
   action: ArchiveAction;
+  entityId: number;
+}
+
+export type PayloadToDelete = {
+  endpoint: string;
   entityId: number;
 }
 

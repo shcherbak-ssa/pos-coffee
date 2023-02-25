@@ -23,7 +23,7 @@ import { AvailableCheckbox } from '@admin/view/components/AvailableCheckbox';
 import { CardHeading } from '@admin/view/components/CardHeading';
 import { CategoriesSelectedWrapper } from '@admin/view/components/CategoriesSelectedWrapper';
 import { actionsMenuItemsProps } from '@admin/shared/configs/pages';
-import { CategoriesArchiveMessage } from '@admin/view/components/CategoriesArchiveMessage';
+import { CategoriesDeleteMessage } from '@admin/view/components/CategoriesDeleteMessage';
 
 export type Props = {
   mode: 'edit' | 'create';
@@ -48,14 +48,22 @@ export function CategoriesSelectedContainer({ mode }: Props) {
     entity: selectedCategory,
     overrides: {
       [Action.VIEW]: () => ({ visible: false }),
-      [Action.ARCHIVE]: (item: MenuItem, entity: Entity) => ({
+      [Action.ARCHIVE]: () => ({ visible: false }),
+      [Action.RESTORE]: () => ({ visible: false }),
+      [Action.DELETE]: (item: MenuItem, entity: Entity) => ({
         ...item,
+        visible: true,
         command: () => {
           confirmDialog({
-            ...confirmDialogConfig.archive,
-            message: <CategoriesArchiveMessage category={entity as CategorySchema} />,
+            ...confirmDialogConfig.delete,
+            message: <CategoriesDeleteMessage category={entity as CategorySchema} />,
             accept: () => {
-              categoriesController.archive(entity.id);
+              categoriesController.delete(entity.id)
+                .then((success) => {
+                  if (success) {
+                    categoriesController.select();
+                  }
+                });
             },
           });
         },

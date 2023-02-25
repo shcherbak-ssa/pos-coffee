@@ -32,25 +32,10 @@ export class ProductVariantsController
   }
 
   public async delete(variantId: number): Promise<boolean> {
-    try {
-      const notificationService: NotificationService = await this.getNotificationService();
-      notificationService.addNotification(notifications.deleteProcess(EntityName.PRODUCT_VARIANT));
-
-      const apiService: ApiService = await this.getApiService();
-      await apiService
-        .addParams({ id: variantId })
-        .delete(ApiEndpoint.PRODUCT_VARIANTS_ID);
-
-      const store = await this.getStore() as ProductVariantsStoreActions;
-      store.remove(variantId);
-
-      notificationService.addNotification(notifications.deleted(EntityName.PRODUCT_VARIANT));
-
-      return true;
-    } catch (e: any) {
-      this.parseError(e);
-      return false;
-    }
+    return await this.tryToDelete({
+      endpoint: ApiEndpoint.PRODUCT_VARIANTS_ID,
+      entityId: variantId,
+    });
   }
 
   public async select(variantId: number = ZERO): Promise<void> {

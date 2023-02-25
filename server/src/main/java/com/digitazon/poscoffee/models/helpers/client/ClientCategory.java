@@ -39,9 +39,7 @@ public class ClientCategory {
 
   private Long productsCount;
   private Boolean isAvailable;
-  private Boolean isArchived;
   private Date createdAt;
   private Date updatedAt;
-  private Date archivedAt;
 
 }
