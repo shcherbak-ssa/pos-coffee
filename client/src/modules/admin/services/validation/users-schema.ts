@@ -32,7 +32,6 @@ const baseSchema: Schema = Joi.object({
     'string.empty': 'Type cannot be empty',
   }),
   image: Joi.string().empty(EMPTY_STRING),
-  isArchived: Joi.boolean(),
   address: addressSchema,
 });
 

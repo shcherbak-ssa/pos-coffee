@@ -84,6 +84,7 @@ export type ProductSchema = BaseSchema & {
   name: string;
   price: number;
   stock: number;
+  stockPerTime: number;
   image: string;
   category: ProductCategory;
   useStockForVariants: boolean;

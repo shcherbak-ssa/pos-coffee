@@ -1,3 +1,5 @@
+export const NAVIGATE_BACK: number = -1;
+
 export const DEFAULT_CATEGORY_NAME: string = 'DEFAULT';
 export const NEW_ENTITY_LABEL: string = 'new';
 

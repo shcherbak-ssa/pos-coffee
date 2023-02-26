@@ -140,6 +140,9 @@ public class ProductsService {
     product.setStock(updates.getStock() == null ? product.getStock() : updates.getStock());
     product.setImage(updates.getImage() == null ? product.getImage() : updates.getImage());
 
+    product.setStockPerTime(
+      updates.getStockPerTime() == null ? product.getStockPerTime() : updates.getStockPerTime()
+    );
     product.setUseStockForVariants(
       updates.getUseStockForVariants() == null
         ? product.getUseStockForVariants() : updates.getUseStockForVariants()

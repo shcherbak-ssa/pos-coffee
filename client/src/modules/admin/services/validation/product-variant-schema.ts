@@ -1,7 +1,7 @@
 import Joi from 'joi';
 
 import type { ProductVariantSchema, ValidationSchema } from 'shared/types';
-import { EMPTY_STRING, ZERO } from 'shared/constants';
+import { ZERO } from 'shared/constants';
 
 type Schema = Joi.ObjectSchema<ProductVariantSchema>;
 
@@ -18,8 +18,12 @@ const baseSchema: Schema = Joi.object({
     'string.max': 'Price must be between 0 and 127',
     'string.empty': 'Price cannot be empty',
   }),
-  stock: Joi.number(),
-  stockPerTime: Joi.number(),
+  stock: Joi.number().min(ZERO).messages({
+    'number.min': 'Stock must be zero or positive number',
+  }),
+  stockPerTime: Joi.number().min(1).messages({
+    'number.min': 'Stock per time must be more than zero',
+  }),
   useProductPrice: Joi.boolean(),
 });
 

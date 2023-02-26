@@ -71,6 +71,7 @@ public class Product extends BaseEntityDates implements BaseEntityId {
 
   private String image;
   private Integer stock;
+  private Integer stockPerTime;
   private Boolean useStockForVariants;
   private Boolean isAvailable;
 

@@ -33,9 +33,10 @@ export type Product = {
   sku: string;
   name: string;
   price: number;
-  stock: number;
   image: string;
   category: number;
+  stock: number;
+  stockPerTime: number;
   useStockForVariants: boolean;
   isAvailable: boolean;
   isArchived: boolean;

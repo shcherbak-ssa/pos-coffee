@@ -42,6 +42,7 @@ export function infoPageContainer<T extends Entity>(
       if (params.id === NEW_ENTITY_LABEL) {
         controller.select()
           .then(() => {
+            appController.setIsEditMode(true);
             setIsLoading(false);
           });
 

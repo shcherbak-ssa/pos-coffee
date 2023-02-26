@@ -5,7 +5,7 @@ import { ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 
-import type { AppController, AppStore, CardWithInputsProps, ProductDraft, ProductsStore } from '@admin/shared/types';
+import type { AppController, AppStore, ProductsStore } from '@admin/shared/types';
 import { StoreName, ControllerName } from '@admin/shared/constants';
 import { ProductsMainCard } from '@admin/view/components/ProductsMainCard';
 import { ProductsVariantsContainer } from '@admin/view/containers/ProductsVariantsContainer';
@@ -23,13 +23,6 @@ export function ProductsInfoPageContainer({ validationError }: Props) {
 
   const [ selectedProductCategory, setSelectedProductCategory ] = useState<ProductCategory>(productCategories[ZERO]);
   const appController = useController(ControllerName.APP) as AppController;
-
-  const cardProps: CardWithInputsProps<ProductSchema, ProductDraft> = {
-    entity: selectedProduct,
-    entityDraft: draftProduct,
-    validationError,
-    isEditMode,
-  };
 
   useEffect(() => {
     appController.loadProductCategories();
@@ -54,10 +47,13 @@ export function ProductsInfoPageContainer({ validationError }: Props) {
       <ProductsMainCard
         productCategories={productCategories}
         selectedProductCategory={selectedProductCategory}
-        {...cardProps}
+        entity={selectedProduct}
+        entityDraft={draftProduct}
+        validationError={validationError}
+        isEditMode={isEditMode}
       />
 
-      <ProductsVariantsContainer {...cardProps} />
+      <ProductsVariantsContainer product={selectedProduct} />
     </InfoPageWrapper>
   );
 

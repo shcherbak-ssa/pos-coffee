@@ -54,8 +54,9 @@ public class ClientProduct {
   )
   private Float price;
 
-  private Integer stock;
   private String image;
+  private Integer stock;
+  private Integer stockPerTime;
   private ClientProductCategory category;
   private List<ClientProductVariant> variants;
   private Boolean useStockForVariants;

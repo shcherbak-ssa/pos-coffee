@@ -183,6 +183,7 @@ export type ProductDraft = {
   set name(name: string);
   set price(price: number);
   set stock(stock: number);
+  set stockPerTime(stockPerTime: number);
   set useStockForVariants(useStockForVariants: boolean);
   set image(image: string);
   set category(category: ProductCategory);
