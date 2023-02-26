@@ -44,7 +44,7 @@ const schemaToCreate: Schema = baseSchema.keys({
   address: addressSchemaToCreate(),
 });
 
-const schemaToUpdate: Schema = baseSchema.keys();
+const schemaToUpdate: Schema = baseSchema;
 
 export const schema: ValidationSchema<Schema> = {
   toCreate: schemaToCreate,

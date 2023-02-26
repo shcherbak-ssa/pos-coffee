@@ -4,6 +4,7 @@ import type {
   CategorySchema,
   ProductSchema,
   ProductVariantSchema,
+  OrderLineSchema,
 } from 'shared/types';
 
 /**
@@ -45,25 +46,41 @@ export type UserSchema = Pick<
  * Cart
  */
 
-export type CartProduct = ProductSchema & {
+export type CartProductSchema = ProductSchema & {
   variants: ProductVariantSchema[];
 }
 
+export type CartOrderSchema = {
+  userId: number;
+  lines: OrderLineSchema[];
+}
+
 export type CartState = {
+  currentOrder: CartOrderSchema;
   activeCategoryId: number;
   categories: CategorySchema[];
-  products: CartProduct[];
+  products: CartProductSchema[];
 }
 
 export interface CartStore extends StoreState<CartState> {}
 
 export interface CartStoreActions extends CartStore {
+  createOrder(): void;
+  addOrderLine(line: OrderLineSchema): void;
+  removeOrderLine(line: OrderLineSchema): void;
+  removeAllOrderLines(): void;
+  updateOrderLineCount(line: OrderLineSchema, count: number): void;
   setActiveCategoryId(categoryId: number): void;
   setCategories(categories: CategorySchema[]): void;
-  setProducts(products: CartProduct[]): void;
+  setProducts(products: CartProductSchema[]): void;
 }
 
 export interface CartController {
+  createOrder(): Promise<void>;
+  addOrderLine(product: CartProductSchema, variant?: ProductVariantSchema): Promise<void>;
+  removeOrderLine(line: OrderLineSchema): Promise<void>;
+  removeAllOrderLines(): Promise<void>;
+  updateOrderLineCount(line: OrderLineSchema, count: number): Promise<void>;
   setActiveCategoryId(categoryId?: number): Promise<void>;
   loadCategories(): Promise<boolean>;
   loadProducts(): Promise<boolean>;

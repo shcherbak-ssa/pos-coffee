@@ -8,6 +8,7 @@ import { useController } from 'view/hooks/controller';
 
 import type { CartController, CartStore } from '@app/shared/types';
 import { ControllerName, IS_ACTIVE_CLASSNAME, StoreName } from '@app/shared/constants';
+import { ScrollPanel } from 'primereact/scrollpanel';
 
 export function CartCategoriesContainer() {
 
@@ -31,8 +32,15 @@ export function CartCategoriesContainer() {
   }
 
   return (
-    <div className="categories px-4">
-      <Menubar model={menuItems} />
+    <div
+      className="categories overflow-hidden"
+      style={{ height: '56px', width: '645px' }}
+    >
+      <ScrollPanel style={{ height: '100%', width: '640px' }}>
+        <div className="px-4">
+          <Menubar model={menuItems} />
+        </div>
+      </ScrollPanel>
     </div>
   );
 

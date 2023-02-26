@@ -17,6 +17,14 @@ body {
   background-color: var(--bluegray-50);
 }
 
+.cart-page {
+  grid-template-columns: 1fr 360px;
+}
+
+.cart-lines {
+  width: 360px;
+}
+
 /** Primereact */
 
 .p-menubar {
