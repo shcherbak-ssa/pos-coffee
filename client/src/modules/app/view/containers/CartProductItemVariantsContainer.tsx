@@ -1,5 +1,6 @@
 import type { MouseEvent } from 'react';
 import { Button } from 'primereact/button';
+import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 import { PrimeIcons } from 'primereact/api';
 
 import type { ProductVariantSchema } from 'shared/types';
@@ -12,6 +13,8 @@ export type Props = {
   product: CartProductSchema;
 }
 
+const TO_DROPDOWN_LIMIT: number = 3;
+
 export function CartProductItemVariantsContainer({ product }: Props) {
 
   const cartController = useController(ControllerName.CART) as CartController;
@@ -22,23 +25,39 @@ export function CartProductItemVariantsContainer({ product }: Props) {
     cartController.addOrderLine(product, variant);
   }
 
-  return (
-    <div className="flex justify-center gap-4">
-      {
-        product.variants.map((variant) => (
-          <div className="flex flex-col items-center" key={variant.id}>
-            <Button
-              className="p-button-sm p-button-rounded"
-              icon={PrimeIcons.BOX}
-              onClick={(e) => addVariantToCart(e, variant)}
-            />
+  function selectVariant(e: DropdownChangeEvent): void {
+    cartController.addOrderLine(product, e.value);
+  }
 
-            <div className="text-xs text-center mt-1">
-              { variant.name }
+  if (product.variants.length <= TO_DROPDOWN_LIMIT) {
+    return (
+      <div className="flex justify-center gap-4">
+        {
+          product.variants.map((variant) => (
+            <div className="flex flex-col items-center" key={variant.id}>
+              <Button
+                className="p-button-sm p-button-rounded"
+                icon={PrimeIcons.BOX}
+                onClick={(e) => addVariantToCart(e, variant)}
+              />
+
+              <div className="text-xs text-center mt-1">
+                { variant.name }
+              </div>
             </div>
-          </div>
-        ))
-      }
-    </div>
+          ))
+        }
+      </div>
+    );
+  }
+
+  return (
+    <Dropdown
+      className="w-full"
+      placeholder="Variants"
+      options={product.variants}
+      optionLabel="name"
+      onChange={selectVariant}
+    />
   );
 }
