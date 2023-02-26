@@ -10,6 +10,7 @@ export class ProductSchema extends BaseSchema<ProductUpdates> implements BasePro
   public price: number;
   public stock: number;
   public stockPerTime: number;
+  public stockAlert: number;
   public image: string;
   public category: ProductCategory;
   public useStockForVariants: boolean;
@@ -22,6 +23,7 @@ export class ProductSchema extends BaseSchema<ProductUpdates> implements BasePro
     this.price = schema?.price || ZERO;
     this.stock = schema?.stock || ZERO;
     this.stockPerTime = schema?.stockPerTime || ZERO;
+    this.stockAlert = schema?.stockAlert || ZERO;
     this.useStockForVariants = schema?.useStockForVariants || false;
     this.image = schema?.image || EMPTY_STRING;
     this.category = schema?.category ? { ...schema.category } : { id: ZERO, name: EMPTY_STRING };
@@ -60,6 +62,10 @@ export function createDraft(schema: BaseProductSchema = ProductSchema.create()):
 
     set stockPerTime(stockPerTime: number) {
       schema.stockPerTime = stockPerTime;
+    },
+
+    set stockAlert(stockAlert: number) {
+      schema.stockAlert = stockAlert;
     },
 
     set useStockForVariants(useStockForVariants: boolean) {

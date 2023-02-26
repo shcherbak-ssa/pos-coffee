@@ -184,6 +184,7 @@ export type ProductDraft = {
   set price(price: number);
   set stock(stock: number);
   set stockPerTime(stockPerTime: number);
+  set stockAlert(stockAlert: number);
   set useStockForVariants(useStockForVariants: boolean);
   set image(image: string);
   set category(category: ProductCategory);
@@ -240,6 +241,7 @@ export type ProductVariantDraft = {
   set price(price: number);
   set stock(stock: number);
   set stockPerTime(stockPerTime: number);
+  set stockAlert(stockAlert: number);
   set useProductPrice(useProductPrice: boolean);
 }
 

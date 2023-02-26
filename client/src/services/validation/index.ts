@@ -2,6 +2,7 @@ import type Joi from 'joi';
 import type { ValidationError as JoiValidationError } from 'joi';
 
 import type {
+  AnyType,
   Errors,
   ValidationSchema,
   ValidationService as BaseValidationService,
@@ -9,6 +10,7 @@ import type {
 } from 'shared/types';
 import { ValidationError } from 'shared/errors';
 import { Context } from 'shared/context';
+import { removeUntrackedFields } from 'shared/utils/untracked-fields';
 
 type Schema<T> = {
   [key in ValidationType]: Joi.ObjectSchema<T>;
@@ -24,9 +26,12 @@ export class ValidationService implements BaseValidationService {
 
   public async validate<T>(type: ValidationType, schemaName: string, object: T): Promise<void> {
     try {
+      const updates: AnyType = removeUntrackedFields(object as AnyType);
+
       const schema: Schema<T> = await this.loadSchema(schemaName);
-      await schema[type].validateAsync(object, { abortEarly: false });
+      await schema[type].validateAsync(updates, { abortEarly: false });
     } catch (e: any) {
+      console.log(e);
       this.parseValidationError(e, schemaName);
     }
   }

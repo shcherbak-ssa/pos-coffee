@@ -59,18 +59,33 @@ export function ProductsVariantsPopup({
     }
 
     return (
-      <InputWrapper
-        label="Stock"
-        valueKey="stock"
-        validationError={validationError}
-      >
-        <InputNumber
-          id="stock"
-          disabled={!isEditMode}
-          value={variant.stock}
-          onValueChange={(e) => variantDraft.stock = Number(e.value)}
-        />
-      </InputWrapper>
+      <>
+        <InputWrapper
+          label="Stock"
+          valueKey="stock"
+          validationError={validationError}
+        >
+          <InputNumber
+            id="stock"
+            disabled={!isEditMode}
+            value={variant.stock}
+            onValueChange={(e) => variantDraft.stock = Number(e.value)}
+          />
+        </InputWrapper>
+
+        <InputWrapper
+          label="Stock alert"
+          valueKey="stockAlert"
+          validationError={validationError}
+        >
+          <InputNumber
+            id="stockAlert"
+            disabled={!isEditMode}
+            value={variant.stockAlert}
+            onValueChange={(e) => variantDraft.stockAlert = Number(e.value)}
+          />
+        </InputWrapper>
+      </>
     );
   }
 

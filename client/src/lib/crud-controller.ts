@@ -78,11 +78,11 @@ export class CrudController<T extends Entity> extends BaseController {
           : notifications.updateProcess(this.entityName)
       );
 
+      const validationService: ValidationService = await this.getValidationService();
+      await validationService.validate(isEntityNew ? 'toCreate' : 'toUpdate', validationName, entity);
+
       const updates: Partial<T> = store.selected.getUpdates();
       let savedEntity: T = entity;
-
-      const validationService: ValidationService = await this.getValidationService();
-      await validationService.validate(isEntityNew ? 'toCreate' : 'toUpdate', validationName, updates);
 
       const apiService: ApiService = await this.getApiService();
       apiService.addBody(updates);

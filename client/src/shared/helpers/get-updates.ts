@@ -1,5 +1,7 @@
 import type { AnyType, AnyValue } from 'shared/types';
 import { ZERO } from 'shared/constants';
+import { isNestedObject } from 'shared/utils/nested-object';
+import { removeUntrackedFields } from 'shared/utils/untracked-fields';
 
 const NO_UPDATE_KEYS_COUNT: number = 1;
 
@@ -30,14 +32,6 @@ export function getUpdates(originalObject: AnyType, objectWithUpdates: AnyType):
   }
 
   return updates;
-}
-
-function removeUntrackedFields({ id, createdAt, updatedAt, archivedAt, ...updates }: AnyType): AnyType {
-  return updates;
-}
-
-function isNestedObject<T>(obj: T): boolean {
-  return typeof obj === 'object' && obj !== null && !(obj instanceof Date);
 }
 
 function isEmptyObject<T extends object>(obj: T): boolean {

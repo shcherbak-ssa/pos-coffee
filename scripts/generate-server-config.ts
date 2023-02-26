@@ -170,6 +170,7 @@ function generateProduct({
     sku: getSku(name),
     price: generatePrice(),
     stock: Number(faker.random.numeric(2)),
+    stockAlert: Number(faker.random.numeric(1)),
     stockPerTime,
     image,
     name,
@@ -190,6 +191,7 @@ function generateProductVariant({
   return {
     sku: getSku(name),
     price: generatePrice(),
+    stockAlert: Number(faker.random.numeric(1)),
     stock,
     stockPerTime,
     useProductPrice,

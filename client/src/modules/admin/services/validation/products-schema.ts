@@ -21,8 +21,13 @@ const baseSchema: Schema = Joi.object({
   stock: Joi.number().min(ZERO).messages({
     'number.min': 'Stock must be zero or positive number',
   }),
-  stockPerTime: Joi.number().min(1).messages({
+  stockPerTime: Joi.number().less(Joi.ref('stock')).min(1).messages({
     'number.min': 'Stock per time must be more than zero',
+    'number.less': 'Stock per time must be less than stock value',
+  }),
+  stockAlert: Joi.number().less(Joi.ref('stock')).min(1).messages({
+    'number.min': 'Stock alert per time must be more than zero',
+    'number.less': 'Stock per time must be less than stock value',
   }),
   image: Joi.string().empty(EMPTY_STRING),
   category: Joi.object({

@@ -21,6 +21,7 @@ import { ProductsVariantsPopup } from '@admin/view/components/ProductsVariantsPo
 import { CardWrapper } from '@admin/view/components/CardWrapper';
 import { CardHeading } from '@admin/view/components/CardHeading';
 import { ProductVariantMenu } from '@admin/view/components/ProductVariantMenu';
+import { ProductsStockLabel } from '@admin/view/components/ProductsStockLabel';
 
 export type Props = {
   product: ProductSchema;
@@ -164,8 +165,8 @@ export function ProductsVariantsContainer({ product }: Props) {
               <Column
                 header="Stock"
                 field="stock"
-                body={({ stock }: ProductVariantSchema) => (
-                  <div>{ product.useStockForVariants ? LONG_MINUS : stock }</div>
+                body={(variant: ProductVariantSchema) => (
+                  <ProductsStockLabel product={product} variant={variant} />
                 )}
               />
 

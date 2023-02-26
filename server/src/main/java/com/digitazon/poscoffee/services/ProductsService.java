@@ -138,6 +138,7 @@ public class ProductsService {
     product.setName(updates.getName() == null ? product.getName() : updates.getName());
     product.setPrice(updates.getPrice() == null ? product.getPrice() : updates.getPrice());
     product.setStock(updates.getStock() == null ? product.getStock() : updates.getStock());
+    product.setStockAlert(updates.getStockAlert() == null ? product.getStockAlert() : updates.getStockAlert());
     product.setImage(updates.getImage() == null ? product.getImage() : updates.getImage());
 
     product.setStockPerTime(

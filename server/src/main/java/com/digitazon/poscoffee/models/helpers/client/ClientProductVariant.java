@@ -50,6 +50,7 @@ public class ClientProductVariant {
   private Float price;
   private Integer stock;
   private Integer stockPerTime;
+  private Integer stockAlert;
   private Boolean useProductPrice;
   private Date createdAt;
   private Date updatedAt;

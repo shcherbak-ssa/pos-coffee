@@ -85,6 +85,7 @@ export type ProductSchema = BaseSchema & {
   price: number;
   stock: number;
   stockPerTime: number;
+  stockAlert: number;
   image: string;
   category: ProductCategory;
   useStockForVariants: boolean;
@@ -112,6 +113,7 @@ export type ProductVariantSchema = {
   price: number;
   stock: number;
   stockPerTime: number;
+  stockAlert: number;
   useProductPrice: boolean;
 }
 

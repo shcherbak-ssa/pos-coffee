@@ -100,6 +100,7 @@ public class AppConfig {
       .price(product.getPrice())
       .stock(product.getStock())
       .stockPerTime(product.getStockPerTime())
+      .stockAlert(product.getStockAlert())
       .image(product.getImage())
       .category(clientCategory)
       .useStockForVariants(product.getUseStockForVariants())
@@ -142,6 +143,7 @@ public class AppConfig {
       .price(variant.getPrice())
       .stock(variant.getStock())
       .stockPerTime(variant.getStockPerTime())
+      .stockAlert(variant.getStockAlert())
       .useProductPrice(variant.getUseProductPrice())
       .createdAt(variant.getCreatedAt())
       .updatedAt(variant.getUpdatedAt())
@@ -233,6 +235,7 @@ public class AppConfig {
       .price(clientProduct.getPrice())
       .stock(clientProduct.getStock())
       .stockPerTime(clientProduct.getStockPerTime())
+      .stockAlert(clientProduct.getStockAlert())
       .image(clientProduct.getImage())
       .category(category)
       .useStockForVariants(clientProduct.getUseStockForVariants())
@@ -260,6 +263,7 @@ public class AppConfig {
       .price(clientVariant.getPrice())
       .stock(clientVariant.getStock())
       .stockPerTime(clientVariant.getStockPerTime())
+      .stockAlert(clientVariant.getStockAlert())
       .useProductPrice(clientVariant.getUseProductPrice())
       .build();
   }
@@ -298,6 +302,7 @@ public class AppConfig {
       .image(configProduct.getImage())
       .stock(configProduct.getStock())
       .stockPerTime(configProduct.getStockPerTime())
+      .stockAlert(configProduct.getStockAlert())
       .useStockForVariants(configProduct.getUseStockForVariants())
       .isAvailable(configProduct.getIsAvailable())
       .isArchived(isArchived)
@@ -323,6 +328,7 @@ public class AppConfig {
       .price(variant.getPrice())
       .stock(variant.getStock())
       .stockPerTime(variant.getStockPerTime())
+      .stockAlert(variant.getStockAlert())
       .useProductPrice(variant.getUseProductPrice())
       .product(product)
       .build();

@@ -92,6 +92,7 @@ public class ProductVariantsService {
     variant.setName(updates.getName() == null ? variant.getName() : updates.getName());
     variant.setPrice(updates.getPrice() == null ? variant.getPrice() : updates.getPrice());
     variant.setStock(updates.getStock() == null ? variant.getStock() : updates.getStock());
+    variant.setStockAlert(updates.getStockAlert() == null ? variant.getStockAlert() : updates.getStockAlert());
 
     variant.setStockPerTime(
       updates.getStockPerTime() == null ? variant.getStockPerTime() : updates.getStockPerTime()

@@ -57,6 +57,7 @@ public class ClientProduct {
   private String image;
   private Integer stock;
   private Integer stockPerTime;
+  private Integer stockAlert;
   private ClientProductCategory category;
   private List<ClientProductVariant> variants;
   private Boolean useStockForVariants;

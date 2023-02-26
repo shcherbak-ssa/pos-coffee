@@ -63,6 +63,7 @@ public class ProductVariant implements BaseEntityId {
   private Float price;
   private Integer stock;
   private Integer stockPerTime;
+  private Integer stockAlert;
   private Boolean useProductPrice;
 
   @ManyToOne(fetch = FetchType.EAGER)

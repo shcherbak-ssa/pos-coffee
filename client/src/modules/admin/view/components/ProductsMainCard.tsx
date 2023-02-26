@@ -108,7 +108,6 @@ export function ProductsMainCard({
       />
 
       <div className="grid grid-cols-2 gap-x-4 gap-y-10">
-
         <InputWrapper
           label="Stock"
           valueKey="stock"
@@ -119,6 +118,19 @@ export function ProductsMainCard({
             disabled={!isEditMode}
             value={product.stock}
             onValueChange={(e) => productDraft.stock = Number(e.value)}
+          />
+        </InputWrapper>
+
+        <InputWrapper
+          label="Stock alert"
+          valueKey="stockAlert"
+          validationError={validationError}
+        >
+          <InputNumber
+            id="stockAlert"
+            disabled={!isEditMode}
+            value={product.stockAlert}
+            onValueChange={(e) => productDraft.stockAlert = Number(e.value)}
           />
         </InputWrapper>
 
