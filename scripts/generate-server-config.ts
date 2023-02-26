@@ -69,8 +69,8 @@ function generateConfig(): Config {
     // @TODO: refactor
     products: [
       // Coffee bar
-      generateProduct({ name: 'Caffe', category: 2, stock: 10000, useStockForVariants: true }),
-      generateProduct({ name: 'Cappuccino', category: 2 }),
+      generateProduct({ name: 'Coffee', category: 2, stock: 10000, useStockForVariants: true, image: 'https://images.unsplash.com/photo-1485808191679-5f86510681a2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }),
+      generateProduct({ name: 'Cappuccino', category: 2, image: 'https://images.unsplash.com/photo-1525629545813-e4e7ba89e506?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }),
       generateProduct({ name: 'Hot chocolate', category: 2 }),
       generateProduct({ name: 'Tea', category: 2 }),
       // Drinks
@@ -97,9 +97,9 @@ function generateConfig(): Config {
     ],
     productVariants: [
       // Caffee
-      generateProductVariant({ name: 'Expressed', product: 1, stockPerTime: 20 }),
-      generateProductVariant({ name: 'Double coffee', product: 1, stockPerTime: 20 }),
-      generateProductVariant({ name: 'American coffee', product: 1, stockPerTime: 20 }),
+      generateProductVariant({ name: 'Expresso', product: 1, stockPerTime: 20 }),
+      generateProductVariant({ name: 'Double', product: 1, stockPerTime: 20 }),
+      generateProductVariant({ name: 'American', product: 1, stockPerTime: 20 }),
       // Tea
       generateProductVariant({ name: 'Green', product: 4 }),
       generateProductVariant({ name: 'Black', product: 4 }),

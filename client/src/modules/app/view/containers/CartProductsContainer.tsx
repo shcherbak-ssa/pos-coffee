@@ -4,10 +4,10 @@ import { useStore } from 'view/hooks/store';
 
 import type { MenuProduct, MenuStore } from '@app/shared/types';
 import { StoreName } from '@app/shared/constants';
-import { ProductMenuContainer } from '@app/view/containers/ProductMenuContainer';
+import { CartProductItemContainer } from '@app/view/containers/CartProductItemContainer';
 import { ZERO } from 'shared/constants';
 
-export function NewOrderProductsContainer() {
+export function CartProductsContainer() {
 
   const { state: { activeCategoryId, products } } = useStore(StoreName.MENU) as MenuStore;
   const [ currentProducts, setCurrentProducts ] = useState<MenuProduct[]>([]);
@@ -23,10 +23,10 @@ export function NewOrderProductsContainer() {
   }
 
   return (
-    <div className="grid grid-cols-3 gap-4 py-2">
+    <div className="grid grid-cols-3 gap-4 px-4 pt-4 pb-4">
       {
         currentProducts.map((product) => (
-          <ProductMenuContainer
+          <CartProductItemContainer
             key={product.id}
             product={product}
           />

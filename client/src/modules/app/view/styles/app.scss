@@ -1,5 +1,5 @@
-:root {
-  --wrapper-color: #F7F8FA;
+body {
+  background-color: var(--bluegray-50);
 }
 
 .app {
@@ -10,11 +10,15 @@
 }
 
 .card-wrapper {
-  background-color: var(--wrapper-color, --surface-ground);
+  box-shadow: 0 3px 8px rgba($color: #000000, $alpha: .15);
+}
+
+.categories {
+  background-color: var(--bluegray-50);
 }
 
 /** Primereact */
 
 .p-menubar {
-  @apply bg-white px-0;
+  @apply px-0;
 }

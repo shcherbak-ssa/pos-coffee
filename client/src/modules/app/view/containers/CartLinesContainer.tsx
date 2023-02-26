@@ -1,6 +1,6 @@
 import { CardWrapper } from '@app/view/components/CardWrapper';
 
-export function NewOrderLinesContainer() {
+export function CartLinesContainer() {
 
   return (
     <CardWrapper className="full">

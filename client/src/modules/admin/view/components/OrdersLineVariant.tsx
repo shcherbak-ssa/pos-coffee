@@ -1,6 +1,6 @@
 import type { OrderLineVariantSchema } from 'shared/types';
 
-import { ProductsImage } from '@admin/view/components/ProductsImage';
+import { ProductsImage } from 'view/components/ProductsImage';
 
 export type Props = {
   variant: OrderLineVariantSchema;

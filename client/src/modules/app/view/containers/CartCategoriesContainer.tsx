@@ -9,7 +9,7 @@ import { useController } from 'view/hooks/controller';
 import type { MenuController, MenuStore } from '@app/shared/types';
 import { ControllerName, IS_ACTIVE_CLASSNAME, StoreName } from '@app/shared/constants';
 
-export function NewOrderCategoriesContainer() {
+export function CartCategoriesContainer() {
 
   const { state: { activeCategoryId, categories } } = useStore(StoreName.MENU) as MenuStore;
   const menuController = useController(ControllerName.MENU) as MenuController;
@@ -31,7 +31,7 @@ export function NewOrderCategoriesContainer() {
   }
 
   return (
-    <div className="sticky top-0">
+    <div className="categories px-4">
       <Menubar model={menuItems} />
     </div>
   );

@@ -74,7 +74,7 @@
 
 .p-scrollpanel {
   &-bar-y {
-    width: 6px;
+    width: 0px;
   }
 
   &-content {
@@ -163,6 +163,10 @@
 
     & > .p-menuitem > .p-menuitem-link {
       @apply rounded px-2;
+
+      .p-menuitem-text {
+        @apply tracking-wider text-sm;
+      }
     }
   }
 

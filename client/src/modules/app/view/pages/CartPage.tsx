@@ -2,18 +2,18 @@ import { loadContext } from 'view/helpers/load-context';
 
 import { ControllerName, StoreName } from '@app/shared/constants';
 import { loadMenu } from '@app/view/helpers/load-menu';
-import { NewOrderContainer } from '@app/view/containers/NewOrderContainer';
+import { CartContainer } from '@app/view/containers/CartContainer';
 
-const NewOrderPage = loadContext(Page, {
+const CartPage = loadContext(Page, {
   stores: [ StoreName.MENU ],
   controllers: [ ControllerName.MENU ],
 });
 
-export default NewOrderPage;
+export default CartPage;
 
 function Page() {
 
-  const Container = loadMenu(NewOrderContainer);
+  const Container = loadMenu(CartContainer);
 
   return <Container />;
 

@@ -27,3 +27,17 @@
     @apply w-12 h-12;
   }
 }
+
+.product-image {
+  &.p-avatar.p-avatar-xl {
+    @apply w-full rounded-lg;
+
+    &.admin {
+      @apply h-44;
+    }
+
+    &.app {
+      @apply h-24;
+    }
+  }
+}

@@ -24,6 +24,6 @@ export enum ValidationName {
 export enum PagePath {
   EMPTY = '',
   HOME = '/app',
-  NEW_ORDER = '/app/new-order',
+  CART = '/app/cart',
   ORDERS = '/app/orders',
 }

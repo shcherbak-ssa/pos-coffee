@@ -1,7 +1,7 @@
 import type { EntityComponentProps, UserSchema } from 'shared/types';
 
 import { CardWrapper } from '@admin/view/components/CardWrapper';
-import { ProductsImage } from '@admin/view/components/ProductsImage';
+import { ProductsImage } from 'view/components/ProductsImage';
 
 export function ProductsCard({ entity: product, className }: EntityComponentProps<UserSchema>) {
 

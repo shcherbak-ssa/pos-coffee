@@ -2,7 +2,7 @@ import type { ColumnProps } from 'primereact/column';
 
 import { PagePath, StoreName } from '@admin/shared/constants';
 import { actionsMenuItemsProps } from '@admin/shared/configs/pages';
-import { ProductsImage } from '@admin/view/components/ProductsImage';
+import { ProductsImage } from 'view/components/ProductsImage';
 import { ProductsCard } from '@admin/view/components/ProductsCard';
 import { AvailableLabel } from '@admin/view/components/AvailableLabel';
 import { CategoryLabel } from '@admin/view/components/CategoryLabel';

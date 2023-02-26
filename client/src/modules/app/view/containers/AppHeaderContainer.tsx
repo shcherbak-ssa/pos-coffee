@@ -22,10 +22,10 @@ export function AppHeaderContainer() {
       },
     },
     {
-      icon: PrimeIcons.TICKET,
-      className: location.pathname.startsWith(PagePath.NEW_ORDER) ? IS_ACTIVE_CLASSNAME : EMPTY_STRING,
+      icon: PrimeIcons.SHOPPING_CART,
+      className: location.pathname.startsWith(PagePath.CART) ? IS_ACTIVE_CLASSNAME : EMPTY_STRING,
       click(e: MouseEvent): void {
-        navigate(PagePath.NEW_ORDER);
+        navigate(PagePath.CART);
       },
     },
     {
@@ -38,7 +38,7 @@ export function AppHeaderContainer() {
   ];
 
   return (
-    <header className="flex items-center justify-between p-4">
+    <header className="flex items-center justify-between p-4 pb-0">
       <div className="flex items-center">
         <AppLogo />
       </div>
