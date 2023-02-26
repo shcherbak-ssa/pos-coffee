@@ -6,13 +6,13 @@ import { EMPTY_STRING, ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 
-import type { MenuController, MenuStore } from '@app/shared/types';
+import type { CartController, CartStore } from '@app/shared/types';
 import { ControllerName, IS_ACTIVE_CLASSNAME, StoreName } from '@app/shared/constants';
 
 export function CartCategoriesContainer() {
 
-  const { state: { activeCategoryId, categories } } = useStore(StoreName.MENU) as MenuStore;
-  const menuController = useController(ControllerName.MENU) as MenuController;
+  const { state: { activeCategoryId, categories } } = useStore(StoreName.CART) as CartStore;
+  const cartController = useController(ControllerName.CART) as CartController;
 
   const [ menuItems, setMenuItems ] = useState<MenuItem[]>(parseCategoriesToTabs());
 
@@ -25,7 +25,7 @@ export function CartCategoriesContainer() {
       label: name.toUpperCase(),
       className: id === activeCategoryId ? IS_ACTIVE_CLASSNAME : EMPTY_STRING,
       command: () => {
-        menuController.setActiveCategoryId(id);
+        cartController.setActiveCategoryId(id);
       },
     }));
   }

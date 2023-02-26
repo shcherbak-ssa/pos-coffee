@@ -56,8 +56,8 @@ public class AppConstants {
     }
 
     public static final class App {
-      public static final String MENU_CATEGORIES = "/api/app/menu/categories";
-      public static final String MENU_PRODUCTS = "/api/app/menu/products";
+      public static final String CART_CATEGORIES = "/api/app/cart/categories";
+      public static final String CART_PRODUCTS = "/api/app/cart/products";
     }
   }
 

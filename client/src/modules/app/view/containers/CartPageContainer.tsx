@@ -4,7 +4,7 @@ import { CartCategoriesContainer } from '@app/view/containers/CartCategoriesCont
 import { CartProductsContainer } from '@app/view/containers/CartProductsContainer';
 import { CartLinesContainer } from '@app/view/containers/CartLinesContainer';
 
-export function CartContainer() {
+export function CartPageContainer() {
 
   return (
     <div className="flex gap-4 pr-4 pb-4 full">

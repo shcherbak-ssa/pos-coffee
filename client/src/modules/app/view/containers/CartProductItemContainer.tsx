@@ -2,12 +2,12 @@ import { Button } from 'primereact/button';
 
 import { ProductsImage } from 'view/components/ProductsImage';
 
-import type { MenuProduct } from '@app/shared/types';
+import type { CartProduct } from '@app/shared/types';
 import { CartProductItemVariantsContainer } from '@app/view/containers/CartProductItemVariantsContainer';
 import { CardWrapper } from '@app/view/components/CardWrapper';
 
 export type Props = {
-  product: MenuProduct;
+  product: CartProduct;
 }
 
 export function CartProductItemContainer({ product }: Props) {

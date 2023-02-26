@@ -1,19 +1,19 @@
 export const IS_ACTIVE_CLASSNAME: string = 'is-active';
 
 export enum ApiEndpoint {
-  MENU_CATEGORIES = '/api/app/menu/categories',
-  MENU_PRODUCTS = '/api/app/menu/products',
+  CART_CATEGORIES = '/api/app/cart/categories',
+  CART_PRODUCTS = '/api/app/cart/products',
 }
 
 export enum ControllerName {
   APP = 'APP',
-  MENU = 'MENU',
+  CART = 'CART',
   ORDERS = 'ORDERS',
 }
 
 export enum StoreName {
   APP = 'APP',
-  MENU = 'MENU',
+  CART = 'CART',
   ORDERS = 'ORDERS',
 }
 

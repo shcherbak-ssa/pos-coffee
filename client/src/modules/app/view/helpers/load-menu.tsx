@@ -4,7 +4,7 @@ import type { AnyType } from 'shared/types';
 import { useController } from 'view/hooks/controller';
 import { AppLoader } from 'view/components/AppLoader';
 
-import type { MenuController } from '@app/shared/types';
+import type { CartController } from '@app/shared/types';
 import { ControllerName } from '@app/shared/constants';
 
 export function loadMenu(Container: React.ComponentType<AnyType>): () => JSX.Element {
@@ -14,15 +14,15 @@ export function loadMenu(Container: React.ComponentType<AnyType>): () => JSX.Ele
     const [ isCategoriesLoaded, setIsCategoriesLoaded ] = useState<boolean>(false);
     const [ isProductsLoaded, setIsProductsLoaded ] = useState<boolean>(false);
 
-    const menuController = useController(ControllerName.MENU) as MenuController;
+    const cartController = useController(ControllerName.CART) as CartController;
 
     useEffect(() => {
-      menuController.loadCategories()
+      cartController.loadCategories()
         .then(() => {
           setIsCategoriesLoaded(true);
         });
 
-      menuController.loadProducts()
+      cartController.loadProducts()
         .then(() => {
           setIsProductsLoaded(true);
         });

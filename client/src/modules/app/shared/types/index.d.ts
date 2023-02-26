@@ -12,7 +12,7 @@ import type {
 
 export type Controllers =
   | AppController
-  | MenuController;
+  | CartController;
 
 /**
  * App
@@ -33,7 +33,7 @@ export interface AppController {
 }
 
 /**
- * User
+ * Users
  */
 
 export type UserSchema = Pick<
@@ -42,28 +42,28 @@ export type UserSchema = Pick<
 >;
 
 /**
- * Menu
+ * Cart
  */
 
-export type MenuProduct = ProductSchema & {
+export type CartProduct = ProductSchema & {
   variants: ProductVariantSchema[];
 }
 
-export type MenuState = {
+export type CartState = {
   activeCategoryId: number;
   categories: CategorySchema[];
-  products: MenuProduct[];
+  products: CartProduct[];
 }
 
-export interface MenuStore extends StoreState<MenuState> {}
+export interface CartStore extends StoreState<CartState> {}
 
-export interface MenuStoreActions extends MenuStore {
+export interface CartStoreActions extends CartStore {
   setActiveCategoryId(categoryId: number): void;
   setCategories(categories: CategorySchema[]): void;
-  setProducts(products: MenuProduct[]): void;
+  setProducts(products: CartProduct[]): void;
 }
 
-export interface MenuController {
+export interface CartController {
   setActiveCategoryId(categoryId?: number): Promise<void>;
   loadCategories(): Promise<boolean>;
   loadProducts(): Promise<boolean>;

@@ -19,10 +19,10 @@ export class LoaderService implements BaseLoaderService {
 
         return AppController.create();
       }
-      case ControllerName.MENU: {
-        const { MenuController } = await import('@app/controllers/menu');
+      case ControllerName.CART: {
+        const { CartController } = await import('@app/controllers/cart');
 
-        return MenuController.create();
+        return CartController.create();
       }
     }
 
@@ -36,10 +36,10 @@ export class LoaderService implements BaseLoaderService {
 
         return appStore;
       }
-      case StoreName.MENU: {
-        const { menuStore } = await import('@app/services/store/menu');
+      case StoreName.CART: {
+        const { cartStore } = await import('@app/services/store/cart');
 
-        return menuStore;
+        return cartStore;
       }
     }
 

@@ -1,22 +1,22 @@
 import { useEffect, useState } from 'react';
 
+import { ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 
-import type { MenuProduct, MenuStore } from '@app/shared/types';
+import type { CartProduct, CartStore } from '@app/shared/types';
 import { StoreName } from '@app/shared/constants';
 import { CartProductItemContainer } from '@app/view/containers/CartProductItemContainer';
-import { ZERO } from 'shared/constants';
 
 export function CartProductsContainer() {
 
-  const { state: { activeCategoryId, products } } = useStore(StoreName.MENU) as MenuStore;
-  const [ currentProducts, setCurrentProducts ] = useState<MenuProduct[]>([]);
+  const { state: { activeCategoryId, products } } = useStore(StoreName.CART) as CartStore;
+  const [ currentProducts, setCurrentProducts ] = useState<CartProduct[]>([]);
 
   useEffect(() => {
     setCurrentProducts(filterProductsByCategory());
   }, [activeCategoryId]);
 
-  function filterProductsByCategory(): MenuProduct[] {
+  function filterProductsByCategory(): CartProduct[] {
     return activeCategoryId === ZERO
       ? products
       : products.filter(({ category }) => category.id === activeCategoryId);

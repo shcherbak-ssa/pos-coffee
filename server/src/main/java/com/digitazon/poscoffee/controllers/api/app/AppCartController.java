@@ -23,7 +23,7 @@ import com.digitazon.poscoffee.shared.constants.AppConstants;
 
 @RestController
 @CrossOrigin
-public class AppMenuController {
+public class AppCartController {
 
   @Autowired
   private ProductsService productsService;
@@ -34,7 +34,7 @@ public class AppMenuController {
   @Autowired
   private ProductVariantsService variantsService;
 
-  @GetMapping(path = AppConstants.ApiEndpoint.App.MENU_CATEGORIES)
+  @GetMapping(path = AppConstants.ApiEndpoint.App.CART_CATEGORIES)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('MANAGER')")
   public List<ClientCategory> getProductCategories() {
@@ -47,7 +47,7 @@ public class AppMenuController {
       .collect(Collectors.toList());
   }
 
-  @GetMapping(path = AppConstants.ApiEndpoint.App.MENU_PRODUCTS)
+  @GetMapping(path = AppConstants.ApiEndpoint.App.CART_PRODUCTS)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('MANAGER')")
   public List<ClientProduct> getProducts() {
