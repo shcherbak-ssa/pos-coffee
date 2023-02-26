@@ -1,6 +1,5 @@
 import type {
   OrderLineSchema as BaseOrderLineSchema,
-  OrderLineVariantSchema as BaseOrderLineVariantSchema,
   OrderSchema as BaseOrderSchema,
   OrderUserSchema as BaseOrderUserSchema,
 } from 'shared/types';
@@ -32,13 +31,21 @@ export class OrderLineSchema implements BaseOrderLineSchema {
   public id: number;
   public count: number;
   public price: number;
-  public variant: BaseOrderLineVariantSchema;
+  public productId: number;
+  public variantId: number;
+  public productName: string;
+  public variantName: string;
+  public image: string;
 
   private constructor(schema?: BaseOrderLineSchema) {
     this.id = schema?.id || ZERO;
     this.count = schema?.count || ZERO;
     this.price = schema?.price || ZERO;
-    this.variant = OrderLineVariantSchema.create(schema?.variant);
+    this.productId = schema?.productId || ZERO;
+    this.variantId = schema?.variantId || ZERO;
+    this.productName = schema?.productName || EMPTY_STRING;
+    this.variantName = schema?.variantName || EMPTY_STRING;
+    this.image = schema?.image || EMPTY_STRING;
   }
 
   public static create(schema?: BaseOrderLineSchema): OrderLineSchema {
@@ -59,23 +66,5 @@ export class OrderUserSchema implements BaseOrderUserSchema {
 
   public static create(schema?: BaseOrderUserSchema): OrderUserSchema {
     return new OrderUserSchema(schema);
-  }
-}
-
-export class OrderLineVariantSchema implements BaseOrderLineVariantSchema {
-  public id: number;
-  public productName: string;
-  public variantName: string;
-  public image: string;
-
-  private constructor(schema?: BaseOrderLineVariantSchema) {
-    this.id = schema?.id || ZERO;
-    this.productName = schema?.productName || EMPTY_STRING;
-    this.variantName = schema?.variantName || EMPTY_STRING;
-    this.image = schema?.image || EMPTY_STRING;
-  }
-
-  public static create(schema?: BaseOrderLineVariantSchema): OrderLineVariantSchema {
-    return new OrderLineVariantSchema(schema);
   }
 }

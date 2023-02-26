@@ -75,6 +75,7 @@ public class DatabaseDataLoader {
     this.loadOrders(
       config.getOrders(),
       config.getOrderLines(),
+      products,
       variants,
       users
     );
@@ -153,10 +154,11 @@ public class DatabaseDataLoader {
   private void loadOrders(
     List<ConfigOrder> orders,
     List<ConfigOrderLine> lines,
+    List<Product> products,
     List<ProductVariant> variants,
     List<User> users
   ) {
-    final List<OrderLine> orderLines = this.loadOrderLines(lines, variants);
+    final List<OrderLine> orderLines = this.loadOrderLines(lines, products, variants);
 
     for (ConfigOrder configOrder : orders) {
       final User user = Helpers.findEntityById(users, configOrder.getUser());
@@ -174,12 +176,17 @@ public class DatabaseDataLoader {
     }
   }
 
-  private List<OrderLine> loadOrderLines(List<ConfigOrderLine> lines, List<ProductVariant> variants) {
+  private List<OrderLine> loadOrderLines(
+    List<ConfigOrderLine> lines, List<Product> products, List<ProductVariant> variants
+  ) {
     final List<OrderLine> createdLines = new ArrayList<OrderLine>();
 
     for (ConfigOrderLine configLine : lines) {
+      final Product product = Helpers.findEntityById(products, configLine.getProduct());
       final ProductVariant variant = Helpers.findEntityById(variants, configLine.getVariant());
-      final OrderLine line = (OrderLine) this.context.getBean("orderLineFromConfigOrderLine", configLine, variant);
+
+      final OrderLine line = (OrderLine)
+        this.context.getBean("orderLineFromConfigOrderLine", configLine, product, variant);
 
       final OrderLine created = this.ordersService.createOrderLine(line);
       createdLines.add(created);

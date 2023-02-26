@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class ConfigOrderLine {
 
   private Short count;
+  private Long product;
   private Long variant;
 
 }

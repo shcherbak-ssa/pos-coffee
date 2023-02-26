@@ -63,5 +63,6 @@ export type Order = {
 
 export type OrderLine = {
   count: number;
+  product: number;
   variant: number;
 }

@@ -127,20 +127,17 @@ export type OrderLineSchema = {
   id: number;
   count: number;
   price: number;
-  variant: OrderLineVariantSchema;
+  productId: number;
+  variantId: number;
+  productName: string;
+  variantName: string;
+  image: string;
 }
 
 export type OrderUserSchema = {
   id: number;
   name: string;
   surname: string;
-}
-
-export type OrderLineVariantSchema = {
-  id: number;
-  productName: string;
-  variantName: string;
-  image: string;
 }
 
 /**

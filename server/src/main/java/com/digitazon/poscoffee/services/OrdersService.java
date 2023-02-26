@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.Order;
 import com.digitazon.poscoffee.models.OrderLine;
-import com.digitazon.poscoffee.models.ProductVariant;
 import com.digitazon.poscoffee.models.helpers.client.ClientOrder;
 import com.digitazon.poscoffee.repositories.OrderLinesRepository;
 import com.digitazon.poscoffee.repositories.OrdersRepository;
@@ -67,8 +66,7 @@ public class OrdersService {
     float total = AppConstants.ZERO;
 
     for (OrderLine orderLine : lines) {
-      final ProductVariant variant = orderLine.getVariant();
-      final float price = Helpers.getProductVariantPrice(variant);
+      final float price = Helpers.getOrderLinePrice(orderLine.getProduct(), orderLine.getVariant());
 
       total += orderLine.getCount() * price;
     }

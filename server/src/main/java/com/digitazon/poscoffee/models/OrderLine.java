@@ -30,6 +30,9 @@ public class OrderLine {
   private Float price;
 
   @OneToOne
+  private Product product;
+
+  @OneToOne
   private ProductVariant variant;
 
 }

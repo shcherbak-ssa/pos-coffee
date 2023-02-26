@@ -64,15 +64,14 @@ public class Helpers {
       .orElse(entities.get(AppConstants.ZERO));
   }
 
-  public static float getProductVariantPrice(ProductVariant variant) {
-    float price = variant.getPrice();
-
-    if (variant.getUseProductPrice()) {
-      final Product product = variant.getProduct();
-      price = product.getPrice();
+  public static float getOrderLinePrice(Product product, ProductVariant variant) {
+    if (variant == null) {
+      return product.getPrice();
     }
 
-    return price;
+    return variant.getUseProductPrice()
+      ? product.getPrice()
+      : variant.getPrice();
   }
 
 }

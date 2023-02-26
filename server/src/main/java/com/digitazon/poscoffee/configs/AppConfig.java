@@ -23,7 +23,6 @@ import com.digitazon.poscoffee.models.helpers.ErrorResponse;
 import com.digitazon.poscoffee.models.helpers.client.ClientCategory;
 import com.digitazon.poscoffee.models.helpers.client.ClientOrder;
 import com.digitazon.poscoffee.models.helpers.client.ClientOrderLine;
-import com.digitazon.poscoffee.models.helpers.client.ClientOrderLineVariant;
 import com.digitazon.poscoffee.models.helpers.client.ClientOrderUser;
 import com.digitazon.poscoffee.models.helpers.client.ClientProduct;
 import com.digitazon.poscoffee.models.helpers.client.ClientProductCategory;
@@ -179,22 +178,25 @@ public class AppConfig {
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
   public ClientOrderLine clientOrderLine(OrderLine line) {
-    final ProductVariant variant = line.getVariant();
-    final Product product = variant.getProduct();
+    final Product product = line.getProduct();
 
-    final ClientOrderLineVariant lineVariant = ClientOrderLineVariant.builder()
-      .id(variant.getId())
-      .variantName(variant.getName())
+    final ClientOrderLine clientLine = ClientOrderLine.builder()
+      .id(line.getId())
+      .count(line.getCount())
+      .price(line.getPrice())
+      .productId(product.getId())
       .productName(product.getName())
       .image(product.getImage())
       .build();
 
-    return ClientOrderLine.builder()
-      .id(line.getId())
-      .count(line.getCount())
-      .price(line.getPrice())
-      .variant(lineVariant)
-      .build();
+    final ProductVariant variant = line.getVariant();
+
+    if (variant != null) {
+      clientLine.setVariantId(variant.getId());
+      clientLine.setVariantName(variant.getName());
+    }
+
+    return clientLine;
   }
 
   /**
@@ -334,12 +336,13 @@ public class AppConfig {
 
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-  public OrderLine orderLineFromConfigOrderLine(ConfigOrderLine line, ProductVariant variant) {
-    final float price = Helpers.getProductVariantPrice(variant);
+  public OrderLine orderLineFromConfigOrderLine(ConfigOrderLine line, Product product, ProductVariant variant) {
+    final float price = Helpers.getOrderLinePrice(product, variant);
 
     return OrderLine.builder()
       .count(line.getCount())
       .price(price)
+      .product(product)
       .variant(variant)
       .build();
   }

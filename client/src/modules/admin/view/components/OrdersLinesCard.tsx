@@ -5,7 +5,7 @@ import type { OrderLineSchema, OrderSchema } from 'shared/types';
 
 import { CardWrapper } from '@admin/view/components/CardWrapper';
 import { CardHeading } from '@admin/view/components/CardHeading';
-import { OrdersLineVariant } from '@admin/view/components/OrdersLineVariant';
+import { OrdersLine } from '@admin/view/components/OrdersLine';
 
 export type Props = {
   order: OrderSchema;
@@ -26,8 +26,8 @@ export function OrdersLinesCard({ order }: Props) {
           <Column
             header="Product"
             field="product"
-            body={({ variant }: OrderLineSchema) => (
-              <OrdersLineVariant variant={variant} />
+            body={(line: OrderLineSchema) => (
+              <OrdersLine line={line} />
             )}
           />
 

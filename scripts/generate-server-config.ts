@@ -111,12 +111,12 @@ function generateConfig(): Config {
       generateOrder({ lines: [6], user: 4 }),
     ],
     orderLines: [
-      generateOrderLine({ count: 2, variant: 1 }),
-      generateOrderLine({ count: 1, variant: 3 }),
-      generateOrderLine({ count: 1, variant: 5 }),
-      generateOrderLine({ count: 2, variant: 2 }),
-      generateOrderLine({ count: 1, variant: 3 }),
-      generateOrderLine({ count: 3, variant: 4 }),
+      generateOrderLine({ count: 2, product: 1, variant: 1 }),
+      generateOrderLine({ count: 1, product: 1, variant: 3 }),
+      generateOrderLine({ count: 1, product: 4, variant: 5 }),
+      generateOrderLine({ count: 2, product: 1, variant: 2 }),
+      generateOrderLine({ count: 1, product: 1, variant: 3 }),
+      generateOrderLine({ count: 3, product: 4, variant: 4 }),
     ],
   };
 }
@@ -203,9 +203,10 @@ function generateOrder({ lines = [], user = 3 }: Partial<Order>): Order {
   };
 }
 
-function generateOrderLine({ count = 1, variant = 1 }: Partial<OrderLine>): OrderLine {
+function generateOrderLine({ count = 1, product = 1, variant = 1 }: Partial<OrderLine>): OrderLine {
   return {
     count,
+    product,
     variant,
   };
 }
