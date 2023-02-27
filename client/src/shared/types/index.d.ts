@@ -1,4 +1,4 @@
-import type { EntityName, ErrorType, UserType } from 'shared/constants';
+import type { EntityName, ErrorType, PaymentMethodType, UserType } from 'shared/constants';
 
 /**
  * Helpers
@@ -26,6 +26,12 @@ export type MessageType = 'success' | 'info' | 'warn' | 'error' | undefined;
 export type ViewSeverity = 'success' | 'info' | 'warning' | 'danger' | null | undefined;
 export type ValidationType = 'toCreate' | 'toUpdate';
 export type ArchiveAction = 'archive' | 'restore';
+
+export type PaymentMethod = {
+  type: PaymentMethodType;
+  label: string;
+  icon: string;
+}
 
 /**
  * Entities

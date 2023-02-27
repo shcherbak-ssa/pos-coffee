@@ -48,11 +48,16 @@ export function CartProductItemContainer({ product }: Props) {
       return;
     }
 
+    const name: string = variant ? variant.name : 'Product';
+
     return (
       <Message
         key={variant?.id || ZERO}
-        severity="error"
-        text={`${variant ? variant.name : 'Product'} left for ${remainStock} times`}
+        severity="warn"
+        text={
+          remainStock === ZERO
+            ? `"${name}" out of stock`
+            : `"${name}" left for ${remainStock} times`}
       />
     );
   }

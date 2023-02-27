@@ -8,11 +8,12 @@ import type { CartOrderLineSchema } from '@app/shared/types';
 
 export type Props = {
   line: CartOrderLineSchema;
-  addLine: (line: CartOrderLineSchema) => void;
-  subtractLine: (line: CartOrderLineSchema) => void;
+  editable: boolean;
+  addLine?: (line: CartOrderLineSchema) => void;
+  subtractLine?: (line: CartOrderLineSchema) => void;
 }
 
-export function CartOrderLine({ line, addLine, subtractLine }: Props) {
+export function CartOrderLine({ line, addLine, subtractLine, editable }: Props) {
 
   function getLineName(): string {
     return line.variant
@@ -23,13 +24,50 @@ export function CartOrderLine({ line, addLine, subtractLine }: Props) {
   function handleAdd(e: MouseEvent): void {
     e.preventDefault();
 
-    addLine(line);
+    if (addLine) {
+      addLine(line);
+    }
   }
 
   function handleSubtract(e: MouseEvent): void {
     e.preventDefault();
 
-    subtractLine(line);
+    if (subtractLine) {
+      subtractLine(line);
+    }
+  }
+
+  function renderEditButtons(): React.ReactNode {
+    if (editable) {
+      return (
+        <div className="flex items-center gap-2">
+          <Button
+            className="p-button-sm p-button-rounded p-button-outlined"
+            icon={PrimeIcons.MINUS}
+            onClick={handleSubtract}
+          />
+
+          <div className="w-6 text-center">{ line.count }</div>
+
+          <Button
+            className="p-button-sm p-button-rounded p-button-outlined"
+            icon={PrimeIcons.PLUS}
+            onClick={handleAdd}
+          />
+        </div>
+      );
+    }
+  }
+
+  function renderTotal(): React.ReactNode {
+    if (!editable) {
+      return (
+        <div className="text-right">
+          <div>{ line.count }</div>
+          <div>{ line.count * line.price }</div>
+        </div>
+      );
+    }
   }
 
   return (
@@ -43,21 +81,9 @@ export function CartOrderLine({ line, addLine, subtractLine }: Props) {
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
-        <Button
-          className="p-button-sm p-button-rounded p-button-outlined"
-          icon={PrimeIcons.MINUS}
-          onClick={handleSubtract}
-        />
+      { renderEditButtons() }
 
-        <div className="w-6 text-center">{ line.count }</div>
-
-        <Button
-          className="p-button-sm p-button-rounded p-button-outlined"
-          icon={PrimeIcons.PLUS}
-          onClick={handleAdd}
-        />
-      </div>
+      { renderTotal() }
     </div>
   );
 

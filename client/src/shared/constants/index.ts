@@ -18,6 +18,12 @@ export enum UserType {
   WAITER = 'WAITER',
 }
 
+export enum PaymentMethodType {
+  CASH = 'CASH',
+  CARD = 'CARD',
+  MISC = 'MISC',
+}
+
 export enum ErrorName {
   APP_ERROR = 'AppError',
   AUTH_ERROR = 'AuthError',

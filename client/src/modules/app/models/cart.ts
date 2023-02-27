@@ -1,5 +1,5 @@
 import type { ProductVariantSchema } from 'shared/types';
-import { ZERO } from 'shared/constants';
+import { PaymentMethodType, ZERO } from 'shared/constants';
 
 import type {
   CartOrderSchema as BaseCartOrderSchema,
@@ -9,12 +9,14 @@ import type {
 import { PRODUCT_COUNT_STEP } from '@app/shared/constants';
 
 export class CartOrderSchema implements BaseCartOrderSchema {
-  public lines: BaseCartOrderLineSchema[];
   public userId: number;
+  public lines: BaseCartOrderLineSchema[];
+  public paymentMethod: PaymentMethodType;
 
   private constructor() {
     this.lines = [];
     this.userId = ZERO;
+    this.paymentMethod = PaymentMethodType.CASH;
   }
 
   public static create(): CartOrderSchema {

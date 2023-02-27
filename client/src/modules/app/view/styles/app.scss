@@ -30,3 +30,7 @@ body {
 .p-menubar {
   @apply px-0;
 }
+
+.p-inline-message {
+  @apply justify-start;
+}

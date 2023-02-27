@@ -1,4 +1,4 @@
-import type { MouseEvent } from 'react';
+import { type MouseEvent, useState } from 'react';
 import { ScrollPanel } from 'primereact/scrollpanel';
 import { Button } from 'primereact/button';
 
@@ -8,12 +8,16 @@ import { useController } from 'view/hooks/controller';
 
 import type { CartController, CartOrderLineSchema, CartStore } from '@app/shared/types';
 import { ControllerName, PRODUCT_COUNT_STEP, StoreName } from '@app/shared/constants';
+import { CartPaymentPopupContainer } from '@app/view/containers/CartPaymentPopupContainer';
 import { CartOrderLine } from '@app/view/components/CartOrderLine';
+import { CartOrderLinesWrapper } from '@app/view/components/CartOrderLinesWrapper';
 
 export function CartOrderContainer() {
 
   const { state: { order } } = useStore(StoreName.CART) as CartStore;
   const cartController = useController(ControllerName.CART) as CartController;
+
+  const [ isPayPopupOpen, setIsPayPopupOpen ] = useState<boolean>(false);
 
   function addLine(line: CartOrderLineSchema): void {
     cartController.updateOrderLineCount(line, line.count + PRODUCT_COUNT_STEP);
@@ -29,16 +33,29 @@ export function CartOrderContainer() {
     cartController.removeAllOrderLines();
   }
 
+  function openPayPopup(e: MouseEvent): void {
+    e.preventDefault();
+
+    setIsPayPopupOpen(true);
+  }
+
   function renderLines(): React.ReactNode {
     if (order.lines.length) {
-      return order.lines.map((line) => (
-        <CartOrderLine
-          key={`${line.product.id}-${line.variant?.id || ZERO}`}
-          line={line}
-          addLine={addLine}
-          subtractLine={subtractLine}
-        />
-      ));
+      return (
+        <CartOrderLinesWrapper>
+          {
+            order.lines.map((line) => (
+              <CartOrderLine
+                key={`${line.product.id}-${line.variant?.id || ZERO}`}
+                line={line}
+                addLine={addLine}
+                subtractLine={subtractLine}
+                editable
+              />
+            ))
+          }
+        </CartOrderLinesWrapper>
+      );
     }
 
     return (
@@ -70,16 +87,20 @@ export function CartOrderContainer() {
         </div>
 
         <ScrollPanel style={{ width: '100%', height: 'calc(100% - 45px)' }}>
-          <div className="flex flex-col gap-2 pb-2">
-            { renderLines() }
-          </div>
+          { renderLines() }
         </ScrollPanel>
       </div>
 
       <Button
-        className="shrink-0 w-full"
+        className="shrink-0 w-full p-button-sm"
         label="Pay"
         disabled={!order.lines.length}
+        onClick={openPayPopup}
+      />
+
+      <CartPaymentPopupContainer
+        isOpen={isPayPopupOpen}
+        hide={() => setIsPayPopupOpen(false)}
       />
     </div>
   );

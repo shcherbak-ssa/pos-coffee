@@ -4,9 +4,9 @@ import type {
   CategorySchema,
   ProductSchema,
   ProductVariantSchema,
-  OrderLineSchema,
   MessageType,
 } from 'shared/types';
+import type { PaymentMethodType } from 'shared/constants';
 
 /**
  * Helpers
@@ -69,6 +69,7 @@ export type CartOrderLineSchema = {
 export type CartOrderSchema = {
   userId: number;
   lines: CartOrderLineSchema[];
+  paymentMethod: PaymentMethodType;
 }
 
 export type CartStockAlertMessage = {
