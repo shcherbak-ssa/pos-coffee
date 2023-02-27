@@ -12,6 +12,9 @@ import type {
  * Helpers
  */
 
+export type ProductId = number;
+export type VariantId = number;
+
 export type Controllers =
   | AppController
   | CartController;
@@ -56,9 +59,16 @@ export type CartProductSchema = ProductSchema & {
   variants: ProductVariantSchema[];
 }
 
+export type CartOrderLineSchema = {
+  count: number;
+  price: number;
+  product: CartProductSchema;
+  variant?: ProductVariantSchema;
+}
+
 export type CartOrderSchema = {
   userId: number;
-  lines: OrderLineSchema[];
+  lines: CartOrderLineSchema[];
 }
 
 export type CartStockAlertMessage = {
@@ -67,37 +77,33 @@ export type CartStockAlertMessage = {
 }
 
 export interface CartStockAlert {
-  getStockAlertMessage(payload: CartPayload): CartStockAlertMessage | undefined;
+  remainStock(payload: CartPayload): number;
 }
 
 export interface CartService extends CartStockAlert {
-  isSameOrderLine(line: OrderLineSchema, lineToCompare: OrderLineSchema): boolean;
-  checkStock(payload: CartPayload): CartStockAlertMessage | undefined;
+  findLine(line: CartOrderLineSchema): CartOrderLineSchema | undefined;
+  isSameOrderLine(line: CartOrderLineSchema, lineToCompare: CartOrderLineSchema): boolean;
+  checkStock(line: CartOrderLineSchema, count: number): void;
+  parseStock(product: CartProductSchema): void;
 }
-
-type ProductId = number;
-type VariantId = number;
 
 export type CartState = {
   order: CartOrderSchema;
-  orderLineStockAlerts: Map<[ProductId, VariantId], CartStockAlertMessage>;
   activeCategoryId: number;
-  categories: CategorySchema[];
-  products: CartProductSchema[];
 }
 
 export interface CartStore extends StoreState<CartState> {
+  categories: CategorySchema[];
+  products: CartProductSchema[];
   getStockAlert: () => CartStockAlert;
 }
 
 export interface CartStoreActions extends CartStore {
   createOrder(): void;
-  addStockAlert(line: OrderLineSchema, message: CartStockAlertMessage): void;
-  removeStockAlert(line: OrderLineSchema): void;
-  addOrderLine(line: OrderLineSchema): void;
-  removeOrderLine(line: OrderLineSchema): void;
+  addOrderLine(line: CartOrderLineSchema): void;
+  removeOrderLine(line: CartOrderLineSchema): void;
   removeAllOrderLines(): void;
-  updateOrderLineCount(line: OrderLineSchema, count: number): void;
+  updateOrderLineCount(line: CartOrderLineSchema, count: number): void;
   setActiveCategoryId(categoryId: number): void;
   setCategories(categories: CategorySchema[]): void;
   setProducts(products: CartProductSchema[]): void;
@@ -106,9 +112,9 @@ export interface CartStoreActions extends CartStore {
 export interface CartController {
   createOrder(): Promise<void>;
   addOrderLine(payload: CartPayload): Promise<void>;
-  removeOrderLine(line: OrderLineSchema): Promise<void>;
+  removeOrderLine(line: CartOrderLineSchema): Promise<void>;
   removeAllOrderLines(): Promise<void>;
-  updateOrderLineCount(line: OrderLineSchema, count: number): Promise<void>;
+  updateOrderLineCount(line: CartOrderLineSchema, count: number): Promise<void>;
   setActiveCategoryId(categoryId?: number): Promise<void>;
   loadCategories(): Promise<boolean>;
   loadProducts(): Promise<boolean>;

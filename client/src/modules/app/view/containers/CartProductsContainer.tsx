@@ -10,7 +10,7 @@ import { CartProductItemContainer } from '@app/view/containers/CartProductItemCo
 
 export function CartProductsContainer() {
 
-  const { state: { activeCategoryId, products } } = useStore(StoreName.CART) as CartStore;
+  const { state: { activeCategoryId }, products } = useStore(StoreName.CART) as CartStore;
   const [ currentProducts, setCurrentProducts ] = useState<CartProductSchema[]>([]);
 
   useEffect(() => {

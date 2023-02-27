@@ -1,13 +1,15 @@
 import type {
   ApiService,
   CategorySchema,
-  OrderLineSchema as BaseOrderLineSchema,
+  NotificationService,
 } from 'shared/types';
 import { EntityName, ZERO } from 'shared/constants';
+import { AppError } from 'shared/errors';
 import { BaseController } from 'lib/base-controller';
 
 import type {
   CartController as BaseCartController,
+  CartOrderLineSchema as BaseCartOrderLineSchema,
   CartPayload,
   CartProductSchema,
   CartService as BaseCartService,
@@ -15,7 +17,7 @@ import type {
   CartStoreActions,
 } from '@app/shared/types';
 import { ApiEndpoint, PRODUCT_COUNT_STEP, StoreName } from '@app/shared/constants';
-import { OrderLineSchema } from '@app/models/order';
+import { CartOrderLineSchema } from '@app/models/cart';
 import { CartService } from '@app/services/cart';
 
 export class CartController extends BaseController implements BaseCartController {
@@ -35,18 +37,23 @@ export class CartController extends BaseController implements BaseCartController
   }
 
   public async addOrderLine({ product, variant }: CartPayload): Promise<void> {
-    const store = await this.getStore() as (CartStore & CartStoreActions);
-    const lineToAdd: BaseOrderLineSchema = OrderLineSchema.create(product, variant);
-    const foundLine: BaseOrderLineSchema | undefined = this.findLine(store.state.order.lines, lineToAdd);
+    try {
+      const store = await this.getStore() as (CartStore & CartStoreActions);
+      const lineToAdd: BaseCartOrderLineSchema = CartOrderLineSchema.create(product, variant);
+      const foundLine: BaseCartOrderLineSchema | undefined = this.service.findLine(lineToAdd);
 
-    if (foundLine) {
-      this.updateOrderLineCount(foundLine, foundLine.count + PRODUCT_COUNT_STEP);
-    } else {
-      store.addOrderLine(lineToAdd);
+      if (foundLine) {
+        this.updateOrderLineCount(lineToAdd, foundLine.count + PRODUCT_COUNT_STEP);
+      } else {
+        this.service.checkStock(lineToAdd, PRODUCT_COUNT_STEP);
+        store.addOrderLine(lineToAdd);
+      }
+    } catch (e: any) {
+      await this.parseStockError(e);
     }
   }
 
-  public async removeOrderLine(line: BaseOrderLineSchema): Promise<void> {
+  public async removeOrderLine(line: BaseCartOrderLineSchema): Promise<void> {
     const store = await this.getStore() as CartStoreActions;
     store.removeOrderLine(line);
   }
@@ -56,15 +63,20 @@ export class CartController extends BaseController implements BaseCartController
     store.removeAllOrderLines();
   }
 
-  public async updateOrderLineCount(line: BaseOrderLineSchema, count: number): Promise<void> {
-    const store = await this.getStore() as CartStoreActions;
+  public async updateOrderLineCount(line: BaseCartOrderLineSchema, count: number): Promise<void> {
+    try {
+      const store = await this.getStore() as CartStoreActions;
 
-    if (count === ZERO) {
-      store.removeOrderLine(line);
-      return;
+      if (count === ZERO) {
+        store.removeOrderLine(line);
+        return;
+      }
+
+      this.service.checkStock(line, count);
+      store.updateOrderLineCount(line, count);
+    } catch (e: any) {
+      await this.parseStockError(e);
     }
-
-    store.updateOrderLineCount(line, count);
   }
 
   public async setActiveCategoryId(categoryId: number = ZERO): Promise<void> {
@@ -102,13 +114,26 @@ export class CartController extends BaseController implements BaseCartController
     }
   }
 
-  private findLine(orderLines: BaseOrderLineSchema[], line: BaseOrderLineSchema): BaseOrderLineSchema | undefined {
-    return orderLines.find((orderLine) => this.service.isSameOrderLine(orderLine, line));
-  }
-
   private async setService(): Promise<void> {
     const store = await this.getStore() as (CartStore & CartStoreActions);
     this.service = CartService.create(store);
+  }
+
+  private async parseStockError(e: Error): Promise<void> {
+    if (e instanceof AppError) {
+      const notificationService: NotificationService = await this.getNotificationService();
+
+      notificationService.addNotification({
+        type: 'result',
+        severity: 'error',
+        heading: 'Add product',
+        message: e.message,
+      });
+
+      return;
+    }
+
+    console.error(e);
   }
 
 }

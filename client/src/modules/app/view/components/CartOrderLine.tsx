@@ -1,21 +1,23 @@
-import { PrimeIcons } from 'primereact/api';
-import { Button } from 'primereact/button';
 import type { MouseEvent } from 'react';
-import type { OrderLineSchema } from 'shared/types';
+import { Button } from 'primereact/button';
+import { PrimeIcons } from 'primereact/api';
+
 import { ProductsImage } from 'view/components/ProductsImage';
 
+import type { CartOrderLineSchema } from '@app/shared/types';
+
 export type Props = {
-  line: OrderLineSchema;
-  addLine: (line: OrderLineSchema) => void;
-  subtractLine: (line: OrderLineSchema) => void;
+  line: CartOrderLineSchema;
+  addLine: (line: CartOrderLineSchema) => void;
+  subtractLine: (line: CartOrderLineSchema) => void;
 }
 
 export function CartOrderLine({ line, addLine, subtractLine }: Props) {
 
   function getLineName(): string {
-    return line.variantName
-      ? `${line.productName}, ${line.variantName}`
-      : line.productName;
+    return line.variant
+      ? `${line.product.name}, ${line.variant.name}`
+      : line.product.name;
   }
 
   function handleAdd(e: MouseEvent): void {
@@ -33,7 +35,7 @@ export function CartOrderLine({ line, addLine, subtractLine }: Props) {
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center">
-        <ProductsImage image={line.image} />
+        <ProductsImage image={line.product.image} />
 
         <div className="ml-2 text-sm">
           <h3>{ getLineName() }</h3>
@@ -48,7 +50,7 @@ export function CartOrderLine({ line, addLine, subtractLine }: Props) {
           onClick={handleSubtract}
         />
 
-        <div className="w-2">{ line.count }</div>
+        <div className="w-6 text-center">{ line.count }</div>
 
         <Button
           className="p-button-sm p-button-rounded p-button-outlined"

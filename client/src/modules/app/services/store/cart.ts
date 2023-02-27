@@ -1,9 +1,11 @@
 import { proxy } from 'valtio';
 
-import type { CategorySchema, OrderLineSchema } from 'shared/types';
+import type { CategorySchema } from 'shared/types';
 import { ZERO } from 'shared/constants';
 
 import type {
+  CartOrderLineSchema as BaseCartOrderLineSchema,
+  CartPayload,
   CartProductSchema,
   CartService as BaseCartService,
   CartState,
@@ -11,18 +13,18 @@ import type {
   CartStore,
   CartStoreActions,
 } from '@app/shared/types';
-import { CartOrderSchema } from '@app/models/order';
+import { CartOrderSchema } from '@app/models/cart';
 import { CartService } from '@app/services/cart';
 
 export const cartStore: CartStore & CartStoreActions = {
 
   state: proxy<CartState>({
     order: CartOrderSchema.create(),
-    orderLineStockAlerts: new Map([]),
     activeCategoryId: ZERO,
-    categories: [],
-    products: [],
   }),
+
+  categories: [],
+  products: [],
 
   getStockAlert: () => {
     return CartService.create(cartStore);
@@ -32,31 +34,15 @@ export const cartStore: CartStore & CartStoreActions = {
     cartStore.state.order = CartOrderSchema.create();
   },
 
-  addStockAlert(line: OrderLineSchema, message: CartStockAlertMessage): void {
-    cartStore.state.orderLineStockAlerts.set([ line.productId, line.variantId ], message);
-  },
-
-  removeStockAlert(line: OrderLineSchema): void {
-    const { orderLineStockAlerts } = cartStore.state;
-
-    for (const stockAlertLine of orderLineStockAlerts.keys()) {
-      const [ productId, variantId ] = stockAlertLine;
-
-      if (productId === line.productId && variantId === line.variantId) {
-        orderLineStockAlerts.delete(stockAlertLine);
-      }
-    }
-  },
-
-  addOrderLine(line: OrderLineSchema): void {
+  addOrderLine(line: BaseCartOrderLineSchema): void {
     cartStore.state.order.lines.push(line);
   },
 
-  removeOrderLine(lineToRemove: OrderLineSchema): void {
-    const { order: currentOrder } = cartStore.state;
+  removeOrderLine(lineToRemove: BaseCartOrderLineSchema): void {
+    const { order } = cartStore.state;
     const isSameOrderLine = createCartService().isSameOrderLine;
 
-    currentOrder.lines = currentOrder.lines.filter((line) => {
+    order.lines = order.lines.filter((line) => {
       return !isSameOrderLine(line, lineToRemove);
     });
   },
@@ -65,11 +51,11 @@ export const cartStore: CartStore & CartStoreActions = {
     cartStore.state.order.lines = [];
   },
 
-  updateOrderLineCount(lineToUpdate: OrderLineSchema, count: number): void {
-    const { order: currentOrder } = cartStore.state;
+  updateOrderLineCount(lineToUpdate: BaseCartOrderLineSchema, count: number): void {
+    const { order } = cartStore.state;
     const isSameOrderLine = createCartService().isSameOrderLine;
 
-    currentOrder.lines = currentOrder.lines.map((line) => {
+    order.lines = order.lines.map((line) => {
       return isSameOrderLine(line, lineToUpdate) ? { ...line, count } : line;
     });
   },
@@ -79,11 +65,11 @@ export const cartStore: CartStore & CartStoreActions = {
   },
 
   setCategories(categories: CategorySchema[]): void {
-    cartStore.state.categories = [ ...categories ];
+    cartStore.categories = [ ...categories ];
   },
 
   setProducts(products: CartProductSchema[]): void {
-    cartStore.state.products = [ ...products ];
+    cartStore.products = [ ...products ];
   },
 
 };

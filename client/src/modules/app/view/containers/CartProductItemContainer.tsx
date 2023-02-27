@@ -1,22 +1,27 @@
-import type { MouseEvent } from 'react';
+import { type MouseEvent, useRef } from 'react';
 import { Button } from 'primereact/button';
 import { Message } from 'primereact/message';
+import { OverlayPanel } from 'primereact/overlaypanel';
 
+import type { MessageType, ProductVariantSchema } from 'shared/types';
+import { ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 import { ProductsImage } from 'view/components/ProductsImage';
 
-import type { CartController, CartProductSchema, CartStockAlert, CartStockAlertMessage, CartStore } from '@app/shared/types';
+import type { CartController, CartProductSchema, CartStockAlert, CartStore } from '@app/shared/types';
 import { ControllerName, StoreName } from '@app/shared/constants';
 import { CartProductItemVariantsContainer } from '@app/view/containers/CartProductItemVariantsContainer';
 import { CardWrapper } from '@app/view/components/CardWrapper';
-import type { ProductVariantSchema } from 'shared/types';
+import { PrimeIcons } from 'primereact/api';
 
 export type Props = {
   product: CartProductSchema;
 }
 
 export function CartProductItemContainer({ product }: Props) {
+
+  const stockPanel = useRef<OverlayPanel>(null);
 
   const { getStockAlert } = useStore(StoreName.CART) as CartStore;
   const cartController = useController(ControllerName.CART) as CartController;
@@ -27,16 +32,38 @@ export function CartProductItemContainer({ product }: Props) {
     cartController.addOrderLine({ product });
   }
 
-  function getStockAlertMessage(variant?: ProductVariantSchema): React.ReactNode {
-    const stockAlert: CartStockAlert = getStockAlert();
-    const alertMessage: CartStockAlertMessage | undefined = stockAlert.getStockAlertMessage({ product, variant });
+  function toggleStockPanel(e: MouseEvent): void {
+    e.preventDefault();
 
-    if (alertMessage) {
+    if (stockPanel.current) {
+      stockPanel.current.toggle(e);
+    }
+  }
+
+  function getStockAlertMessage(variant?: ProductVariantSchema): React.ReactNode {
+    const remainStock: number = getStockAlert().remainStock({ product, variant });
+    const stockAlert: number = typeof(variant?.stockAlert) === 'number' ? variant.stockAlert : product.stockAlert;
+
+    if (remainStock > stockAlert) {
+      return;
+    }
+
+    return (
+      <Message
+        key={variant?.id || ZERO}
+        severity="error"
+        text={`${variant ? variant.name : 'Product'} left for ${remainStock} times`}
+      />
+    );
+  }
+
+  function renderStockAlertButton(): React.ReactNode {
+    if (renderStockAlertMessages()) {
       return (
-        <Message
-          key={variant?.id}
-          severity={alertMessage.type}
-          text={alertMessage.message}
+        <Button
+          className="p-button-rounded p-button-sm p-button-danger absolute -top-2 -right-2"
+          icon={PrimeIcons.EXCLAMATION_CIRCLE}
+          onClick={toggleStockPanel}
         />
       );
     }
@@ -44,7 +71,11 @@ export function CartProductItemContainer({ product }: Props) {
 
   function renderStockAlertMessages(): React.ReactNode {
     if (product.variants.length) {
-      return product.variants.map(getStockAlertMessage);
+      const messages = product.variants.map(getStockAlertMessage);
+
+      return !!messages.filter((message) => message).length
+        ? messages
+        : undefined;
     }
 
     return getStockAlertMessage();
@@ -55,10 +86,14 @@ export function CartProductItemContainer({ product }: Props) {
       return <CartProductItemVariantsContainer product={product} />;
     }
 
+    const stockAlert: CartStockAlert = getStockAlert();
+    const remainStock: number = stockAlert.remainStock({ product });
+
     return (
       <Button
         className="p-button-sm w-full"
         label="Add to cart"
+        disabled={!remainStock}
         onClick={addProductToCart}
       />
     );
@@ -79,13 +114,17 @@ export function CartProductItemContainer({ product }: Props) {
         </h3>
       </div>
 
-      <div className="flex flex-col gap-2">
-        { renderStockAlertMessages() }
-      </div>
-
       <div className="mt-4">
         { renderAddButtons() }
       </div>
+
+      { renderStockAlertButton() }
+
+      <OverlayPanel ref={stockPanel}>
+        <div className="flex flex-col gap-2">
+          { renderStockAlertMessages() }
+        </div>
+      </OverlayPanel>
     </CardWrapper>
   );
 

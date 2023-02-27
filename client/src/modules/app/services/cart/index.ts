@@ -1,12 +1,15 @@
-import type { OrderLineSchema } from 'shared/types';
-import { ZERO } from 'shared/constants';
+import { DOUBLE_STOCK_ALERT, ZERO } from 'shared/constants';
+import { AppError } from 'shared/errors';
 
 import type {
+  CartOrderLineSchema as BaseCartOrderLineSchema,
   CartPayload,
+  CartProductSchema,
   CartService as BaseCartService,
   CartStockAlertMessage,
   CartStore,
 } from '@app/shared/types';
+import { CartOrderLineSchema } from '@app/models/cart';
 
 export class CartService implements BaseCartService {
 
@@ -18,25 +21,42 @@ export class CartService implements BaseCartService {
     return new CartService(store);
   }
 
-  public isSameOrderLine(line: OrderLineSchema, lineToCompare: OrderLineSchema): boolean {
-    return line.productId === lineToCompare.productId
-      ? line.variantId === lineToCompare.variantId
+  public remainStock({ product, variant }: CartPayload): number {
+    const stock: number = typeof(variant?.stock) === 'number' ? variant.stock : product.stock;
+    const stockPerTime: number
+      = typeof(variant?.stockPerTime) === 'number' ? variant.stockPerTime : product.stockPerTime;
+
+    const line: BaseCartOrderLineSchema = CartOrderLineSchema.create(product, variant);
+    const foundLine: BaseCartOrderLineSchema | undefined = this.findLine(line);
+    const count: number = foundLine?.count || ZERO;
+
+    return Math.floor((stock - count * stockPerTime) / stockPerTime);
+  }
+
+  public findLine(line: BaseCartOrderLineSchema): BaseCartOrderLineSchema | undefined {
+    return this.store.state.order.lines.find((orderLine) => this.isSameOrderLine(orderLine, line));
+  }
+
+  public isSameOrderLine(line: BaseCartOrderLineSchema, lineToCompare: BaseCartOrderLineSchema): boolean {
+    return line.product.id === lineToCompare.product.id
+      ? line.variant?.id === lineToCompare.variant?.id
       : false;
   }
 
-  public getStockAlertMessage({ product, variant }: CartPayload): CartStockAlertMessage | undefined {
-    const { id: searchProductId } = product;
-    const searchVariantId: number = variant?.id || ZERO;
+  public checkStock({ product, variant }: BaseCartOrderLineSchema, count: number): void {
+    const stock: number = typeof(variant?.stock) === 'number' ? variant.stock : product.stock;
+    const stockPerTime: number
+      = typeof(variant?.stockPerTime) === 'number' ? variant.stockPerTime : product.stockPerTime;
 
-    for (const [ [ productId, variantId ], alertMessage ] of this.store.state.orderLineStockAlerts.entries()) {
-      if (productId === searchProductId && variantId === searchVariantId) {
-        return alertMessage;
-      }
+    const useStock: number = count * stockPerTime;
+
+    if (useStock > stock) {
+      throw new AppError('Not enough stock!');
     }
   }
 
-  public checkStock({ product, variant }: CartPayload): CartStockAlertMessage | undefined {
-    throw new Error('Method not implemented.');
+  public parseStock(product: CartProductSchema): void {
+    throw new Error('');
   }
 
 }

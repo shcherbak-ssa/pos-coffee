@@ -12,7 +12,7 @@ import { ScrollPanel } from 'primereact/scrollpanel';
 
 export function CartCategoriesContainer() {
 
-  const { state: { activeCategoryId, categories } } = useStore(StoreName.CART) as CartStore;
+  const { state: { activeCategoryId }, categories } = useStore(StoreName.CART) as CartStore;
   const cartController = useController(ControllerName.CART) as CartController;
 
   const [ menuItems, setMenuItems ] = useState<MenuItem[]>(parseCategoriesToTabs());

@@ -2,11 +2,11 @@ import type { MouseEvent } from 'react';
 import { ScrollPanel } from 'primereact/scrollpanel';
 import { Button } from 'primereact/button';
 
-import type { OrderLineSchema } from 'shared/types';
+import { ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 
-import type { CartController, CartStore } from '@app/shared/types';
+import type { CartController, CartOrderLineSchema, CartStore } from '@app/shared/types';
 import { ControllerName, PRODUCT_COUNT_STEP, StoreName } from '@app/shared/constants';
 import { CartOrderLine } from '@app/view/components/CartOrderLine';
 
@@ -15,11 +15,11 @@ export function CartOrderContainer() {
   const { state: { order } } = useStore(StoreName.CART) as CartStore;
   const cartController = useController(ControllerName.CART) as CartController;
 
-  function addLine(line: OrderLineSchema): void {
+  function addLine(line: CartOrderLineSchema): void {
     cartController.updateOrderLineCount(line, line.count + PRODUCT_COUNT_STEP);
   }
 
-  function subtractLine(line: OrderLineSchema): void {
+  function subtractLine(line: CartOrderLineSchema): void {
     cartController.updateOrderLineCount(line, line.count - PRODUCT_COUNT_STEP);
   }
 
@@ -33,7 +33,7 @@ export function CartOrderContainer() {
     if (order.lines.length) {
       return order.lines.map((line) => (
         <CartOrderLine
-          key={`${line.productId}-${line.variantId}`}
+          key={`${line.product.id}-${line.variant?.id || ZERO}`}
           line={line}
           addLine={addLine}
           subtractLine={subtractLine}
