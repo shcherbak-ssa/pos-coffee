@@ -2,25 +2,31 @@ import type {
   ApiService,
   CategorySchema,
   OrderLineSchema as BaseOrderLineSchema,
-  ProductVariantSchema,
 } from 'shared/types';
 import { EntityName, ZERO } from 'shared/constants';
 import { BaseController } from 'lib/base-controller';
 
 import type {
   CartController as BaseCartController,
+  CartPayload,
   CartProductSchema,
+  CartService as BaseCartService,
   CartStore,
   CartStoreActions,
 } from '@app/shared/types';
 import { ApiEndpoint, PRODUCT_COUNT_STEP, StoreName } from '@app/shared/constants';
-import { isSameOrderLine } from '@app/shared/helpers/order-line';
 import { OrderLineSchema } from '@app/models/order';
+import { CartService } from '@app/services/cart';
 
 export class CartController extends BaseController implements BaseCartController {
 
+  private service!: BaseCartService;
+
   public static create(): CartController {
-    return new CartController(StoreName.CART, EntityName.ANY);
+    const controller: CartController = new CartController(StoreName.CART, EntityName.ANY);
+    controller.setService();
+
+    return controller;
   }
 
   public async createOrder(): Promise<void> {
@@ -28,10 +34,10 @@ export class CartController extends BaseController implements BaseCartController
     store.createOrder();
   }
 
-  public async addOrderLine(product: CartProductSchema, variant?: ProductVariantSchema): Promise<void> {
+  public async addOrderLine({ product, variant }: CartPayload): Promise<void> {
     const store = await this.getStore() as (CartStore & CartStoreActions);
     const lineToAdd: BaseOrderLineSchema = OrderLineSchema.create(product, variant);
-    const foundLine: BaseOrderLineSchema | undefined = this.findLine(store.state.currentOrder.lines, lineToAdd);
+    const foundLine: BaseOrderLineSchema | undefined = this.findLine(store.state.order.lines, lineToAdd);
 
     if (foundLine) {
       this.updateOrderLineCount(foundLine, foundLine.count + PRODUCT_COUNT_STEP);
@@ -96,8 +102,13 @@ export class CartController extends BaseController implements BaseCartController
     }
   }
 
-  private findLine(orderLines: BaseOrderLineSchema[], lineToAdd: BaseOrderLineSchema): BaseOrderLineSchema | undefined {
-    return orderLines.find((line) => isSameOrderLine(line, lineToAdd));
+  private findLine(orderLines: BaseOrderLineSchema[], line: BaseOrderLineSchema): BaseOrderLineSchema | undefined {
+    return orderLines.find((orderLine) => this.service.isSameOrderLine(orderLine, line));
+  }
+
+  private async setService(): Promise<void> {
+    const store = await this.getStore() as (CartStore & CartStoreActions);
+    this.service = CartService.create(store);
   }
 
 }

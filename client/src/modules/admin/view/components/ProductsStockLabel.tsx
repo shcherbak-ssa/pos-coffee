@@ -1,8 +1,7 @@
 import { Tag  } from 'primereact/tag';
 
 import type { ProductSchema, ProductVariantSchema, ViewSeverity } from 'shared/types';
-import { LONG_MINUS } from 'shared/constants';
-import { STOCK_ALERT_DISTANCE } from '@admin/shared/constants';
+import { DOUBLE_STOCK_ALERT, LONG_MINUS } from 'shared/constants';
 
 export type Props = {
   product: ProductSchema;
@@ -16,7 +15,7 @@ export function ProductsStockLabel({ product, variant }: Props) {
       return 'danger';
     }
 
-    if (variant.stock / STOCK_ALERT_DISTANCE <= variant.stockAlert) {
+    if (variant.stock / DOUBLE_STOCK_ALERT <= variant.stockAlert) {
       return 'warning';
     }
 

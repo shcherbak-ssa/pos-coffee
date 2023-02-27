@@ -5,6 +5,7 @@ import type {
   ProductSchema,
   ProductVariantSchema,
   OrderLineSchema,
+  MessageType,
 } from 'shared/types';
 
 /**
@@ -46,6 +47,11 @@ export type UserSchema = Pick<
  * Cart
  */
 
+export type CartPayload = {
+  product: CartProductSchema;
+  variant?: ProductVariantSchema;
+}
+
 export type CartProductSchema = ProductSchema & {
   variants: ProductVariantSchema[];
 }
@@ -55,17 +61,39 @@ export type CartOrderSchema = {
   lines: OrderLineSchema[];
 }
 
+export type CartStockAlertMessage = {
+  type: MessageType;
+  message: string;
+}
+
+export interface CartStockAlert {
+  getStockAlertMessage(payload: CartPayload): CartStockAlertMessage | undefined;
+}
+
+export interface CartService extends CartStockAlert {
+  isSameOrderLine(line: OrderLineSchema, lineToCompare: OrderLineSchema): boolean;
+  checkStock(payload: CartPayload): CartStockAlertMessage | undefined;
+}
+
+type ProductId = number;
+type VariantId = number;
+
 export type CartState = {
-  currentOrder: CartOrderSchema;
+  order: CartOrderSchema;
+  orderLineStockAlerts: Map<[ProductId, VariantId], CartStockAlertMessage>;
   activeCategoryId: number;
   categories: CategorySchema[];
   products: CartProductSchema[];
 }
 
-export interface CartStore extends StoreState<CartState> {}
+export interface CartStore extends StoreState<CartState> {
+  getStockAlert: () => CartStockAlert;
+}
 
 export interface CartStoreActions extends CartStore {
   createOrder(): void;
+  addStockAlert(line: OrderLineSchema, message: CartStockAlertMessage): void;
+  removeStockAlert(line: OrderLineSchema): void;
   addOrderLine(line: OrderLineSchema): void;
   removeOrderLine(line: OrderLineSchema): void;
   removeAllOrderLines(): void;
@@ -77,7 +105,7 @@ export interface CartStoreActions extends CartStore {
 
 export interface CartController {
   createOrder(): Promise<void>;
-  addOrderLine(product: CartProductSchema, variant?: ProductVariantSchema): Promise<void>;
+  addOrderLine(payload: CartPayload): Promise<void>;
   removeOrderLine(line: OrderLineSchema): Promise<void>;
   removeAllOrderLines(): Promise<void>;
   updateOrderLineCount(line: OrderLineSchema, count: number): Promise<void>;

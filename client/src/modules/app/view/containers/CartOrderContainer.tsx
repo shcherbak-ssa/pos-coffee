@@ -12,7 +12,7 @@ import { CartOrderLine } from '@app/view/components/CartOrderLine';
 
 export function CartOrderContainer() {
 
-  const { state: { currentOrder } } = useStore(StoreName.CART) as CartStore;
+  const { state: { order } } = useStore(StoreName.CART) as CartStore;
   const cartController = useController(ControllerName.CART) as CartController;
 
   function addLine(line: OrderLineSchema): void {
@@ -30,8 +30,8 @@ export function CartOrderContainer() {
   }
 
   function renderLines(): React.ReactNode {
-    if (currentOrder.lines.length) {
-      return currentOrder.lines.map((line) => (
+    if (order.lines.length) {
+      return order.lines.map((line) => (
         <CartOrderLine
           key={`${line.productId}-${line.variantId}`}
           line={line}
@@ -41,11 +41,15 @@ export function CartOrderContainer() {
       ));
     }
 
-    return <small className="text-center">Order is empty</small>;
+    return (
+      <div className="flex-center h-80">
+        <div className="text-center">Order is empty</div>
+      </div>
+    );
   }
 
   function renderClearAllButton(): React.ReactNode {
-    if (currentOrder && currentOrder.lines.length) {
+    if (order && order.lines.length) {
       return (
         <Button
           className="p-button-sm p-button-text"
@@ -60,7 +64,7 @@ export function CartOrderContainer() {
     <div className="flex flex-col justify-between full">
       <div style={{ height: 'calc(100% - 80px)' }}>
         <div className="flex items-center justify-between mb-4">
-          <h2>Order</h2>
+          <h2 className="text-lg">Order</h2>
 
           { renderClearAllButton() }
         </div>
@@ -75,7 +79,7 @@ export function CartOrderContainer() {
       <Button
         className="shrink-0 w-full"
         label="Pay"
-        disabled={!currentOrder.lines.length}
+        disabled={!order.lines.length}
       />
     </div>
   );

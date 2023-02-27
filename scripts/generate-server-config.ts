@@ -72,9 +72,9 @@ function generateConfig(): Config {
       generateProduct({ name: 'Coffee', category: 2, stock: 10000, useStockForVariants: true, image: 'https://images.unsplash.com/photo-1485808191679-5f86510681a2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }),
       generateProduct({ name: 'Cappuccino', category: 2, image: 'https://images.unsplash.com/photo-1525629545813-e4e7ba89e506?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }),
       generateProduct({ name: 'Hot chocolate', category: 2 }),
-      generateProduct({ name: 'Tea', category: 2 }),
+      generateProduct({ name: 'Tea', category: 2, image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }),
       // Drinks
-      generateProduct({ name: 'Coca-Cola', category: 3 }),
+      generateProduct({ name: 'Coca-Cola', category: 3, image: 'https://images.unsplash.com/photo-1624552184280-9e9631bbeee9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }),
       generateProduct({ name: 'Coca-Cola Zero', category: 3 }),
       generateProduct({ name: 'Fanta', category: 3 }),
       generateProduct({ name: 'Sprite', category: 3 }),
@@ -101,8 +101,13 @@ function generateConfig(): Config {
       generateProductVariant({ name: 'Double', product: 1, stockPerTime: 20 }),
       generateProductVariant({ name: 'American', product: 1, stockPerTime: 20 }),
       // Tea
-      generateProductVariant({ name: 'Green', product: 4 }),
+      generateProductVariant({ name: 'Green', product: 4, stock: 15, stockAlert: 10, stockPerTime: 1 }),
       generateProductVariant({ name: 'Black', product: 4 }),
+      // Coca-Cola
+      generateProductVariant({ name: '330', sku: 'COLA_SMALL', product: 5, stock: 50, stockAlert: 10, stockPerTime: 1 }),
+      generateProductVariant({ name: '500', sku: 'COLA_MEDIUM', product: 5, stock: 10, stockAlert: 10, stockPerTime: 1 }),
+      generateProductVariant({ name: '1L', sku: 'COLA_LITRE', product: 5, stock: 5, stockAlert: 10, stockPerTime: 1 }),
+      generateProductVariant({ name: '1.5L', sku: 'COLA_LITRE_HALF', product: 5, stock: 15, stockAlert: 10, stockPerTime: 1 }),
     ],
     orders: [
       generateOrder({ lines: [1], user: 3 }),
@@ -184,12 +189,13 @@ function generateProduct({
 function generateProductVariant({
   name = faker.commerce.productName(),
   stock = Number(faker.random.numeric(2)),
+  sku,
   stockPerTime = 1,
   useProductPrice = false,
   product = 1,
 }: Partial<ProductVariant>): ProductVariant {
   return {
-    sku: getSku(name),
+    sku: sku || getSku(name),
     price: generatePrice(),
     stockAlert: Number(faker.random.numeric(1)),
     stock,

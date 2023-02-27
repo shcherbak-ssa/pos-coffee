@@ -5,15 +5,13 @@ import type {
   PayloadToSave,
   PayloadToGetById,
   PayloadToGetAll,
-  Store,
   StoreCrud,
   ValidationService,
   PayloadToChangeArchiveState,
   StoreEntityState,
   PayloadToDelete,
 } from 'shared/types';
-import { EntityName, ZERO } from 'shared/constants';
-import { Context } from 'shared/context';
+import { ZERO } from 'shared/constants';
 import { notifications } from 'shared/configs/notifications';
 import { BaseController } from 'lib/base-controller';
 
