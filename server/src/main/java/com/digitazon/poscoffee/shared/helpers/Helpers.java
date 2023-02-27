@@ -69,7 +69,7 @@ public class Helpers {
       return product.getPrice();
     }
 
-    return variant.getUseProductPrice()
+    return variant.getPrice() == null
       ? product.getPrice()
       : variant.getPrice();
   }

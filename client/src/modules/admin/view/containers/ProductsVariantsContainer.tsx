@@ -1,13 +1,13 @@
 import { useEffect, useState, type MouseEvent } from 'react';
 import type { MenuItem } from 'primereact/menuitem';
 import { Button } from 'primereact/button';
-import { DataTable } from 'primereact/datatable';
+import { DataTable, type DataTableRowClickEvent, type DataTableSelectionChangeEvent } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { PrimeIcons } from 'primereact/api';
 import { confirmDialog } from 'primereact/confirmdialog';
 
 import type { ProductSchema, ProductVariantSchema } from 'shared/types';
-import { EntityName, ErrorType, LONG_MINUS, ZERO } from 'shared/constants';
+import { EntityName, ErrorType, ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { useError } from 'view/hooks/error';
 import { useController } from 'view/hooks/controller';
@@ -22,6 +22,7 @@ import { CardWrapper } from '@admin/view/components/CardWrapper';
 import { CardHeading } from '@admin/view/components/CardHeading';
 import { ProductVariantMenu } from '@admin/view/components/ProductVariantMenu';
 import { ProductsStockLabel } from '@admin/view/components/ProductsStockLabel';
+import { ProductsPrice } from '@admin/view/components/ProductsPrice';
 
 export type Props = {
   product: ProductSchema;
@@ -33,6 +34,7 @@ export function ProductsVariantsContainer({ product }: Props) {
   const [ isPopupVisible, setIsPopupVisible ] = useState<boolean>(false);
   const [ isEditMode, setIsEditMode ] = useState<boolean>(false);
   const [ isSaveProcessing, setIsSaveProcessing ] = useState<boolean>(false);
+  const [ selectedEntities, setSelectedEntities ] = useState<ProductVariantSchema[]>([]);
 
   const {
     state: { list: variants, selected: selectedVariant },
@@ -99,7 +101,7 @@ export function ProductsVariantsContainer({ product }: Props) {
   function saveVariant(): void {
     setIsSaveProcessing(true);
 
-    variantsController.save(product.id)
+    variantsController.save(product)
       .then((id) => {
         if (id) {
           setIsEditMode(false);
@@ -128,6 +130,15 @@ export function ProductsVariantsContainer({ product }: Props) {
     setIsEditMode(false);
   }
 
+  function selectEntities({ value }: DataTableSelectionChangeEvent<ProductVariantSchema[]>): void {
+    // @ts-ignore
+    setSelectedEntities([value]);
+  }
+
+  function handleRowDoubleClick(e: DataTableRowClickEvent): void {
+    selectVariant(e.data.id, false);
+  }
+
   if (isVariantsLoaded) {
     return (
       <>
@@ -150,23 +161,33 @@ export function ProductsVariantsContainer({ product }: Props) {
               dataKey="id"
               value={variants}
               responsiveLayout="scroll"
+              selectionMode="single"
+              selection={selectedEntities}
+              onSelectionChange={selectEntities}
+              onRowDoubleClick={handleRowDoubleClick}
             >
+              <Column
+                field="selection"
+                selectionMode={undefined}
+                headerStyle={{ width: '0', padding: '0' }}
+              />
+
               <Column header="Name" field="name" />
               <Column header="Sku" field="sku" />
 
               <Column
                 header="Price"
                 field="price"
-                body={({ price, useProductPrice }: ProductVariantSchema) => (
-                  <div>{ useProductPrice ? LONG_MINUS : price }</div>
+                body={({ price }: ProductVariantSchema) => (
+                  <ProductsPrice price={price} />
                 )}
               />
 
               <Column
                 header="Stock"
                 field="stock"
-                body={(variant: ProductVariantSchema) => (
-                  <ProductsStockLabel product={product} variant={variant} />
+                body={({ stock, stockAlert }: ProductVariantSchema) => (
+                  <ProductsStockLabel stock={stock} stockAlert={stockAlert || product.stockAlert} />
                 )}
               />
 
@@ -186,7 +207,6 @@ export function ProductsVariantsContainer({ product }: Props) {
           entityDraft={variantDraft}
           validationError={validationError}
           isEditMode={isEditMode}
-          product={product}
           isVisible={isPopupVisible}
           hide={hidePopup}
           footer={(

@@ -11,6 +11,7 @@ import { ProductsMainCard } from '@admin/view/components/ProductsMainCard';
 import { ProductsVariantsContainer } from '@admin/view/containers/ProductsVariantsContainer';
 import { ProductsImageCard } from '@admin/view/components/ProductsImageCard';
 import { InfoPageWrapper } from '@admin/view/components/InfoPageWrapper';
+import { ProductsStockCard } from '@admin/view/components/ProductsStockCard';
 
 export type Props = {
   validationError?: ErrorObject<ProductSchema>;
@@ -47,6 +48,13 @@ export function ProductsInfoPageContainer({ validationError }: Props) {
       <ProductsMainCard
         productCategories={productCategories}
         selectedProductCategory={selectedProductCategory}
+        entity={selectedProduct}
+        entityDraft={draftProduct}
+        validationError={validationError}
+        isEditMode={isEditMode}
+      />
+
+      <ProductsStockCard
         entity={selectedProduct}
         entityDraft={draftProduct}
         validationError={validationError}

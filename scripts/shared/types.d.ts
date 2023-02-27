@@ -38,7 +38,6 @@ export type Product = {
   stock: number;
   stockPerTime: number;
   stockAlert: number;
-  useStockForVariants: boolean;
   isAvailable: boolean;
   isArchived: boolean;
 }
@@ -51,11 +50,10 @@ export type Category = {
 export type ProductVariant = {
   sku: string;
   name: string;
-  price: number;
-  stock: number
-  stockPerTime: number;
-  stockAlert: number;
-  useProductPrice: boolean;
+  price: number | null;
+  stock: number | null
+  stockPerTime: number | null;
+  stockAlert: number | null;
   product: number;
 }
 

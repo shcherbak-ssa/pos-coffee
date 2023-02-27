@@ -19,7 +19,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.digitazon.poscoffee.models.helpers.base.BaseEntityId;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
-import com.digitazon.poscoffee.shared.constants.ProductVariantsConstants;
+import com.digitazon.poscoffee.shared.constants.ProductsConstants;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,22 +40,22 @@ public class ProductVariant implements BaseEntityId {
   private Long id;
 
   @NotBlank(
-    message = ProductVariantsConstants.SKU_EMPTY_MESSAGE,
+    message = ProductsConstants.SKU_EMPTY_MESSAGE,
     groups = AppConstants.ValidationGroups.ToCreate.class
   )
   @Size(
     min = AppConstants.MIN_UPDATE_LENGTH,
-    message = ProductVariantsConstants.SKU_EMPTY_MESSAGE
+    message = ProductsConstants.SKU_EMPTY_MESSAGE
   )
   private String sku;
 
   @NotBlank(
-    message = ProductVariantsConstants.NAME_EMPTY_MESSAGE,
+    message = ProductsConstants.NAME_EMPTY_MESSAGE,
     groups = AppConstants.ValidationGroups.ToCreate.class
   )
   @Size(
     min = AppConstants.MIN_UPDATE_LENGTH,
-    message = ProductVariantsConstants.NAME_EMPTY_MESSAGE,
+    message = ProductsConstants.NAME_EMPTY_MESSAGE,
     groups = AppConstants.ValidationGroups.ToUpdate.class
   )
   private String name;
@@ -64,7 +64,6 @@ public class ProductVariant implements BaseEntityId {
   private Integer stock;
   private Integer stockPerTime;
   private Integer stockAlert;
-  private Boolean useProductPrice;
 
   @ManyToOne(fetch = FetchType.EAGER)
   private Product product;

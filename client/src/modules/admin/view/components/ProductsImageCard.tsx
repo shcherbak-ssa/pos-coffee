@@ -26,7 +26,10 @@ export function ProductsImageCard({ product }: Props) {
         </div>
 
         <div>
-          <Button label="Change image" />
+          <Button
+            className="w-full"
+            label="Change image"
+          />
         </div>
       </div>
     </CardWrapper>

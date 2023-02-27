@@ -88,7 +88,6 @@ export type ProductSchema = BaseSchema & {
   stockAlert: number;
   image: string;
   category: ProductCategory;
-  useStockForVariants: boolean;
   isAvailable: boolean;
 }
 
@@ -110,11 +109,10 @@ export type ProductVariantSchema = {
   id: number;
   sku: string;
   name: string;
-  price: number;
-  stock: number;
-  stockPerTime: number;
-  stockAlert: number;
-  useProductPrice: boolean;
+  price: number | null;
+  stock: number | null;
+  stockPerTime: number | null;
+  stockAlert: number | null;
 }
 
 export type OrderSchema = {
@@ -201,6 +199,7 @@ export type PayloadToGetAll<T> = {
 export type PayloadToSave<T, Q> = {
   endpoint: string;
   validationName: string;
+  entity?: T;
   query?: Q;
 }
 

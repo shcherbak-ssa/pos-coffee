@@ -13,7 +13,6 @@ export class ProductSchema extends BaseSchema<ProductUpdates> implements BasePro
   public stockAlert: number;
   public image: string;
   public category: ProductCategory;
-  public useStockForVariants: boolean;
   public isAvailable: boolean;
 
   private constructor(schema?: BaseProductSchema) {
@@ -22,9 +21,8 @@ export class ProductSchema extends BaseSchema<ProductUpdates> implements BasePro
     this.name = schema?.name || EMPTY_STRING;
     this.price = schema?.price || ZERO;
     this.stock = schema?.stock || ZERO;
-    this.stockPerTime = schema?.stockPerTime || ZERO;
-    this.stockAlert = schema?.stockAlert || ZERO;
-    this.useStockForVariants = schema?.useStockForVariants || false;
+    this.stockPerTime = schema?.stockPerTime || ZERO + 1;
+    this.stockAlert = schema?.stockAlert || ZERO + 1;
     this.image = schema?.image || EMPTY_STRING;
     this.category = schema?.category ? { ...schema.category } : { id: ZERO, name: EMPTY_STRING };
     this.isAvailable = schema?.isAvailable || false;
@@ -66,10 +64,6 @@ export function createDraft(schema: BaseProductSchema = ProductSchema.create()):
 
     set stockAlert(stockAlert: number) {
       schema.stockAlert = stockAlert;
-    },
-
-    set useStockForVariants(useStockForVariants: boolean) {
-      schema.useStockForVariants = useStockForVariants;
     },
 
     set image(photo: string) {

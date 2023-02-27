@@ -17,7 +17,6 @@ public class ConfigProduct {
   private Integer stockAlert;
   private String image;
   private Long category;
-  private Boolean useStockForVariants;
   private Boolean isAvailable;
   private Boolean isArchived;
 

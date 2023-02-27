@@ -20,10 +20,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digitazon.poscoffee.models.Product;
+import com.digitazon.poscoffee.models.helpers.ProductFilter;
 import com.digitazon.poscoffee.models.helpers.client.ClientProductVariant;
 import com.digitazon.poscoffee.services.ProductVariantsService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
-import com.digitazon.poscoffee.shared.constants.ProductVariantsConstants;
+import com.digitazon.poscoffee.shared.constants.ProductsConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
 
@@ -39,8 +40,8 @@ public class AdminProductVariantsController {
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('ADMIN')")
   public List<ClientProductVariant> getVariants(
-    @RequestParam(ProductVariantsConstants.PARAM_PRODUCT_ID)
-    @NotNull(message = ProductVariantsConstants.PARAM_PRODUCT_ID_MESSAGE)
+    @RequestParam(ProductsConstants.PARAM_PRODUCT_ID)
+    @NotNull(message = ProductsConstants.PARAM_PRODUCT_ID_MESSAGE)
     Long productId
   ) {
     final Product product = this.createProductById(productId);
@@ -52,8 +53,8 @@ public class AdminProductVariantsController {
   @ResponseStatus(HttpStatus.CREATED)
   @PreAuthorize("hasAuthority('ADMIN')")
   public ClientProductVariant createVariant(
-    @RequestParam(ProductVariantsConstants.PARAM_PRODUCT_ID)
-    @NotNull(message = ProductVariantsConstants.PARAM_PRODUCT_ID_MESSAGE)
+    @RequestParam(ProductsConstants.PARAM_PRODUCT_ID)
+    @NotNull(message = ProductsConstants.PARAM_PRODUCT_ID_MESSAGE)
       Long productId,
     @RequestBody @Validated(AppConstants.ValidationGroups.ToCreate.class)
       ClientProductVariant variantToCreate
@@ -67,9 +68,14 @@ public class AdminProductVariantsController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasAuthority('ADMIN')")
   public void updateProduct(
-    @RequestBody @Validated(AppConstants.ValidationGroups.ToUpdate.class) ClientProductVariant updates
+    @RequestBody @Validated(AppConstants.ValidationGroups.ToUpdate.class) ClientProductVariant updates,
+    @RequestParam(name = ProductsConstants.PARAM_NULL_LABELS, required = false) String nullLabels
   ) throws AlreadyExistException, ResourceNotFoundException {
-    this.service.updateVariant(updates);
+    final ProductFilter filter = ProductFilter.builder()
+      .nullLabels(nullLabels == null ? null : nullLabels.split(ProductsConstants.NULL_LABELS_SPLITTER))
+      .build();
+
+    this.service.updateVariant(updates, filter);
   }
 
   @DeleteMapping(path = AppConstants.ApiEndpoint.Admin.PRODUCT_VARIANTS_ID)

@@ -5,7 +5,6 @@ import { Dropdown } from 'primereact/dropdown';
 import type { ProductCategory, ProductSchema } from 'shared/types';
 import { EntityName } from 'shared/constants';
 import { InputWrapper } from 'view/components/InputWrapper';
-import { BaseCheckbox } from 'view/components/BaseCheckbox';
 
 import type { CardWithInputsProps, ProductDraft } from '@admin/shared/types';
 import { AvailableCheckbox } from '@admin/view/components/AvailableCheckbox';
@@ -94,56 +93,6 @@ export function ProductsMainCard({
             onChange={(e) => productDraft.category = e.value}
             options={productCategories}
             optionLabel="name"
-          />
-        </InputWrapper>
-      </div>
-
-      <BaseCheckbox
-        className="mb-10"
-        inputId="useStockForVariants"
-        label="Use stock for variants"
-        disabled={!isEditMode}
-        checked={product.useStockForVariants}
-        onChange={(e) => productDraft.useStockForVariants = e.checked || false}
-      />
-
-      <div className="grid grid-cols-2 gap-x-4 gap-y-10">
-        <InputWrapper
-          label="Stock"
-          valueKey="stock"
-          validationError={validationError}
-        >
-          <InputNumber
-            id="stock"
-            disabled={!isEditMode}
-            value={product.stock}
-            onValueChange={(e) => productDraft.stock = Number(e.value)}
-          />
-        </InputWrapper>
-
-        <InputWrapper
-          label="Stock alert"
-          valueKey="stockAlert"
-          validationError={validationError}
-        >
-          <InputNumber
-            id="stockAlert"
-            disabled={!isEditMode}
-            value={product.stockAlert}
-            onValueChange={(e) => productDraft.stockAlert = Number(e.value)}
-          />
-        </InputWrapper>
-
-        <InputWrapper
-          label="Stock per time"
-          valueKey="stockPerTime"
-          validationError={validationError}
-        >
-          <InputNumber
-            id="stock"
-            disabled={!isEditMode}
-            value={product.stockPerTime}
-            onValueChange={(e) => productDraft.stockPerTime = Number(e.value)}
           />
         </InputWrapper>
       </div>

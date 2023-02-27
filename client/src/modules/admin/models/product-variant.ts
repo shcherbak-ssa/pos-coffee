@@ -7,21 +7,19 @@ export class ProductVariantSchema implements BaseProductVariantSchema {
   public id: number;
   public sku: string;
   public name: string;
-  public price: number;
-  public stock: number;
-  public stockPerTime: number;
-  public stockAlert: number;
-  public useProductPrice: boolean;
+  public price: number | null;
+  public stock: number | null;
+  public stockPerTime: number | null;
+  public stockAlert: number | null;
 
   private constructor(schema?: BaseProductVariantSchema) {
     this.id = schema?.id || ZERO;
     this.sku = schema?.sku || EMPTY_STRING;
     this.name = schema?.name || EMPTY_STRING;
-    this.price = schema?.price || ZERO;
-    this.stock = schema?.stock || ZERO;
-    this.stockPerTime = schema?.stockPerTime || ZERO;
-    this.stockAlert = schema?.stockAlert || ZERO;
-    this.useProductPrice = schema?.useProductPrice || false;
+    this.price = typeof(schema?.price) === 'number' ? schema.price : null;
+    this.stock = typeof(schema?.stock) === 'number' ? schema.stock : null;
+    this.stockPerTime = typeof(schema?.stockPerTime) === 'number' ? schema.stockPerTime : null;
+    this.stockAlert = typeof(schema?.stockAlert) === 'number' ? schema.stockAlert : null;
   }
 
   public static create(schema?: BaseProductVariantSchema): ProductVariantSchema {
@@ -50,24 +48,20 @@ export function createDraft(schema: BaseProductVariantSchema = ProductVariantSch
       schema.name = name;
     },
 
-    set price(price: number) {
+    set price(price: number | null) {
       schema.price = price;
     },
 
-    set stock(stock: number) {
+    set stock(stock: number | null) {
       schema.stock = stock;
     },
 
-    set stockPerTime(stockPerTime: number) {
+    set stockPerTime(stockPerTime: number | null) {
       schema.stockPerTime = stockPerTime;
     },
 
-    set stockAlert(stockAlert: number) {
+    set stockAlert(stockAlert: number | null) {
       schema.stockAlert = stockAlert;
-    },
-
-    set useProductPrice(useProductPrice: boolean) {
-      schema.useProductPrice = useProductPrice;
     },
   };
 

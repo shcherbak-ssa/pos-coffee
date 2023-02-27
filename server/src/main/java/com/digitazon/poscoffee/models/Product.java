@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -60,20 +59,14 @@ public class Product extends BaseEntityDates implements BaseEntityId {
   )
   private String name;
 
-  @NotNull(
-    message = ProductsConstants.PRICE_EMPTY_MESSAGE,
-    groups = AppConstants.ValidationGroups.ToCreate.class
-  )
-  private Float price;
-
   @ManyToOne(fetch = FetchType.EAGER)
   private Category category;
 
+  private Float price;
   private String image;
   private Integer stock;
   private Integer stockPerTime;
   private Integer stockAlert;
-  private Boolean useStockForVariants;
   private Boolean isAvailable;
 
 }

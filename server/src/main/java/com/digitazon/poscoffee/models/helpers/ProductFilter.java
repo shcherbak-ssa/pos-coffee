@@ -11,5 +11,6 @@ public class ProductFilter {
 
   private Boolean isArchived;
   private Boolean isAvailable;
+  private String[] nullLabels;
 
 }

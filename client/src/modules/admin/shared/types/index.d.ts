@@ -185,7 +185,6 @@ export type ProductDraft = {
   set stock(stock: number);
   set stockPerTime(stockPerTime: number);
   set stockAlert(stockAlert: number);
-  set useStockForVariants(useStockForVariants: boolean);
   set image(image: string);
   set category(category: ProductCategory);
   set isAvailable(isAvailable: boolean);
@@ -238,11 +237,10 @@ export type ProductVariantsFilter = Partial<{
 export type ProductVariantDraft = {
   set sku(sku: string);
   set name(name: string);
-  set price(price: number);
-  set stock(stock: number);
-  set stockPerTime(stockPerTime: number);
-  set stockAlert(stockAlert: number);
-  set useProductPrice(useProductPrice: boolean);
+  set price(price: number | null);
+  set stock(stock: number | null);
+  set stockPerTime(stockPerTime: number | null);
+  set stockAlert(stockAlert: number | null);
 }
 
 export type ProductVariantsState = {}
@@ -254,7 +252,7 @@ export interface ProductVariantsStoreActions extends StoreCrud<ProductVariantSch
 
 export interface ProductVariantsController {
   loadAll(productId: number): Promise<boolean>;
-  save(productId: number): Promise<boolean>;
+  save(product: ProductSchema): Promise<boolean>;
   delete(entityId: number): Promise<boolean>;
   select(entityId?: number): Promise<void>;
 }

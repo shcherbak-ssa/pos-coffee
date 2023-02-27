@@ -1,33 +1,37 @@
 import { Tag  } from 'primereact/tag';
 
-import type { ProductSchema, ProductVariantSchema, ViewSeverity } from 'shared/types';
+import type { ViewSeverity } from 'shared/types';
 import { DOUBLE_STOCK_ALERT, LONG_MINUS } from 'shared/constants';
 
 export type Props = {
-  product: ProductSchema;
-  variant: ProductVariantSchema;
+  stock: number | null;
+  stockAlert: number | null;
 }
 
-export function ProductsStockLabel({ product, variant }: Props) {
+export function ProductsStockLabel({ stock, stockAlert }: Props) {
 
   function getSeverity(): ViewSeverity {
-    if (variant.stock <= variant.stockAlert) {
+    if (stock === null || stockAlert === null) {
+      return;
+    }
+
+    if (stock <= stockAlert) {
       return 'danger';
     }
 
-    if (variant.stock / DOUBLE_STOCK_ALERT <= variant.stockAlert) {
+    if (stock / DOUBLE_STOCK_ALERT <= stockAlert) {
       return 'warning';
     }
 
     return 'success';
   }
 
-  if (product.useStockForVariants) {
+  if (stock === null) {
     return <div>{ LONG_MINUS }</div>;
   }
 
   return (
-    <Tag severity={getSeverity()} value={variant.stock} />
+    <Tag severity={getSeverity()} value={stock} />
   );
 
 }

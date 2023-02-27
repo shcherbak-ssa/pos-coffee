@@ -13,21 +13,21 @@ const baseSchema: Schema = Joi.object({
   name: Joi.string().messages({
     'string.empty': 'Name cannot be empty',
   }),
-  price: Joi.number().min(ZERO).max(200).messages({
+  price: Joi.number().min(ZERO).max(200).empty(null).messages({
     'string.min': 'Price must be between 0 and 127',
     'string.max': 'Price must be between 0 and 127',
     'string.empty': 'Price cannot be empty',
   }),
-  stock: Joi.number().min(ZERO).messages({
+  stock: Joi.number().min(ZERO).empty(null).messages({
     'number.min': 'Stock must be zero or positive number',
   }),
-  stockPerTime: Joi.number().less(Joi.ref('stock')).min(1).messages({
+  stockPerTime: Joi.number().less(Joi.ref('stock')).min(1).empty(null).messages({
     'number.min': 'Stock per time must be more than zero',
     'number.less': 'Stock per time must be less than stock value',
   }),
-  stockAlert: Joi.number().less(Joi.ref('stock')).min(1).messages({
+  stockAlert: Joi.number().less(Joi.ref('stock')).min(1).empty(null).messages({
     'number.min': 'Stock alert per time must be more than zero',
-    'number.less': 'Stock per time must be less than stock value',
+    'number.less': 'Stock alert must be less than stock value',
   }),
   useProductPrice: Joi.boolean(),
 });

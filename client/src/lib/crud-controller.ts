@@ -56,6 +56,7 @@ export class CrudController<T extends Entity> extends BaseController {
   protected async tryToSave<Q>({
     endpoint,
     validationName,
+    entity,
     query,
   }: PayloadToSave<T, Q>): Promise<boolean> {
     try {
@@ -65,8 +66,8 @@ export class CrudController<T extends Entity> extends BaseController {
         return true;
       }
 
-      const entity: T = store.selected.get();
-      const isEntityNew: boolean = this.isNewEntity(entity);
+      const entityToSave: T = entity || store.selected.get();
+      const isEntityNew: boolean = this.isNewEntity(entityToSave);
 
       const notificationService: NotificationService = await this.getNotificationService();
 
@@ -77,10 +78,10 @@ export class CrudController<T extends Entity> extends BaseController {
       );
 
       const validationService: ValidationService = await this.getValidationService();
-      await validationService.validate(isEntityNew ? 'toCreate' : 'toUpdate', validationName, entity);
+      await validationService.validate(isEntityNew ? 'toCreate' : 'toUpdate', validationName, entityToSave);
 
       const updates: Partial<T> = store.selected.getUpdates();
-      let savedEntity: T = entity;
+      let savedEntity: T = entityToSave;
 
       const apiService: ApiService = await this.getApiService();
       apiService.addBody(updates);
