@@ -84,7 +84,7 @@ public class DatabaseDataLoader {
     for (ConfigUser configUser : users) {
       final User user = (User) this.context.getBean("userFromConfigUser", configUser);
 
-      final UserType userType = Helpers.converUserTypeToEnumValue(this.userTypesService, configUser.getType());
+      final UserType userType = this.userTypesService.getByName(configUser.getType());
       user.setType(userType);
 
       final Address address = this.addressService.createAddress(configUser.getAddress());

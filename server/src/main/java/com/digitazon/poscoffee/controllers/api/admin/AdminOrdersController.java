@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.digitazon.poscoffee.models.helpers.OrdersFilter;
 import com.digitazon.poscoffee.models.helpers.client.ClientOrder;
 import com.digitazon.poscoffee.services.OrdersService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
@@ -27,7 +28,10 @@ public class AdminOrdersController {
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('ADMIN')")
   public List<ClientOrder> getOrders() {
-    return this.service.getOrders();
+    final OrdersFilter filter = OrdersFilter.builder()
+      .build();
+
+    return this.service.getOrders(filter);
   }
 
   @GetMapping(path = AppConstants.ApiEndpoint.Admin.ORDERS_ID)

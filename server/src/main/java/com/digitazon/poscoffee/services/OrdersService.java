@@ -1,18 +1,27 @@
 package com.digitazon.poscoffee.services;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.Order;
 import com.digitazon.poscoffee.models.OrderLine;
 import com.digitazon.poscoffee.models.PaymentMethod;
+import com.digitazon.poscoffee.models.helpers.OrdersFilter;
 import com.digitazon.poscoffee.models.helpers.client.ClientOrder;
 import com.digitazon.poscoffee.repositories.OrderLinesRepository;
 import com.digitazon.poscoffee.repositories.OrdersRepository;
@@ -46,8 +55,9 @@ public class OrdersService {
     throw new ResourceNotFoundException("Order not found");
   }
 
-  public List<ClientOrder> getOrders() {
-    final List<Order> orders = this.repository.findAll();
+  public List<ClientOrder> getOrders(OrdersFilter filter) {
+    final List<Order> orders = this.repository.findAll(
+      OrdersService.filter(filter), Sort.by(Sort.Direction.DESC, "id"));
 
     return orders
       .stream()
@@ -88,6 +98,25 @@ public class OrdersService {
       = Helpers.converPaymentMethodToEnumValue(this.paymentMethodsService, clientOrder.getPaymentMethod());
 
     return (Order) this.context.getBean("order", clientOrder, paymentMethod);
+  }
+
+  private static Specification<Order> filter(OrdersFilter filter) {
+    return new Specification<Order>() {
+
+      @Override
+      public Predicate toPredicate(Root<Order> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+        final List<Predicate> predicates = new ArrayList<Predicate>();
+
+        if (filter.getForApp()) {
+          predicates.add(
+            builder.greaterThanOrEqualTo(root.<Date>get("createdAt"), builder.currentDate())
+          );
+        }
+
+        return builder.and(predicates.toArray(new Predicate[0]));
+      }
+
+    };
   }
 
 }

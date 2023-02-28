@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.digitazon.poscoffee.models.Product;
 import com.digitazon.poscoffee.models.ProductVariant;
-import com.digitazon.poscoffee.models.helpers.ProductFilter;
+import com.digitazon.poscoffee.models.helpers.ProductsFilter;
 import com.digitazon.poscoffee.models.helpers.client.ClientOrderLine;
 import com.digitazon.poscoffee.models.helpers.client.ClientProduct;
 import com.digitazon.poscoffee.models.helpers.client.ClientProductVariant;
@@ -53,7 +53,7 @@ public class StockService {
         .build();
 
       final String[] nullLabels = { ProductsConstants.STOCK_LABEL };
-      final ProductFilter filter = ProductFilter.builder()
+      final ProductsFilter filter = ProductsFilter.builder()
         .nullLabels(nullLabels)
         .build();
 

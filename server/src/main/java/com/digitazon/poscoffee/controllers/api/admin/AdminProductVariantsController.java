@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digitazon.poscoffee.models.Product;
-import com.digitazon.poscoffee.models.helpers.ProductFilter;
+import com.digitazon.poscoffee.models.helpers.ProductsFilter;
 import com.digitazon.poscoffee.models.helpers.client.ClientProductVariant;
 import com.digitazon.poscoffee.services.ProductVariantsService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
@@ -71,7 +71,7 @@ public class AdminProductVariantsController {
     @RequestBody @Validated(AppConstants.ValidationGroups.ToUpdate.class) ClientProductVariant updates,
     @RequestParam(name = ProductsConstants.PARAM_NULL_LABELS, required = false) String nullLabels
   ) throws AlreadyExistException, ResourceNotFoundException {
-    final ProductFilter filter = ProductFilter.builder()
+    final ProductsFilter filter = ProductsFilter.builder()
       .nullLabels(nullLabels == null ? null : nullLabels.split(ProductsConstants.NULL_LABELS_SPLITTER))
       .build();
 

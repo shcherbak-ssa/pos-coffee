@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.Category;
 import com.digitazon.poscoffee.models.Product;
-import com.digitazon.poscoffee.models.helpers.ProductFilter;
+import com.digitazon.poscoffee.models.helpers.ProductsFilter;
 import com.digitazon.poscoffee.models.helpers.client.ClientCategory;
 import com.digitazon.poscoffee.models.helpers.client.ClientProduct;
 import com.digitazon.poscoffee.repositories.ProductsRepository;
@@ -68,7 +68,7 @@ public class ProductsService {
     throw new ResourceNotFoundException("Product not found");
   }
 
-  public List<ClientProduct> getProducts(ProductFilter filter) {
+  public List<ClientProduct> getProducts(ProductsFilter filter) {
     final List<Product> products = this.repository.findAll(ProductsService.filter(filter));
 
     return products
@@ -167,7 +167,7 @@ public class ProductsService {
     }
   }
 
-  private static Specification<Product> filter(ProductFilter filter) {
+  private static Specification<Product> filter(ProductsFilter filter) {
     return new Specification<Product>() {
 
       @Override
@@ -180,9 +180,18 @@ public class ProductsService {
           );
         }
 
-        if (filter.getIsAvailable() != null) {
+        if (filter.getForMenu()) {
+          final List<Category> categories = filter.getCategories()
+            .stream()
+            .map((category) -> Category.builder().id(category.getId()).build())
+            .collect(Collectors.toList());
+
           predicates.add(
-            builder.equal(root.get("isAvailable"), filter.getIsAvailable())
+            builder.and(
+              builder.equal(root.get("isArchived"), false),
+              builder.equal(root.get("isAvailable"), true),
+              root.get("category").in(categories)
+            )
           );
         }
 

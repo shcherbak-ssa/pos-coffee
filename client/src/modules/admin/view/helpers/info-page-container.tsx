@@ -66,6 +66,7 @@ export function infoPageContainer<T extends Entity>(
 
     useEffect(() => {
       return () => {
+        // @TODO: fix!!!
         appController.setIsEditMode(false);
       };
     }, []);

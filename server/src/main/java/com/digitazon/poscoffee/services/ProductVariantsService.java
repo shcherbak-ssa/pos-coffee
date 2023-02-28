@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.Product;
 import com.digitazon.poscoffee.models.ProductVariant;
-import com.digitazon.poscoffee.models.helpers.ProductFilter;
+import com.digitazon.poscoffee.models.helpers.ProductsFilter;
 import com.digitazon.poscoffee.models.helpers.client.ClientProductVariant;
 import com.digitazon.poscoffee.repositories.ProductVariantsRepository;
 import com.digitazon.poscoffee.shared.constants.ProductsConstants;
@@ -70,7 +70,7 @@ public class ProductVariantsService {
   }
 
   public void updateVariant(
-    ClientProductVariant updates, ProductFilter filter
+    ClientProductVariant updates, ProductsFilter filter
   ) throws AlreadyExistException, ResourceNotFoundException {
     this.checkIfVariantExists(updates.getSku());
 
@@ -98,7 +98,7 @@ public class ProductVariantsService {
     }
   }
 
-  private void mergeWithUpdates(ProductVariant variant, ClientProductVariant updates, ProductFilter filter) {
+  private void mergeWithUpdates(ProductVariant variant, ClientProductVariant updates, ProductsFilter filter) {
     variant.setSku(updates.getSku() == null ? variant.getSku() : updates.getSku());
     variant.setName(updates.getName() == null ? variant.getName() : updates.getName());
 

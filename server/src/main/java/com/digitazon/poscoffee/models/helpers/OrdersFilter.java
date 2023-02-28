@@ -1,7 +1,5 @@
 package com.digitazon.poscoffee.models.helpers;
 
-import java.util.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,8 +7,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
-public class OrderFilter {
+public class OrdersFilter {
 
-  private Date createdAt;
+  @Builder.Default
+  private Boolean forApp = false;
 
 }

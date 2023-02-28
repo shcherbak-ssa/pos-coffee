@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digitazon.poscoffee.models.Product;
-import com.digitazon.poscoffee.models.helpers.ProductFilter;
-import com.digitazon.poscoffee.models.helpers.UserFilter;
+import com.digitazon.poscoffee.models.helpers.OrdersFilter;
+import com.digitazon.poscoffee.models.helpers.ProductsFilter;
+import com.digitazon.poscoffee.models.helpers.UsersFilter;
 import com.digitazon.poscoffee.models.helpers.app.AppHome;
 import com.digitazon.poscoffee.models.helpers.app.AppMenu;
 import com.digitazon.poscoffee.models.helpers.client.ClientCategory;
@@ -61,13 +62,18 @@ public class AppController {
   @GetMapping(path = AppConstants.ApiEndpoint.App.APP_HOME)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('MANAGER')")
-  public AppHome getAppHome() {
-    final UserFilter filter = UserFilter.builder()
+  public AppHome getAppHome() throws ProgerException {
+    final UsersFilter usersFilter = UsersFilter.builder()
       .forApp(true)
       .build();
 
-    final List<ClientUser> users = this.usersService.getUsers(filter);
-    final List<ClientOrder> orders = this.ordersService.getOrders();
+    final List<ClientUser> users = this.usersService.getUsers(usersFilter);
+
+    final OrdersFilter ordersFilter = OrdersFilter.builder()
+      .forApp(true)
+      .build();
+
+    final List<ClientOrder> orders = this.ordersService.getOrders(ordersFilter);
 
     return AppHome.builder()
       .users(users)
@@ -87,9 +93,9 @@ public class AppController {
       .filter((category) -> category.getProductsCount() != AppConstants.ZERO)
       .collect(Collectors.toList());
 
-    final ProductFilter filter = ProductFilter.builder()
-      .isArchived(false)
-      .isAvailable(true)
+    final ProductsFilter filter = ProductsFilter.builder()
+      .forMenu(true)
+      .categories(categories)
       .build();
 
     final List<ClientProduct> products = this.productsService.getProducts(filter);

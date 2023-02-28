@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -19,7 +21,7 @@ import org.springframework.stereotype.Service;
 import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.User;
 import com.digitazon.poscoffee.models.UserType;
-import com.digitazon.poscoffee.models.helpers.UserFilter;
+import com.digitazon.poscoffee.models.helpers.UsersFilter;
 import com.digitazon.poscoffee.models.helpers.client.ClientUser;
 import com.digitazon.poscoffee.repositories.UsersRepository;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
@@ -36,6 +38,9 @@ public class UsersService {
   // @TODO: conver to annotation
   private AnnotationConfigApplicationContext context
     = new AnnotationConfigApplicationContext(AppConfig.class);
+
+  @PersistenceContext
+  private EntityManager manager;
 
   @Autowired
   private UserTypesService userTypesService;
@@ -76,7 +81,7 @@ public class UsersService {
     throw new ResourceNotFoundException("User not found");
   }
 
-  public List<ClientUser> getUsers(UserFilter filter) {
+  public List<ClientUser> getUsers(UsersFilter filter) {
     final List<User> users = this.repository.findAll(UsersService.filter(filter, this.userTypesService));
 
     return users
@@ -136,8 +141,7 @@ public class UsersService {
   }
 
   private User convertToUser(ClientUser user) throws ProgerException {
-    final UserType userType
-      = Helpers.converUserTypeToEnumValue(this.userTypesService, user.getType());
+    final UserType userType = this.userTypesService.getByName(user.getType());
 
     return (User) this.context.getBean("user", user, userType);
   }
@@ -149,7 +153,7 @@ public class UsersService {
     user.setPhone(updates.getPhone() == null ? user.getPhone() : updates.getPhone());
   }
 
-  private static Specification<User> filter(UserFilter filter, UserTypesService userTypesService) {
+  private static Specification<User> filter(UsersFilter filter, UserTypesService userTypesService) {
     return new Specification<User>() {
 
       @Override
@@ -162,7 +166,7 @@ public class UsersService {
           );
         }
 
-        if (filter.getForApp() != null) {
+        if (filter.getForApp()) {
           final UserType type = userTypesService.getByName(UsersConstants.UserType.WAITER);
 
           predicates.add(

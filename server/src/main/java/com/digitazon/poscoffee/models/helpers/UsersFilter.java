@@ -7,10 +7,11 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
-public class ProductFilter {
+public class UsersFilter {
 
   private Boolean isArchived;
-  private Boolean isAvailable;
-  private String[] nullLabels;
+
+  @Builder.Default
+  private Boolean forApp = false;
 
 }
