@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.digitazon.poscoffee.models.Category;
 import com.digitazon.poscoffee.models.Order;
 import com.digitazon.poscoffee.models.OrderLine;
+import com.digitazon.poscoffee.models.PaymentMethod;
 import com.digitazon.poscoffee.models.Product;
 import com.digitazon.poscoffee.models.ProductVariant;
 import com.digitazon.poscoffee.models.User;
@@ -263,6 +264,48 @@ public class AppConfig {
       .stock(clientVariant.getStock())
       .stockPerTime(clientVariant.getStockPerTime())
       .stockAlert(clientVariant.getStockAlert())
+      .build();
+  }
+
+  @Bean
+  @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+  public Order order(ClientOrder clientOrder, PaymentMethod paymentMethod) {
+    final User user = User.builder()
+      .id(clientOrder.getUser().getId())
+      .build();
+
+    final List<OrderLine> lines = clientOrder.getLines()
+      .stream()
+      .map(this::orderLine)
+      .collect(Collectors.toList());
+
+    return Order.builder()
+      .id(clientOrder.getId())
+      .user(user)
+      .lines(lines)
+      .paymentMethod(paymentMethod)
+      .build();
+  }
+
+  @Bean
+  @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+  public OrderLine orderLine(ClientOrderLine clientLine) {
+    final Product product = Product.builder()
+      .id(clientLine.getProductId())
+      .build();
+
+    final ProductVariant variant = ProductVariant.builder()
+      .id(clientLine.getVariantId())
+      .build();
+
+    final float price = Helpers.getOrderLinePrice(product, variant);
+
+    return OrderLine.builder()
+      .id(clientLine.getId())
+      .count(clientLine.getCount())
+      .price(price)
+      .product(product)
+      .variant(variant)
       .build();
   }
 

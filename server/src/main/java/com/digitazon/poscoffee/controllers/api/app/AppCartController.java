@@ -17,6 +17,7 @@ import com.digitazon.poscoffee.models.helpers.client.ClientCategory;
 import com.digitazon.poscoffee.models.helpers.client.ClientProduct;
 import com.digitazon.poscoffee.models.helpers.client.ClientProductVariant;
 import com.digitazon.poscoffee.services.CategoriesService;
+import com.digitazon.poscoffee.services.OrdersService;
 import com.digitazon.poscoffee.services.ProductVariantsService;
 import com.digitazon.poscoffee.services.ProductsService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
@@ -33,6 +34,9 @@ public class AppCartController {
 
   @Autowired
   private ProductVariantsService variantsService;
+
+  @Autowired
+  private OrdersService ordersService;
 
   @GetMapping(path = AppConstants.ApiEndpoint.App.CART_CATEGORIES)
   @ResponseStatus(HttpStatus.OK)

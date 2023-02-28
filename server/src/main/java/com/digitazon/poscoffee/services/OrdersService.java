@@ -11,10 +11,13 @@ import org.springframework.stereotype.Service;
 import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.Order;
 import com.digitazon.poscoffee.models.OrderLine;
+import com.digitazon.poscoffee.models.PaymentMethod;
 import com.digitazon.poscoffee.models.helpers.client.ClientOrder;
 import com.digitazon.poscoffee.repositories.OrderLinesRepository;
 import com.digitazon.poscoffee.repositories.OrdersRepository;
+import com.digitazon.poscoffee.shared.exceptions.ProgerException;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
+import com.digitazon.poscoffee.shared.helpers.Helpers;
 
 @Service
 public class OrdersService {
@@ -28,6 +31,9 @@ public class OrdersService {
 
   @Autowired
   private OrderLinesRepository liensRepository;
+
+  @Autowired
+  private PaymentMethodsService paymentMethodsService;
 
   public ClientOrder getOrderById(Long id) throws ResourceNotFoundException {
     final Optional<Order> foundOrder = this.repository.findById(id);
@@ -58,6 +64,13 @@ public class OrdersService {
 
   private ClientOrder convertToClientOrder(Order order) {
     return (ClientOrder) this.context.getBean("clientOrder", order);
+  }
+
+  private Order convertToOrder(ClientOrder clientOrder) throws ProgerException {
+    final PaymentMethod paymentMethod
+      = Helpers.converPaymentMethodToEnumValue(this.paymentMethodsService, clientOrder.getPaymentMethod());
+
+    return (Order) this.context.getBean("order", clientOrder, paymentMethod);
   }
 
 }
