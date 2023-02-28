@@ -13,6 +13,7 @@ import com.digitazon.poscoffee.models.Address;
 import com.digitazon.poscoffee.models.Category;
 import com.digitazon.poscoffee.models.Order;
 import com.digitazon.poscoffee.models.OrderLine;
+import com.digitazon.poscoffee.models.PaymentMethod;
 import com.digitazon.poscoffee.models.Product;
 import com.digitazon.poscoffee.models.ProductVariant;
 import com.digitazon.poscoffee.models.User;
@@ -27,6 +28,7 @@ import com.digitazon.poscoffee.models.helpers.config.ConfigUser;
 import com.digitazon.poscoffee.services.AddressService;
 import com.digitazon.poscoffee.services.CategoriesService;
 import com.digitazon.poscoffee.services.OrdersService;
+import com.digitazon.poscoffee.services.PaymentMethodsService;
 import com.digitazon.poscoffee.services.ProductVariantsService;
 import com.digitazon.poscoffee.services.ProductsService;
 import com.digitazon.poscoffee.services.UserTypesService;
@@ -48,6 +50,9 @@ public class DatabaseDataLoader {
   private UserTypesService userTypesService;
 
   @Autowired
+  private PaymentMethodsService paymentMethodsService;
+
+  @Autowired
   private AddressService addressService;
 
   @Autowired
@@ -64,6 +69,7 @@ public class DatabaseDataLoader {
 
   public void loadConstants() {
     this.userTypesService.loadTypes();
+    this.paymentMethodsService.loadMethods();
   }
 
   public void loadConfigData(Config config) throws ProgerException, AlreadyExistException {
@@ -157,7 +163,7 @@ public class DatabaseDataLoader {
     List<Product> products,
     List<ProductVariant> variants,
     List<User> users
-  ) {
+  ) throws ProgerException {
     final List<OrderLine> orderLines = this.loadOrderLines(lines, products, variants);
 
     for (ConfigOrder configOrder : orders) {
@@ -171,6 +177,10 @@ public class DatabaseDataLoader {
 
       final Order order = (Order)
         this.context.getBean("orderFromConfigOrder", configOrder, currentOrderLines, user);
+
+      final PaymentMethod paymentMethod
+        = Helpers.converPaymentMethodToEnumValue(this.paymentMethodsService, configOrder.getPaymentMethod());
+      order.setPaymentMethod(paymentMethod);
 
       this.ordersService.createOrder(order);
     }

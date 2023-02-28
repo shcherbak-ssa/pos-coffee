@@ -73,6 +73,8 @@ public class AppConstants {
     public static final String ORDERS = "orders";
     public static final String ORDER_LINES = "order_lines";
     public static final String ORDER_LINE_JOIN = "order_line_join";
+    public static final String PAYMENT_METHODS = "payment_methods";
+    public static final String ORDER_PAYMENT_JOIN = "order_payment_join";
   }
 
   public static enum ErrorType {

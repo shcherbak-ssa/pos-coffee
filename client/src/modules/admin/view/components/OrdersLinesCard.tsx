@@ -14,7 +14,7 @@ export type Props = {
 export function OrdersLinesCard({ order }: Props) {
 
   return (
-    <CardWrapper>
+    <CardWrapper className="col-span-3">
       <CardHeading heading="Products" />
 
       <div className="overflow-hidden rounded-xl border-2">

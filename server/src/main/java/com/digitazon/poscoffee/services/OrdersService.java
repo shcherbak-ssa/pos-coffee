@@ -14,9 +14,7 @@ import com.digitazon.poscoffee.models.OrderLine;
 import com.digitazon.poscoffee.models.helpers.client.ClientOrder;
 import com.digitazon.poscoffee.repositories.OrderLinesRepository;
 import com.digitazon.poscoffee.repositories.OrdersRepository;
-import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
-import com.digitazon.poscoffee.shared.helpers.Helpers;
 
 @Service
 public class OrdersService {
@@ -51,27 +49,11 @@ public class OrdersService {
   }
 
   public Order createOrder(Order order) {
-    final float total = this.calculateTotal(order);
-    order.setTotal(total);
-
     return this.repository.save(order);
   }
 
   public OrderLine createOrderLine(OrderLine line) {
     return this.liensRepository.save(line);
-  }
-
-  private float calculateTotal(Order order) {
-    final List<OrderLine> lines = order.getLines();
-    float total = AppConstants.ZERO;
-
-    for (OrderLine orderLine : lines) {
-      final float price = Helpers.getOrderLinePrice(orderLine.getProduct(), orderLine.getVariant());
-
-      total += orderLine.getCount() * price;
-    }
-
-    return total;
   }
 
   private ClientOrder convertToClientOrder(Order order) {

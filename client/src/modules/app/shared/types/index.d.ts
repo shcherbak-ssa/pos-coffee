@@ -121,6 +121,7 @@ export interface CartStoreActions extends CartStore {
   removeOrderLine(line: CartOrderLineSchema): void;
   removeAllOrderLines(): void;
   updateOrderLineCount(line: CartOrderLineSchema, count: number): void;
+  setOrderPaymentMethod(type: PaymentMethodType): void;
   setActiveCategoryId(categoryId: number): void;
   setCategories(categories: CategorySchema[]): void;
   setProducts(products: CartProductSchema[]): void;
@@ -132,6 +133,7 @@ export interface CartController {
   removeOrderLine(line: CartOrderLineSchema): Promise<void>;
   removeAllOrderLines(): Promise<void>;
   updateOrderLineCount(line: CartOrderLineSchema, count: number): Promise<void>;
+  setOrderPaymentMethod(type: PaymentMethodType): Promise<void>;
   setActiveCategoryId(categoryId?: number): Promise<void>;
   loadCategories(): Promise<boolean>;
   loadProducts(): Promise<boolean>;

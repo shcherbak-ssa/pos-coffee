@@ -2,7 +2,7 @@ import fs from 'fs';
 import { faker } from '@faker-js/faker';
 
 import type { Address, Category, Config, Order, OrderLine, Product, ProductVariant, User } from './shared/types';
-import { EMPTY_STRING, SERVER_CONFIG_FILENAME, UserType } from './shared/constants';
+import { EMPTY_STRING, PaymentMethod, SERVER_CONFIG_FILENAME, UserType } from './shared/constants';
 import { generatePrice, generateRundomAvatar, getSku } from './shared/utils';
 
 const adminUser: User = {
@@ -111,9 +111,9 @@ function generateConfig(): Config {
     ],
     orders: [
       generateOrder({ lines: [1], user: 3 }),
-      generateOrder({ lines: [2], user: 5 }),
+      generateOrder({ lines: [2], user: 5, paymentMethod: PaymentMethod.CASH }),
       generateOrder({ lines: [3, 4, 5], user: 3 }),
-      generateOrder({ lines: [6], user: 4 }),
+      generateOrder({ lines: [6], user: 4, paymentMethod: PaymentMethod.MISC }),
     ],
     orderLines: [
       generateOrderLine({ count: 2, product: 1, variant: 1 }),
@@ -207,10 +207,11 @@ function generateProductVariant({
   };
 }
 
-function generateOrder({ lines = [], user = 3 }: Partial<Order>): Order {
+function generateOrder({ lines = [], user = 2, paymentMethod = PaymentMethod.CARD }: Partial<Order>): Order {
   return {
     lines,
     user,
+    paymentMethod,
   };
 }
 

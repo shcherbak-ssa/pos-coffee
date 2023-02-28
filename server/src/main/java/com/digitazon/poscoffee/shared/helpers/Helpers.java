@@ -3,12 +3,17 @@ package com.digitazon.poscoffee.shared.helpers;
 import java.util.List;
 import java.util.Random;
 
+import com.digitazon.poscoffee.models.Order;
+import com.digitazon.poscoffee.models.OrderLine;
+import com.digitazon.poscoffee.models.PaymentMethod;
 import com.digitazon.poscoffee.models.Product;
 import com.digitazon.poscoffee.models.ProductVariant;
 import com.digitazon.poscoffee.models.UserType;
 import com.digitazon.poscoffee.models.helpers.base.BaseEntityId;
+import com.digitazon.poscoffee.services.PaymentMethodsService;
 import com.digitazon.poscoffee.services.UserTypesService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
+import com.digitazon.poscoffee.shared.constants.OrdersConstants;
 import com.digitazon.poscoffee.shared.constants.UsersConstants;
 import com.digitazon.poscoffee.shared.exceptions.ProgerException;
 
@@ -38,6 +43,32 @@ public class Helpers {
     }
 
     return userTypesService.getByName(type);
+  }
+
+  public static final PaymentMethod converPaymentMethodToEnumValue(
+    PaymentMethodsService paymentMethodsService,
+    String paymentMethod
+  ) throws ProgerException {
+
+    OrdersConstants.PaymentMethod method = null;
+
+    switch (paymentMethod) {
+      case OrdersConstants.ConfigPaymentMethod.CASH:
+        method = OrdersConstants.PaymentMethod.CASH;
+        break;
+      case OrdersConstants.ConfigPaymentMethod.CARD:
+        method = OrdersConstants.PaymentMethod.CARD;
+        break;
+      case OrdersConstants.ConfigPaymentMethod.MISC:
+        method = OrdersConstants.PaymentMethod.MISC;
+        break;
+    }
+
+    if (method == null) {
+      throw new ProgerException(String.format("Unknown payment method %s", paymentMethod));
+    }
+
+    return paymentMethodsService.getByName(method);
   }
 
   public static String generatePassword() {
@@ -72,6 +103,19 @@ public class Helpers {
     return variant.getPrice() == null
       ? product.getPrice()
       : variant.getPrice();
+  }
+
+  public static float calculateTotal(Order order) {
+    final List<OrderLine> lines = order.getLines();
+    float total = AppConstants.ZERO;
+
+    for (OrderLine orderLine : lines) {
+      final float price = Helpers.getOrderLinePrice(orderLine.getProduct(), orderLine.getVariant());
+
+      total += orderLine.getCount() * price;
+    }
+
+    return total;
   }
 
 }

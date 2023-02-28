@@ -14,7 +14,7 @@ export type Props = {
 export function OrdersCard({ order }: Props) {
 
   return (
-    <CardWrapper>
+    <CardWrapper className="col-span-2">
       <CardHeading heading="Order" />
 
       <div className="grid grid-cols-1 gap-10">
@@ -46,12 +46,21 @@ export function OrdersCard({ order }: Props) {
           />
         </InputWrapper>
 
+        <InputWrapper label="Payment method">
+          <InputText
+            id="paymentMethod"
+            type="text"
+            disabled={true}
+            value={order.paymentMethod}
+          />
+        </InputWrapper>
+
         <InputWrapper label="Created">
           <InputText
             id="created"
             type="text"
             disabled={true}
-            value={order.createdAt?.toLocaleDateString()}
+            value={order.createdAt?.toLocaleString()}
           />
         </InputWrapper>
       </div>

@@ -3,7 +3,7 @@ import type {
   CategorySchema,
   NotificationService,
 } from 'shared/types';
-import { EntityName, ZERO } from 'shared/constants';
+import { EntityName, PaymentMethodType, ZERO } from 'shared/constants';
 import { AppError } from 'shared/errors';
 import { BaseController } from 'lib/base-controller';
 
@@ -77,6 +77,11 @@ export class CartController extends BaseController implements BaseCartController
     } catch (e: any) {
       await this.parseStockError(e);
     }
+  }
+
+  public async setOrderPaymentMethod(type: PaymentMethodType): Promise<void> {
+    const store = await this.getStore() as CartStoreActions;
+    store.setOrderPaymentMethod(type);
   }
 
   public async setActiveCategoryId(categoryId: number = ZERO): Promise<void> {

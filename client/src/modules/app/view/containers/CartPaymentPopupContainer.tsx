@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Dialog } from 'primereact/dialog';
-import { SelectButton } from 'primereact/selectbutton';
+import { SelectButton, type SelectButtonChangeEvent } from 'primereact/selectbutton';
 import { ScrollPanel } from 'primereact/scrollpanel';
 import { Button } from 'primereact/button';
 
@@ -28,12 +28,26 @@ export function CartPaymentPopupContainer({ isOpen, hide }: Props) {
 
   const [ selectedPaymentMethod, setSelectedPaymentMethod ] = useState<PaymentMethod>();
 
+  function selectPaymentMethod(e: SelectButtonChangeEvent): void {
+    setSelectedPaymentMethod(e.value);
+
+    if (e.value) {
+      cartController.setOrderPaymentMethod(e.value.type);
+    }
+  }
+
+  function handleHide(): void {
+    setSelectedPaymentMethod(undefined);
+
+    hide();
+  }
+
   return (
     <Dialog
       className="popup"
       header="Payment"
       visible={isOpen}
-      onHide={hide}
+      onHide={handleHide}
     >
       <div>
         <ScrollPanel style={{ width: '100%', height: '200px' }}>
@@ -65,7 +79,7 @@ export function CartPaymentPopupContainer({ isOpen, hide }: Props) {
             options={paymentMethods}
             optionLabel="label"
             itemTemplate={CartPaymentMethod}
-            onChange={(e) => setSelectedPaymentMethod(e.value)}
+            onChange={selectPaymentMethod}
           />
         </div>
 

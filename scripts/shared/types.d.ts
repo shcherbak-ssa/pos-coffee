@@ -1,4 +1,4 @@
-import type { UserType } from './constants';
+import type { PaymentMethod, UserType } from './constants';
 
 export type Config = {
   users: User[];
@@ -58,8 +58,9 @@ export type ProductVariant = {
 }
 
 export type Order = {
-  lines: number[];
   user: number,
+  lines: number[];
+  paymentMethod: PaymentMethod;
 }
 
 export type OrderLine = {

@@ -152,9 +152,10 @@ public class AppConfig {
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
   public ClientOrder clientOrder(Order order) {
     final Long orderId = order.getId();
-    final User user = order.getUser();
-
     final String number = (orderId + OrdersConstants.ORDER_NUMBER_BASE) + AppConstants.EMPTY_STRING;
+    final Float total = Helpers.calculateTotal(order);
+
+    final User user = order.getUser();
     final ClientOrderUser clientOrderUser = ClientOrderUser.builder()
       .id(user.getId())
       .name(user.getName())
@@ -169,10 +170,11 @@ public class AppConfig {
     return ClientOrder.builder()
       .id(orderId)
       .number(number)
-      .total(order.getTotal())
+      .total(total)
       .lines(lines)
       .user(clientOrderUser)
       .createdAt(order.getCreatedAt())
+      .paymentMethod(order.getPaymentMethod().getName().name())
       .build();
   }
 

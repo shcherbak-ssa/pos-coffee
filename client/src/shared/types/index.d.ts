@@ -127,6 +127,7 @@ export type OrderSchema = {
   total: number;
   lines: OrderLineSchema[];
   user: OrderUserSchema;
+  paymentMethod: PaymentMethodType;
   createdAt: Date | null;
 }
 

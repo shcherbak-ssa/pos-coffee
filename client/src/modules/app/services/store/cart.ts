@@ -1,15 +1,13 @@
 import { proxy } from 'valtio';
 
 import type { CategorySchema } from 'shared/types';
-import { ZERO } from 'shared/constants';
+import { PaymentMethodType, ZERO } from 'shared/constants';
 
 import type {
   CartOrderLineSchema as BaseCartOrderLineSchema,
-  CartPayload,
   CartProductSchema,
   CartService as BaseCartService,
   CartState,
-  CartStockAlertMessage,
   CartStore,
   CartStoreActions,
 } from '@app/shared/types';
@@ -58,6 +56,10 @@ export const cartStore: CartStore & CartStoreActions = {
     order.lines = order.lines.map((line) => {
       return isSameOrderLine(line, lineToUpdate) ? { ...line, count } : line;
     });
+  },
+
+  setOrderPaymentMethod(type: PaymentMethodType): void {
+    cartStore.state.order.paymentMethod = type;
   },
 
   setActiveCategoryId(categoryId: number): void {

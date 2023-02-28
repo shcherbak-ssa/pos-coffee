@@ -3,7 +3,7 @@ import type {
   OrderSchema as BaseOrderSchema,
   OrderUserSchema as BaseOrderUserSchema,
 } from 'shared/types';
-import { EMPTY_STRING, ZERO } from 'shared/constants';
+import { EMPTY_STRING, PaymentMethodType, ZERO } from 'shared/constants';
 
 export class OrderSchema implements BaseOrderSchema {
   public id: number;
@@ -11,6 +11,7 @@ export class OrderSchema implements BaseOrderSchema {
   public total: number;
   public lines: BaseOrderLineSchema[];
   public user: BaseOrderUserSchema;
+  public paymentMethod: PaymentMethodType;
   public createdAt: Date | null;
 
   private constructor(schema?: BaseOrderSchema) {
@@ -19,6 +20,7 @@ export class OrderSchema implements BaseOrderSchema {
     this.total = schema?.total || ZERO;
     this.lines = schema?.lines ? schema.lines.map(OrderLineSchema.create) : [];
     this.user = OrderUserSchema.create(schema?.user);
+    this.paymentMethod = schema?.paymentMethod || PaymentMethodType.CARD;
     this.createdAt = schema?.createdAt ? new Date(schema.createdAt) : null;
   }
 
