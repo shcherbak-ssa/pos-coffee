@@ -1,11 +1,4 @@
-import type {
-  ApiService,
-  CategorySchema,
-  NotificationService,
-  OrderLineSchema,
-  OrderSchema,
-  OrderUserSchema,
-} from 'shared/types';
+import type { ApiService, CategorySchema, NotificationService } from 'shared/types';
 import { EntityName, PaymentMethodType, ZERO } from 'shared/constants';
 import { AppError } from 'shared/errors';
 import { BaseController } from 'lib/base-controller';
@@ -16,6 +9,7 @@ import type {
   CartController as BaseCartController,
   CartOrderLineSchema as BaseCartOrderLineSchema,
   CartOrderSchema,
+  CartOrderUpdates,
   CartPayload,
   CartProductSchema,
   CartService as BaseCartService,
@@ -40,7 +34,7 @@ export class CartController extends BaseController implements BaseCartController
 
   public async createOrder(): Promise<boolean> {
     try {
-      const appStore= await this.getStore(StoreName.APP) as (AppStore & AppStoreActions);
+      const appStore = await this.getStore(StoreName.APP) as (AppStore & AppStoreActions);
 
       if (!appStore.state.users.cashier) {
         throw new AppError('Create order', 'Cashier not defined');
@@ -62,13 +56,14 @@ export class CartController extends BaseController implements BaseCartController
 
       const apiService: ApiService = await this.getApiService();
       await apiService
-        .addBody(this.parseOrder(order, cashier))
+        .addBody(this.service.parseOrder(order, cashier))
         .post(ApiEndpoint.CART_ORDERS);
 
       await this.loadProducts();
       cartStore.resetOrder();
 
-      appStore.setCashier(cashier);
+      appStore.setCashier(null);
+      setTimeout(() => appStore.setCashier(cashier));
 
       notificationService.addNotification({
         severity: 'success',
@@ -169,24 +164,6 @@ export class CartController extends BaseController implements BaseCartController
   private async setService(): Promise<void> {
     const store = await this.getStore() as (CartStore & CartStoreActions);
     this.service = CartService.create(store);
-  }
-
-  private parseOrder(order: CartOrderSchema, user: UserSchema): Partial<
-    Omit<OrderSchema, 'user' | 'lines'> & {
-      user: Partial<OrderUserSchema>,
-      lines: Partial<OrderLineSchema>[],
-    }
-  > {
-    return {
-      user: { id: user.id },
-      lines: order.lines.map(({ count, price, product, variant }) => ({
-        count,
-        price,
-        productId: product.id,
-        variantId: variant?.id,
-      })),
-      paymentMethod: order.paymentMethod,
-    };
   }
 
 }

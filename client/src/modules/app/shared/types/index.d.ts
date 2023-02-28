@@ -5,6 +5,9 @@ import type {
   ProductSchema,
   ProductVariantSchema,
   MessageType,
+  OrderSchema,
+  OrderLineSchema,
+  OrderUserSchema,
 } from 'shared/types';
 import type { PaymentMethodType } from 'shared/constants';
 
@@ -88,10 +91,12 @@ export type CartOrderSchema = {
   paymentMethod: PaymentMethodType;
 }
 
-export type CartStockAlertMessage = {
-  type: MessageType;
-  message: string;
-}
+export type CartOrderUpdates = Partial<
+  Omit<OrderSchema, 'user' | 'lines'> & {
+    user: Partial<OrderUserSchema>,
+    lines: Partial<OrderLineSchema>[],
+  }
+>
 
 export interface CartStockAlert {
   remainStock(payload: CartPayload): number;
@@ -101,7 +106,7 @@ export interface CartService extends CartStockAlert {
   findLine(line: CartOrderLineSchema): CartOrderLineSchema | undefined;
   isSameOrderLine(line: CartOrderLineSchema, lineToCompare: CartOrderLineSchema): boolean;
   checkStock(line: CartOrderLineSchema, count: number): void;
-  parseStock(product: CartProductSchema): void;
+  parseOrder(order: CartOrderSchema, user: UserSchema): CartOrderUpdates;
 }
 
 export type CartState = {

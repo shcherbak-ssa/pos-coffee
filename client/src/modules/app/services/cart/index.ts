@@ -1,13 +1,14 @@
-import { DOUBLE_STOCK_ALERT, ZERO } from 'shared/constants';
+import { ZERO } from 'shared/constants';
 import { AppError } from 'shared/errors';
 
 import type {
   CartOrderLineSchema as BaseCartOrderLineSchema,
+  CartOrderSchema,
+  CartOrderUpdates,
   CartPayload,
-  CartProductSchema,
   CartService as BaseCartService,
-  CartStockAlertMessage,
   CartStore,
+  UserSchema,
 } from '@app/shared/types';
 import { CartOrderLineSchema } from '@app/models/cart';
 
@@ -55,8 +56,17 @@ export class CartService implements BaseCartService {
     }
   }
 
-  public parseStock(product: CartProductSchema): void {
-    throw new Error('');
+  public parseOrder(order: CartOrderSchema, user: UserSchema): CartOrderUpdates {
+    return {
+      user: { id: user.id },
+      lines: order.lines.map(({ count, price, product, variant }) => ({
+        count,
+        price,
+        productId: product.id,
+        variantId: variant?.id,
+      })),
+      paymentMethod: order.paymentMethod,
+    };
   }
 
 }
