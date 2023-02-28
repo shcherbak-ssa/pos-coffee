@@ -26,7 +26,7 @@ import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.ProductsConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
-import com.digitazon.poscoffee.shared.helpers.ServiceHelpers;
+import com.digitazon.poscoffee.shared.types.BaseServiceHelpers;
 
 @Service
 public class ProductsService {
@@ -38,10 +38,10 @@ public class ProductsService {
   @Autowired
   private ProductsRepository repository;
 
-  private ServiceHelpers helpers;
+  private BaseServiceHelpers helpers;
 
   public ProductsService() {
-    this.helpers = (ServiceHelpers) this.context.getBean("serviceHelpers", AppConstants.Entity.PRODUCT);
+    this.helpers = (BaseServiceHelpers) this.context.getBean("serviceHelpers", AppConstants.Entity.PRODUCT);
   }
 
   public boolean isProductExist(String sku) {

@@ -23,7 +23,7 @@ import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.CategoriesConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
-import com.digitazon.poscoffee.shared.helpers.ServiceHelpers;
+import com.digitazon.poscoffee.shared.types.BaseServiceHelpers;
 
 @Service
 public class CategoriesService {
@@ -35,10 +35,10 @@ public class CategoriesService {
   @Autowired
   private CategoriesRepository repository;
 
-  private ServiceHelpers helpers;
+  private BaseServiceHelpers helpers;
 
   public CategoriesService() {
-    this.helpers = (ServiceHelpers) this.context.getBean("serviceHelpers", AppConstants.Entity.CATEGORY);
+    this.helpers = (BaseServiceHelpers) this.context.getBean("serviceHelpers", AppConstants.Entity.CATEGORY);
   }
 
   public boolean isCategoryExist(String name) {

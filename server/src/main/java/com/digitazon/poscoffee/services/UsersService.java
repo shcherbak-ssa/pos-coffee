@@ -28,7 +28,7 @@ import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
 import com.digitazon.poscoffee.shared.exceptions.ProgerException;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
 import com.digitazon.poscoffee.shared.helpers.Helpers;
-import com.digitazon.poscoffee.shared.helpers.ServiceHelpers;
+import com.digitazon.poscoffee.shared.types.BaseServiceHelpers;
 
 @Service
 public class UsersService {
@@ -46,10 +46,10 @@ public class UsersService {
   @Autowired
   private UsersRepository repository;
 
-  private ServiceHelpers helpers;
+  private BaseServiceHelpers helpers;
 
   public UsersService() {
-    this.helpers = (ServiceHelpers) this.context.getBean("serviceHelpers", AppConstants.Entity.USER);
+    this.helpers = (BaseServiceHelpers) this.context.getBean("serviceHelpers", AppConstants.Entity.USER);
   }
 
   public boolean isUserExist(String email) {

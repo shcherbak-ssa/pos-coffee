@@ -7,8 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.digitazon.poscoffee.models.helpers.base.BaseEntityDates;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
+import com.digitazon.poscoffee.shared.types.BaseServiceHelpers;
 
-public class ServiceHelpers {
+public class ServiceHelpers implements BaseServiceHelpers {
 
   private String entityName;
 
@@ -16,12 +17,8 @@ public class ServiceHelpers {
     this.entityName = entityName;
   }
 
-  public interface MergeWithUpdates<T> {
-    public void mergeWithUpdates(T entity);
-  }
-
   public <T> void update(
-    Long id, JpaRepository<T, Long> repository, MergeWithUpdates<T> merge
+    Long id, JpaRepository<T, Long> repository, BaseServiceHelpers.MergeWithUpdates<T> merge
   ) throws ResourceNotFoundException {
     final Optional<T> foundEntity = repository.findById(id);
 

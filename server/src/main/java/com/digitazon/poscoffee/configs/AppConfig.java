@@ -39,6 +39,7 @@ import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.OrdersConstants;
 import com.digitazon.poscoffee.shared.helpers.Helpers;
 import com.digitazon.poscoffee.shared.helpers.ServiceHelpers;
+import com.digitazon.poscoffee.shared.types.BaseServiceHelpers;
 
 @Configuration
 @PropertySource(AppConstants.POSCOFFEE_PROPS_FILENAME)
@@ -58,7 +59,7 @@ public class AppConfig {
 
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-  public ServiceHelpers serviceHelpers(String entityName) {
+  public BaseServiceHelpers serviceHelpers(String entityName) {
     return new ServiceHelpers(entityName);
   }
 

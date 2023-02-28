@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class ClientOrderLine {
 
   private Long id;
-  private Short count;
+  private Integer count;
   private Float price;
   private Long productId;
   private Long variantId;

@@ -17,13 +17,13 @@ export function loadMenu(Container: React.ComponentType<AnyType>): () => JSX.Ele
     const cartController = useController(ControllerName.CART) as CartController;
 
     useEffect(() => {
-      cartController.loadCategories()
+      Promise
+        .all([
+          cartController.loadCategories(),
+          cartController.loadProducts(),
+        ])
         .then(() => {
           setIsCategoriesLoaded(true);
-        });
-
-      cartController.loadProducts()
-        .then(() => {
           setIsProductsLoaded(true);
         });
     }, []);

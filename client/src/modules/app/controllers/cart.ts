@@ -1,9 +1,18 @@
-import type { ApiService, CategorySchema, NotificationService, OrderLineSchema, OrderSchema, OrderUserSchema } from 'shared/types';
+import type {
+  ApiService,
+  CategorySchema,
+  NotificationService,
+  OrderLineSchema,
+  OrderSchema,
+  OrderUserSchema,
+} from 'shared/types';
 import { EntityName, PaymentMethodType, ZERO } from 'shared/constants';
+import { AppError } from 'shared/errors';
 import { BaseController } from 'lib/base-controller';
 
 import type {
   AppStore,
+  AppStoreActions,
   CartController as BaseCartController,
   CartOrderLineSchema as BaseCartOrderLineSchema,
   CartOrderSchema,
@@ -17,7 +26,6 @@ import type {
 import { ApiEndpoint, PRODUCT_COUNT_STEP, StoreName } from '@app/shared/constants';
 import { CartOrderLineSchema } from '@app/models/cart';
 import { CartService } from '@app/services/cart';
-import { AppError } from 'shared/errors';
 
 export class CartController extends BaseController implements BaseCartController {
 
@@ -32,11 +40,13 @@ export class CartController extends BaseController implements BaseCartController
 
   public async createOrder(): Promise<boolean> {
     try {
-      const { state: { users } } = await this.getStore(StoreName.APP) as AppStore;
+      const appStore= await this.getStore(StoreName.APP) as (AppStore & AppStoreActions);
 
-      if (!users.cashier) {
+      if (!appStore.state.users.cashier) {
         throw new AppError('Create order', 'Cashier not defined');
       }
+
+      const { cashier } = appStore.state.users;
 
       const notificationService: NotificationService = await this.getNotificationService();
 
@@ -51,13 +61,14 @@ export class CartController extends BaseController implements BaseCartController
       const { order } = cartStore.state;
 
       const apiService: ApiService = await this.getApiService();
-      const createdOrder: OrderSchema = await apiService
-        .addBody(this.parseOrder(order, users.cashier))
+      await apiService
+        .addBody(this.parseOrder(order, cashier))
         .post(ApiEndpoint.CART_ORDERS);
 
-      console.log(createdOrder);
-
+      await this.loadProducts();
       cartStore.resetOrder();
+
+      appStore.setCashier(cashier);
 
       notificationService.addNotification({
         severity: 'success',

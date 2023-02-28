@@ -24,8 +24,11 @@ import com.digitazon.poscoffee.services.CategoriesService;
 import com.digitazon.poscoffee.services.OrdersService;
 import com.digitazon.poscoffee.services.ProductVariantsService;
 import com.digitazon.poscoffee.services.ProductsService;
+import com.digitazon.poscoffee.services.StockService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
+import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
 import com.digitazon.poscoffee.shared.exceptions.ProgerException;
+import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
 
 @RestController
 @CrossOrigin
@@ -44,11 +47,19 @@ public class AppCartController {
   @Autowired
   private OrdersService ordersService;
 
+  @Autowired
+  private StockService stockService;
+
   @PostMapping(path = AppConstants.ApiEndpoint.App.CART_ORDERS)
   @ResponseStatus(HttpStatus.CREATED)
   @PreAuthorize("hasAuthority('MANAGER')")
-  public ClientOrder createOrder(@RequestBody @Validated ClientOrder orderToCreate) throws ProgerException {
-    return this.ordersService.createOrder(orderToCreate);
+  public ClientOrder createOrder(
+    @RequestBody @Validated ClientOrder orderToCreate
+  ) throws AlreadyExistException, ResourceNotFoundException, ProgerException {
+    final ClientOrder createdOrder = this.ordersService.createOrder(orderToCreate);
+    this.stockService.takeStock(createdOrder.getLines());
+
+    return createdOrder;
   }
 
   @GetMapping(path = AppConstants.ApiEndpoint.App.CART_CATEGORIES)
