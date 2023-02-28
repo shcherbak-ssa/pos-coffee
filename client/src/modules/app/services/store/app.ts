@@ -1,7 +1,10 @@
 import { proxy } from 'valtio';
 
+import type { OrderSchema as BaseOrderSchema } from 'shared/types';
+
 import type { AppState, AppStore, AppStoreActions, UserSchema as BaseUserSchema } from '@app/shared/types';
 import { UserSchema } from '@app/models/user';
+import { OrderSchema } from 'lib/order-models';
 
 export const appStore: AppStore & AppStoreActions = {
 
@@ -14,6 +17,7 @@ export const appStore: AppStore & AppStoreActions = {
   }),
 
   usersList: [],
+  orders: [],
 
   setManager(user: BaseUserSchema): void {
     appStore.state.users.manager = UserSchema.create(user);
@@ -34,6 +38,10 @@ export const appStore: AppStore & AppStoreActions = {
 
   setUsers(users: BaseUserSchema[]): void {
     appStore.usersList = users.map(UserSchema.create);
+  },
+
+  setOrders(orders: BaseOrderSchema[]): void {
+    appStore.orders = orders.map(OrderSchema.create);
   },
 
 };

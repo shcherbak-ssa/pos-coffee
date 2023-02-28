@@ -57,7 +57,7 @@ export class CartController extends BaseController implements BaseCartController
       const apiService: ApiService = await this.getApiService();
       await apiService
         .addBody(this.service.parseOrder(order, cashier))
-        .post(ApiEndpoint.CART_ORDERS);
+        .post(ApiEndpoint.APP_ORDERS);
 
       await this.loadProducts();
       cartStore.resetOrder();
@@ -134,7 +134,7 @@ export class CartController extends BaseController implements BaseCartController
   public async loadCategories(): Promise<boolean> {
     try {
       const apiService: ApiService = await this.getApiService();
-      const categories: CategorySchema[] = await apiService.get(ApiEndpoint.CART_CATEGORIES);
+      const categories: CategorySchema[] = await apiService.get(ApiEndpoint.APP_CATEGORIES);
 
       const store = await this.getStore() as CartStoreActions;
       store.setCategories(categories);
@@ -149,7 +149,7 @@ export class CartController extends BaseController implements BaseCartController
   public async loadProducts(): Promise<boolean> {
     try {
       const apiService: ApiService = await this.getApiService();
-      const products: CartProductSchema[] = await apiService.get(ApiEndpoint.CART_PRODUCTS);
+      const products: CartProductSchema[] = await apiService.get(ApiEndpoint.APP_PRODUCTS);
 
       const store = await this.getStore() as CartStoreActions;
       store.setProducts(products);

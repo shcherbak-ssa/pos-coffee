@@ -38,6 +38,7 @@ export type AppUsersState = {
 
 export interface AppStore extends StoreState<AppState> {
   usersList: UserSchema[];
+  orders: OrderSchema[];
 }
 
 export interface AppStoreActions extends AppStore {
@@ -46,6 +47,7 @@ export interface AppStoreActions extends AppStore {
   addLoggedUser(user: UserSchema): void;
   removeLoggedUser(user: UserSchema): void;
   setUsers(users: UserSchema[]): void;
+  setOrders(orders: OrderSchema[]): void;
 }
 
 export interface AppController {
@@ -54,6 +56,7 @@ export interface AppController {
   addLoggedUser(user: UserSchema): Promise<void>;
   removeLoggedUser(user: UserSchema): Promise<void>;
   loadUsers(): Promise<void>;
+  loadOrders(): Promise<void>;
 }
 
 /**

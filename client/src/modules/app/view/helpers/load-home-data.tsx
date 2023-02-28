@@ -4,28 +4,28 @@ import type { AnyType } from 'shared/types';
 import { useController } from 'view/hooks/controller';
 import { AppLoader } from 'view/components/AppLoader';
 
-import type { CartController } from '@app/shared/types';
+import type { AppController } from '@app/shared/types';
 import { ControllerName } from '@app/shared/constants';
 
-export function loadMenu(Container: React.ComponentType<AnyType>): () => JSX.Element {
+export function loadHomeData(Container: React.ComponentType<AnyType>): () => JSX.Element {
 
   return function () {
 
-    const [ isMenuLoaded, setIsMenuLoaded ] = useState<boolean>(false);
-    const cartController = useController(ControllerName.CART) as CartController;
+    const [ isDataLoaded, setIsDataLoaded ] = useState<boolean>(false);
+    const appController = useController(ControllerName.APP) as AppController;
 
     useEffect(() => {
       Promise
         .all([
-          cartController.loadCategories(),
-          cartController.loadProducts(),
+          appController.loadUsers(),
+          appController.loadOrders(),
         ])
         .then(() => {
-          setIsMenuLoaded(true);
+          setIsDataLoaded(true);
         });
     }, []);
 
-    if (isMenuLoaded) {
+    if (isDataLoaded) {
       return <Container />;
     }
 

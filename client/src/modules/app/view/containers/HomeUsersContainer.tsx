@@ -6,7 +6,7 @@ import { ScrollPanel } from 'primereact/scrollpanel';
 
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
-import { CardHeading } from "view/components/CardHeading";
+import { CardHeading } from 'view/components/CardHeading';
 
 import type { AppController, AppStore, UserSchema } from '@app/shared/types';
 import { ControllerName, StoreName } from '@app/shared/constants';

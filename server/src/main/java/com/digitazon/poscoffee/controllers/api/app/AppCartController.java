@@ -50,7 +50,14 @@ public class AppCartController {
   @Autowired
   private StockService stockService;
 
-  @PostMapping(path = AppConstants.ApiEndpoint.App.CART_ORDERS)
+  @GetMapping(path = AppConstants.ApiEndpoint.App.APP_ORDERS)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAuthority('MANAGER')")
+  public List<ClientOrder> getOrders() {
+    return this.ordersService.getOrders();
+  }
+
+  @PostMapping(path = AppConstants.ApiEndpoint.App.APP_ORDERS)
   @ResponseStatus(HttpStatus.CREATED)
   @PreAuthorize("hasAuthority('MANAGER')")
   public ClientOrder createOrder(
@@ -62,7 +69,7 @@ public class AppCartController {
     return createdOrder;
   }
 
-  @GetMapping(path = AppConstants.ApiEndpoint.App.CART_CATEGORIES)
+  @GetMapping(path = AppConstants.ApiEndpoint.App.APP_CATEGORIES)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('MANAGER')")
   public List<ClientCategory> getProductCategories() {
@@ -75,7 +82,7 @@ public class AppCartController {
       .collect(Collectors.toList());
   }
 
-  @GetMapping(path = AppConstants.ApiEndpoint.App.CART_PRODUCTS)
+  @GetMapping(path = AppConstants.ApiEndpoint.App.APP_PRODUCTS)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('MANAGER')")
   public List<ClientProduct> getProducts() {
