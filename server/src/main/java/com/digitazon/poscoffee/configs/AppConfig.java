@@ -375,7 +375,16 @@ public class AppConfig {
 
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-  public Order orderFromConfigOrder(ConfigOrder order, List<OrderLine> lines, User user) {
+  public Order orderFromConfigOrder(ConfigOrder order) {
+    final User user = User.builder()
+      .id(order.getUser())
+      .build();
+
+    final List<OrderLine> lines = order.getLines()
+      .stream()
+      .map((Long lineId) -> OrderLine.builder().id(lineId).build())
+      .collect(Collectors.toList());
+
     return Order.builder()
       .lines(lines)
       .user(user)

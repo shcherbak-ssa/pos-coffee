@@ -9,7 +9,6 @@ import com.digitazon.poscoffee.models.PaymentMethod;
 import com.digitazon.poscoffee.models.Product;
 import com.digitazon.poscoffee.models.ProductVariant;
 import com.digitazon.poscoffee.models.UserType;
-import com.digitazon.poscoffee.models.helpers.base.BaseEntityId;
 import com.digitazon.poscoffee.services.PaymentMethodsService;
 import com.digitazon.poscoffee.services.UserTypesService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
@@ -87,19 +86,7 @@ public class Helpers {
     return builder.toString();
   }
 
-  public static <T extends BaseEntityId> T findEntityById(List<T> entities, Long id) {
-    return entities
-      .stream()
-      .filter((e) -> e.getId() == id)
-      .findFirst()
-      .orElse(entities.get(AppConstants.ZERO));
-  }
-
   public static float getOrderLinePrice(Product product, ProductVariant variant) {
-    if (variant == null) {
-      return product.getPrice();
-    }
-
     return variant.getPrice() == null
       ? product.getPrice()
       : variant.getPrice();

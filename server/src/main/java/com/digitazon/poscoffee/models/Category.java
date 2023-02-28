@@ -15,7 +15,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.digitazon.poscoffee.models.helpers.base.BaseEntityId;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.CategoriesConstants;
 
@@ -31,7 +30,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class Category implements BaseEntityId {
+public class Category {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

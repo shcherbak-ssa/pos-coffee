@@ -33,6 +33,16 @@ public class ProductVariantsService {
     return this.repository.existsBySku(sku);
   }
 
+  public ProductVariant findVariantById(Long id) throws ResourceNotFoundException {
+    final Optional<ProductVariant> foundVariant = this.repository.findById(id);
+
+    if (foundVariant.isPresent()) {
+      return foundVariant.get();
+    }
+
+    throw new ResourceNotFoundException("Variant not found");
+  }
+
   public List<ClientProductVariant> getVariants(Product product) {
     final List<ProductVariant> variants = this.repository.findAllByProduct(product);
 

@@ -17,7 +17,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.digitazon.poscoffee.models.helpers.base.BaseEntityId;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.ProductsConstants;
 
@@ -33,7 +32,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProductVariant implements BaseEntityId {
+public class ProductVariant {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

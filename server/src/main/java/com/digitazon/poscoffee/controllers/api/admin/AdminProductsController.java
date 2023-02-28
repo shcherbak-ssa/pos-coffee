@@ -46,7 +46,7 @@ public class AdminProductsController {
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('ADMIN')")
   public ClientProduct getProductById(@PathVariable Long id) throws ResourceNotFoundException {
-    return this.service.findProductById(id);
+    return this.service.findClientProductById(id);
   }
 
   @PostMapping(path = AppConstants.ApiEndpoint.Admin.PRODUCTS)

@@ -48,7 +48,17 @@ public class ProductsService {
     return this.repository.existsBySku(sku);
   }
 
-  public ClientProduct findProductById(Long id) throws ResourceNotFoundException {
+  public Product findProductById(Long id) throws ResourceNotFoundException {
+    final Optional<Product> foundProduct = this.repository.findById(id);
+
+    if (foundProduct.isPresent()) {
+      return foundProduct.get();
+    }
+
+    throw new ResourceNotFoundException("Product not found");
+  }
+
+  public ClientProduct findClientProductById(Long id) throws ResourceNotFoundException {
     final Optional<Product> foundProduct = this.repository.findById(id);
 
     if (foundProduct.isPresent()) {
