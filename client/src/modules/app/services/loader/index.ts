@@ -2,7 +2,7 @@ import type { LoaderService as BaseLoaderService, Store, ValidationSchema } from
 import { ProgerError } from 'shared/errors';
 
 import type { Controllers } from '@app/shared/types';
-import { ControllerName, StoreName, ValidationName } from '@app/shared/constants';
+import { ControllerName, StoreName } from '@app/shared/constants';
 
 export class LoaderService implements BaseLoaderService {
 
@@ -46,7 +46,7 @@ export class LoaderService implements BaseLoaderService {
     throw new ProgerError(`[LOADER] Store ${name} does not exist`);
   }
 
-  public async loadValidationSchema<T>(name: ValidationName): Promise<ValidationSchema<T>> {
+  public async loadValidationSchema<T>(name: string): Promise<ValidationSchema<T>> {
     throw new ProgerError(`[LOADER] Validation ${name} does not exist`);
   }
 

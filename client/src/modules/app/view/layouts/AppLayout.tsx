@@ -11,7 +11,6 @@ import { AppPageWrapper } from '@app/view/components/AppPageWrapper';
 
 const HomePage = lazy(() => import('@app/view/pages/HomePage'));
 const CartPage = lazy(() => import('@app/view/pages/CartPage'));
-const OrdersPage = lazy(() => import('@app/view/pages/OrdersPage'));
 
 export function AppLayout() {
 
@@ -31,11 +30,6 @@ export function AppLayout() {
               <Route
                 path={PagePath.CART}
                 element={<CartPage />}
-              />
-
-              <Route
-                path={PagePath.ORDERS}
-                element={<OrdersPage />}
               />
             </Routes>
           </Suspense>

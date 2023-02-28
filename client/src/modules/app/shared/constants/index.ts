@@ -12,22 +12,15 @@ export enum ApiEndpoint {
 export enum ControllerName {
   APP = 'APP',
   CART = 'CART',
-  ORDERS = 'ORDERS',
 }
 
 export enum StoreName {
   APP = 'APP',
   CART = 'CART',
-  ORDERS = 'ORDERS',
-}
-
-export enum ValidationName {
-  ORDERS = 'ORDERS',
 }
 
 export enum PagePath {
   EMPTY = '',
   HOME = '/app',
   CART = '/app/cart',
-  ORDERS = '/app/orders',
 }

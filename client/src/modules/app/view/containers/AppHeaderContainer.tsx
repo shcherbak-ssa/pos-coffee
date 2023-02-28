@@ -28,16 +28,9 @@ export function AppHeaderContainer() {
     },
     {
       icon: PrimeIcons.SHOPPING_CART,
-      className: location.pathname.startsWith(PagePath.CART) ? IS_ACTIVE_CLASSNAME : EMPTY_STRING,
+      className: location.pathname === PagePath.CART ? IS_ACTIVE_CLASSNAME : EMPTY_STRING,
       click(e: MouseEvent): void {
         navigate(PagePath.CART);
-      },
-    },
-    {
-      icon: PrimeIcons.SHOPPING_BAG,
-      className: location.pathname === PagePath.ORDERS ? IS_ACTIVE_CLASSNAME : EMPTY_STRING,
-      click(e: MouseEvent): void {
-        navigate(PagePath.ORDERS);
       },
     },
   ];
@@ -68,7 +61,7 @@ export function AppHeaderContainer() {
         />
 
         <OverlayPanel ref={menuPanel}>
-          <div className="flex flex-col gap-2 w-80">
+          <div className="flex flex-col gap-2 w-60">
             <AppCashierContainer />
           </div>
         </OverlayPanel>
