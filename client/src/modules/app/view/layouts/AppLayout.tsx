@@ -1,9 +1,9 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { ConfirmPopup } from 'primereact/confirmpopup';
 
 import { NotificationContainer } from 'view/containers/NotificationContainer';
 import { AppLoader } from 'view/components/AppLoader';
+import { ConfimComponents } from 'view/components/ConfimComponents';
 
 import { PagePath } from '@app/shared/constants';
 import { AppHeaderContainer } from '@app/view/containers/AppHeaderContainer';
@@ -36,7 +36,7 @@ export function AppLayout() {
         </AppPageWrapper>
 
         <NotificationContainer />
-        <ConfirmPopup />
+        <ConfimComponents />
       </BrowserRouter>
     </div>
   );

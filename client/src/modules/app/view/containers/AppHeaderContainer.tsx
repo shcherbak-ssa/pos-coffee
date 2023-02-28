@@ -1,10 +1,14 @@
 import { MouseEvent, useRef } from 'react';
 import { Location, NavigateFunction, useLocation, useNavigate } from 'react-router';
+import type { MenuItem } from 'primereact/menuitem';
 import { Button } from 'primereact/button';
 import { PrimeIcons } from 'primereact/api';
 import { OverlayPanel } from 'primereact/overlaypanel';
+import { Divider } from 'primereact/divider';
+import { Menu } from 'primereact/menu';
 
 import { EMPTY_STRING } from 'shared/constants';
+import { logout } from 'shared/helpers/logout';
 import { AppLogo } from 'view/components/AppLogo';
 import { type Props as IconButtonProps, IconButton } from 'view/components/IconButton';
 
@@ -31,6 +35,16 @@ export function AppHeaderContainer() {
       className: location.pathname === PagePath.CART ? IS_ACTIVE_CLASSNAME : EMPTY_STRING,
       click(e: MouseEvent): void {
         navigate(PagePath.CART);
+      },
+    },
+  ];
+
+  const menuItems: MenuItem[] = [
+    {
+      label: 'Logout',
+      icon: PrimeIcons.SIGN_OUT,
+      command: () => {
+        logout();
       },
     },
   ];
@@ -63,6 +77,10 @@ export function AppHeaderContainer() {
         <OverlayPanel ref={menuPanel}>
           <div className="flex flex-col gap-2 w-60">
             <AppCashierContainer />
+
+            <Divider />
+
+            <Menu className="w-full" model={menuItems} />
           </div>
         </OverlayPanel>
       </div>
