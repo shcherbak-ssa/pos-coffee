@@ -7,6 +7,12 @@ body {
     @apply mx-auto h-screen overflow-hidden;
     width: 1024px;
   }
+
+  &-user {
+    &:hover .p-button {
+      @apply opacity-100;
+    }
+  }
 }
 
 .card-wrapper {

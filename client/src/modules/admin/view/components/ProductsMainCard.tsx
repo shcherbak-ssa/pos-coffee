@@ -5,11 +5,11 @@ import { Dropdown } from 'primereact/dropdown';
 import type { ProductCategory, ProductSchema } from 'shared/types';
 import { EntityName } from 'shared/constants';
 import { InputWrapper } from 'view/components/InputWrapper';
+import { CardHeading } from 'view/components/CardHeading';
 
 import type { CardWithInputsProps, ProductDraft } from '@admin/shared/types';
 import { AvailableCheckbox } from '@admin/view/components/AvailableCheckbox';
 import { CardWrapper } from '@admin/view/components/CardWrapper';
-import { CardHeading } from '@admin/view/components/CardHeading';
 
 export type Props = CardWithInputsProps<ProductSchema, ProductDraft> & {
   productCategories: ProductCategory[];

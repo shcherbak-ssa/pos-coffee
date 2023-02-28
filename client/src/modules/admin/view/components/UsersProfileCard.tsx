@@ -5,10 +5,10 @@ import { Dropdown } from 'primereact/dropdown';
 import type { UserSchema } from 'shared/types';
 import { EMPTY_STRING, UserType, ZERO } from 'shared/constants';
 import { InputWrapper } from 'view/components/InputWrapper';
+import { CardHeading } from 'view/components/CardHeading';
 
 import type { CardWithInputsProps, UserDraft } from '@admin/shared/types';
 import { CardWrapper } from '@admin/view/components/CardWrapper';
-import { CardHeading } from '@admin/view/components/CardHeading';
 
 export type Props = CardWithInputsProps<UserSchema, UserDraft>;
 

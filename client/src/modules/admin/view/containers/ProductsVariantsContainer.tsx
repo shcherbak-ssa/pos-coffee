@@ -12,6 +12,7 @@ import { useStore } from 'view/hooks/store';
 import { useError } from 'view/hooks/error';
 import { useController } from 'view/hooks/controller';
 import { AppLoader } from 'view/components/AppLoader';
+import { CardHeading } from 'view/components/CardHeading';
 
 import type { ProductVariantsController, ProductVariantsStore } from '@admin/shared/types';
 import { ControllerName, StoreName } from '@admin/shared/constants';
@@ -19,7 +20,6 @@ import { confirmDialogConfig } from '@admin/shared/configs/confirm-dialog';
 import { ProductsVariantsPopupFooter } from '@admin/view/components/ProductsVariantsPopupFooter';
 import { ProductsVariantsPopup } from '@admin/view/components/ProductsVariantsPopup';
 import { CardWrapper } from '@admin/view/components/CardWrapper';
-import { CardHeading } from '@admin/view/components/CardHeading';
 import { ProductVariantMenu } from '@admin/view/components/ProductVariantMenu';
 import { ProductsStockLabel } from '@admin/view/components/ProductsStockLabel';
 import { ProductsPrice } from '@admin/view/components/ProductsPrice';

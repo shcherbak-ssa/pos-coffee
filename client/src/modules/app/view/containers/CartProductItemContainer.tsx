@@ -2,8 +2,9 @@ import { type MouseEvent, useRef } from 'react';
 import { Button } from 'primereact/button';
 import { Message } from 'primereact/message';
 import { OverlayPanel } from 'primereact/overlaypanel';
+import { PrimeIcons } from 'primereact/api';
 
-import type { MessageType, ProductVariantSchema } from 'shared/types';
+import type { ProductVariantSchema } from 'shared/types';
 import { ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
@@ -13,7 +14,6 @@ import type { CartController, CartProductSchema, CartStockAlert, CartStore } fro
 import { ControllerName, StoreName } from '@app/shared/constants';
 import { CartProductItemVariantsContainer } from '@app/view/containers/CartProductItemVariantsContainer';
 import { CardWrapper } from '@app/view/components/CardWrapper';
-import { PrimeIcons } from 'primereact/api';
 
 export type Props = {
   product: CartProductSchema;
@@ -57,7 +57,8 @@ export function CartProductItemContainer({ product }: Props) {
         text={
           remainStock === ZERO
             ? `"${name}" out of stock`
-            : `"${name}" left for ${remainStock} times`}
+            : `"${name}" left for ${remainStock} times`
+        }
       />
     );
   }

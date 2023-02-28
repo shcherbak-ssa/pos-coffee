@@ -10,7 +10,7 @@ import type { CartController, CartOrderLineSchema, CartStore } from '@app/shared
 import { ControllerName, PRODUCT_COUNT_STEP, StoreName } from '@app/shared/constants';
 import { CartPaymentPopupContainer } from '@app/view/containers/CartPaymentPopupContainer';
 import { CartOrderLine } from '@app/view/components/CartOrderLine';
-import { CartOrderLinesWrapper } from '@app/view/components/CartOrderLinesWrapper';
+import { CardListWrapper } from '@app/view/components/CardListWrapper';
 
 export function CartOrderContainer() {
 
@@ -42,7 +42,7 @@ export function CartOrderContainer() {
   function renderLines(): React.ReactNode {
     if (order.lines.length) {
       return (
-        <CartOrderLinesWrapper>
+        <CardListWrapper>
           {
             order.lines.map((line) => (
               <CartOrderLine
@@ -54,7 +54,7 @@ export function CartOrderContainer() {
               />
             ))
           }
-        </CartOrderLinesWrapper>
+        </CardListWrapper>
       );
     }
 

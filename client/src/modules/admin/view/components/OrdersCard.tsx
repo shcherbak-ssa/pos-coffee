@@ -3,9 +3,9 @@ import { InputText } from 'primereact/inputtext';
 
 import type { OrderSchema } from 'shared/types';
 import { InputWrapper } from 'view/components/InputWrapper';
+import { CardHeading } from 'view/components/CardHeading';
 
 import { CardWrapper } from '@admin/view/components/CardWrapper';
-import { CardHeading } from '@admin/view/components/CardHeading';
 
 export type Props = {
   order: OrderSchema;

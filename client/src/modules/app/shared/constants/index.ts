@@ -3,6 +3,7 @@ export const PRODUCT_COUNT_STEP: number = 1;
 export const IS_ACTIVE_CLASSNAME: string = 'is-active';
 
 export enum ApiEndpoint {
+  APP_USERS = '/api/app/users',
   CART_CATEGORIES = '/api/app/cart/categories',
   CART_PRODUCTS = '/api/app/cart/products',
 }

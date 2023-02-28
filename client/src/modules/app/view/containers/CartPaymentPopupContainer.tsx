@@ -12,7 +12,7 @@ import { useController } from 'view/hooks/controller';
 
 import type { CartStore, CartController } from '@app/shared/types';
 import { ControllerName, StoreName } from '@app/shared/constants';
-import { CartOrderLinesWrapper } from '@app/view/components/CartOrderLinesWrapper';
+import { CardListWrapper } from '@app/view/components/CardListWrapper';
 import { CartOrderLine } from '@app/view/components/CartOrderLine';
 import { CartPaymentMethod } from '@app/view/components/CartPaymentMethod';
 
@@ -37,7 +37,7 @@ export function CartPaymentPopupContainer({ isOpen, hide }: Props) {
     >
       <div>
         <ScrollPanel style={{ width: '100%', height: '200px' }}>
-          <CartOrderLinesWrapper>
+          <CardListWrapper>
             {
               order.lines.map((line) => (
                 <CartOrderLine
@@ -47,7 +47,7 @@ export function CartPaymentPopupContainer({ isOpen, hide }: Props) {
                 />
               ))
             }
-          </CartOrderLinesWrapper>
+          </CardListWrapper>
         </ScrollPanel>
 
         <div className="mt-4 rounded flex items-center justify-between p-2 bg-gray-50">

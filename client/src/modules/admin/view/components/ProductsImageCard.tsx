@@ -1,10 +1,10 @@
 import { Button } from 'primereact/button';
 
 import type { ProductSchema } from 'shared/types';
-
 import { ProductsImage } from 'view/components/ProductsImage';
+import { CardHeading } from 'view/components/CardHeading';
+
 import { CardWrapper } from '@admin/view/components/CardWrapper';
-import { CardHeading } from '@admin/view/components/CardHeading';
 
 export type Props = {
   product: ProductSchema;

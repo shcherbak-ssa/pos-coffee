@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { ConfirmPopup } from 'primereact/confirmpopup';
 
 import { NotificationContainer } from 'view/containers/NotificationContainer';
 import { AppLoader } from 'view/components/AppLoader';
@@ -41,6 +42,7 @@ export function AppLayout() {
         </AppPageWrapper>
 
         <NotificationContainer />
+        <ConfirmPopup />
       </BrowserRouter>
     </div>
   );

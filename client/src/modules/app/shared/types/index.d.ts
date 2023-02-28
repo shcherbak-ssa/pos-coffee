@@ -24,17 +24,33 @@ export type Controllers =
  */
 
 export type AppState = {
-  loggedUser: UserSchema;
+  users: AppUsersState;
 }
 
-export interface AppStore extends StoreState<AppState> {}
+export type AppUsersState = {
+  manager: UserSchema | null;
+  cashier: UserSchema | null;
+  loggedUsers: UserSchema[];
+}
+
+export interface AppStore extends StoreState<AppState> {
+  usersList: UserSchema[];
+}
 
 export interface AppStoreActions extends AppStore {
-  setLoggedUser(user: UserSchema): void;
+  setManager(user: UserSchema): void;
+  setCashier(user: UserSchema | null): void;
+  addLoggedUser(user: UserSchema): void;
+  removeLoggedUser(user: UserSchema): void;
+  setUsers(users: UserSchema[]): void;
 }
 
 export interface AppController {
-  setLoggedUser(user: UserSchema): Promise<void>;
+  setManager(user: UserSchema): Promise<void>;
+  setCashier(user: UserSchema | null): Promise<void>;
+  addLoggedUser(user: UserSchema): Promise<void>;
+  removeLoggedUser(user: UserSchema): Promise<void>;
+  loadUsers(): Promise<void>;
 }
 
 /**
@@ -43,7 +59,7 @@ export interface AppController {
 
 export type UserSchema = Pick<
   BaseUserSchema,
-  'id' | 'name' | 'surname' | 'image'
+  'id' | 'name' | 'surname' | 'image' | 'type'
 >;
 
 /**

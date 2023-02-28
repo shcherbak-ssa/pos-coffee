@@ -28,5 +28,6 @@ async function setup(currentUser: UserSchema): Promise<void> {
   await Context.loadStore(StoreName.APP);
 
   const appController = Context.getController(ControllerName.APP) as AppController;
-  await appController.setLoggedUser(currentUser);
+  await appController.setManager(currentUser);
+  await appController.loadUsers();
 }

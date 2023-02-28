@@ -10,5 +10,6 @@ import lombok.Data;
 public class UserFilter {
 
   private Boolean isArchived;
+  private Boolean forApp;
 
 }

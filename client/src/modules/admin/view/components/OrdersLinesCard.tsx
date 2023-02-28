@@ -2,9 +2,9 @@ import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 
 import type { OrderLineSchema, OrderSchema } from 'shared/types';
+import { CardHeading } from 'view/components/CardHeading';
 
 import { CardWrapper } from '@admin/view/components/CardWrapper';
-import { CardHeading } from '@admin/view/components/CardHeading';
 import { OrdersLine } from '@admin/view/components/OrdersLine';
 
 export type Props = {

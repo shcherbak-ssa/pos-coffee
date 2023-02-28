@@ -10,10 +10,10 @@ import { LocalStorage } from 'shared/helpers/local-storage';
 import { replaceLocation } from 'shared/utils/replace-location';
 import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/navigate';
 import { IconButton } from 'view/components/IconButton';
+import { UsersImage } from 'view/components/UsersImage';
 
 import type { AppComponentProps } from '@admin/shared/types';
 import { PagePath } from '@admin/shared/constants';
-import { UsersImage } from '@admin/view/components/UsersImage';
 import { AppHeaderLogo } from '@admin/view/components/AppHeaderLogo';
 
 export type Props = AppComponentProps;

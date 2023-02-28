@@ -77,7 +77,7 @@ public class UsersService {
   }
 
   public List<ClientUser> getUsers(UserFilter filter) {
-    final List<User> users = this.repository.findAll(UsersService.filter(filter));
+    final List<User> users = this.repository.findAll(UsersService.filter(filter, this.userTypesService));
 
     return users
       .stream()
@@ -149,7 +149,7 @@ public class UsersService {
     user.setPhone(updates.getPhone() == null ? user.getPhone() : updates.getPhone());
   }
 
-  private static Specification<User> filter(UserFilter filter) {
+  private static Specification<User> filter(UserFilter filter, UserTypesService userTypesService) {
     return new Specification<User>() {
 
       @Override
@@ -159,6 +159,17 @@ public class UsersService {
         if (filter.getIsArchived() != null) {
           predicates.add(
             builder.equal(root.get("isArchived"), filter.getIsArchived())
+          );
+        }
+
+        if (filter.getForApp() != null) {
+          final UserType type = userTypesService.getByName(UsersConstants.UserType.WAITER);
+
+          predicates.add(
+            builder.and(
+              builder.equal(root.get("isArchived"), false),
+              builder.equal(root.get("type"), type)
+            )
           );
         }
 

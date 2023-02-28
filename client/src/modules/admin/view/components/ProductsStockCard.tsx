@@ -2,10 +2,10 @@ import { InputNumber } from 'primereact/inputnumber';
 
 import type { ProductSchema } from 'shared/types';
 import { InputWrapper } from 'view/components/InputWrapper';
+import { CardHeading } from 'view/components/CardHeading';
 
 import type { CardWithInputsProps, ProductDraft } from '@admin/shared/types';
 import { CardWrapper } from '@admin/view/components/CardWrapper';
-import { CardHeading } from '@admin/view/components/CardHeading';
 
 export type Props = CardWithInputsProps<ProductSchema, ProductDraft>;
 
