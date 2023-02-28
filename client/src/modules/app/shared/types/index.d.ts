@@ -4,7 +4,6 @@ import type {
   CategorySchema,
   ProductSchema,
   ProductVariantSchema,
-  MessageType,
   OrderSchema,
   OrderLineSchema,
   OrderUserSchema,
@@ -21,6 +20,16 @@ export type VariantId = number;
 export type Controllers =
   | AppController
   | CartController;
+
+export type AppHomeData = {
+  users: UserSchema[];
+  orders: OrderSchema[];
+}
+
+export type AppMenu = {
+  categories: CategorySchema[];
+  products: CartProductSchema[];
+}
 
 /**
  * App
@@ -55,8 +64,7 @@ export interface AppController {
   setCashier(user: UserSchema | null): Promise<void>;
   addLoggedUser(user: UserSchema): Promise<void>;
   removeLoggedUser(user: UserSchema): Promise<void>;
-  loadUsers(): Promise<void>;
-  loadOrders(): Promise<void>;
+  loadData(): Promise<void>;
 }
 
 /**
@@ -143,6 +151,5 @@ export interface CartController {
   updateOrderLineCount(line: CartOrderLineSchema, count: number): Promise<void>;
   setOrderPaymentMethod(type: PaymentMethodType): Promise<void>;
   setActiveCategoryId(categoryId?: number): Promise<void>;
-  loadCategories(): Promise<boolean>;
-  loadProducts(): Promise<boolean>;
+  loadMenu(): Promise<void>;
 }

@@ -15,11 +15,7 @@ export function loadMenu(Container: React.ComponentType<AnyType>): () => JSX.Ele
     const cartController = useController(ControllerName.CART) as CartController;
 
     useEffect(() => {
-      Promise
-        .all([
-          cartController.loadCategories(),
-          cartController.loadProducts(),
-        ])
+      cartController.loadMenu()
         .then(() => {
           setIsMenuLoaded(true);
         });

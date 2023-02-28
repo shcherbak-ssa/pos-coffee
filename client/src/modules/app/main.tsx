@@ -29,5 +29,5 @@ async function setup(currentUser: UserSchema): Promise<void> {
 
   const appController = Context.getController(ControllerName.APP) as AppController;
   await appController.setManager(currentUser);
-  await appController.loadUsers();
+  await appController.loadData();
 }

@@ -4,6 +4,7 @@ import { AppError } from 'shared/errors';
 import { BaseController } from 'lib/base-controller';
 
 import type {
+  AppMenu,
   AppStore,
   AppStoreActions,
   CartController as BaseCartController,
@@ -59,7 +60,7 @@ export class CartController extends BaseController implements BaseCartController
         .addBody(this.service.parseOrder(order, cashier))
         .post(ApiEndpoint.APP_ORDERS);
 
-      await this.loadProducts();
+      await this.loadMenu();
       cartStore.resetOrder();
 
       appStore.setCashier(null);
@@ -131,33 +132,16 @@ export class CartController extends BaseController implements BaseCartController
     store.setActiveCategoryId(categoryId);
   }
 
-  public async loadCategories(): Promise<boolean> {
+  public async loadMenu(): Promise<void> {
     try {
       const apiService: ApiService = await this.getApiService();
-      const categories: CategorySchema[] = await apiService.get(ApiEndpoint.APP_CATEGORIES);
+      const { categories, products }: AppMenu = await apiService.get(ApiEndpoint.APP_MENU);
 
       const store = await this.getStore() as CartStoreActions;
       store.setCategories(categories);
-
-      return true;
-    } catch (e: any) {
-      this.parseError(e);
-      return false;
-    }
-  }
-
-  public async loadProducts(): Promise<boolean> {
-    try {
-      const apiService: ApiService = await this.getApiService();
-      const products: CartProductSchema[] = await apiService.get(ApiEndpoint.APP_PRODUCTS);
-
-      const store = await this.getStore() as CartStoreActions;
       store.setProducts(products);
-
-      return true;
     } catch (e: any) {
       this.parseError(e);
-      return false;
     }
   }
 

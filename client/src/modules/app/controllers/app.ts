@@ -2,7 +2,7 @@ import type { ApiService, OrderSchema } from 'shared/types';
 import { EntityName } from 'shared/constants';
 import { BaseController } from 'lib/base-controller';
 
-import type { AppController as BaseAppController, AppStoreActions, UserSchema } from '@app/shared/types';
+import type { AppController as BaseAppController, AppHomeData, AppStoreActions, UserSchema } from '@app/shared/types';
 import { ApiEndpoint, StoreName } from '@app/shared/constants';
 
 export class AppController extends BaseController implements BaseAppController {
@@ -31,24 +31,13 @@ export class AppController extends BaseController implements BaseAppController {
     store.removeLoggedUser(user);
   }
 
-  public async loadUsers(): Promise<void> {
+  public async loadData(): Promise<void> {
     try {
       const apiService: ApiService = await this.getApiService();
-      const users: UserSchema[] = await apiService.get(ApiEndpoint.APP_USERS);
+      const { users, orders }: AppHomeData = await apiService.get(ApiEndpoint.APP_HOME);
 
       const store = await this.getStore() as AppStoreActions;
       store.setUsers(users);
-    } catch (e: any) {
-      this.parseError(e);
-    }
-  }
-
-  public async loadOrders(): Promise<void> {
-    try {
-      const apiService: ApiService = await this.getApiService();
-      const orders: OrderSchema[] = await apiService.get(ApiEndpoint.APP_ORDERS);
-
-      const store = await this.getStore() as AppStoreActions;
       store.setOrders(orders);
     } catch (e: any) {
       this.parseError(e);

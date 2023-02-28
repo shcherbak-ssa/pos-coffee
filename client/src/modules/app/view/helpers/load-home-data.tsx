@@ -15,11 +15,7 @@ export function loadHomeData(Container: React.ComponentType<AnyType>): () => JSX
     const appController = useController(ControllerName.APP) as AppController;
 
     useEffect(() => {
-      Promise
-        .all([
-          appController.loadUsers(),
-          appController.loadOrders(),
-        ])
+      appController.loadData()
         .then(() => {
           setIsDataLoaded(true);
         });
