@@ -51,7 +51,7 @@ export class CartService implements BaseCartService {
     const useStock: number = count * stockPerTime;
 
     if (useStock > stock) {
-      throw new AppError('Not enough stock!');
+      throw new AppError('Add product', 'Not enough stock!');
     }
   }
 

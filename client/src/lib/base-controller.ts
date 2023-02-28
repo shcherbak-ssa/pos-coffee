@@ -7,7 +7,7 @@ import type {
 } from 'shared/types';
 import { EntityName, ErrorType } from 'shared/constants';
 import { Context } from 'shared/context';
-import { ApiError, AuthError, ValidationError } from 'shared/errors';
+import { ApiError, AppError, AuthError, ValidationError } from 'shared/errors';
 
 export class BaseController implements Controller {
 
@@ -16,10 +16,10 @@ export class BaseController implements Controller {
     protected entityName: EntityName,
   ) {}
 
-  protected async getStore(): Promise<Store> {
-    await Context.loadStore(this.storeName);
+  protected async getStore(storeName: string = this.storeName): Promise<Store> {
+    await Context.loadStore(storeName);
 
-    return Context.getStore(this.storeName);
+    return Context.getStore(storeName);
   }
 
   protected async getApiService(): Promise<BaseApiService> {
@@ -67,6 +67,19 @@ export class BaseController implements Controller {
       const notificationService: BaseNotificationService = await this.getNotificationService();
 
       notificationService.addError(e.error);
+      return;
+    }
+
+    if (e instanceof AppError) {
+      const notificationService: BaseNotificationService = await this.getNotificationService();
+
+      notificationService.addNotification({
+        type: 'result',
+        severity: 'error',
+        heading: e.heading,
+        message: e.message,
+      });
+
       return;
     }
 

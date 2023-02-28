@@ -1,5 +1,6 @@
 package com.digitazon.poscoffee.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,7 +31,7 @@ public class OrdersService {
   private OrdersRepository repository;
 
   @Autowired
-  private OrderLinesRepository liensRepository;
+  private OrderLinesRepository linesRepository;
 
   @Autowired
   private PaymentMethodsService paymentMethodsService;
@@ -54,12 +55,28 @@ public class OrdersService {
       .collect(Collectors.toList());
   }
 
+  public ClientOrder createOrder(ClientOrder clientOrder) throws ProgerException {
+    final Order order = this.convertToOrder(clientOrder);
+    final List<OrderLine> lines = new ArrayList<OrderLine>();
+
+    for (OrderLine line : order.getLines()) {
+      final OrderLine createdLine = this.createOrderLine(line);
+      lines.add(createdLine);
+    }
+
+    order.setLines(lines);
+
+    final Order createdOrder = this.createOrder(order);
+
+    return this.convertToClientOrder(createdOrder);
+  }
+
   public Order createOrder(Order order) {
     return this.repository.save(order);
   }
 
   public OrderLine createOrderLine(OrderLine line) {
-    return this.liensRepository.save(line);
+    return this.linesRepository.save(line);
   }
 
   private ClientOrder convertToClientOrder(Order order) {

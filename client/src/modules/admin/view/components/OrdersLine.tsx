@@ -10,7 +10,7 @@ export function OrdersLine({ line }: Props) {
 
   function renderVariantName(): React.ReactNode {
     if (line.variantName) {
-      return <div>{ line.variantName }</div>;
+      return <span>, { line.variantName }</span>;
     }
   }
 
@@ -22,7 +22,7 @@ export function OrdersLine({ line }: Props) {
       />
 
       <div>
-        <div>{ line.productName },</div>
+        <span>{ line.productName }</span>
 
         { renderVariantName() }
       </div>

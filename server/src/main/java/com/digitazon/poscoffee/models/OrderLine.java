@@ -32,7 +32,7 @@ public class OrderLine {
   @OneToOne
   private Product product;
 
-  @OneToOne
+  @OneToOne(optional = true)
   private ProductVariant variant;
 
 }

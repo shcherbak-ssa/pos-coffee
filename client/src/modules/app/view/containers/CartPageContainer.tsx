@@ -1,6 +1,3 @@
-import { useState } from 'react';
-import { BlockUI } from 'primereact/blockui';
-
 import { useStore } from 'view/hooks/store';
 
 import type { AppStore } from '@app/shared/types';
@@ -14,8 +11,6 @@ import { CardWrapper } from '@app/view/components/CardWrapper';
 export function CartPageContainer() {
 
   const { state: { users } } = useStore(StoreName.APP) as AppStore;
-
-  const [ isUIBlocked, setIsUIBlocked ] = useState<boolean>(false);
 
   if (users.cashier) {
     return (

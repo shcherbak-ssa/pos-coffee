@@ -96,10 +96,8 @@ public class Helpers {
     final List<OrderLine> lines = order.getLines();
     float total = AppConstants.ZERO;
 
-    for (OrderLine orderLine : lines) {
-      final float price = Helpers.getOrderLinePrice(orderLine.getProduct(), orderLine.getVariant());
-
-      total += orderLine.getCount() * price;
+    for (OrderLine line : lines) {
+      total += line.getCount() * line.getPrice();
     }
 
     return total;

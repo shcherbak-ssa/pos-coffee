@@ -83,7 +83,7 @@ export type CartOrderLineSchema = {
 }
 
 export type CartOrderSchema = {
-  userId: number;
+  user: { id: number };
   lines: CartOrderLineSchema[];
   paymentMethod: PaymentMethodType;
 }
@@ -116,7 +116,7 @@ export interface CartStore extends StoreState<CartState> {
 }
 
 export interface CartStoreActions extends CartStore {
-  createOrder(): void;
+  resetOrder(): void;
   addOrderLine(line: CartOrderLineSchema): void;
   removeOrderLine(line: CartOrderLineSchema): void;
   removeAllOrderLines(): void;
@@ -128,7 +128,7 @@ export interface CartStoreActions extends CartStore {
 }
 
 export interface CartController {
-  createOrder(): Promise<void>;
+  createOrder(): Promise<boolean>;
   addOrderLine(payload: CartPayload): Promise<void>;
   removeOrderLine(line: CartOrderLineSchema): Promise<void>;
   removeAllOrderLines(): Promise<void>;

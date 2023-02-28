@@ -28,7 +28,7 @@ export const cartStore: CartStore & CartStoreActions = {
     return CartService.create(cartStore);
   },
 
-  createOrder(): void {
+  resetOrder(): void {
     cartStore.state.order = CartOrderSchema.create();
   },
 

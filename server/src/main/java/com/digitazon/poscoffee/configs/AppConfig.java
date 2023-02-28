@@ -294,16 +294,17 @@ public class AppConfig {
       .id(clientLine.getProductId())
       .build();
 
-    final ProductVariant variant = ProductVariant.builder()
-      .id(clientLine.getVariantId())
-      .build();
-
-    final float price = Helpers.getOrderLinePrice(product, variant);
+    final Long varaintId = clientLine.getVariantId();
+    final ProductVariant variant = varaintId == null
+      ? null
+      : ProductVariant.builder()
+          .id(varaintId)
+          .build();
 
     return OrderLine.builder()
       .id(clientLine.getId())
       .count(clientLine.getCount())
-      .price(price)
+      .price(clientLine.getPrice())
       .product(product)
       .variant(variant)
       .build();

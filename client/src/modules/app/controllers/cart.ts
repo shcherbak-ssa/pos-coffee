@@ -1,24 +1,23 @@
-import type {
-  ApiService,
-  CategorySchema,
-  NotificationService,
-} from 'shared/types';
+import type { ApiService, CategorySchema, NotificationService, OrderLineSchema, OrderSchema, OrderUserSchema } from 'shared/types';
 import { EntityName, PaymentMethodType, ZERO } from 'shared/constants';
-import { AppError } from 'shared/errors';
 import { BaseController } from 'lib/base-controller';
 
 import type {
+  AppStore,
   CartController as BaseCartController,
   CartOrderLineSchema as BaseCartOrderLineSchema,
+  CartOrderSchema,
   CartPayload,
   CartProductSchema,
   CartService as BaseCartService,
   CartStore,
   CartStoreActions,
+  UserSchema,
 } from '@app/shared/types';
 import { ApiEndpoint, PRODUCT_COUNT_STEP, StoreName } from '@app/shared/constants';
 import { CartOrderLineSchema } from '@app/models/cart';
 import { CartService } from '@app/services/cart';
+import { AppError } from 'shared/errors';
 
 export class CartController extends BaseController implements BaseCartController {
 
@@ -31,9 +30,46 @@ export class CartController extends BaseController implements BaseCartController
     return controller;
   }
 
-  public async createOrder(): Promise<void> {
-    const store = await this.getStore() as CartStoreActions;
-    store.createOrder();
+  public async createOrder(): Promise<boolean> {
+    try {
+      const { state: { users } } = await this.getStore(StoreName.APP) as AppStore;
+
+      if (!users.cashier) {
+        throw new AppError('Create order', 'Cashier not defined');
+      }
+
+      const notificationService: NotificationService = await this.getNotificationService();
+
+      notificationService.addNotification({
+        type: 'process',
+        severity: 'info',
+        heading: 'Creating...',
+        message: `A new order is being created`,
+      });
+
+      const cartStore = await this.getStore() as (CartStore & CartStoreActions);
+      const { order } = cartStore.state;
+
+      const apiService: ApiService = await this.getApiService();
+      const createdOrder: OrderSchema = await apiService
+        .addBody(this.parseOrder(order, users.cashier))
+        .post(ApiEndpoint.CART_ORDERS);
+
+      console.log(createdOrder);
+
+      cartStore.resetOrder();
+
+      notificationService.addNotification({
+        severity: 'success',
+        heading: 'Created',
+        message: `Order created successfully`,
+      });
+
+      return true;
+    } catch (e: any) {
+      this.parseError(e);
+      return false;
+    }
   }
 
   public async addOrderLine({ product, variant }: CartPayload): Promise<void> {
@@ -49,7 +85,7 @@ export class CartController extends BaseController implements BaseCartController
         store.addOrderLine(lineToAdd);
       }
     } catch (e: any) {
-      await this.parseStockError(e);
+      await this.parseError(e);
     }
   }
 
@@ -75,7 +111,7 @@ export class CartController extends BaseController implements BaseCartController
       this.service.checkStock(line, count);
       store.updateOrderLineCount(line, count);
     } catch (e: any) {
-      await this.parseStockError(e);
+      await this.parseError(e);
     }
   }
 
@@ -124,21 +160,22 @@ export class CartController extends BaseController implements BaseCartController
     this.service = CartService.create(store);
   }
 
-  private async parseStockError(e: Error): Promise<void> {
-    if (e instanceof AppError) {
-      const notificationService: NotificationService = await this.getNotificationService();
-
-      notificationService.addNotification({
-        type: 'result',
-        severity: 'error',
-        heading: 'Add product',
-        message: e.message,
-      });
-
-      return;
+  private parseOrder(order: CartOrderSchema, user: UserSchema): Partial<
+    Omit<OrderSchema, 'user' | 'lines'> & {
+      user: Partial<OrderUserSchema>,
+      lines: Partial<OrderLineSchema>[],
     }
-
-    console.error(e);
+  > {
+    return {
+      user: { id: user.id },
+      lines: order.lines.map(({ count, price, product, variant }) => ({
+        count,
+        price,
+        productId: product.id,
+        variantId: variant?.id,
+      })),
+      paymentMethod: order.paymentMethod,
+    };
   }
 
 }

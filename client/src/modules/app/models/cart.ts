@@ -9,13 +9,13 @@ import type {
 import { PRODUCT_COUNT_STEP } from '@app/shared/constants';
 
 export class CartOrderSchema implements BaseCartOrderSchema {
-  public userId: number;
+  public user: { id: number };
   public lines: BaseCartOrderLineSchema[];
   public paymentMethod: PaymentMethodType;
 
   private constructor() {
+    this.user = { id: ZERO };
     this.lines = [];
-    this.userId = ZERO;
     this.paymentMethod = PaymentMethodType.CASH;
   }
 

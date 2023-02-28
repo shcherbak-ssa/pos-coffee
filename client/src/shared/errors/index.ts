@@ -3,9 +3,11 @@ import { ErrorName } from 'shared/constants';
 
 export class AppError extends Error {
   public name: string = ErrorName.APP_ERROR;
+  public heading: string;
 
-  public constructor(message: string) {
+  public constructor(heading: string, message: string) {
     super(message);
+    this.heading = heading;
   }
 }
 

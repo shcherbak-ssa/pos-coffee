@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { type MouseEvent, useState } from 'react';
 import { Dialog } from 'primereact/dialog';
 import { SelectButton, type SelectButtonChangeEvent } from 'primereact/selectbutton';
 import { ScrollPanel } from 'primereact/scrollpanel';
@@ -26,7 +26,21 @@ export function CartPaymentPopupContainer({ isOpen, hide }: Props) {
   const { state: { order } } = useStore(StoreName.CART) as CartStore;
   const cartController = useController(ControllerName.CART) as CartController;
 
+  const [ isPaymentProcessing, setIsPaymentProcessing ] = useState<boolean>(false);
   const [ selectedPaymentMethod, setSelectedPaymentMethod ] = useState<PaymentMethod>();
+
+  function processPayment(e: MouseEvent): void {
+    e.preventDefault();
+
+    setIsPaymentProcessing(true);
+
+    cartController.createOrder()
+      .then((success) => {
+        if (success) {
+          handleHide();
+        }
+      });
+  }
 
   function selectPaymentMethod(e: SelectButtonChangeEvent): void {
     setSelectedPaymentMethod(e.value);
@@ -38,6 +52,7 @@ export function CartPaymentPopupContainer({ isOpen, hide }: Props) {
 
   function handleHide(): void {
     setSelectedPaymentMethod(undefined);
+    setIsPaymentProcessing(false);
 
     hide();
   }
@@ -88,6 +103,8 @@ export function CartPaymentPopupContainer({ isOpen, hide }: Props) {
             className="w-full p-button-sm"
             label="Process payment"
             disabled={!selectedPaymentMethod}
+            loading={isPaymentProcessing}
+            onClick={processPayment}
           />
         </div>
       </div>
