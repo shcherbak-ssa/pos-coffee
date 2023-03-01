@@ -8,8 +8,9 @@ import type { ProductVariantSchema } from 'shared/types';
 import { ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
+import { BasePrice } from 'view/components/BasePrice';
 
-import type { CartController, CartProductSchema, CartStockAlert, CartStore } from '@app/shared/types';
+import type { AppStore, CartController, CartProductSchema, CartStockAlert, CartStore } from '@app/shared/types';
 import { ControllerName, StoreName } from '@app/shared/constants';
 
 export type Props = {
@@ -20,6 +21,7 @@ const TO_DROPDOWN_LIMIT: number = 3;
 
 export function CartProductItemVariantsContainer({ product }: Props) {
 
+  const { state: { settings } } = useStore(StoreName.APP) as AppStore;
   const { getStockAlert } = useStore(StoreName.CART) as CartStore;
   const cartController = useController(ControllerName.CART) as CartController;
 
@@ -79,7 +81,12 @@ export function CartProductItemVariantsContainer({ product }: Props) {
             })}
           >
             <div>{ variant.name }</div>
-            <div>{ variant.price || product.price }</div>
+
+            <BasePrice
+              price={variant.price || product.price }
+              currency={settings.currency}
+              useSymbol
+            />
           </div>
         );
       }}

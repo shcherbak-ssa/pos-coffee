@@ -3,7 +3,7 @@ import { InputNumber } from 'primereact/inputnumber';
 import { Dropdown } from 'primereact/dropdown';
 
 import type { ProductCategory, ProductSchema } from 'shared/types';
-import { EntityName } from 'shared/constants';
+import { Currency, EntityName } from 'shared/constants';
 import { InputWrapper } from 'view/components/InputWrapper';
 import { CardHeading } from 'view/components/CardHeading';
 
@@ -14,6 +14,7 @@ import { CardWrapper } from '@admin/view/components/CardWrapper';
 export type Props = CardWithInputsProps<ProductSchema, ProductDraft> & {
   productCategories: ProductCategory[];
   selectedProductCategory: ProductCategory;
+  currency: Currency;
 };
 
 export function ProductsMainCard({
@@ -23,6 +24,7 @@ export function ProductsMainCard({
   isEditMode,
   productCategories,
   selectedProductCategory,
+  currency,
 }: Props) {
 
   return (
@@ -74,7 +76,7 @@ export function ProductsMainCard({
           <InputNumber
             id="price"
             mode="currency"
-            currency="EUR"
+            currency={currency}
             disabled={!isEditMode}
             value={product.price}
             onValueChange={(e) => productDraft.price = Number(e.value)}

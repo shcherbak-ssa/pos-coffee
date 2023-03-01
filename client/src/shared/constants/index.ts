@@ -11,6 +11,7 @@ export const QUERY_URL_SEPARATOR: string = '?';
 export const AUTHORIZATION_HEADER: string = 'Authorization';
 export const ROOT_PAGE_PATH: string = '/';
 export const CURRENT_USER_API_ENDPOINT: string = '/api/users';
+export const PRICE_WHOLE_DECIMAL_SPLITTER: string = '.';
 
 export enum UserType {
   ADMIN = 'ADMIN',

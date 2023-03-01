@@ -9,8 +9,9 @@ import { ZERO } from 'shared/constants';
 import { paymentMethods } from 'shared/configs/payment-methods';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
+import { BasePrice } from 'view/components/BasePrice';
 
-import type { CartStore, CartController } from '@app/shared/types';
+import type { CartStore, CartController, AppStore } from '@app/shared/types';
 import { ControllerName, StoreName } from '@app/shared/constants';
 import { CardListWrapper } from '@app/view/components/CardListWrapper';
 import { CartOrderLine } from '@app/view/components/CartOrderLine';
@@ -23,11 +24,16 @@ export type Props = {
 
 export function CartPaymentPopupContainer({ isOpen, hide }: Props) {
 
+  const { state: { settings } } = useStore(StoreName.APP) as AppStore;
   const { state: { order } } = useStore(StoreName.CART) as CartStore;
   const cartController = useController(ControllerName.CART) as CartController;
 
   const [ isPaymentProcessing, setIsPaymentProcessing ] = useState<boolean>(false);
   const [ selectedPaymentMethod, setSelectedPaymentMethod ] = useState<PaymentMethod>();
+
+  function getTotal(): number {
+    return order.lines.reduce((total, { price, count }) => total + (price * count), ZERO);
+  }
 
   function processPayment(e: MouseEvent): void {
     e.preventDefault();
@@ -73,6 +79,7 @@ export function CartPaymentPopupContainer({ isOpen, hide }: Props) {
                   key={`${line.product.id}-${line.variant?.id || ZERO}`}
                   line={line}
                   editable={false}
+                  currency={settings.currency}
                 />
               ))
             }
@@ -83,7 +90,10 @@ export function CartPaymentPopupContainer({ isOpen, hide }: Props) {
           <h3>Total</h3>
 
           <strong>
-            { order.lines.reduce((total, { price, count }) => total + (price * count), ZERO) }
+            <BasePrice
+              price={getTotal()}
+              currency={settings.currency}
+            />
           </strong>
         </div>
 

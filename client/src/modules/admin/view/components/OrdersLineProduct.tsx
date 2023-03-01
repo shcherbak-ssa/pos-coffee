@@ -6,7 +6,7 @@ export type Props = {
   line: OrderLineSchema;
 }
 
-export function OrdersLine({ line }: Props) {
+export function OrdersLineProduct({ line }: Props) {
 
   function renderVariantName(): React.ReactNode {
     if (line.variantName) {

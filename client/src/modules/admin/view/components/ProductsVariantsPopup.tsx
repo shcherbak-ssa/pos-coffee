@@ -4,7 +4,7 @@ import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
 
 import type { EmptyFunction, ProductVariantSchema } from 'shared/types';
-import { EMPTY_STRING } from 'shared/constants';
+import { Currency, EMPTY_STRING } from 'shared/constants';
 import { InputWrapper } from 'view/components/InputWrapper';
 
 import type { CardWithInputsProps, ProductVariantDraft } from '@admin/shared/types';
@@ -13,6 +13,7 @@ export type Props = CardWithInputsProps<ProductVariantSchema, ProductVariantDraf
   isVisible: boolean;
   hide: EmptyFunction;
   footer: React.ReactNode;
+  currency: Currency;
 }
 
 export function ProductsVariantsPopup({
@@ -23,6 +24,7 @@ export function ProductsVariantsPopup({
   isVisible,
   hide,
   footer,
+  currency,
 }: Props) {
 
   function getNumberFiledValue(field: number | null): string {
@@ -79,7 +81,7 @@ export function ProductsVariantsPopup({
             <InputNumber
               id="price"
               mode="currency"
-              currency="EUR"
+              currency={currency}
               disabled={!isEditMode}
               value={variant.price}
               onValueChange={(e) => variantDraft.price = Number(e.value)}

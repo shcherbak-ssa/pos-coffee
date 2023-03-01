@@ -7,6 +7,7 @@ import type {
   OrderSchema,
   OrderLineSchema,
   OrderUserSchema,
+  SettingsSchema,
 } from 'shared/types';
 import type { PaymentMethodType } from 'shared/constants';
 
@@ -36,6 +37,7 @@ export type AppMenu = {
  */
 
 export type AppState = {
+  settings: SettingsSchema;
   users: AppUsersState;
 }
 
@@ -51,20 +53,22 @@ export interface AppStore extends StoreState<AppState> {
 }
 
 export interface AppStoreActions extends AppStore {
+  setSettings(settings: SettingsSchema): void;
+  setUsers(users: UserSchema[]): void;
+  setOrders(orders: OrderSchema[]): void;
   setManager(user: UserSchema): void;
   setCashier(user: UserSchema | null): void;
   addLoggedUser(user: UserSchema): void;
   removeLoggedUser(user: UserSchema): void;
-  setUsers(users: UserSchema[]): void;
-  setOrders(orders: OrderSchema[]): void;
 }
 
 export interface AppController {
+  loadSettings(): Promise<void>;
+  loadData(): Promise<void>;
   setManager(user: UserSchema): Promise<void>;
   setCashier(user: UserSchema | null): Promise<void>;
   addLoggedUser(user: UserSchema): Promise<void>;
   removeLoggedUser(user: UserSchema): Promise<void>;
-  loadData(): Promise<void>;
 }
 
 /**

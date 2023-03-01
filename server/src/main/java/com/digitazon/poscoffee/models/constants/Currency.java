@@ -16,7 +16,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = AppConstants.DatabaseTable.CATEGORIES)
+@Table(name = AppConstants.DatabaseTable.CURRENCIES)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

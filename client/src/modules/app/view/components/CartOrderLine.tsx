@@ -2,18 +2,21 @@ import type { MouseEvent } from 'react';
 import { Button } from 'primereact/button';
 import { PrimeIcons } from 'primereact/api';
 
+import type { Currency } from 'shared/constants';
 import { ProductsImage } from 'view/components/ProductsImage';
+import { BasePrice } from 'view/components/BasePrice';
 
 import type { CartOrderLineSchema } from '@app/shared/types';
 
 export type Props = {
   line: CartOrderLineSchema;
   editable: boolean;
+  currency: Currency;
   addLine?: (line: CartOrderLineSchema) => void;
   subtractLine?: (line: CartOrderLineSchema) => void;
 }
 
-export function CartOrderLine({ line, addLine, subtractLine, editable }: Props) {
+export function CartOrderLine({ line, editable, currency, addLine, subtractLine }: Props) {
 
   function getLineName(): string {
     return line.variant
@@ -47,7 +50,7 @@ export function CartOrderLine({ line, addLine, subtractLine, editable }: Props) 
             onClick={handleSubtract}
           />
 
-          <div className="w-6 text-center">{ line.count }</div>
+          <div className="w-6 text-center font-semibold">{ line.count }</div>
 
           <Button
             className="p-button-sm p-button-rounded p-button-outlined"
@@ -62,10 +65,15 @@ export function CartOrderLine({ line, addLine, subtractLine, editable }: Props) 
   function renderTotal(): React.ReactNode {
     if (!editable) {
       return (
-        <div className="text-right">
+        <strong className="text-right text-sm">
           <div>{ line.count }</div>
-          <div>{ line.count * line.price }</div>
-        </div>
+
+          <BasePrice
+            price={line.count * line.price}
+            currency={currency}
+            useSymbol
+          />
+        </strong>
       );
     }
   }
@@ -77,7 +85,11 @@ export function CartOrderLine({ line, addLine, subtractLine, editable }: Props) 
 
         <div className="ml-2 text-sm">
           <h3>{ getLineName() }</h3>
-          <div>{ line.price }</div>
+
+          <BasePrice
+            price={line.price}
+            currency={currency}
+          />
         </div>
       </div>
 

@@ -1,11 +1,16 @@
 import type { ColumnProps } from 'primereact/column';
 
 import type { OrderSchema } from 'shared/types';
+import { useStore } from 'view/hooks/store';
+import { BasePrice } from 'view/components/BasePrice';
 
+import type { AppStore } from '@admin/shared/types';
 import { StoreName, PagePath } from '@admin/shared/constants';
 import { PageDefaultContentContainer } from '@admin/view/containers/PageDefaultContentContainer';
 
 export function OrdersPageContainer() {
+
+  const { state: { settings } } = useStore(StoreName.APP) as AppStore;
 
   const ordersTableColumns: ColumnProps[] = [
     {
@@ -29,6 +34,9 @@ export function OrdersPageContainer() {
     {
       field: 'total',
       header: 'Total',
+      body: ({ total }: OrderSchema) => (
+        <BasePrice price={total} currency={settings.currency} />
+      ),
     },
     {
       field: 'createdAt',

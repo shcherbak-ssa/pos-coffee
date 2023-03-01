@@ -2,6 +2,7 @@ import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
 
 import type { OrderSchema } from 'shared/types';
+import type { Currency } from 'shared/constants';
 import { InputWrapper } from 'view/components/InputWrapper';
 import { CardHeading } from 'view/components/CardHeading';
 
@@ -9,9 +10,10 @@ import { CardWrapper } from '@admin/view/components/CardWrapper';
 
 export type Props = {
   order: OrderSchema;
+  currency: Currency;
 }
 
-export function OrdersCard({ order }: Props) {
+export function OrdersCard({ order, currency }: Props) {
 
   return (
     <CardWrapper className="col-span-2">
@@ -40,7 +42,7 @@ export function OrdersCard({ order }: Props) {
           <InputNumber
             id="total"
             mode="currency"
-            currency="EUR"
+            currency={currency}
             disabled={true}
             value={order.total}
           />

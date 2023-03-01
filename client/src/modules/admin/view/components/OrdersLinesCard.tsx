@@ -2,16 +2,19 @@ import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 
 import type { OrderLineSchema, OrderSchema } from 'shared/types';
+import type { Currency } from 'shared/constants';
+import { BasePrice } from 'view/components/BasePrice';
 import { CardHeading } from 'view/components/CardHeading';
 
 import { CardWrapper } from '@admin/view/components/CardWrapper';
-import { OrdersLine } from '@admin/view/components/OrdersLine';
+import { OrdersLineProduct } from '@admin/view/components/OrdersLineProduct';
 
 export type Props = {
   order: OrderSchema;
+  currency: Currency;
 }
 
-export function OrdersLinesCard({ order }: Props) {
+export function OrdersLinesCard({ order, currency }: Props) {
 
   return (
     <CardWrapper className="col-span-3">
@@ -27,18 +30,25 @@ export function OrdersLinesCard({ order }: Props) {
             header="Product"
             field="product"
             body={(line: OrderLineSchema) => (
-              <OrdersLine line={line} />
+              <OrdersLineProduct line={line} />
             )}
           />
 
           <Column header="Count" field="count" />
-          <Column header="Price" field="price" />
+
+          <Column
+            header="Price"
+            field="price"
+            body={({ price }: OrderLineSchema) => (
+              <BasePrice price={price} currency={currency} />
+            )}
+          />
 
           <Column
             header="Total"
             field="Total"
             body={({ count, price }: OrderLineSchema) => (
-              <div>{ count * price }</div>
+              <BasePrice price={count * price} currency={currency} />
             )}
           />
         </DataTable>

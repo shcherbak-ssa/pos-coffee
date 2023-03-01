@@ -24,15 +24,18 @@ import com.digitazon.poscoffee.models.helpers.client.ClientCategory;
 import com.digitazon.poscoffee.models.helpers.client.ClientOrder;
 import com.digitazon.poscoffee.models.helpers.client.ClientProduct;
 import com.digitazon.poscoffee.models.helpers.client.ClientProductVariant;
+import com.digitazon.poscoffee.models.helpers.client.ClientSettings;
 import com.digitazon.poscoffee.models.helpers.client.ClientUser;
 import com.digitazon.poscoffee.services.CategoriesService;
 import com.digitazon.poscoffee.services.OrdersService;
 import com.digitazon.poscoffee.services.ProductVariantsService;
 import com.digitazon.poscoffee.services.ProductsService;
+import com.digitazon.poscoffee.services.SettingsService;
 import com.digitazon.poscoffee.services.StockService;
 import com.digitazon.poscoffee.services.UsersService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
+import com.digitazon.poscoffee.shared.exceptions.ProgerException;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
 
 @RestController
@@ -57,6 +60,16 @@ public class AppController {
 
   @Autowired
   private StockService stockService;
+
+  @Autowired
+  private SettingsService settingsService;
+
+  @GetMapping(path = AppConstants.ApiEndpoint.App.APP_SETTINGS)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public ClientSettings getSettings() throws ProgerException {
+    return this.settingsService.getSettings();
+  }
 
   @GetMapping(path = AppConstants.ApiEndpoint.App.APP_HOME)
   @ResponseStatus(HttpStatus.OK)
