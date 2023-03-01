@@ -50,7 +50,7 @@ export function CartProductItemContainer({ product }: Props) {
       return;
     }
 
-    const name: string = variant ? variant.name : 'Product';
+    const name: string = variant ? `"${variant.name}"` : 'Product';
 
     return (
       <Message
@@ -58,8 +58,8 @@ export function CartProductItemContainer({ product }: Props) {
         severity="warn"
         text={
           remainStock === ZERO
-            ? `"${name}" out of stock`
-            : `"${name}" left for ${remainStock} times`
+            ? `${name} out of stock`
+            : `${name} left for ${remainStock} times`
         }
       />
     );

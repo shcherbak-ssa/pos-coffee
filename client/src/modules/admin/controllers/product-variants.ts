@@ -59,8 +59,8 @@ export class ProductVariantsController
     await this.tryToSelect(variantId);
   }
 
-  private getNullLabels({ price, stock, stockAlert, stockPerTime }: ProductVariantUpdates): string {
-    const labels: { [key: string]: number | null | undefined } = { price, stock, stockAlert, stockPerTime };
+  private getNullLabels({ stock, stockAlert, stockPerTime }: ProductVariantUpdates): string {
+    const labels: { [key: string]: number | null | undefined } = { stock, stockAlert, stockPerTime };
     const nullLabels: string[] = [];
 
     for (const [ key, value ] of Object.entries(labels)) {

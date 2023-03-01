@@ -132,7 +132,7 @@ public class AppController {
   @ResponseStatus(HttpStatus.CREATED)
   @PreAuthorize("hasAuthority('MANAGER')")
   public ClientOrder createOrder(
-    @RequestBody @Validated ClientOrder orderToCreate
+    @RequestBody @Validated(AppConstants.ValidationGroups.ToCreate.class) ClientOrder orderToCreate
   ) throws AlreadyExistException, ResourceNotFoundException {
     final ClientOrder createdOrder = this.ordersService.createOrder(orderToCreate);
     this.stockService.takeStock(createdOrder.getLines());

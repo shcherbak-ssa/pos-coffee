@@ -105,10 +105,6 @@ public class ProductVariantsService {
     if (filter.getNullLabels() != null) {
       final List<String> nullLabels = Arrays.asList(filter.getNullLabels());
 
-      if (nullLabels.contains(ProductsConstants.PRICE_LABEL)) {
-        variant.setPrice(updates.getPrice());
-      }
-
       if (nullLabels.contains(ProductsConstants.STOCK_LABEL)) {
         variant.setStock(updates.getStock());
       }

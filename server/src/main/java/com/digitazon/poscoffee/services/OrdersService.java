@@ -80,6 +80,10 @@ public class OrdersService {
   }
 
   public Order createOrder(Order order) {
+    if (order.getCreatedAt() == null) {
+      order.setCreatedAt(new Date());
+    }
+
     return this.repository.save(order);
   }
 

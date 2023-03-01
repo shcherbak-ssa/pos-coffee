@@ -425,6 +425,7 @@ public class AppConfig {
       .taxes(order.getTaxes())
       .lines(lines)
       .user(user)
+      .createdAt(order.getCreatedAt())
       .build();
   }
 

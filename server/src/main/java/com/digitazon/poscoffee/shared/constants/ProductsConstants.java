@@ -13,7 +13,6 @@ public class ProductsConstants {
   public static final String PARAM_NULL_LABELS = "nullLabels";
   public static final String UNIQUE_FIELD = "sku";
 
-  public static final String PRICE_LABEL = "price";
   public static final String STOCK_LABEL = "stock";
   public static final String STOCK_PER_TIME_LABEL = "stockPerTime";
   public static final String STOCK_ALERT_LABEL = "stockAlert";

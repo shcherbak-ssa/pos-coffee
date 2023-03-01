@@ -153,7 +153,9 @@ public class DatabaseDataLoader {
   private void loadOrderLines(List<ConfigOrderLine> lines) throws ResourceNotFoundException {
     for (ConfigOrderLine configLine : lines) {
       final Product product = this.productsService.findProductById(configLine.getProduct());
-      final ProductVariant variant = this.productVariantsService.findVariantById(configLine.getVariant());
+      final ProductVariant variant = configLine.getVariant() == null
+        ? null
+        : this.productVariantsService.findVariantById(configLine.getVariant());
 
       final OrderLine line = (OrderLine)
         this.context.getBean("orderLineFromConfigOrderLine", configLine, product, variant);

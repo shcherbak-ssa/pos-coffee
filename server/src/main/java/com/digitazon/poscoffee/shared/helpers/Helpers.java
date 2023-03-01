@@ -29,7 +29,7 @@ public class Helpers {
   }
 
   public static float getOrderLinePrice(Product product, ProductVariant variant) {
-    return variant.getPrice() == AppConstants.ZERO
+    return variant == null || variant.getPrice() == AppConstants.ZERO
       ? product.getPrice()
       : variant.getPrice();
   }
@@ -46,7 +46,9 @@ public class Helpers {
   }
 
   public static float calculateTaxes(Order order, float total) {
-    return total * order.getTaxes() / AppConstants.ONE_HUNDRED;
+    return (float) Math.round(
+      (total * order.getTaxes() / AppConstants.ONE_HUNDRED) * AppConstants.ONE_HUNDRED
+    ) / AppConstants.ONE_HUNDRED;
   }
 
 }

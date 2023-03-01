@@ -28,6 +28,7 @@ export function getSku(name: string): string {
     .toUpperCase()
     .replace(/[\s|-]/g, '_')
     .replace(/[\(\)]/g, '')
+    .replace(/\./, '');
 }
 
 export function generatePrice(): number {

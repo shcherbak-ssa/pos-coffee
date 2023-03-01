@@ -68,10 +68,11 @@ export type Order = {
   lines: number[];
   taxes: number;
   paymentMethod: PaymentMethod;
+  createdAt: number;
 }
 
 export type OrderLine = {
   count: number;
   product: number;
-  variant: number;
+  variant: number | null;
 }

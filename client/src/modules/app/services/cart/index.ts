@@ -31,7 +31,7 @@ export class CartService implements BaseCartService {
     const foundLine: BaseCartOrderLineSchema | undefined = this.findLine(line);
     const count: number = foundLine?.count || ZERO;
 
-    return Math.floor((stock - count * stockPerTime) / stockPerTime);
+    return Math.floor(stock - count * stockPerTime);
   }
 
   public findLine(line: BaseCartOrderLineSchema): BaseCartOrderLineSchema | undefined {
