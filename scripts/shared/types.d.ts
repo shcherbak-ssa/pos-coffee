@@ -66,6 +66,7 @@ export type ProductVariant = {
 export type Order = {
   user: number,
   lines: number[];
+  taxes: number;
   paymentMethod: PaymentMethod;
 }
 

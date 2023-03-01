@@ -9,7 +9,7 @@ export type Props = {
 
 export function BasePrice({ price, currency, useSymbol = false }: Props) {
 
-  function parsePrice(price: number, currency: Currency): string {
+  function parsePrice(): string {
     const zeroString: string = ZERO.toString();
     let [ whole, decimal ] = price.toString().split(PRICE_WHOLE_DECIMAL_SPLITTER);
 
@@ -26,7 +26,7 @@ export function BasePrice({ price, currency, useSymbol = false }: Props) {
 
   return (
     <div className="shrink-0">
-      { parsePrice(price, currency) }
+      { parsePrice() }
     </div>
   );
 

@@ -187,6 +187,7 @@ public class AppConfig {
       .id(orderId)
       .number(number)
       .total(total)
+      .taxes(order.getTaxes())
       .lines(lines)
       .user(clientOrderUser)
       .createdAt(order.getCreatedAt())
@@ -306,6 +307,7 @@ public class AppConfig {
 
     return Order.builder()
       .id(clientOrder.getId())
+      .taxes(clientOrder.getTaxes())
       .user(user)
       .lines(lines)
       .paymentMethod(paymentMethod)
@@ -420,6 +422,7 @@ public class AppConfig {
       .collect(Collectors.toList());
 
     return Order.builder()
+      .taxes(order.getTaxes())
       .lines(lines)
       .user(user)
       .build();

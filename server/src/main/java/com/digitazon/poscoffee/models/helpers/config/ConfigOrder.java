@@ -14,5 +14,6 @@ public class ConfigOrder {
   private Long user;
   private List<Long> lines;
   private String paymentMethod;
+  private Byte taxes;
 
 }

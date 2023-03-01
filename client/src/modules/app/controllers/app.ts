@@ -1,4 +1,4 @@
-import type { ApiService, OrderSchema, SettingsSchema } from 'shared/types';
+import type { ApiService, SettingsSchema } from 'shared/types';
 import { EntityName } from 'shared/constants';
 import { BaseController } from 'lib/base-controller';
 

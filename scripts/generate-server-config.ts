@@ -211,8 +211,14 @@ function generateProductVariant({
   };
 }
 
-function generateOrder({ lines = [], user = 2, paymentMethod = PaymentMethod.CARD }: Partial<Order>): Order {
+function generateOrder({
+  taxes = 5,
+  lines = [],
+  user = 2,
+  paymentMethod = PaymentMethod.CARD,
+}: Partial<Order>): Order {
   return {
+    taxes,
     lines,
     user,
     paymentMethod,

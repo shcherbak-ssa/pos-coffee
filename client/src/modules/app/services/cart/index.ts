@@ -56,8 +56,9 @@ export class CartService implements BaseCartService {
     }
   }
 
-  public parseOrder(order: CartOrderSchema, user: UserSchema): CartOrderUpdates {
+  public parseOrder(order: CartOrderSchema, user: UserSchema, taxes: number): CartOrderUpdates {
     return {
+      taxes,
       user: { id: user.id },
       lines: order.lines.map(({ count, price, product, variant }) => ({
         count,

@@ -5,6 +5,7 @@ import javax.validation.groups.Default;
 public class AppConstants {
 
   public static final int ZERO = 0;
+  public static final int ONE_HUNDRED = 100;
   public static final int MIN_UPDATE_LENGTH = 1;
 
   public static final String EMPTY_STRING = "";

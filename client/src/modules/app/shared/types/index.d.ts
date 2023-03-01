@@ -121,7 +121,7 @@ export interface CartService extends CartStockAlert {
   findLine(line: CartOrderLineSchema): CartOrderLineSchema | undefined;
   isSameOrderLine(line: CartOrderLineSchema, lineToCompare: CartOrderLineSchema): boolean;
   checkStock(line: CartOrderLineSchema, count: number): void;
-  parseOrder(order: CartOrderSchema, user: UserSchema): CartOrderUpdates;
+  parseOrder(order: CartOrderSchema, user: UserSchema, taxes: number): CartOrderUpdates;
 }
 
 export type CartState = {

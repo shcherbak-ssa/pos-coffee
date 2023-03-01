@@ -48,6 +48,15 @@ export function OrdersCard({ order, currency }: Props) {
           />
         </InputWrapper>
 
+        <InputWrapper label="Taxes">
+          <InputText
+            id="taxes"
+            type="text"
+            disabled={true}
+            value={`${order.taxes}.00 %`}
+          />
+        </InputWrapper>
+
         <InputWrapper label="Payment method">
           <InputText
             id="paymentMethod"

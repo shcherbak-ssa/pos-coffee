@@ -42,7 +42,11 @@ public class Helpers {
       total += line.getCount() * line.getPrice();
     }
 
-    return total;
+    return total + Helpers.calculateTaxes(order, total);
+  }
+
+  public static float calculateTaxes(Order order, float total) {
+    return total * order.getTaxes() / AppConstants.ONE_HUNDRED;
   }
 
 }

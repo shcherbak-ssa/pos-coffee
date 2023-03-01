@@ -22,6 +22,7 @@ public class ClientOrder {
   private Long id;
   private String number;
   private Float total;
+  private Byte taxes;
   private List<ClientOrderLine> lines;
   private ClientOrderUser user;
   private Date createdAt;

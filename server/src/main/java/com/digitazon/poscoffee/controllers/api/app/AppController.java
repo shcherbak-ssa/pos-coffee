@@ -66,7 +66,7 @@ public class AppController {
 
   @GetMapping(path = AppConstants.ApiEndpoint.App.APP_SETTINGS)
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("hasAuthority('ADMIN')")
+  @PreAuthorize("hasAuthority('MANAGER')")
   public ClientSettings getSettings() throws ProgerException {
     return this.settingsService.getSettings();
   }

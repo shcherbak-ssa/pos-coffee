@@ -42,15 +42,15 @@ public class Order {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @OneToMany(
-    fetch = FetchType.EAGER
-  )
+  @OneToMany(fetch = FetchType.EAGER)
   @JoinTable(
     name = AppConstants.DatabaseTable.ORDER_LINE_JOIN,
     joinColumns = @JoinColumn(name = OrdersConstants.ORDER_JOIN_COLUMN),
     inverseJoinColumns = @JoinColumn(name = OrdersConstants.LINE_JOIN_COLUMN)
   )
   private List<OrderLine> lines;
+
+  private Byte taxes;
 
   @OneToOne
   private User user;

@@ -131,6 +131,7 @@ export type OrderSchema = {
   id: number;
   number: string;
   total: number;
+  taxes: number;
   lines: OrderLineSchema[];
   user: OrderUserSchema;
   paymentMethod: PaymentMethodType;
