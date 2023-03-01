@@ -12,7 +12,9 @@ export function ProductsImage({ className, image, size = 'large' }: Props) {
 
   return (
     <Avatar
-      className={classames('overflow-hidden', className)}
+      className={classames('overflow-hidden', className, {
+        'product-image': size === 'xlarge',
+      })}
       icon={PrimeIcons.BOX}
       size={size}
       image={image || undefined}

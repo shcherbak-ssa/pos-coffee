@@ -11,7 +11,7 @@ export function OrdersInfoPageContainer() {
   const { state: { selected: selectedOrder } } = useStore(StoreName.ORDERS) as OrdersStore;
 
   return (
-    <InfoPageWrapper className="grid-cols-2">
+    <InfoPageWrapper className="grid-cols-5">
       <OrdersCard order={selectedOrder} />
 
       <OrdersLinesCard order={selectedOrder} />

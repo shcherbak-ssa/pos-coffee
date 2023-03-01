@@ -2,10 +2,10 @@ import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 
 import type { OrderLineSchema, OrderSchema } from 'shared/types';
+import { CardHeading } from 'view/components/CardHeading';
 
 import { CardWrapper } from '@admin/view/components/CardWrapper';
-import { CardHeading } from '@admin/view/components/CardHeading';
-import { OrdersLineVariant } from '@admin/view/components/OrdersLineVariant';
+import { OrdersLine } from '@admin/view/components/OrdersLine';
 
 export type Props = {
   order: OrderSchema;
@@ -14,7 +14,7 @@ export type Props = {
 export function OrdersLinesCard({ order }: Props) {
 
   return (
-    <CardWrapper>
+    <CardWrapper className="col-span-3">
       <CardHeading heading="Products" />
 
       <div className="overflow-hidden rounded-xl border-2">
@@ -26,8 +26,8 @@ export function OrdersLinesCard({ order }: Props) {
           <Column
             header="Product"
             field="product"
-            body={({ variant }: OrderLineSchema) => (
-              <OrdersLineVariant variant={variant} />
+            body={(line: OrderLineSchema) => (
+              <OrdersLine line={line} />
             )}
           />
 

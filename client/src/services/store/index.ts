@@ -1,8 +1,8 @@
 import type { Entity, JoinedStore, StoreService as BaseStoreService } from 'shared/types';
 import { EntityName, ZERO } from 'shared/constants';
+import { ProgerError } from 'shared/errors';
 import { filterById, findById, replaceById } from 'shared/utils/by-id';
 import { getUpdates } from 'shared/helpers/get-updates';
-import { AppError } from 'shared/errors';
 
 export class StoreService<S, E extends Entity, D> implements BaseStoreService<E> {
 
@@ -64,7 +64,7 @@ export class StoreService<S, E extends Entity, D> implements BaseStoreService<E>
       return;
     }
 
-    throw new AppError(`${this.entityName} not found in the store`);
+    throw new ProgerError(`${this.entityName} not found in the store`);
   }
 
   public getSelectedUpdates(): Partial<E> | undefined {

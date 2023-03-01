@@ -3,8 +3,15 @@ package com.digitazon.poscoffee.services;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.digitazon.poscoffee.configs.AppConfig;
@@ -16,7 +23,7 @@ import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.CategoriesConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
-import com.digitazon.poscoffee.shared.helpers.ServiceHelpers;
+import com.digitazon.poscoffee.shared.types.BaseServiceHelpers;
 
 @Service
 public class CategoriesService {
@@ -28,18 +35,18 @@ public class CategoriesService {
   @Autowired
   private CategoriesRepository repository;
 
-  private ServiceHelpers helpers;
+  private BaseServiceHelpers helpers;
 
   public CategoriesService() {
-    this.helpers = (ServiceHelpers) this.context.getBean("serviceHelpers", AppConstants.Entity.CATEGORY);
+    this.helpers = (BaseServiceHelpers) this.context.getBean("serviceHelpers", AppConstants.Entity.CATEGORY);
   }
 
   public boolean isCategoryExist(String name) {
     return this.repository.existsByName(name);
   }
 
-  public List<ClientCategory> getCategories() {
-    final List<Category> categories = this.repository.findAll();
+  public List<ClientCategory> getCategories(boolean onlyAvailable) {
+    final List<Category> categories = this.repository.findAll(CategoriesService.filter(onlyAvailable));
 
     return categories
       .stream()
@@ -105,6 +112,26 @@ public class CategoriesService {
     category.setName(updates.getName() == null ? category.getName() : updates.getName());
     category
       .setIsAvailable(updates.getIsAvailable() == null ? category.getIsAvailable() : updates.getIsAvailable());
+  }
+
+  private static Specification<Category> filter(boolean onlyAvailable) {
+    return new Specification<Category>() {
+
+      @Override
+      public Predicate toPredicate(Root<Category> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+        final Path<Category> isAvailablePath = root.get("isAvailable");
+
+        if (onlyAvailable) {
+          return builder.equal(isAvailablePath, true);
+        }
+
+        return builder.or(
+          builder.equal(isAvailablePath, true),
+          builder.equal(isAvailablePath, false)
+        );
+      }
+
+    };
   }
 
 }

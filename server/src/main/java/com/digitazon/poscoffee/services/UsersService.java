@@ -1,12 +1,14 @@
 package com.digitazon.poscoffee.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -19,7 +21,7 @@ import org.springframework.stereotype.Service;
 import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.User;
 import com.digitazon.poscoffee.models.UserType;
-import com.digitazon.poscoffee.models.helpers.EntityFilter;
+import com.digitazon.poscoffee.models.helpers.UsersFilter;
 import com.digitazon.poscoffee.models.helpers.client.ClientUser;
 import com.digitazon.poscoffee.repositories.UsersRepository;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
@@ -28,7 +30,7 @@ import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
 import com.digitazon.poscoffee.shared.exceptions.ProgerException;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
 import com.digitazon.poscoffee.shared.helpers.Helpers;
-import com.digitazon.poscoffee.shared.helpers.ServiceHelpers;
+import com.digitazon.poscoffee.shared.types.BaseServiceHelpers;
 
 @Service
 public class UsersService {
@@ -36,6 +38,9 @@ public class UsersService {
   // @TODO: conver to annotation
   private AnnotationConfigApplicationContext context
     = new AnnotationConfigApplicationContext(AppConfig.class);
+
+  @PersistenceContext
+  private EntityManager manager;
 
   @Autowired
   private UserTypesService userTypesService;
@@ -46,10 +51,10 @@ public class UsersService {
   @Autowired
   private UsersRepository repository;
 
-  private ServiceHelpers helpers;
+  private BaseServiceHelpers helpers;
 
   public UsersService() {
-    this.helpers = (ServiceHelpers) this.context.getBean("serviceHelpers", AppConstants.Entity.USER);
+    this.helpers = (BaseServiceHelpers) this.context.getBean("serviceHelpers", AppConstants.Entity.USER);
   }
 
   public boolean isUserExist(String email) {
@@ -76,8 +81,8 @@ public class UsersService {
     throw new ResourceNotFoundException("User not found");
   }
 
-  public List<ClientUser> getUsers(EntityFilter filter) {
-    final List<User> users = this.repository.findAll(UsersService.filter(filter));
+  public List<ClientUser> getUsers(UsersFilter filter) {
+    final List<User> users = this.repository.findAll(UsersService.filter(filter, this.userTypesService));
 
     return users
       .stream()
@@ -136,8 +141,7 @@ public class UsersService {
   }
 
   private User convertToUser(ClientUser user) throws ProgerException {
-    final UserType userType
-      = Helpers.converUserTypeToEnumValue(this.userTypesService, user.getType());
+    final UserType userType = this.userTypesService.getByName(user.getType());
 
     return (User) this.context.getBean("user", user, userType);
   }
@@ -149,22 +153,31 @@ public class UsersService {
     user.setPhone(updates.getPhone() == null ? user.getPhone() : updates.getPhone());
   }
 
-  private static Specification<User> filter(EntityFilter filter) {
+  private static Specification<User> filter(UsersFilter filter, UserTypesService userTypesService) {
     return new Specification<User>() {
 
       @Override
       public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-        final Path<User> isArchivedPath = root.get("isArchived");
-        final Boolean onlyArchived = filter.getOnlyArchived();
+        final List<Predicate> predicates = new ArrayList<Predicate>();
 
-        if (onlyArchived != null && onlyArchived) {
-          return builder.equal(isArchivedPath, true);
+        if (filter.getIsArchived() != null) {
+          predicates.add(
+            builder.equal(root.get("isArchived"), filter.getIsArchived())
+          );
         }
 
-        return builder.or(
-          builder.isNull(isArchivedPath),
-          builder.equal(isArchivedPath, false)
-        );
+        if (filter.getForApp()) {
+          final UserType type = userTypesService.getByName(UsersConstants.UserType.WAITER);
+
+          predicates.add(
+            builder.and(
+              builder.equal(root.get("isArchived"), false),
+              builder.equal(root.get("type"), type)
+            )
+          );
+        }
+
+        return builder.and(predicates.toArray(new Predicate[0]));
       }
 
     };

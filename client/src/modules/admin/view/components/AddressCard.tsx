@@ -3,9 +3,9 @@ import { InputText } from 'primereact/inputtext';
 import type { AddressDraft, AddressSchema } from 'shared/types';
 import { InputWrapper } from 'view/components/InputWrapper';
 import { EmptyComponent } from 'view/components/EmptyComponent';
+import { CardHeading } from 'view/components/CardHeading';
 
 import type { CardWithInputsProps } from '@admin/shared/types';
-import { CardHeading } from '@admin/view/components/CardHeading';
 import { CardWrapper } from '@admin/view/components/CardWrapper';
 
 export type Props = CardWithInputsProps<AddressSchema, AddressDraft>;

@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ConfigOrder {
 
-  private List<Long> lines;
   private Long user;
+  private List<Long> lines;
+  private String paymentMethod;
 
 }

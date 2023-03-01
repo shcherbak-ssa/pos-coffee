@@ -1,4 +1,4 @@
-import type { UserType } from './constants';
+import type { PaymentMethod, UserType } from './constants';
 
 export type Config = {
   users: User[];
@@ -33,10 +33,11 @@ export type Product = {
   sku: string;
   name: string;
   price: number;
-  stock: number;
   image: string;
   category: number;
-  useStockForVariants: boolean;
+  stock: number;
+  stockPerTime: number;
+  stockAlert: number;
   isAvailable: boolean;
   isArchived: boolean;
 }
@@ -49,19 +50,21 @@ export type Category = {
 export type ProductVariant = {
   sku: string;
   name: string;
-  price: number;
-  stock: number
-  stockPerTime: number;
-  useProductPrice: boolean;
+  price: number | null;
+  stock: number | null
+  stockPerTime: number | null;
+  stockAlert: number | null;
   product: number;
 }
 
 export type Order = {
-  lines: number[];
   user: number,
+  lines: number[];
+  paymentMethod: PaymentMethod;
 }
 
 export type OrderLine = {
   count: number;
+  product: number;
   variant: number;
 }

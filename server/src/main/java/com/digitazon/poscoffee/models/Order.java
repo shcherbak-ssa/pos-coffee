@@ -11,9 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -39,8 +41,6 @@ public class Order {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private Float total;
-
   @OneToMany(
     fetch = FetchType.EAGER
   )
@@ -56,5 +56,14 @@ public class Order {
 
   @CreatedDate
   private Date createdAt;
+
+  @ManyToOne
+  @JoinTable(
+    name = AppConstants.DatabaseTable.ORDER_PAYMENT_JOIN,
+    joinColumns = @JoinColumn(name = OrdersConstants.ORDER_JOIN_COLUMN),
+    inverseJoinColumns = @JoinColumn(name = OrdersConstants.PAYMENT_JOIN_COLUMN)
+  )
+  @NotNull(message = OrdersConstants.PAYMENT_METHOD_EMPTY_MESSAGE)
+  private PaymentMethod paymentMethod;
 
 }

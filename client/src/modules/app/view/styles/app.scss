@@ -1,0 +1,42 @@
+body {
+  background-color: var(--bluegray-50);
+}
+
+.app {
+  &-container {
+    @apply mx-auto h-screen overflow-hidden;
+    width: 1024px;
+  }
+
+  &-user {
+    &:hover .p-button {
+      @apply opacity-100;
+    }
+  }
+}
+
+.card-wrapper {
+  box-shadow: 0 3px 8px rgba($color: #000000, $alpha: .15);
+}
+
+.categories {
+  background-color: var(--bluegray-50);
+}
+
+.cart-page {
+  grid-template-columns: 1fr 360px;
+}
+
+.cart-lines {
+  width: 360px;
+}
+
+/** Primereact */
+
+.p-menubar {
+  @apply px-0;
+}
+
+.p-inline-message {
+  @apply justify-start;
+}

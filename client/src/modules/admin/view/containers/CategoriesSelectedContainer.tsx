@@ -13,6 +13,7 @@ import { useError } from 'view/hooks/error';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 import { InputWrapper } from 'view/components/InputWrapper';
+import { CardHeading } from 'view/components/CardHeading';
 
 import type { AppController, AppStore, CategoriesController, CategoriesStore } from '@admin/shared/types';
 import { Action, ControllerName, DEFAULT_CATEGORY_NAME, StoreName } from '@admin/shared/constants';
@@ -20,7 +21,6 @@ import { confirmDialogConfig } from '@admin/shared/configs/confirm-dialog';
 import { useActionsMenuItems } from '@admin/view/hooks/actions-menu-items';
 import { SaveButton } from '@admin/view/components/SaveButton';
 import { AvailableCheckbox } from '@admin/view/components/AvailableCheckbox';
-import { CardHeading } from '@admin/view/components/CardHeading';
 import { CategoriesSelectedWrapper } from '@admin/view/components/CategoriesSelectedWrapper';
 import { actionsMenuItemsProps } from '@admin/shared/configs/pages';
 import { CategoriesDeleteMessage } from '@admin/view/components/CategoriesDeleteMessage';

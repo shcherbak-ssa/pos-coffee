@@ -3,41 +3,43 @@ package com.digitazon.poscoffee.shared.helpers;
 import java.util.List;
 import java.util.Random;
 
+import com.digitazon.poscoffee.models.Order;
+import com.digitazon.poscoffee.models.OrderLine;
+import com.digitazon.poscoffee.models.PaymentMethod;
 import com.digitazon.poscoffee.models.Product;
 import com.digitazon.poscoffee.models.ProductVariant;
-import com.digitazon.poscoffee.models.UserType;
-import com.digitazon.poscoffee.models.helpers.base.BaseEntityId;
-import com.digitazon.poscoffee.services.UserTypesService;
+import com.digitazon.poscoffee.services.PaymentMethodsService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
+import com.digitazon.poscoffee.shared.constants.OrdersConstants;
 import com.digitazon.poscoffee.shared.constants.UsersConstants;
 import com.digitazon.poscoffee.shared.exceptions.ProgerException;
 
 public class Helpers {
 
-  public static final UserType converUserTypeToEnumValue(
-    UserTypesService userTypesService,
-    String userType
+  public static final PaymentMethod converPaymentMethodToEnumValue(
+    PaymentMethodsService paymentMethodsService,
+    String paymentMethod
   ) throws ProgerException {
 
-    UsersConstants.UserType type = null;
+    OrdersConstants.PaymentMethod method = null;
 
-    switch (userType) {
-      case UsersConstants.ConfigUserType.ADMIN:
-        type = UsersConstants.UserType.ADMIN;
+    switch (paymentMethod) {
+      case OrdersConstants.ConfigPaymentMethod.CASH:
+        method = OrdersConstants.PaymentMethod.CASH;
         break;
-      case UsersConstants.ConfigUserType.MANAGER:
-        type = UsersConstants.UserType.MANAGER;
+      case OrdersConstants.ConfigPaymentMethod.CARD:
+        method = OrdersConstants.PaymentMethod.CARD;
         break;
-      case UsersConstants.ConfigUserType.WAITER:
-        type = UsersConstants.UserType.WAITER;
+      case OrdersConstants.ConfigPaymentMethod.MISC:
+        method = OrdersConstants.PaymentMethod.MISC;
         break;
     }
 
-    if (type == null) {
-      throw new ProgerException(String.format("Unknown user type %s", userType));
+    if (method == null) {
+      throw new ProgerException(String.format("Unknown payment method %s", paymentMethod));
     }
 
-    return userTypesService.getByName(type);
+    return paymentMethodsService.getByName(method);
   }
 
   public static String generatePassword() {
@@ -56,23 +58,21 @@ public class Helpers {
     return builder.toString();
   }
 
-  public static <T extends BaseEntityId> T findEntityById(List<T> entities, Long id) {
-    return entities
-      .stream()
-      .filter((e) -> e.getId() == id)
-      .findFirst()
-      .orElse(entities.get(AppConstants.ZERO));
+  public static float getOrderLinePrice(Product product, ProductVariant variant) {
+    return variant.getPrice() == null
+      ? product.getPrice()
+      : variant.getPrice();
   }
 
-  public static float getProductVariantPrice(ProductVariant variant) {
-    float price = variant.getPrice();
+  public static float calculateTotal(Order order) {
+    final List<OrderLine> lines = order.getLines();
+    float total = AppConstants.ZERO;
 
-    if (variant.getUseProductPrice()) {
-      final Product product = variant.getProduct();
-      price = product.getPrice();
+    for (OrderLine line : lines) {
+      total += line.getCount() * line.getPrice();
     }
 
-    return price;
+    return total;
   }
 
 }

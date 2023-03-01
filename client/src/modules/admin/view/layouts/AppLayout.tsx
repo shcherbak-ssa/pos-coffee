@@ -1,13 +1,13 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import classnames from 'classnames';
-import { ConfirmDialog } from 'primereact/confirmdialog';
 import { ScrollPanel } from 'primereact/scrollpanel';
 
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 import { NotificationContainer } from 'view/containers/NotificationContainer';
 import { AppLoader } from 'view/components/AppLoader';
+import { ConfimComponents } from 'view/components/ConfimComponents';
 
 import type { AppStore, AppController, AppComponentProps } from '@admin/shared/types';
 import { ControllerName, PagePath, StoreName } from '@admin/shared/constants';
@@ -98,7 +98,7 @@ export function AppLayout() {
         </ScrollPanel>
 
         <NotificationContainer />
-        <ConfirmDialog />
+        <ConfimComponents />
       </BrowserRouter>
     </div>
   );

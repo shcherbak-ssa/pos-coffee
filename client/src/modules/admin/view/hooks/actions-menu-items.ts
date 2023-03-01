@@ -54,6 +54,8 @@ export function useActionsMenuItems({
       data: { action: Action.EDIT },
       command: () => {
         appController.setIsEditMode(true);
+
+        toInfoPage({ id: entity.id });
       },
     },
     {

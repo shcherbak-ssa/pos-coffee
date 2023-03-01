@@ -1,5 +1,9 @@
+export const NAVIGATE_BACK: number = -1;
+
 export const DEFAULT_CATEGORY_NAME: string = 'DEFAULT';
 export const NEW_ENTITY_LABEL: string = 'new';
+export const PARAM_NULL_LABELS: string = 'nullLabels';
+export const PARAM_NULL_LABELS_SAPARATOR: string = ',';
 
 export enum ApiEndpoint {
   APP_PRODUCT_CATEGORIES = '/api/admin/app/productCategories',

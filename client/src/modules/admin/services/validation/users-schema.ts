@@ -32,7 +32,6 @@ const baseSchema: Schema = Joi.object({
     'string.empty': 'Type cannot be empty',
   }),
   image: Joi.string().empty(EMPTY_STRING),
-  isArchived: Joi.boolean(),
   address: addressSchema,
 });
 
@@ -45,7 +44,7 @@ const schemaToCreate: Schema = baseSchema.keys({
   address: addressSchemaToCreate(),
 });
 
-const schemaToUpdate: Schema = baseSchema.keys();
+const schemaToUpdate: Schema = baseSchema;
 
 export const schema: ValidationSchema<Schema> = {
   toCreate: schemaToCreate,

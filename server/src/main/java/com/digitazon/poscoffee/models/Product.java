@@ -9,13 +9,11 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.digitazon.poscoffee.models.helpers.base.BaseEntityDates;
-import com.digitazon.poscoffee.models.helpers.base.BaseEntityId;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.ProductsConstants;
 
@@ -33,7 +31,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class Product extends BaseEntityDates implements BaseEntityId {
+public class Product extends BaseEntityDates {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,18 +58,14 @@ public class Product extends BaseEntityDates implements BaseEntityId {
   )
   private String name;
 
-  @NotNull(
-    message = ProductsConstants.PRICE_EMPTY_MESSAGE,
-    groups = AppConstants.ValidationGroups.ToCreate.class
-  )
-  private Float price;
-
   @ManyToOne(fetch = FetchType.EAGER)
   private Category category;
 
+  private Float price;
   private String image;
   private Integer stock;
-  private Boolean useStockForVariants;
+  private Integer stockPerTime;
+  private Integer stockAlert;
   private Boolean isAvailable;
 
 }

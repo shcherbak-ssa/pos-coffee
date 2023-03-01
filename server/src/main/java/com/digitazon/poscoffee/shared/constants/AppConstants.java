@@ -25,7 +25,7 @@ public class AppConstants {
   public static final String ACCESS_DENY_MESSAGE = "Access denied";
   public static final String ACCESS_DENIED_ERROR = "AccessDeniedException";
 
-  public static final String PARAM_ONLY_ARCHIVED = "onlyArchived";
+  public static final String PARAM_IS_ARCHIVED = "isArchived";
 
   public static final class Entity {
     public static final String USER = "User";
@@ -54,6 +54,12 @@ public class AppConstants {
       public static final String ORDERS = "/api/admin/orders";
       public static final String ORDERS_ID = "/api/admin/orders/{id}";
     }
+
+    public static final class App {
+      public static final String APP_HOME = "/api/app/home";
+      public static final String APP_MENU = "/api/app/menu";
+      public static final String APP_ORDERS = "/api/app/orders";
+    }
   }
 
   public static class DatabaseTable {
@@ -67,6 +73,8 @@ public class AppConstants {
     public static final String ORDERS = "orders";
     public static final String ORDER_LINES = "order_lines";
     public static final String ORDER_LINE_JOIN = "order_line_join";
+    public static final String PAYMENT_METHODS = "payment_methods";
+    public static final String ORDER_PAYMENT_JOIN = "order_payment_join";
   }
 
   public static enum ErrorType {

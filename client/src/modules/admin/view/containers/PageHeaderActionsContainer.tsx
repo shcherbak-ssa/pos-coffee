@@ -1,13 +1,15 @@
-import { MouseEvent, useEffect, useState } from 'react';
+import { MouseEvent, useState } from 'react';
+import { NavigateFunction, useNavigate } from 'react-router';
 import { PrimeIcons } from 'primereact/api';
 import { Button } from 'primereact/button';
 
 import type { CrudController, Entity, StoreEntityState } from 'shared/types';
+import { ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 
 import type { AppStore, AppController } from '@admin/shared/types';
-import { ControllerName, StoreName } from '@admin/shared/constants';
+import { ControllerName, NAVIGATE_BACK, StoreName } from '@admin/shared/constants';
 import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-menu-items';
 import { EntityActionsMenuContainer } from '@admin/view/containers/EntityActionsMenuContainer';
 import { SaveButton } from '@admin/view/components/SaveButton';
@@ -24,6 +26,7 @@ export function PageHeaderActionsContainer({
   actionsMenuItemsProps,
 }: Props) {
 
+  const navigate: NavigateFunction = useNavigate();
   const [ isSaveProcessing, setIsSaveProcessing ] = useState<boolean>(false);
 
   const store = useStore(storeName) as StoreEntityState<{}, Entity>;
@@ -54,6 +57,10 @@ export function PageHeaderActionsContainer({
 
     appController.setIsEditMode(false);
     controller.select(store.state.selected.id);
+
+    if (store.state.selected.id === ZERO) {
+      navigate(NAVIGATE_BACK);
+    }
   }
 
   function drawSaveButton(): React.ReactNode {

@@ -148,7 +148,7 @@ export type UserUpdates = Partial<Omit<UserSchema, 'address'> & {
 }>
 
 export type UsersFilter = Partial<{
-  onlyArchived: boolean;
+  isArchived: boolean;
 }>
 
 export type UserDraft = {
@@ -175,7 +175,7 @@ export interface UsersController extends CrudController<UsersFilter> {}
 export type ProductUpdates = Partial<ProductSchema>;
 
 export type ProductsFilter = Partial<{
-  onlyArchived: boolean;
+  isArchived: boolean;
 }>
 
 export type ProductDraft = {
@@ -183,7 +183,8 @@ export type ProductDraft = {
   set name(name: string);
   set price(price: number);
   set stock(stock: number);
-  set useStockForVariants(useStockForVariants: boolean);
+  set stockPerTime(stockPerTime: number);
+  set stockAlert(stockAlert: number);
   set image(image: string);
   set category(category: ProductCategory);
   set isAvailable(isAvailable: boolean);
@@ -203,10 +204,6 @@ export interface ProductsController extends CrudController<ProductsFilter> {}
 
 export type CategoryUpdates = Partial<CategorySchema>;
 
-export type CategoriesFilter = Partial<{
-  onlyArchived: boolean;
-}>
-
 export type CategoryDraft = {
   set isAvailable(isAvailable: boolean);
   set name(name: string);
@@ -222,7 +219,7 @@ export interface CategoriesStoreActions extends StoreCrud<CategorySchema> {
   setIsPopupOpen(isPopupOpen: boolean): void;
 }
 
-export interface CategoriesController extends CrudController<CategoriesFilter> {
+export interface CategoriesController extends CrudController<{}> {
   setIsPopupOpen(isPopupOpen: boolean): Promise<void>;
   delete(categoryId: number): Promise<boolean>;
 }
@@ -240,10 +237,10 @@ export type ProductVariantsFilter = Partial<{
 export type ProductVariantDraft = {
   set sku(sku: string);
   set name(name: string);
-  set price(price: number);
-  set stock(stock: number);
-  set stockPerTime(stockPerTime: number);
-  set useProductPrice(useProductPrice: boolean);
+  set price(price: number | null);
+  set stock(stock: number | null);
+  set stockPerTime(stockPerTime: number | null);
+  set stockAlert(stockAlert: number | null);
 }
 
 export type ProductVariantsState = {}
@@ -255,7 +252,7 @@ export interface ProductVariantsStoreActions extends StoreCrud<ProductVariantSch
 
 export interface ProductVariantsController {
   loadAll(productId: number): Promise<boolean>;
-  save(productId: number): Promise<boolean>;
+  save(product: ProductSchema): Promise<boolean>;
   delete(entityId: number): Promise<boolean>;
   select(entityId?: number): Promise<void>;
 }

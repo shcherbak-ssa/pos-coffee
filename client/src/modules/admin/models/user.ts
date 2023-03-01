@@ -39,9 +39,9 @@ export class UserSchema extends BaseSchema<UserUpdates> implements BaseUserSchem
   }
 }
 
-export function createFilter({ onlyArchived = false }: UsersFilter): UsersFilter {
+export function createFilter({ isArchived: onlyArchived = false }: UsersFilter): UsersFilter {
   return {
-    onlyArchived,
+    isArchived: onlyArchived,
   };
 }
 

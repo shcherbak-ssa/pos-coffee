@@ -3,9 +3,9 @@ import { InputText } from 'primereact/inputtext';
 
 import type { OrderSchema } from 'shared/types';
 import { InputWrapper } from 'view/components/InputWrapper';
+import { CardHeading } from 'view/components/CardHeading';
 
 import { CardWrapper } from '@admin/view/components/CardWrapper';
-import { CardHeading } from '@admin/view/components/CardHeading';
 
 export type Props = {
   order: OrderSchema;
@@ -14,7 +14,7 @@ export type Props = {
 export function OrdersCard({ order }: Props) {
 
   return (
-    <CardWrapper>
+    <CardWrapper className="col-span-2">
       <CardHeading heading="Order" />
 
       <div className="grid grid-cols-1 gap-10">
@@ -46,12 +46,21 @@ export function OrdersCard({ order }: Props) {
           />
         </InputWrapper>
 
+        <InputWrapper label="Payment method">
+          <InputText
+            id="paymentMethod"
+            type="text"
+            disabled={true}
+            value={order.paymentMethod}
+          />
+        </InputWrapper>
+
         <InputWrapper label="Created">
           <InputText
             id="created"
             type="text"
             disabled={true}
-            value={order.createdAt?.toLocaleDateString()}
+            value={order.createdAt?.toLocaleString()}
           />
         </InputWrapper>
       </div>

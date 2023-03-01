@@ -11,3 +11,9 @@ export enum UserType {
   MANAGER = 'MANAGER',
   WAITER = 'WAITER',
 }
+
+export enum PaymentMethod {
+  CASH = 'CASH',
+  CARD = 'CARD',
+  MISC = 'MISC',
+}

@@ -40,7 +40,7 @@ public class AdminCategoriesController {
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('ADMIN')")
   public List<ClientCategory> getCategories() {
-    final List<ClientCategory> categories = this.service.getCategories();
+    final List<ClientCategory> categories = this.service.getCategories(false);
     this.productsService.countProductsByCategories(categories);
 
     return categories;

@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.digitazon.poscoffee.models.Category;
 import com.digitazon.poscoffee.models.Order;
 import com.digitazon.poscoffee.models.OrderLine;
+import com.digitazon.poscoffee.models.PaymentMethod;
 import com.digitazon.poscoffee.models.Product;
 import com.digitazon.poscoffee.models.ProductVariant;
 import com.digitazon.poscoffee.models.User;
@@ -23,7 +24,6 @@ import com.digitazon.poscoffee.models.helpers.ErrorResponse;
 import com.digitazon.poscoffee.models.helpers.client.ClientCategory;
 import com.digitazon.poscoffee.models.helpers.client.ClientOrder;
 import com.digitazon.poscoffee.models.helpers.client.ClientOrderLine;
-import com.digitazon.poscoffee.models.helpers.client.ClientOrderLineVariant;
 import com.digitazon.poscoffee.models.helpers.client.ClientOrderUser;
 import com.digitazon.poscoffee.models.helpers.client.ClientProduct;
 import com.digitazon.poscoffee.models.helpers.client.ClientProductCategory;
@@ -39,6 +39,7 @@ import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.OrdersConstants;
 import com.digitazon.poscoffee.shared.helpers.Helpers;
 import com.digitazon.poscoffee.shared.helpers.ServiceHelpers;
+import com.digitazon.poscoffee.shared.types.BaseServiceHelpers;
 
 @Configuration
 @PropertySource(AppConstants.POSCOFFEE_PROPS_FILENAME)
@@ -58,7 +59,7 @@ public class AppConfig {
 
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-  public ServiceHelpers serviceHelpers(String entityName) {
+  public BaseServiceHelpers serviceHelpers(String entityName) {
     return new ServiceHelpers(entityName);
   }
 
@@ -100,9 +101,10 @@ public class AppConfig {
       .name(product.getName())
       .price(product.getPrice())
       .stock(product.getStock())
+      .stockPerTime(product.getStockPerTime())
+      .stockAlert(product.getStockAlert())
       .image(product.getImage())
       .category(clientCategory)
-      .useStockForVariants(product.getUseStockForVariants())
       .isAvailable(product.getIsAvailable())
       .isArchived(product.getIsArchived())
       .createdAt(product.getCreatedAt())
@@ -142,7 +144,7 @@ public class AppConfig {
       .price(variant.getPrice())
       .stock(variant.getStock())
       .stockPerTime(variant.getStockPerTime())
-      .useProductPrice(variant.getUseProductPrice())
+      .stockAlert(variant.getStockAlert())
       .createdAt(variant.getCreatedAt())
       .updatedAt(variant.getUpdatedAt())
       .build();
@@ -152,9 +154,10 @@ public class AppConfig {
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
   public ClientOrder clientOrder(Order order) {
     final Long orderId = order.getId();
-    final User user = order.getUser();
-
     final String number = (orderId + OrdersConstants.ORDER_NUMBER_BASE) + AppConstants.EMPTY_STRING;
+    final Float total = Helpers.calculateTotal(order);
+
+    final User user = order.getUser();
     final ClientOrderUser clientOrderUser = ClientOrderUser.builder()
       .id(user.getId())
       .name(user.getName())
@@ -169,32 +172,36 @@ public class AppConfig {
     return ClientOrder.builder()
       .id(orderId)
       .number(number)
-      .total(order.getTotal())
+      .total(total)
       .lines(lines)
       .user(clientOrderUser)
       .createdAt(order.getCreatedAt())
+      .paymentMethod(order.getPaymentMethod().getName().name())
       .build();
   }
 
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
   public ClientOrderLine clientOrderLine(OrderLine line) {
-    final ProductVariant variant = line.getVariant();
-    final Product product = variant.getProduct();
+    final Product product = line.getProduct();
 
-    final ClientOrderLineVariant lineVariant = ClientOrderLineVariant.builder()
-      .id(variant.getId())
-      .variantName(variant.getName())
+    final ClientOrderLine clientLine = ClientOrderLine.builder()
+      .id(line.getId())
+      .count(line.getCount())
+      .price(line.getPrice())
+      .productId(product.getId())
       .productName(product.getName())
       .image(product.getImage())
       .build();
 
-    return ClientOrderLine.builder()
-      .id(line.getId())
-      .count(line.getCount())
-      .price(line.getPrice())
-      .variant(lineVariant)
-      .build();
+    final ProductVariant variant = line.getVariant();
+
+    if (variant != null) {
+      clientLine.setVariantId(variant.getId());
+      clientLine.setVariantName(variant.getName());
+    }
+
+    return clientLine;
   }
 
   /**
@@ -229,9 +236,10 @@ public class AppConfig {
       .name(clientProduct.getName())
       .price(clientProduct.getPrice())
       .stock(clientProduct.getStock())
+      .stockPerTime(clientProduct.getStockPerTime())
+      .stockAlert(clientProduct.getStockAlert())
       .image(clientProduct.getImage())
       .category(category)
-      .useStockForVariants(clientProduct.getUseStockForVariants())
       .isAvailable(clientProduct.getIsAvailable())
       .build();
   }
@@ -256,7 +264,50 @@ public class AppConfig {
       .price(clientVariant.getPrice())
       .stock(clientVariant.getStock())
       .stockPerTime(clientVariant.getStockPerTime())
-      .useProductPrice(clientVariant.getUseProductPrice())
+      .stockAlert(clientVariant.getStockAlert())
+      .build();
+  }
+
+  @Bean
+  @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+  public Order order(ClientOrder clientOrder, PaymentMethod paymentMethod) {
+    final User user = User.builder()
+      .id(clientOrder.getUser().getId())
+      .build();
+
+    final List<OrderLine> lines = clientOrder.getLines()
+      .stream()
+      .map(this::orderLine)
+      .collect(Collectors.toList());
+
+    return Order.builder()
+      .id(clientOrder.getId())
+      .user(user)
+      .lines(lines)
+      .paymentMethod(paymentMethod)
+      .build();
+  }
+
+  @Bean
+  @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+  public OrderLine orderLine(ClientOrderLine clientLine) {
+    final Product product = Product.builder()
+      .id(clientLine.getProductId())
+      .build();
+
+    final Long varaintId = clientLine.getVariantId();
+    final ProductVariant variant = varaintId == null
+      ? null
+      : ProductVariant.builder()
+          .id(varaintId)
+          .build();
+
+    return OrderLine.builder()
+      .id(clientLine.getId())
+      .count(clientLine.getCount())
+      .price(clientLine.getPrice())
+      .product(product)
+      .variant(variant)
       .build();
   }
 
@@ -290,10 +341,11 @@ public class AppConfig {
       .sku(configProduct.getSku())
       .name(configProduct.getName())
       .price(configProduct.getPrice())
-      .stock(configProduct.getStock())
       .category(category)
       .image(configProduct.getImage())
-      .useStockForVariants(configProduct.getUseStockForVariants())
+      .stock(configProduct.getStock())
+      .stockPerTime(configProduct.getStockPerTime())
+      .stockAlert(configProduct.getStockAlert())
       .isAvailable(configProduct.getIsAvailable())
       .isArchived(isArchived)
       .archivedAt(isArchived ? new Date() : null)
@@ -318,14 +370,23 @@ public class AppConfig {
       .price(variant.getPrice())
       .stock(variant.getStock())
       .stockPerTime(variant.getStockPerTime())
-      .useProductPrice(variant.getUseProductPrice())
+      .stockAlert(variant.getStockAlert())
       .product(product)
       .build();
   }
 
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-  public Order orderFromConfigOrder(ConfigOrder order, List<OrderLine> lines, User user) {
+  public Order orderFromConfigOrder(ConfigOrder order) {
+    final User user = User.builder()
+      .id(order.getUser())
+      .build();
+
+    final List<OrderLine> lines = order.getLines()
+      .stream()
+      .map((Long lineId) -> OrderLine.builder().id(lineId).build())
+      .collect(Collectors.toList());
+
     return Order.builder()
       .lines(lines)
       .user(user)
@@ -334,12 +395,13 @@ public class AppConfig {
 
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-  public OrderLine orderLineFromConfigOrderLine(ConfigOrderLine line, ProductVariant variant) {
-    final float price = Helpers.getProductVariantPrice(variant);
+  public OrderLine orderLineFromConfigOrderLine(ConfigOrderLine line, Product product, ProductVariant variant) {
+    final float price = Helpers.getOrderLinePrice(product, variant);
 
     return OrderLine.builder()
       .count(line.getCount())
       .price(price)
+      .product(product)
       .variant(variant)
       .build();
   }
