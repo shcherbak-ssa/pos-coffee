@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Config {
 
+  private ConfigSettings settings;
   private List<ConfigUser> users;
   private List<ConfigCategory> categories;
   private List<ConfigProduct> products;

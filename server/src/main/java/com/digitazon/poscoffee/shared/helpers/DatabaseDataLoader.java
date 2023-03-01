@@ -13,7 +13,9 @@ import com.digitazon.poscoffee.models.Order;
 import com.digitazon.poscoffee.models.OrderLine;
 import com.digitazon.poscoffee.models.Product;
 import com.digitazon.poscoffee.models.ProductVariant;
+import com.digitazon.poscoffee.models.Settings;
 import com.digitazon.poscoffee.models.User;
+import com.digitazon.poscoffee.models.constants.Currency;
 import com.digitazon.poscoffee.models.constants.PaymentMethod;
 import com.digitazon.poscoffee.models.constants.UserType;
 import com.digitazon.poscoffee.models.helpers.config.Config;
@@ -22,13 +24,16 @@ import com.digitazon.poscoffee.models.helpers.config.ConfigOrder;
 import com.digitazon.poscoffee.models.helpers.config.ConfigOrderLine;
 import com.digitazon.poscoffee.models.helpers.config.ConfigProduct;
 import com.digitazon.poscoffee.models.helpers.config.ConfigProductVariant;
+import com.digitazon.poscoffee.models.helpers.config.ConfigSettings;
 import com.digitazon.poscoffee.models.helpers.config.ConfigUser;
 import com.digitazon.poscoffee.services.AddressService;
 import com.digitazon.poscoffee.services.CategoriesService;
+import com.digitazon.poscoffee.services.CurrenciesService;
 import com.digitazon.poscoffee.services.OrdersService;
 import com.digitazon.poscoffee.services.PaymentMethodsService;
 import com.digitazon.poscoffee.services.ProductVariantsService;
 import com.digitazon.poscoffee.services.ProductsService;
+import com.digitazon.poscoffee.services.SettingsService;
 import com.digitazon.poscoffee.services.UserTypesService;
 import com.digitazon.poscoffee.services.UsersService;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
@@ -43,13 +48,19 @@ public class DatabaseDataLoader {
     = new AnnotationConfigApplicationContext(AppConfig.class);
 
   @Autowired
-  private UsersService usersService;
-
-  @Autowired
   private UserTypesService userTypesService;
 
   @Autowired
   private PaymentMethodsService paymentMethodsService;
+
+  @Autowired
+  private CurrenciesService currenciesService;
+
+  @Autowired
+  private SettingsService settingsService;
+
+  @Autowired
+  private UsersService usersService;
 
   @Autowired
   private AddressService addressService;
@@ -69,15 +80,26 @@ public class DatabaseDataLoader {
   public void loadConstants() {
     this.userTypesService.loadTypes();
     this.paymentMethodsService.loadMethods();
+    this.currenciesService.loadCurrencies();
   }
 
   public void loadConfigData(Config config) throws ProgerException, ResourceNotFoundException, AlreadyExistException {
+    this.loadSettings(config.getSettings());
     this.loadUsers(config.getUsers());
     this.loadCategories(config.getCategories());
     this.loadProducts(config.getProducts());
     this.loadProductVariants(config.getProductVariants());
     this.loadOrderLines(config.getOrderLines());
     this.loadOrders(config.getOrders());
+  }
+
+  private void loadSettings(ConfigSettings configSettings) {
+    final Settings settings = (Settings) this.context.getBean("settingsFromConfigSettings", configSettings);
+
+    final Currency currency = this.currenciesService.getByName(configSettings.getCurrency());
+    settings.setCurrency(currency);
+
+    this.settingsService.createSettings(settings);
   }
 
   private void loadUsers(List<ConfigUser> users) throws AlreadyExistException {

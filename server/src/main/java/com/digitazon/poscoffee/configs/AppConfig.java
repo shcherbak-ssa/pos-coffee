@@ -17,7 +17,9 @@ import com.digitazon.poscoffee.models.Order;
 import com.digitazon.poscoffee.models.OrderLine;
 import com.digitazon.poscoffee.models.Product;
 import com.digitazon.poscoffee.models.ProductVariant;
+import com.digitazon.poscoffee.models.Settings;
 import com.digitazon.poscoffee.models.User;
+import com.digitazon.poscoffee.models.constants.Currency;
 import com.digitazon.poscoffee.models.constants.PaymentMethod;
 import com.digitazon.poscoffee.models.constants.UserType;
 import com.digitazon.poscoffee.models.helpers.ErrorResponse;
@@ -28,12 +30,14 @@ import com.digitazon.poscoffee.models.helpers.client.ClientOrderUser;
 import com.digitazon.poscoffee.models.helpers.client.ClientProduct;
 import com.digitazon.poscoffee.models.helpers.client.ClientProductCategory;
 import com.digitazon.poscoffee.models.helpers.client.ClientProductVariant;
+import com.digitazon.poscoffee.models.helpers.client.ClientSettings;
 import com.digitazon.poscoffee.models.helpers.client.ClientUser;
 import com.digitazon.poscoffee.models.helpers.config.ConfigCategory;
 import com.digitazon.poscoffee.models.helpers.config.ConfigOrder;
 import com.digitazon.poscoffee.models.helpers.config.ConfigOrderLine;
 import com.digitazon.poscoffee.models.helpers.config.ConfigProduct;
 import com.digitazon.poscoffee.models.helpers.config.ConfigProductVariant;
+import com.digitazon.poscoffee.models.helpers.config.ConfigSettings;
 import com.digitazon.poscoffee.models.helpers.config.ConfigUser;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.OrdersConstants;
@@ -66,6 +70,16 @@ public class AppConfig {
   /**
    * Entity to Client
    */
+
+  @Bean
+  @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+  public ClientSettings clientSettings(Settings settings) {
+    return ClientSettings.builder()
+      .id(settings.getId())
+      .currency(settings.getCurrency().getName().name())
+      .taxes(settings.getTaxes())
+      .build();
+  }
 
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -210,6 +224,16 @@ public class AppConfig {
 
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+  public Settings settings(ClientSettings clientSettings, Currency currency) {
+    return Settings.builder()
+      .id(clientSettings.getId())
+      .currency(currency)
+      .taxes(clientSettings.getTaxes())
+      .build();
+  }
+
+  @Bean
+  @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
   public User user(ClientUser clientUser, UserType userType) {
     return User.builder()
       .id(clientUser.getId())
@@ -314,6 +338,14 @@ public class AppConfig {
   /**
    * Config to Model
    */
+
+  @Bean
+  @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+  public Settings settingsFromConfigSettings(ConfigSettings configSettings) {
+    return Settings.builder()
+      .taxes(configSettings.getTaxes())
+      .build();
+  }
 
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)

@@ -1,12 +1,18 @@
-import type { PaymentMethod, UserType } from './constants';
+import type { Currency, PaymentMethod, UserType } from './constants';
 
 export type Config = {
+  settings: Settings;
   users: User[];
   categories: Category[];
   products: Product[];
   productVariants: ProductVariant[];
   orders: Order[];
   orderLines: OrderLine[];
+}
+
+export type Settings = {
+  currency: Currency,
+  taxes: number;
 }
 
 export type User = {

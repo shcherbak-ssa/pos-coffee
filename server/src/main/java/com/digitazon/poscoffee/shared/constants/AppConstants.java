@@ -28,6 +28,7 @@ public class AppConstants {
   public static final String PARAM_IS_ARCHIVED = "isArchived";
 
   public static final class Entity {
+    public static final String SETTINGS = "Settings";
     public static final String USER = "User";
     public static final String PRODUCT = "Product";
     public static final String CATEGORY = "Category";
@@ -38,6 +39,7 @@ public class AppConstants {
     public static final String USERS = "/api/users";
 
     public static final class Admin {
+      public static final String APP_SETTINGS = "/api/admin/app/settings";
       public static final String APP_PRODUCT_CATEGORIES = "/api/admin/app/productCategories";
       public static final String USERS = "/api/admin/users";
       public static final String USERS_ID = "/api/admin/users/{id}";
@@ -64,7 +66,6 @@ public class AppConstants {
 
   public static class DatabaseTable {
     public static final String USERS = "users";
-    public static final String USER_TYPES = "user_types";
     public static final String USER_TYPE_JOIN = "user_type_join";
     public static final String ADDRESSES = "addresses";
     public static final String PRODUCTS = "products";
@@ -73,8 +74,12 @@ public class AppConstants {
     public static final String ORDERS = "orders";
     public static final String ORDER_LINES = "order_lines";
     public static final String ORDER_LINE_JOIN = "order_line_join";
-    public static final String PAYMENT_METHODS = "payment_methods";
     public static final String ORDER_PAYMENT_JOIN = "order_payment_join";
+    public static final String SETTINGS = "settings";
+
+    public static final String USER_TYPES = "user_types";
+    public static final String PAYMENT_METHODS = "payment_methods";
+    public static final String CURRENCIES = "currencies";
   }
 
   public static enum ErrorType {

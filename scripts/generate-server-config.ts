@@ -2,7 +2,7 @@ import fs from 'fs';
 import { faker } from '@faker-js/faker';
 
 import type { Address, Category, Config, Order, OrderLine, Product, ProductVariant, User } from './shared/types';
-import { EMPTY_STRING, PaymentMethod, SERVER_CONFIG_FILENAME, UserType } from './shared/constants';
+import { Currency, EMPTY_STRING, PaymentMethod, SERVER_CONFIG_FILENAME, UserType } from './shared/constants';
 import { generatePrice, generateRundomAvatar, getSku } from './shared/utils';
 
 const adminUser: User = {
@@ -42,6 +42,10 @@ function run(): void {
 
 function generateConfig(): Config {
   return {
+    settings: {
+      currency: Currency.EUR,
+      taxes: 5,
+    },
     users: [
       adminUser,
       managerUser,

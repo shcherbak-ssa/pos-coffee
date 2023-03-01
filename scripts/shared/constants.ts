@@ -17,3 +17,8 @@ export enum PaymentMethod {
   CARD = 'CARD',
   MISC = 'MISC',
 }
+
+export enum Currency {
+  USD = 'USD',
+  EUR = 'EUR',
+}

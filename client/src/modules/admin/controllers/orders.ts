@@ -48,7 +48,7 @@ export class OrdersController extends CrudController<BaseOrderSchema> implements
   private updateSelectedEntityTitle(): void {
     updateSelectedEntityTitle<BaseOrderSchema>(
       StoreName.ORDERS,
-      (order: BaseOrderSchema) => order.number,
+      (order: BaseOrderSchema) => `Order ${order.number}`,
     );
   }
 
