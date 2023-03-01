@@ -237,7 +237,7 @@ export type ProductVariantsFilter = Partial<{
 export type ProductVariantDraft = {
   set sku(sku: string);
   set name(name: string);
-  set price(price: number | null);
+  set price(price: number);
   set stock(stock: number | null);
   set stockPerTime(stockPerTime: number | null);
   set stockAlert(stockAlert: number | null);

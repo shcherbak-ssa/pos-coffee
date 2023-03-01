@@ -50,7 +50,7 @@ export type Category = {
 export type ProductVariant = {
   sku: string;
   name: string;
-  price: number | null;
+  price: number;
   stock: number | null
   stockPerTime: number | null;
   stockAlert: number | null;

@@ -101,8 +101,8 @@ function generateConfig(): Config {
       generateProductVariant({ name: 'Double', product: 1, price: 1.00, stock: null, stockAlert: null, stockPerTime: 20 }),
       generateProductVariant({ name: 'American', product: 1, price: 1.50, stock: null, stockAlert: null, stockPerTime: 20 }),
       // Tea
-      generateProductVariant({ name: 'Green', product: 4, price: null, stock: 15, stockAlert: null, stockPerTime: null }),
-      generateProductVariant({ name: 'Black', product: 4, price: null, stock: 30, stockAlert: null, stockPerTime: null }),
+      generateProductVariant({ name: 'Green', product: 4, price: 0, stock: 15, stockAlert: null, stockPerTime: null }),
+      generateProductVariant({ name: 'Black', product: 4, price: 0, stock: 30, stockAlert: null, stockPerTime: null }),
       // Coca-Cola
       generateProductVariant({ name: '330', sku: 'COLA_SMALL', product: 5, price: 2.50, stock: 50, stockAlert: null, stockPerTime: null }),
       generateProductVariant({ name: '500', sku: 'COLA_MEDIUM', product: 5, price: 3.00, stock: 10, stockAlert: null, stockPerTime: null }),

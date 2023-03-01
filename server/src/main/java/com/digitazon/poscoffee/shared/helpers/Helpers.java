@@ -16,6 +16,7 @@ import com.digitazon.poscoffee.shared.exceptions.ProgerException;
 
 public class Helpers {
 
+  // @TODO: move to service
   public static final PaymentMethod converPaymentMethodToEnumValue(
     PaymentMethodsService paymentMethodsService,
     String paymentMethod
@@ -59,7 +60,7 @@ public class Helpers {
   }
 
   public static float getOrderLinePrice(Product product, ProductVariant variant) {
-    return variant.getPrice() == null
+    return variant.getPrice() == AppConstants.ZERO
       ? product.getPrice()
       : variant.getPrice();
   }

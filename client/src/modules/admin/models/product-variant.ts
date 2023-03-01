@@ -7,7 +7,7 @@ export class ProductVariantSchema implements BaseProductVariantSchema {
   public id: number;
   public sku: string;
   public name: string;
-  public price: number | null;
+  public price: number;
   public stock: number | null;
   public stockPerTime: number | null;
   public stockAlert: number | null;
@@ -16,7 +16,7 @@ export class ProductVariantSchema implements BaseProductVariantSchema {
     this.id = schema?.id || ZERO;
     this.sku = schema?.sku || EMPTY_STRING;
     this.name = schema?.name || EMPTY_STRING;
-    this.price = typeof(schema?.price) === 'number' ? schema.price : null;
+    this.price = schema?.price || ZERO;
     this.stock = typeof(schema?.stock) === 'number' ? schema.stock : null;
     this.stockPerTime = typeof(schema?.stockPerTime) === 'number' ? schema.stockPerTime : null;
     this.stockAlert = typeof(schema?.stockAlert) === 'number' ? schema.stockAlert : null;
@@ -48,7 +48,7 @@ export function createDraft(schema: BaseProductVariantSchema = ProductVariantSch
       schema.name = name;
     },
 
-    set price(price: number | null) {
+    set price(price: number) {
       schema.price = price;
     },
 

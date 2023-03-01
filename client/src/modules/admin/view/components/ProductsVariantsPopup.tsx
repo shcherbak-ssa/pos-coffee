@@ -1,6 +1,7 @@
 import type { ChangeEvent } from 'react';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
+import { InputNumber } from 'primereact/inputnumber';
 
 import type { EmptyFunction, ProductVariantSchema } from 'shared/types';
 import { EMPTY_STRING } from 'shared/constants';
@@ -75,11 +76,13 @@ export function ProductsVariantsPopup({
             valueKey="price"
             validationError={validationError}
           >
-            <InputText
+            <InputNumber
               id="price"
+              mode="currency"
+              currency="EUR"
               disabled={!isEditMode}
-              value={getNumberFiledValue(variant.price)}
-              onChange={(e) => variantDraft.price = getNumberFieldValueFromInput(e)}
+              value={variant.price}
+              onValueChange={(e) => variantDraft.price = Number(e.value)}
             />
           </InputWrapper>
 
