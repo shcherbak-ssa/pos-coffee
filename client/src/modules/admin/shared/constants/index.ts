@@ -51,7 +51,6 @@ export enum ValidationName {
 export enum PagePath {
   EMPTY = '',
   HOME = '/admin',
-  DASHBOARD = '/admin/dashboard',
   PRODUCTS = '/admin/products',
   PRODUCTS_INFO = '/admin/products/:id',
   CATEGORIES = '/admin/products/categories',
@@ -64,7 +63,6 @@ export enum PagePath {
 
 export enum PageTitle {
   HOME = 'Home',
-  DASHBOARD = 'Dashboard',
   PRODUCTS = 'Products',
   CATEGORIES = 'Categories',
   ORDERS = 'Orders',

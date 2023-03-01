@@ -15,7 +15,6 @@ import { AppHeaderContainer } from '@admin/view/containers/AppHeaderContainer';
 import { AppMenuContainer } from '@admin/view/containers/AppMenuContainer';
 
 const HomePage = lazy(() => import('@admin/view/pages/HomePage'));
-const DashboardPage = lazy(() => import('@admin/view/pages/DashboardPage'));
 const ProductsPage = lazy(() => import('@admin/view/pages/ProductsPage'));
 const ProductsInfoPage = lazy(() => import('@admin/view/pages/ProductsInfoPage'));
 const CategoriesPage = lazy(() => import('@admin/view/pages/CategoriesPage'));
@@ -50,10 +49,6 @@ export function AppLayout() {
                 <Route
                   path={PagePath.HOME}
                   element={<HomePage />}
-                />
-                <Route
-                  path={PagePath.DASHBOARD}
-                  element={<DashboardPage />}
                 />
 
                 <Route
