@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.digitazon.poscoffee.models.helpers.base.BaseEntityDates;
+import com.digitazon.poscoffee.models.helpers.BaseEntityDates;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.ProductsConstants;
 

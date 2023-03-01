@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digitazon.poscoffee.models.Product;
+import com.digitazon.poscoffee.models.helpers.AppHome;
+import com.digitazon.poscoffee.models.helpers.AppMenu;
 import com.digitazon.poscoffee.models.helpers.OrdersFilter;
 import com.digitazon.poscoffee.models.helpers.ProductsFilter;
 import com.digitazon.poscoffee.models.helpers.UsersFilter;
-import com.digitazon.poscoffee.models.helpers.app.AppHome;
-import com.digitazon.poscoffee.models.helpers.app.AppMenu;
 import com.digitazon.poscoffee.models.helpers.client.ClientCategory;
 import com.digitazon.poscoffee.models.helpers.client.ClientOrder;
 import com.digitazon.poscoffee.models.helpers.client.ClientProduct;
@@ -33,7 +33,6 @@ import com.digitazon.poscoffee.services.StockService;
 import com.digitazon.poscoffee.services.UsersService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
-import com.digitazon.poscoffee.shared.exceptions.ProgerException;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
 
 @RestController
@@ -62,7 +61,7 @@ public class AppController {
   @GetMapping(path = AppConstants.ApiEndpoint.App.APP_HOME)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('MANAGER')")
-  public AppHome getAppHome() throws ProgerException {
+  public AppHome getAppHome() {
     final UsersFilter usersFilter = UsersFilter.builder()
       .forApp(true)
       .build();
@@ -121,7 +120,7 @@ public class AppController {
   @PreAuthorize("hasAuthority('MANAGER')")
   public ClientOrder createOrder(
     @RequestBody @Validated ClientOrder orderToCreate
-  ) throws AlreadyExistException, ResourceNotFoundException, ProgerException {
+  ) throws AlreadyExistException, ResourceNotFoundException {
     final ClientOrder createdOrder = this.ordersService.createOrder(orderToCreate);
     this.stockService.takeStock(createdOrder.getLines());
 

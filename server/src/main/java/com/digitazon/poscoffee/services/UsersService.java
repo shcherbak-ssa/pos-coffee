@@ -20,14 +20,13 @@ import org.springframework.stereotype.Service;
 
 import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.User;
-import com.digitazon.poscoffee.models.UserType;
+import com.digitazon.poscoffee.models.constants.UserType;
 import com.digitazon.poscoffee.models.helpers.UsersFilter;
 import com.digitazon.poscoffee.models.helpers.client.ClientUser;
 import com.digitazon.poscoffee.repositories.UsersRepository;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.UsersConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
-import com.digitazon.poscoffee.shared.exceptions.ProgerException;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
 import com.digitazon.poscoffee.shared.helpers.Helpers;
 import com.digitazon.poscoffee.shared.types.BaseServiceHelpers;
@@ -90,7 +89,7 @@ public class UsersService {
       .collect(Collectors.toList());
   }
 
-  public ClientUser createUser(ClientUser userToCreate) throws ProgerException, AlreadyExistException {
+  public ClientUser createUser(ClientUser userToCreate) throws AlreadyExistException {
     final User user = this.convertToUser(userToCreate);
     final String password = Helpers.generatePassword();
     user.setPassword(password);
@@ -140,7 +139,7 @@ public class UsersService {
     return (ClientUser) this.context.getBean("clientUser", user, loadAddress);
   }
 
-  private User convertToUser(ClientUser user) throws ProgerException {
+  private User convertToUser(ClientUser user) {
     final UserType userType = this.userTypesService.getByName(user.getType());
 
     return (User) this.context.getBean("user", user, userType);

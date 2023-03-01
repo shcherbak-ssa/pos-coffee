@@ -23,7 +23,6 @@ import com.digitazon.poscoffee.services.AddressService;
 import com.digitazon.poscoffee.services.UsersService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
-import com.digitazon.poscoffee.shared.exceptions.ProgerException;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
 
 @RestController
@@ -60,7 +59,7 @@ public class AdminUsersController {
   @PreAuthorize("hasAuthority('ADMIN')")
   public ClientUser createUser(
     @RequestBody @Validated(AppConstants.ValidationGroups.ToCreate.class) ClientUser userToCreate
-  ) throws ProgerException, AlreadyExistException {
+  ) throws AlreadyExistException {
     final Address createdAdress = this.addressService.createAddress(userToCreate.getAddress());
     userToCreate.setAddress(createdAdress);
 

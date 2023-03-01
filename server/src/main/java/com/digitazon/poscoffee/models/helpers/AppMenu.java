@@ -1,4 +1,4 @@
-package com.digitazon.poscoffee.models.helpers.app;
+package com.digitazon.poscoffee.models.helpers;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@ package com.digitazon.poscoffee.shared.types;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.digitazon.poscoffee.models.helpers.base.BaseEntityDates;
+import com.digitazon.poscoffee.models.helpers.BaseEntityDates;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
 
 public interface BaseServiceHelpers {

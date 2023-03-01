@@ -20,6 +20,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.digitazon.poscoffee.models.constants.PaymentMethod;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.OrdersConstants;
 

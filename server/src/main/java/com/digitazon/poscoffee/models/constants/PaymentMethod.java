@@ -1,4 +1,4 @@
-package com.digitazon.poscoffee.models;
+package com.digitazon.poscoffee.models.constants;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;

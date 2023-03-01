@@ -11,11 +11,11 @@ import com.digitazon.poscoffee.models.Address;
 import com.digitazon.poscoffee.models.Category;
 import com.digitazon.poscoffee.models.Order;
 import com.digitazon.poscoffee.models.OrderLine;
-import com.digitazon.poscoffee.models.PaymentMethod;
 import com.digitazon.poscoffee.models.Product;
 import com.digitazon.poscoffee.models.ProductVariant;
 import com.digitazon.poscoffee.models.User;
-import com.digitazon.poscoffee.models.UserType;
+import com.digitazon.poscoffee.models.constants.PaymentMethod;
+import com.digitazon.poscoffee.models.constants.UserType;
 import com.digitazon.poscoffee.models.helpers.config.Config;
 import com.digitazon.poscoffee.models.helpers.config.ConfigCategory;
 import com.digitazon.poscoffee.models.helpers.config.ConfigOrder;
@@ -80,7 +80,7 @@ public class DatabaseDataLoader {
     this.loadOrders(config.getOrders());
   }
 
-  private void loadUsers(List<ConfigUser> users) throws ProgerException, AlreadyExistException {
+  private void loadUsers(List<ConfigUser> users) throws AlreadyExistException {
     for (ConfigUser configUser : users) {
       final User user = (User) this.context.getBean("userFromConfigUser", configUser);
 
@@ -144,8 +144,7 @@ public class DatabaseDataLoader {
     for (ConfigOrder configOrder : orders) {
       final Order order = (Order) this.context.getBean("orderFromConfigOrder", configOrder);
 
-      final PaymentMethod paymentMethod
-        = Helpers.converPaymentMethodToEnumValue(this.paymentMethodsService, configOrder.getPaymentMethod());
+      final PaymentMethod paymentMethod = this.paymentMethodsService.getByName(configOrder.getPaymentMethod());
       order.setPaymentMethod(paymentMethod);
 
       this.ordersService.createOrder(order);

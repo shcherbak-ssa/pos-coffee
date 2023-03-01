@@ -3,10 +3,9 @@ package com.digitazon.poscoffee.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.digitazon.poscoffee.models.UserType;
+import com.digitazon.poscoffee.models.constants.UserType;
 import com.digitazon.poscoffee.repositories.UserTypesRepository;
 import com.digitazon.poscoffee.shared.constants.UsersConstants;
-import com.digitazon.poscoffee.shared.exceptions.ProgerException;
 
 @Service
 public class UserTypesService {
@@ -27,7 +26,7 @@ public class UserTypesService {
     return this.repository.findByName(name);
   }
 
-  public UserType getByName(String userType) throws ProgerException {
+  public UserType getByName(String userType) {
     return this.getByName(UsersConstants.UserType.valueOf(userType));
   }
 
