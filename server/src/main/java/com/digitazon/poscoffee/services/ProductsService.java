@@ -98,6 +98,8 @@ public class ProductsService {
   public Product createProduct(Product productToCreate) throws AlreadyExistException {
     this.checkIfProductExists(productToCreate.getSku());
 
+    productToCreate.setIsArchived(false);
+
     return this.repository.save(productToCreate);
   }
 

@@ -65,13 +65,6 @@ export function infoPageContainer<T extends Entity>(
     }, [location.pathname]);
 
     useEffect(() => {
-      return () => {
-        // @TODO: fix!!!
-        appController.setIsEditMode(false);
-      };
-    }, []);
-
-    useEffect(() => {
       cleanValidationError();
     }, [isEditMode]);
 
