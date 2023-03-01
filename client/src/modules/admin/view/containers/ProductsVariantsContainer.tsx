@@ -1,48 +1,40 @@
 import { useEffect, useState, type MouseEvent } from 'react';
 import type { MenuItem } from 'primereact/menuitem';
 import { Button } from 'primereact/button';
-import { DataTable } from 'primereact/datatable';
+import { DataTable, type DataTableRowClickEvent, type DataTableSelectionChangeEvent } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { InputNumber } from 'primereact/inputnumber';
 import { PrimeIcons } from 'primereact/api';
 import { confirmDialog } from 'primereact/confirmdialog';
 
 import type { ProductSchema, ProductVariantSchema } from 'shared/types';
-import { EntityName, ErrorType, LONG_MINUS, ZERO } from 'shared/constants';
+import { EntityName, ErrorType, ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { useError } from 'view/hooks/error';
 import { useController } from 'view/hooks/controller';
 import { AppLoader } from 'view/components/AppLoader';
-import { BaseCheckbox } from 'view/components/BaseCheckbox';
-import { InputWrapper } from 'view/components/InputWrapper';
+import { CardHeading } from 'view/components/CardHeading';
 
-import type {
-  CardWithInputsProps,
-  ProductDraft,
-  ProductVariantsController,
-  ProductVariantsStore,
-} from '@admin/shared/types';
+import type { ProductVariantsController, ProductVariantsStore } from '@admin/shared/types';
 import { ControllerName, StoreName } from '@admin/shared/constants';
 import { confirmDialogConfig } from '@admin/shared/configs/confirm-dialog';
 import { ProductsVariantsPopupFooter } from '@admin/view/components/ProductsVariantsPopupFooter';
 import { ProductsVariantsPopup } from '@admin/view/components/ProductsVariantsPopup';
 import { CardWrapper } from '@admin/view/components/CardWrapper';
-import { CardHeading } from '@admin/view/components/CardHeading';
 import { ProductVariantMenu } from '@admin/view/components/ProductVariantMenu';
+import { ProductsStockLabel } from '@admin/view/components/ProductsStockLabel';
+import { ProductsPrice } from '@admin/view/components/ProductsPrice';
 
-export type Props = CardWithInputsProps<ProductSchema, ProductDraft>;
+export type Props = {
+  product: ProductSchema;
+}
 
-export function ProductsVariantsContainer({
-  entity: product,
-  entityDraft: productDraft,
-  validationError: productValidationError,
-  isEditMode: isProductEditMode,
-}: Props) {
+export function ProductsVariantsContainer({ product }: Props) {
 
   const [ isVariantsLoaded, setIsVariantsLoaded ] = useState<boolean>(false);
   const [ isPopupVisible, setIsPopupVisible ] = useState<boolean>(false);
   const [ isEditMode, setIsEditMode ] = useState<boolean>(false);
   const [ isSaveProcessing, setIsSaveProcessing ] = useState<boolean>(false);
+  const [ selectedEntities, setSelectedEntities ] = useState<ProductVariantSchema[]>([]);
 
   const {
     state: { list: variants, selected: selectedVariant },
@@ -109,7 +101,7 @@ export function ProductsVariantsContainer({
   function saveVariant(): void {
     setIsSaveProcessing(true);
 
-    variantsController.save(product.id)
+    variantsController.save(product)
       .then((id) => {
         if (id) {
           setIsEditMode(false);
@@ -138,6 +130,15 @@ export function ProductsVariantsContainer({
     setIsEditMode(false);
   }
 
+  function selectEntities({ value }: DataTableSelectionChangeEvent<ProductVariantSchema[]>): void {
+    // @ts-ignore
+    setSelectedEntities([value]);
+  }
+
+  function handleRowDoubleClick(e: DataTableRowClickEvent): void {
+    selectVariant(e.data.id, false);
+  }
+
   if (isVariantsLoaded) {
     return (
       <>
@@ -155,53 +156,38 @@ export function ProductsVariantsContainer({
             />
           </div>
 
-          <BaseCheckbox
-            className="mb-10"
-            inputId="useStockForVariants"
-            label="Use stock for variants"
-            disabled={!isProductEditMode}
-            checked={product.useStockForVariants}
-            onChange={(e) => productDraft.useStockForVariants = e.checked || false}
-          />
-
-          <div className="grid grid-cols-3 mb-10">
-            <InputWrapper
-              label="Stock"
-              valueKey="stock"
-              validationError={productValidationError}
-            >
-              <InputNumber
-                id="stock"
-                disabled={!isProductEditMode}
-                value={product.stock}
-                onValueChange={(e) => productDraft.stock = Number(e.value)}
-              />
-            </InputWrapper>
-          </div>
-
-
           <div className="overflow-hidden rounded-xl border-2">
             <DataTable
               dataKey="id"
               value={variants}
               responsiveLayout="scroll"
+              selectionMode="single"
+              selection={selectedEntities}
+              onSelectionChange={selectEntities}
+              onRowDoubleClick={handleRowDoubleClick}
             >
+              <Column
+                field="selection"
+                selectionMode={undefined}
+                headerStyle={{ width: '0', padding: '0' }}
+              />
+
               <Column header="Name" field="name" />
               <Column header="Sku" field="sku" />
 
               <Column
                 header="Price"
                 field="price"
-                body={({ price, useProductPrice }: ProductVariantSchema) => (
-                  <div>{ useProductPrice ? LONG_MINUS : price }</div>
+                body={({ price }: ProductVariantSchema) => (
+                  <ProductsPrice price={price} />
                 )}
               />
 
               <Column
                 header="Stock"
                 field="stock"
-                body={({ stock }: ProductVariantSchema) => (
-                  <div>{ product.useStockForVariants ? LONG_MINUS : stock }</div>
+                body={({ stock, stockAlert }: ProductVariantSchema) => (
+                  <ProductsStockLabel stock={stock} stockAlert={stockAlert || product.stockAlert} />
                 )}
               />
 
@@ -221,7 +207,6 @@ export function ProductsVariantsContainer({
           entityDraft={variantDraft}
           validationError={validationError}
           isEditMode={isEditMode}
-          product={product}
           isVisible={isPopupVisible}
           hide={hidePopup}
           footer={(

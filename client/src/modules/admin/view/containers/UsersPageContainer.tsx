@@ -1,11 +1,12 @@
 import type { ColumnProps } from 'primereact/column';
 
+import { UsersImage } from 'view/components/UsersImage';
+
 import { PagePath, StoreName } from '@admin/shared/constants';
 import { useUsersActionsMenuItemsProps } from '@admin/view/hooks/users-actions-menu-items';
 import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-menu-items';
 import { UsersCard } from '@admin/view/components/UsersCard';
 import { UsersTypeLabel } from '@admin/view/components/UsersTypeLabel';
-import { UsersImage } from '@admin/view/components/UsersImage';
 import { PageDefaultContentContainer } from '@admin/view/containers/PageDefaultContentContainer';
 
 export function UsersPageContainer() {

@@ -33,8 +33,10 @@ export function AppLogo({
       />
 
       <div
-        className={classnames('app-name text-lg', {
-          'text-3xl mt-2': type === 'block',
+        className={classnames('app-name', {
+          'mt-2': type === 'block',
+          'text-2xl': size === 'normal',
+          'text-3xl': size === 'large',
         })}
       >
         { APP_NAME }

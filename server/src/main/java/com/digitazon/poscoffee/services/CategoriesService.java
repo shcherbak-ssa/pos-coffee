@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.Category;
-import com.digitazon.poscoffee.models.helpers.EntityFilter;
 import com.digitazon.poscoffee.models.helpers.client.ClientCategory;
 import com.digitazon.poscoffee.models.helpers.client.ClientProductCategory;
 import com.digitazon.poscoffee.repositories.CategoriesRepository;
@@ -24,7 +23,7 @@ import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.CategoriesConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
-import com.digitazon.poscoffee.shared.helpers.ServiceHelpers;
+import com.digitazon.poscoffee.shared.types.BaseServiceHelpers;
 
 @Service
 public class CategoriesService {
@@ -33,22 +32,21 @@ public class CategoriesService {
   private AnnotationConfigApplicationContext context
     = new AnnotationConfigApplicationContext(AppConfig.class);
 
+  @Autowired
   private CategoriesRepository repository;
-  private ServiceHelpers<Category> helpers;
 
-  @SuppressWarnings("unchecked")
-  public CategoriesService(@Autowired CategoriesRepository repository) {
-    this.repository = repository;
-    this.helpers = (ServiceHelpers<Category>)
-      this.context.getBean("serviceHelpers", repository, AppConstants.Entity.CATEGORY);
+  private BaseServiceHelpers helpers;
+
+  public CategoriesService() {
+    this.helpers = (BaseServiceHelpers) this.context.getBean("serviceHelpers", AppConstants.Entity.CATEGORY);
   }
 
   public boolean isCategoryExist(String name) {
     return this.repository.existsByName(name);
   }
 
-  public List<ClientCategory> getCategories(EntityFilter filter) {
-    final List<Category> categories = this.repository.findAll(CategoriesService.filter(filter));
+  public List<ClientCategory> getCategories(boolean onlyAvailable) {
+    final List<Category> categories = this.repository.findAll(CategoriesService.filter(onlyAvailable));
 
     return categories
       .stream()
@@ -61,7 +59,6 @@ public class CategoriesService {
 
     return categories
       .stream()
-      .filter((category) -> !category.getIsArchived())
       .map(this::convertToClientProductCategory)
       .collect(Collectors.toList());
   }
@@ -88,15 +85,15 @@ public class CategoriesService {
       throw new AlreadyExistException(CategoriesConstants.UNIQUE_FIELD, CategoriesConstants.ALREADY_EXIST_MESSAGE);
     }
 
-    this.helpers.update(updates.getId(), (Category category) -> this.mergeWithUpdates(category, updates));
+    this.helpers.update(
+      updates.getId(),
+      this.repository,
+      (Category category) -> this.mergeWithUpdates(category, updates)
+    );
   }
 
-  public void archiveCategoryById(Long id) throws ResourceNotFoundException {
-    this.helpers.archiveById(id);
-  }
-
-  public void restoreCategoryById(Long id) throws ResourceNotFoundException {
-    this.helpers.restoreById(id);
+  public void deleteCategory(Long id) {
+    this.repository.deleteById(id);
   }
 
   private ClientCategory convertToClientCategory(Category category) {
@@ -117,21 +114,20 @@ public class CategoriesService {
       .setIsAvailable(updates.getIsAvailable() == null ? category.getIsAvailable() : updates.getIsAvailable());
   }
 
-  private static Specification<Category> filter(EntityFilter filter) {
+  private static Specification<Category> filter(boolean onlyAvailable) {
     return new Specification<Category>() {
 
       @Override
       public Predicate toPredicate(Root<Category> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-        final Path<Category> isArchivedPath = root.get("isArchived");
-        final Boolean onlyArchived = filter.getOnlyArchived();
+        final Path<Category> isAvailablePath = root.get("isAvailable");
 
-        if (onlyArchived != null && onlyArchived) {
-          return builder.equal(isArchivedPath, true);
+        if (onlyAvailable) {
+          return builder.equal(isAvailablePath, true);
         }
 
         return builder.or(
-          builder.isNull(isArchivedPath),
-          builder.equal(isArchivedPath, false)
+          builder.equal(isAvailablePath, true),
+          builder.equal(isAvailablePath, false)
         );
       }
 

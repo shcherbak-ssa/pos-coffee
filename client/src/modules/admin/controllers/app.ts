@@ -1,6 +1,5 @@
-import type { ApiService, ProductCategory, Store, UserSchema } from 'shared/types';
-import { EMPTY_STRING, EntityName } from 'shared/constants';
-import { Context } from 'shared/context';
+import type { ApiService, ProductCategory, UserSchema } from 'shared/types';
+import { EntityName } from 'shared/constants';
 import { BaseController } from 'lib/base-controller';
 
 import type {
@@ -15,7 +14,7 @@ import { ApiEndpoint, StoreName } from '@admin/shared/constants';
 export class AppController extends BaseController implements BaseAppController {
 
   public static create(): AppController {
-    return new AppController(EntityName.ANY);
+    return new AppController(StoreName.APP, EntityName.ANY);
   }
 
   public async loadProductCategories(): Promise<void> {
@@ -63,12 +62,6 @@ export class AppController extends BaseController implements BaseAppController {
   public async updateViewState<T extends keyof AppViewState>(state: T, value: AppViewState[T]): Promise<void> {
     const store = await this.getStore() as AppStoreActions;
     store.updateViewState(state, value);
-  }
-
-  private async getStore(): Promise<Store> {
-    await Context.loadStore(StoreName.APP);
-
-    return Context.getStore(StoreName.APP) as Store;
   }
 
 }

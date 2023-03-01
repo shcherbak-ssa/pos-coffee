@@ -3,9 +3,11 @@ import { EntityName, ZERO } from 'shared/constants';
 import { ProgerError } from 'shared/errors';
 import { CrudController } from 'lib/crud-controller';
 
-import type { CategoriesController as BaseCategoriesController, CategoriesFilter, CategoriesStoreActions } from '@admin/shared/types';
+import type {
+  CategoriesController as BaseCategoriesController,
+  CategoriesStoreActions,
+} from '@admin/shared/types';
 import { ApiEndpoint, StoreName, ValidationName } from '@admin/shared/constants';
-import { createFilter } from '@admin/models/category';
 
 export class CategoriesController extends CrudController<BaseCategorySchema> implements BaseCategoriesController {
 
@@ -22,10 +24,10 @@ export class CategoriesController extends CrudController<BaseCategorySchema> imp
     throw new ProgerError('This method cannot be called');
   }
 
-  public async loadAll(filter?: CategoriesFilter): Promise<boolean> {
+  public async loadAll(): Promise<boolean> {
     return await this.tryToLoadAll({
       endpoint: ApiEndpoint.CATEGORIES,
-      filter: createFilter(filter || {}),
+      filter: {},
     });
   }
 
@@ -36,20 +38,19 @@ export class CategoriesController extends CrudController<BaseCategorySchema> imp
     });
   }
 
-  public async archive(categoryId: number): Promise<boolean> {
-    return await this.tryToChangeArchiveState({
-      endpoint: ApiEndpoint.CATEGORIES_ARCHIVE,
+  public async delete(categoryId: number): Promise<boolean> {
+    return await this.tryToDelete({
+      endpoint: ApiEndpoint.CATEGORIES_ID,
       entityId: categoryId,
-      action: 'restore',
     });
   }
 
+  public async archive(categoryId: number): Promise<boolean> {
+    throw new ProgerError('This method cannot be called');
+  }
+
   public async restore(categoryId: number): Promise<boolean> {
-    return await this.tryToChangeArchiveState({
-      endpoint: ApiEndpoint.CATEGORIES_RESTORE,
-      entityId: categoryId,
-      action: 'restore',
-    });
+    throw new ProgerError('This method cannot be called');
   }
 
   public async select(categoryId: number = ZERO): Promise<void> {

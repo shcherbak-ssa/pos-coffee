@@ -18,7 +18,7 @@ const schemaToCreate: Schema = baseSchema.keys({
   name: baseSchema.extract('name').required(),
 });
 
-const schemaToUpdate: Schema = baseSchema.keys();
+const schemaToUpdate: Schema = baseSchema;
 
 export const schema: ValidationSchema<Schema> = {
   toCreate: schemaToCreate,

@@ -25,7 +25,7 @@ public class AppConstants {
   public static final String ACCESS_DENY_MESSAGE = "Access denied";
   public static final String ACCESS_DENIED_ERROR = "AccessDeniedException";
 
-  public static final String PARAM_ONLY_ARCHIVED = "onlyArchived";
+  public static final String PARAM_IS_ARCHIVED = "isArchived";
 
   public static final class Entity {
     public static final String USER = "User";
@@ -48,12 +48,17 @@ public class AppConstants {
       public static final String PRODUCTS_ARCHIVE = "/api/admin/products/{id}/archive";
       public static final String PRODUCTS_RESTORE = "/api/admin/products/{id}/restore";
       public static final String CATEGORIES = "/api/admin/categories";
-      public static final String CATEGORIES_ARCHIVE = "/api/admin/categories/{id}/archive";
-      public static final String CATEGORIES_RESTORE = "/api/admin/categories/{id}/restore";
+      public static final String CATEGORIES_ID = "/api/admin/categories/{id}";
       public static final String PRODUCT_VARIANTS = "/api/admin/products/variants";
       public static final String PRODUCT_VARIANTS_ID = "/api/admin/products/variants/{id}";
       public static final String ORDERS = "/api/admin/orders";
       public static final String ORDERS_ID = "/api/admin/orders/{id}";
+    }
+
+    public static final class App {
+      public static final String APP_HOME = "/api/app/home";
+      public static final String APP_MENU = "/api/app/menu";
+      public static final String APP_ORDERS = "/api/app/orders";
     }
   }
 
@@ -68,6 +73,8 @@ public class AppConstants {
     public static final String ORDERS = "orders";
     public static final String ORDER_LINES = "order_lines";
     public static final String ORDER_LINE_JOIN = "order_line_join";
+    public static final String PAYMENT_METHODS = "payment_methods";
+    public static final String ORDER_PAYMENT_JOIN = "order_payment_join";
   }
 
   public static enum ErrorType {

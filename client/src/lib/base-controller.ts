@@ -3,15 +3,24 @@ import type {
   ApiService as BaseApiService,
   ValidationService as BaseValidationService,
   NotificationService as BaseNotificationService,
+  Store,
 } from 'shared/types';
 import { EntityName, ErrorType } from 'shared/constants';
-import { ApiError, AuthError, ValidationError } from 'shared/errors';
+import { Context } from 'shared/context';
+import { ApiError, AppError, AuthError, ValidationError } from 'shared/errors';
 
 export class BaseController implements Controller {
 
   protected constructor(
+    private storeName: string,
     protected entityName: EntityName,
   ) {}
+
+  protected async getStore(storeName: string = this.storeName): Promise<Store> {
+    await Context.loadStore(storeName);
+
+    return Context.getStore(storeName);
+  }
 
   protected async getApiService(): Promise<BaseApiService> {
     const { ApiService } = await import('services/api');
@@ -58,6 +67,19 @@ export class BaseController implements Controller {
       const notificationService: BaseNotificationService = await this.getNotificationService();
 
       notificationService.addError(e.error);
+      return;
+    }
+
+    if (e instanceof AppError) {
+      const notificationService: BaseNotificationService = await this.getNotificationService();
+
+      notificationService.addNotification({
+        type: 'result',
+        severity: 'error',
+        heading: e.heading,
+        message: e.message,
+      });
+
       return;
     }
 

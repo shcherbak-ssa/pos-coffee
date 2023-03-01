@@ -9,7 +9,7 @@ export type Props = {
 export function CategoryLabel({ category }: Props) {
 
   return (
-    <Tag severity="info" value={category.name} />
+    <Tag severity="warning" value={category.name} />
   );
 
 }

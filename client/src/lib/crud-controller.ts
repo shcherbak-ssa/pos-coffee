@@ -5,25 +5,17 @@ import type {
   PayloadToSave,
   PayloadToGetById,
   PayloadToGetAll,
-  Store,
   StoreCrud,
   ValidationService,
   PayloadToChangeArchiveState,
   StoreEntityState,
+  PayloadToDelete,
 } from 'shared/types';
-import { EntityName, ZERO } from 'shared/constants';
-import { Context } from 'shared/context';
+import { ZERO } from 'shared/constants';
 import { notifications } from 'shared/configs/notifications';
 import { BaseController } from 'lib/base-controller';
 
 export class CrudController<T extends Entity> extends BaseController {
-
-  private storeName: string;
-
-  protected constructor(storeName: string, entityName: EntityName) {
-    super(entityName);
-    this.storeName = storeName;
-  }
 
   protected async tryToLoadById({ endpoint, entityId }: PayloadToGetById): Promise<boolean> {
     try {
@@ -64,6 +56,7 @@ export class CrudController<T extends Entity> extends BaseController {
   protected async tryToSave<Q>({
     endpoint,
     validationName,
+    entity,
     query,
   }: PayloadToSave<T, Q>): Promise<boolean> {
     try {
@@ -73,8 +66,8 @@ export class CrudController<T extends Entity> extends BaseController {
         return true;
       }
 
-      const entity: T = store.selected.get();
-      const isEntityNew: boolean = this.isNewEntity(entity);
+      const entityToSave: T = entity || store.selected.get();
+      const isEntityNew: boolean = this.isNewEntity(entityToSave);
 
       const notificationService: NotificationService = await this.getNotificationService();
 
@@ -84,11 +77,11 @@ export class CrudController<T extends Entity> extends BaseController {
           : notifications.updateProcess(this.entityName)
       );
 
-      const updates: Partial<T> = store.selected.getUpdates();
-      let savedEntity: T = entity;
-
       const validationService: ValidationService = await this.getValidationService();
-      await validationService.validate(isEntityNew ? 'toCreate' : 'toUpdate', validationName, updates);
+      await validationService.validate(isEntityNew ? 'toCreate' : 'toUpdate', validationName, entityToSave);
+
+      const updates: Partial<T> = store.selected.getUpdates();
+      let savedEntity: T = entityToSave;
 
       const apiService: ApiService = await this.getApiService();
       apiService.addBody(updates);
@@ -153,6 +146,28 @@ export class CrudController<T extends Entity> extends BaseController {
     }
   }
 
+  protected async tryToDelete({ endpoint, entityId }: PayloadToDelete): Promise<boolean> {
+    try {
+      const notificationService: NotificationService = await this.getNotificationService();
+      notificationService.addNotification(notifications.deleteProcess(this.entityName));
+
+      const apiService: ApiService = await this.getApiService();
+      await apiService
+        .addParams({ id: entityId })
+        .delete(endpoint);
+
+      const store = await this.getStore() as StoreCrud<T>;
+      store.remove(entityId);
+
+      notificationService.addNotification(notifications.deleted(this.entityName));
+
+      return true;
+    } catch (e: any) {
+      this.parseError(e);
+      return false;
+    }
+  }
+
   public async tryToSelect(entityId: number): Promise<void> {
     try {
       const store = await this.getStore() as StoreCrud & StoreEntityState<{}, T>;
@@ -160,12 +175,6 @@ export class CrudController<T extends Entity> extends BaseController {
     } catch (e: any) {
       await this.parseError(e);
     }
-  }
-
-  protected async getStore(): Promise<Store> {
-    await Context.loadStore(this.storeName);
-
-    return Context.getStore(this.storeName);
   }
 
   private isNewEntity(entity: T): boolean {

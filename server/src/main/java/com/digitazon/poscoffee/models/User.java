@@ -21,7 +21,6 @@ import javax.validation.constraints.Size;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.digitazon.poscoffee.models.helpers.base.BaseEntityDates;
-import com.digitazon.poscoffee.models.helpers.base.BaseEntityId;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.UsersConstants;
 
@@ -39,7 +38,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class User extends BaseEntityDates implements BaseEntityId {
+public class User extends BaseEntityDates {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

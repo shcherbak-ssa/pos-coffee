@@ -26,10 +26,13 @@ public class OrderLine {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private Short count;
+  private Integer count;
   private Float price;
 
   @OneToOne
+  private Product product;
+
+  @OneToOne(optional = true)
   private ProductVariant variant;
 
 }

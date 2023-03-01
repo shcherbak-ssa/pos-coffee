@@ -1,15 +1,14 @@
+import type { ChangeEvent } from 'react';
 import { Dialog } from 'primereact/dialog';
-import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
 
-import type { EmptyFunction, ProductSchema, ProductVariantSchema } from 'shared/types';
+import type { EmptyFunction, ProductVariantSchema } from 'shared/types';
+import { EMPTY_STRING } from 'shared/constants';
 import { InputWrapper } from 'view/components/InputWrapper';
-import { BaseCheckbox } from 'view/components/BaseCheckbox';
 
 import type { CardWithInputsProps, ProductVariantDraft } from '@admin/shared/types';
 
 export type Props = CardWithInputsProps<ProductVariantSchema, ProductVariantDraft> & {
-  product: ProductSchema;
   isVisible: boolean;
   hide: EmptyFunction;
   footer: React.ReactNode;
@@ -20,58 +19,17 @@ export function ProductsVariantsPopup({
   entityDraft: variantDraft,
   validationError,
   isEditMode,
-  product,
   isVisible,
   hide,
   footer,
 }: Props) {
 
-  function drawPriceInput(): React.ReactNode {
-    if (variant.useProductPrice) {
-      return;
-    }
-
-    return (
-      <>
-        <InputWrapper
-          label="Price"
-          valueKey="price"
-          validationError={validationError}
-        >
-          <InputNumber
-            id="price"
-            mode="currency"
-            currency="EUR"
-            disabled={!isEditMode}
-            value={variant.price}
-            onValueChange={(e) => variantDraft.price = Number(e.value)}
-          />
-        </InputWrapper>
-
-        <div></div>
-      </>
-    );
+  function getNumberFiledValue(field: number | null): string {
+    return field === null ? EMPTY_STRING : field.toString();
   }
 
-  function drawStockInputs(): React.ReactNode {
-    if (product.useStockForVariants) {
-      return;
-    }
-
-    return (
-      <InputWrapper
-        label="Stock"
-        valueKey="stock"
-        validationError={validationError}
-      >
-        <InputNumber
-          id="stock"
-          disabled={!isEditMode}
-          value={variant.stock}
-          onValueChange={(e) => variantDraft.stock = Number(e.value)}
-        />
-      </InputWrapper>
-    );
+  function getNumberFieldValueFromInput(e: ChangeEvent<HTMLInputElement>): number | null {
+    return e.target.value.trim() === EMPTY_STRING ? null : Number(e.target.value);
   }
 
   return (
@@ -83,14 +41,6 @@ export function ProductsVariantsPopup({
       footer={footer}
     >
       <div className="py-6">
-        <BaseCheckbox
-          inputId="useProductPrice"
-          label="Use product price"
-          disabled={!isEditMode}
-          checked={variant.useProductPrice}
-          onChange={(e) => variantDraft.useProductPrice = e.checked || false}
-        />
-
         <div className="grid grid-cols-2 gap-x-4 gap-y-10 pt-10">
           <InputWrapper
             label="Name"
@@ -120,20 +70,57 @@ export function ProductsVariantsPopup({
             />
           </InputWrapper>
 
-          { drawPriceInput() }
+          <InputWrapper
+            label="Price"
+            valueKey="price"
+            validationError={validationError}
+          >
+            <InputText
+              id="price"
+              disabled={!isEditMode}
+              value={getNumberFiledValue(variant.price)}
+              onChange={(e) => variantDraft.price = getNumberFieldValueFromInput(e)}
+            />
+          </InputWrapper>
 
-          { drawStockInputs() }
+          <div></div>
+
+          <InputWrapper
+            label="Stock"
+            valueKey="stock"
+            validationError={validationError}
+          >
+            <InputText
+              id="stock"
+              disabled={!isEditMode}
+              value={getNumberFiledValue(variant.stock)}
+              onChange={(e) => variantDraft.stock = getNumberFieldValueFromInput(e)}
+            />
+          </InputWrapper>
+
+          <InputWrapper
+            label="Stock alert"
+            valueKey="stockAlert"
+            validationError={validationError}
+          >
+            <InputText
+              id="stockAlert"
+              disabled={!isEditMode}
+              value={getNumberFiledValue(variant.stockAlert)}
+              onChange={(e) => variantDraft.stockAlert = getNumberFieldValueFromInput(e)}
+            />
+          </InputWrapper>
 
           <InputWrapper
             label="Stock per time"
             valueKey="stockPerTime"
             validationError={validationError}
           >
-            <InputNumber
+            <InputText
               id="stockPerTime"
               disabled={!isEditMode}
-              value={variant.stockPerTime}
-              onValueChange={(e) => variantDraft.stockPerTime = Number(e.value)}
+              value={getNumberFiledValue(variant.stockPerTime)}
+              onChange={(e) => variantDraft.stockPerTime = getNumberFieldValueFromInput(e)}
             />
           </InputWrapper>
         </div>

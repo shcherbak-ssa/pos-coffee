@@ -1,12 +1,12 @@
 package com.digitazon.poscoffee.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.Category;
 import com.digitazon.poscoffee.models.Product;
-import com.digitazon.poscoffee.models.helpers.EntityFilter;
+import com.digitazon.poscoffee.models.helpers.ProductsFilter;
 import com.digitazon.poscoffee.models.helpers.client.ClientCategory;
 import com.digitazon.poscoffee.models.helpers.client.ClientProduct;
 import com.digitazon.poscoffee.repositories.ProductsRepository;
@@ -26,7 +26,7 @@ import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.ProductsConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
-import com.digitazon.poscoffee.shared.helpers.ServiceHelpers;
+import com.digitazon.poscoffee.shared.types.BaseServiceHelpers;
 
 @Service
 public class ProductsService {
@@ -35,21 +35,30 @@ public class ProductsService {
   private AnnotationConfigApplicationContext context
     = new AnnotationConfigApplicationContext(AppConfig.class);
 
+  @Autowired
   private ProductsRepository repository;
-  private ServiceHelpers<Product> helpers;
 
-  @SuppressWarnings("unchecked")
-  public ProductsService(@Autowired ProductsRepository repository) {
-    this.repository = repository;
-    this.helpers = (ServiceHelpers<Product>)
-      this.context.getBean("serviceHelpers", repository, AppConstants.Entity.PRODUCT);
+  private BaseServiceHelpers helpers;
+
+  public ProductsService() {
+    this.helpers = (BaseServiceHelpers) this.context.getBean("serviceHelpers", AppConstants.Entity.PRODUCT);
   }
 
   public boolean isProductExist(String sku) {
     return this.repository.existsBySku(sku);
   }
 
-  public ClientProduct findProductById(Long id) throws ResourceNotFoundException {
+  public Product findProductById(Long id) throws ResourceNotFoundException {
+    final Optional<Product> foundProduct = this.repository.findById(id);
+
+    if (foundProduct.isPresent()) {
+      return foundProduct.get();
+    }
+
+    throw new ResourceNotFoundException("Product not found");
+  }
+
+  public ClientProduct findClientProductById(Long id) throws ResourceNotFoundException {
     final Optional<Product> foundProduct = this.repository.findById(id);
 
     if (foundProduct.isPresent()) {
@@ -59,7 +68,7 @@ public class ProductsService {
     throw new ResourceNotFoundException("Product not found");
   }
 
-  public List<ClientProduct> getProducts(EntityFilter filter) {
+  public List<ClientProduct> getProducts(ProductsFilter filter) {
     final List<Product> products = this.repository.findAll(ProductsService.filter(filter));
 
     return products
@@ -89,6 +98,8 @@ public class ProductsService {
   public Product createProduct(Product productToCreate) throws AlreadyExistException {
     this.checkIfProductExists(productToCreate.getSku());
 
+    productToCreate.setIsArchived(false);
+
     return this.repository.save(productToCreate);
   }
 
@@ -97,16 +108,17 @@ public class ProductsService {
 
     this.helpers.update(
       updates.getId(),
+      this.repository,
       (Product product) -> this.mergeWithUpdates(product, updates)
     );
   }
 
   public void archiveProductById(Long id) throws ResourceNotFoundException {
-    this.helpers.archiveById(id);
+    this.helpers.archiveById(id, this.repository);
   }
 
   public void restoreProductById(Long id) throws ResourceNotFoundException {
-    this.helpers.restoreById(id);
+    this.helpers.restoreById(id, this.repository);
   }
 
   public void moveProductsToDefaultCategory(Category currentCategory, Category defaultCategory) {
@@ -136,13 +148,13 @@ public class ProductsService {
   private void mergeWithUpdates(Product product, ClientProduct updates) {
     product.setSku(updates.getSku() == null ? product.getSku() : updates.getSku());
     product.setName(updates.getName() == null ? product.getName() : updates.getName());
+    product.setImage(updates.getImage() == null ? product.getImage() : updates.getImage());
     product.setPrice(updates.getPrice() == null ? product.getPrice() : updates.getPrice());
     product.setStock(updates.getStock() == null ? product.getStock() : updates.getStock());
-    product.setImage(updates.getImage() == null ? product.getImage() : updates.getImage());
+    product.setStockAlert(updates.getStockAlert() == null ? product.getStockAlert() : updates.getStockAlert());
 
-    product.setUseStockForVariants(
-      updates.getUseStockForVariants() == null
-        ? product.getUseStockForVariants() : updates.getUseStockForVariants()
+    product.setStockPerTime(
+      updates.getStockPerTime() == null ? product.getStockPerTime() : updates.getStockPerTime()
     );
     product.setIsAvailable(
       updates.getIsAvailable() == null ? product.getIsAvailable() : updates.getIsAvailable()
@@ -157,22 +169,35 @@ public class ProductsService {
     }
   }
 
-  private static Specification<Product> filter(EntityFilter filter) {
+  private static Specification<Product> filter(ProductsFilter filter) {
     return new Specification<Product>() {
 
       @Override
       public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-        final Path<Product> isArchivedPath = root.get("isArchived");
-        final Boolean onlyArchived = filter.getOnlyArchived();
+        final List<Predicate> predicates = new ArrayList<Predicate>();
 
-        if (onlyArchived != null && onlyArchived) {
-          return builder.equal(isArchivedPath, true);
+        if (filter.getIsArchived() != null) {
+          predicates.add(
+            builder.equal(root.get("isArchived"), filter.getIsArchived())
+          );
         }
 
-        return builder.or(
-          builder.isNull(isArchivedPath),
-          builder.equal(isArchivedPath, false)
-        );
+        if (filter.getForMenu()) {
+          final List<Category> categories = filter.getCategories()
+            .stream()
+            .map((category) -> Category.builder().id(category.getId()).build())
+            .collect(Collectors.toList());
+
+          predicates.add(
+            builder.and(
+              builder.equal(root.get("isArchived"), false),
+              builder.equal(root.get("isAvailable"), true),
+              root.get("category").in(categories)
+            )
+          );
+        }
+
+        return builder.and(predicates.toArray(new Predicate[0]));
       }
 
     };

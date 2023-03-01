@@ -1,8 +1,6 @@
 package com.digitazon.poscoffee.shared.helpers;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -13,6 +11,7 @@ import com.digitazon.poscoffee.models.Address;
 import com.digitazon.poscoffee.models.Category;
 import com.digitazon.poscoffee.models.Order;
 import com.digitazon.poscoffee.models.OrderLine;
+import com.digitazon.poscoffee.models.PaymentMethod;
 import com.digitazon.poscoffee.models.Product;
 import com.digitazon.poscoffee.models.ProductVariant;
 import com.digitazon.poscoffee.models.User;
@@ -27,12 +26,14 @@ import com.digitazon.poscoffee.models.helpers.config.ConfigUser;
 import com.digitazon.poscoffee.services.AddressService;
 import com.digitazon.poscoffee.services.CategoriesService;
 import com.digitazon.poscoffee.services.OrdersService;
+import com.digitazon.poscoffee.services.PaymentMethodsService;
 import com.digitazon.poscoffee.services.ProductVariantsService;
 import com.digitazon.poscoffee.services.ProductsService;
 import com.digitazon.poscoffee.services.UserTypesService;
 import com.digitazon.poscoffee.services.UsersService;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
 import com.digitazon.poscoffee.shared.exceptions.ProgerException;
+import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
 
 @Component
 public class DatabaseDataLoader {
@@ -46,6 +47,9 @@ public class DatabaseDataLoader {
 
   @Autowired
   private UserTypesService userTypesService;
+
+  @Autowired
+  private PaymentMethodsService paymentMethodsService;
 
   @Autowired
   private AddressService addressService;
@@ -64,128 +68,88 @@ public class DatabaseDataLoader {
 
   public void loadConstants() {
     this.userTypesService.loadTypes();
+    this.paymentMethodsService.loadMethods();
   }
 
-  public void loadConfigData(Config config) throws ProgerException, AlreadyExistException {
-    final List<User> users = this.loadUsers(config.getUsers());
-    final List<Category> categories = this.loadCategories(config.getCategories());
-    final List<Product> products = this.loadProducts(config.getProducts(), categories);
-    final List<ProductVariant> variants = this.loadProductVariants(config.getProductVariants(), products);
-
-    this.loadOrders(
-      config.getOrders(),
-      config.getOrderLines(),
-      variants,
-      users
-    );
+  public void loadConfigData(Config config) throws ProgerException, ResourceNotFoundException, AlreadyExistException {
+    this.loadUsers(config.getUsers());
+    this.loadCategories(config.getCategories());
+    this.loadProducts(config.getProducts());
+    this.loadProductVariants(config.getProductVariants());
+    this.loadOrderLines(config.getOrderLines());
+    this.loadOrders(config.getOrders());
   }
 
-  private List<User> loadUsers(List<ConfigUser> users) throws ProgerException, AlreadyExistException {
-    final List<User> createdUsers = new ArrayList<User>();
-
+  private void loadUsers(List<ConfigUser> users) throws ProgerException, AlreadyExistException {
     for (ConfigUser configUser : users) {
       final User user = (User) this.context.getBean("userFromConfigUser", configUser);
 
-      final UserType userType = Helpers.converUserTypeToEnumValue(this.userTypesService, configUser.getType());
+      final UserType userType = this.userTypesService.getByName(configUser.getType());
       user.setType(userType);
 
       final Address address = this.addressService.createAddress(configUser.getAddress());
       user.setAddress(address);
 
-      final User created = this.usersService.createUser(user);
-      createdUsers.add(created);
+      this.usersService.createUser(user);
     }
-
-    return createdUsers;
   }
 
-  private List<Category> loadCategories(List<ConfigCategory> categories) throws AlreadyExistException {
-    final List<Category> createdCategories = new ArrayList<Category>();
-
+  private void loadCategories(List<ConfigCategory> categories) throws AlreadyExistException {
     for (ConfigCategory configCategory : categories) {
       final Category category = (Category) this.context.getBean("categoryFromConfigCategory", configCategory);
 
-      final Category created = this.categoriesService.createCategory(category);
-      createdCategories.add(created);
+      this.categoriesService.createCategory(category);
     }
-
-    return createdCategories;
   }
 
-  private List<Product> loadProducts(
-    List<ConfigProduct> products,
-    List<Category> categories
-  ) throws AlreadyExistException {
-    final List<Product> createdProducts = new ArrayList<Product>();
-
+  private void loadProducts(List<ConfigProduct> products) throws AlreadyExistException {
     for (ConfigProduct configProduct : products) {
-      final Category productCategory = Helpers.findEntityById(categories, configProduct.getCategory());
+      final Category category = Category.builder()
+        .id(configProduct.getCategory())
+        .build();
 
       final Product product = (Product)
-        this.context.getBean("productFromConfigProduct", configProduct, productCategory);
+        this.context.getBean("productFromConfigProduct", configProduct, category);
 
-      final Product created = this.productsService.createProduct(product);
-      createdProducts.add(created);
+      this.productsService.createProduct(product);
     }
-
-    return createdProducts;
   }
 
-  private List<ProductVariant> loadProductVariants(
-    List<ConfigProductVariant> variants,
-    List<Product> products
-  ) throws AlreadyExistException {
-    final List<ProductVariant> createdVariants = new ArrayList<ProductVariant>();
-
+  private void loadProductVariants(List<ConfigProductVariant> variants) throws AlreadyExistException {
     for (ConfigProductVariant configVariant : variants) {
-      final Product product = Helpers.findEntityById(products, configVariant.getProduct());
+      final Product product = Product.builder()
+        .id(configVariant.getProduct())
+        .build();
 
       final ProductVariant productVariant = (ProductVariant)
         this.context.getBean("variantFromConfigVariant", configVariant, product);
 
-      final ProductVariant created = this.productVariantsService.createVariant(productVariant);
-      createdVariants.add(created);
+      this.productVariantsService.createVariant(productVariant);
     }
-
-    return createdVariants;
   }
 
-  private void loadOrders(
-    List<ConfigOrder> orders,
-    List<ConfigOrderLine> lines,
-    List<ProductVariant> variants,
-    List<User> users
-  ) {
-    final List<OrderLine> orderLines = this.loadOrderLines(lines, variants);
+  private void loadOrderLines(List<ConfigOrderLine> lines) throws ResourceNotFoundException {
+    for (ConfigOrderLine configLine : lines) {
+      final Product product = this.productsService.findProductById(configLine.getProduct());
+      final ProductVariant variant = this.productVariantsService.findVariantById(configLine.getVariant());
 
+      final OrderLine line = (OrderLine)
+        this.context.getBean("orderLineFromConfigOrderLine", configLine, product, variant);
+
+      this.ordersService.createOrderLine(line);
+    }
+  }
+
+  private void loadOrders(List<ConfigOrder> orders) throws ProgerException {
     for (ConfigOrder configOrder : orders) {
-      final User user = Helpers.findEntityById(users, configOrder.getUser());
+      final Order order = (Order) this.context.getBean("orderFromConfigOrder", configOrder);
 
-      final List<Long> lineIds = configOrder.getLines();
-      final List<OrderLine> currentOrderLines = orderLines
-        .stream()
-        .filter((line) -> lineIds.contains(line.getId()))
-        .collect(Collectors.toList());
-
-      final Order order = (Order)
-        this.context.getBean("orderFromConfigOrder", configOrder, currentOrderLines, user);
+      final PaymentMethod paymentMethod
+        = Helpers.converPaymentMethodToEnumValue(this.paymentMethodsService, configOrder.getPaymentMethod());
+      order.setPaymentMethod(paymentMethod);
 
       this.ordersService.createOrder(order);
     }
-  }
-
-  private List<OrderLine> loadOrderLines(List<ConfigOrderLine> lines, List<ProductVariant> variants) {
-    final List<OrderLine> createdLines = new ArrayList<OrderLine>();
-
-    for (ConfigOrderLine configLine : lines) {
-      final ProductVariant variant = Helpers.findEntityById(variants, configLine.getVariant());
-      final OrderLine line = (OrderLine) this.context.getBean("orderLineFromConfigOrderLine", configLine, variant);
-
-      final OrderLine created = this.ordersService.createOrderLine(line);
-      createdLines.add(created);
-    }
-
-    return createdLines;
   }
 
 }

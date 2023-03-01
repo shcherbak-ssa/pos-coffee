@@ -1,7 +1,7 @@
 import type { EntityComponentProps, UserSchema } from 'shared/types';
+import { ProductsImage } from 'view/components/ProductsImage';
 
 import { CardWrapper } from '@admin/view/components/CardWrapper';
-import { ProductsImage } from '@admin/view/components/ProductsImage';
 
 export function ProductsCard({ entity: product, className }: EntityComponentProps<UserSchema>) {
 
@@ -9,7 +9,7 @@ export function ProductsCard({ entity: product, className }: EntityComponentProp
     <CardWrapper className={className}>
       <div className="flex-center flex-col text-center full">
         <ProductsImage
-          className="mb-6"
+          className="admin mb-6"
           image={product.image}
           size="xlarge"
         />

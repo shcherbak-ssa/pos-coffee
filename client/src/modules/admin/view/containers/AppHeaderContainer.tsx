@@ -5,15 +5,13 @@ import { Menu } from 'primereact/menu';
 import { Menubar } from 'primereact/menubar';
 import { PrimeIcons } from 'primereact/api';
 
-import { LocalStorageKey, ROOT_PAGE_PATH } from 'shared/constants';
-import { LocalStorage } from 'shared/helpers/local-storage';
-import { replaceLocation } from 'shared/utils/replace-location';
+import { logout } from 'shared/helpers/logout';
 import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/navigate';
 import { IconButton } from 'view/components/IconButton';
+import { UsersImage } from 'view/components/UsersImage';
 
 import type { AppComponentProps } from '@admin/shared/types';
 import { PagePath } from '@admin/shared/constants';
-import { UsersImage } from '@admin/view/components/UsersImage';
 import { AppHeaderLogo } from '@admin/view/components/AppHeaderLogo';
 
 export type Props = AppComponentProps;
@@ -43,8 +41,7 @@ export function AppHeaderContainer({ appStore, appController }: Props) {
       label: 'Logout',
       icon: PrimeIcons.SIGN_OUT,
       command: () => {
-        LocalStorage.remove(LocalStorageKey.USER_TOKEN);
-        replaceLocation(ROOT_PAGE_PATH);
+        logout();
       },
     },
   ];

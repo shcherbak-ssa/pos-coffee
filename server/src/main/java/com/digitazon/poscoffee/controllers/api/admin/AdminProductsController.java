@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.digitazon.poscoffee.models.helpers.EntityFilter;
+import com.digitazon.poscoffee.models.helpers.ProductsFilter;
 import com.digitazon.poscoffee.models.helpers.client.ClientProduct;
 import com.digitazon.poscoffee.services.ProductsService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
@@ -34,9 +34,9 @@ public class AdminProductsController {
   @GetMapping(path = AppConstants.ApiEndpoint.Admin.PRODUCTS)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('ADMIN')")
-  public List<ClientProduct> getProducts(@RequestParam(AppConstants.PARAM_ONLY_ARCHIVED) boolean onlyArchived) {
-    final EntityFilter filter = EntityFilter.builder()
-      .onlyArchived(onlyArchived)
+  public List<ClientProduct> getProducts(@RequestParam(AppConstants.PARAM_IS_ARCHIVED) boolean isArchived) {
+    final ProductsFilter filter = ProductsFilter.builder()
+      .isArchived(isArchived)
       .build();
 
     return this.service.getProducts(filter);
@@ -46,7 +46,7 @@ public class AdminProductsController {
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('ADMIN')")
   public ClientProduct getProductById(@PathVariable Long id) throws ResourceNotFoundException {
-    return this.service.findProductById(id);
+    return this.service.findClientProductById(id);
   }
 
   @PostMapping(path = AppConstants.ApiEndpoint.Admin.PRODUCTS)

@@ -1,22 +1,107 @@
 :root {
-  --wripper-color: #F7F8FA;
+  --wrapper-color: #F7F8FA;
 }
 
-@import "./app.scss";
-@import "./card.scss";
-@import "./page.scss";
-@import "./user.scss";
+.app {
+  &-container {
+    background-color: var(--bluegray-50);
+  }
+
+  &-header {
+    background-color: var(--bluegray-50);
+  }
+
+  &-menu {
+    &-container {
+      @apply bg-white lg:bg-transparent;
+      background-color: var(--bluegray-50);
+
+      &.is-open {
+        @apply w-60;
+      }
+
+      &.is-close {
+        @apply -ml-60 w-60 lg:ml-0 lg:w-24 ;
+      }
+    }
+
+    &-item {
+      &:hover {
+        box-shadow: inset 0 0 0 0.1rem #81a1c1;
+      }
+
+      &.is-close {
+        @apply bg-transparent shadow-none;
+      }
+    }
+
+    &-overlay {
+      background-color: rgba(112, 120, 136, 0.5);
+    }
+  }
+}
+
+.card {
+  &:hover {
+    .card-menu {
+      @apply opacity-100;
+    }
+  }
+
+  &-menu {
+    @apply opacity-0 duration-200;
+  }
+
+  &-wrapper {
+    background-color: var(--wrapper-color, --surface-ground);
+  }
+
+  &-active &-wrapper {
+    background: #D8DEE9;
+    color: #2E3440;
+  }
+}
+
+.page {
+  &-header {
+    background-color: var(--wripper-color, --surface-ground);
+  }
+
+  &-tabs {
+    height: calc(100% + 2px);
+
+    .p-tabmenu {
+      @apply h-full;
+
+      .p-tabmenu-nav {
+        @apply bg-transparent h-full flex gap-10;
+
+        .p-tabmenuitem {
+          &,
+          &.p-highlight,
+          &:not(.p-highlight):not(.p-disabled):hover {
+            .p-menuitem-link {
+              @apply bg-transparent p-0;
+            }
+          }
+
+          .p-menuitem-link:not(.p-disabled):focus {
+            @apply shadow-none;
+          }
+        }
+      }
+    }
+  }
+}
+
+.user {
+  &-type {
+    color: var(--text-color-secondary);
+  }
+}
 
 .button-label {
   &.p-disabled {
     @apply opacity-100;
-  }
-}
-
-.popup {
-  min-width: 320px;
-
-  &.p-dialog .p-dialog-footer button {
-    @apply m-0;
   }
 }

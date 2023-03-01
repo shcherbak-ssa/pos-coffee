@@ -14,7 +14,7 @@ public class ConfigProductVariant {
   private Float price;
   private Integer stock;
   private Integer stockPerTime;
-  private Boolean useProductPrice;
+  private Integer stockAlert;
   private Long product;
 
 }

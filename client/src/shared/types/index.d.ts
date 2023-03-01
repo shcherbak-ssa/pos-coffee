@@ -1,4 +1,4 @@
-import type { EntityName, ErrorType, UserType } from 'shared/constants';
+import type { EntityName, ErrorType, PaymentMethodType, UserType } from 'shared/constants';
 
 /**
  * Helpers
@@ -26,6 +26,12 @@ export type MessageType = 'success' | 'info' | 'warn' | 'error' | undefined;
 export type ViewSeverity = 'success' | 'info' | 'warning' | 'danger' | null | undefined;
 export type ValidationType = 'toCreate' | 'toUpdate';
 export type ArchiveAction = 'archive' | 'restore';
+
+export type PaymentMethod = {
+  type: PaymentMethodType;
+  label: string;
+  icon: string;
+}
 
 /**
  * Entities
@@ -84,9 +90,10 @@ export type ProductSchema = BaseSchema & {
   name: string;
   price: number;
   stock: number;
+  stockPerTime: number;
+  stockAlert: number;
   image: string;
   category: ProductCategory;
-  useStockForVariants: boolean;
   isAvailable: boolean;
 }
 
@@ -95,20 +102,23 @@ export type ProductCategory = {
   name: string;
 }
 
-export type CategorySchema = BaseSchema & {
+export type CategorySchema = {
+  id: number;
   name: string;
   productsCount: number;
   isAvailable: boolean;
+  createdAt: Date | null;
+  updatedAt: Date | null;
 }
 
 export type ProductVariantSchema = {
   id: number;
   sku: string;
   name: string;
-  price: number;
-  stock: number;
-  stockPerTime: number;
-  useProductPrice: boolean;
+  price: number | null;
+  stock: number | null;
+  stockPerTime: number | null;
+  stockAlert: number | null;
 }
 
 export type OrderSchema = {
@@ -117,6 +127,7 @@ export type OrderSchema = {
   total: number;
   lines: OrderLineSchema[];
   user: OrderUserSchema;
+  paymentMethod: PaymentMethodType;
   createdAt: Date | null;
 }
 
@@ -124,20 +135,17 @@ export type OrderLineSchema = {
   id: number;
   count: number;
   price: number;
-  variant: OrderLineVariantSchema;
+  productId: number;
+  variantId: number;
+  productName: string;
+  variantName: string;
+  image: string;
 }
 
 export type OrderUserSchema = {
   id: number;
   name: string;
   surname: string;
-}
-
-export type OrderLineVariantSchema = {
-  id: number;
-  productName: string;
-  variantName: string;
-  image: string;
 }
 
 /**
@@ -198,12 +206,18 @@ export type PayloadToGetAll<T> = {
 export type PayloadToSave<T, Q> = {
   endpoint: string;
   validationName: string;
+  entity?: T;
   query?: Q;
 }
 
 export type PayloadToChangeArchiveState = {
   endpoint: string;
   action: ArchiveAction;
+  entityId: number;
+}
+
+export type PayloadToDelete = {
+  endpoint: string;
   entityId: number;
 }
 

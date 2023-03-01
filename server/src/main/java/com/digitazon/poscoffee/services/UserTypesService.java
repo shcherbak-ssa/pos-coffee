@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.digitazon.poscoffee.models.UserType;
 import com.digitazon.poscoffee.repositories.UserTypesRepository;
 import com.digitazon.poscoffee.shared.constants.UsersConstants;
+import com.digitazon.poscoffee.shared.exceptions.ProgerException;
 
 @Service
 public class UserTypesService {
@@ -24,6 +25,10 @@ public class UserTypesService {
 
   public UserType getByName(UsersConstants.UserType name) {
     return this.repository.findByName(name);
+  }
+
+  public UserType getByName(String userType) throws ProgerException {
+    return this.getByName(UsersConstants.UserType.valueOf(userType));
   }
 
 }

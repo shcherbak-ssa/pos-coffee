@@ -2,6 +2,7 @@ export const APP_NAME: string = 'POS`Coffee';
 
 export const ZERO: number = 0;
 export const NOTIFICATION_LIFE: number = 7000;
+export const DOUBLE_STOCK_ALERT: number = 2;
 
 export const EMPTY_STRING: string = '';
 export const PAGE_TITLE_DIVIDER: string = ' | ';
@@ -15,6 +16,12 @@ export enum UserType {
   ADMIN = 'ADMIN',
   MANAGER = 'MANAGER',
   WAITER = 'WAITER',
+}
+
+export enum PaymentMethodType {
+  CASH = 'CASH',
+  CARD = 'CARD',
+  MISC = 'MISC',
 }
 
 export enum ErrorName {
