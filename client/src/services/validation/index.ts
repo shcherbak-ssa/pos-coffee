@@ -31,7 +31,6 @@ export class ValidationService implements BaseValidationService {
       const schema: Schema<T> = await this.loadSchema(schemaName);
       await schema[type].validateAsync(updates, { abortEarly: false });
     } catch (e: any) {
-      console.log(e);
       this.parseValidationError(e, schemaName);
     }
   }

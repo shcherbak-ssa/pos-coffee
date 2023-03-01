@@ -78,7 +78,7 @@ export function PageHeaderHeadingContainer({ showTabs, actionProps, addButton }:
         return (
           <Button
             className="p-button-sm"
-            icon={PrimeIcons.PLUS}
+            icon={addButton.icon || PrimeIcons.PLUS}
             label={addButton.label}
             onClick={handleAddButonClick}
           />

@@ -1,15 +1,27 @@
 import { proxy } from 'valtio';
 
-import type { ProductCategory } from 'shared/types';
+import type { ProductCategory, SettingsSchema as BaseSettingsSchema } from 'shared/types';
 import { EMPTY_STRING } from 'shared/constants';
+import { getUpdates } from 'shared/helpers/get-updates';
+import { SettingsSchema } from 'lib/settings-model';
 
-import type { AppPageSchema, AppState, AppStore, AppStoreActions, AppViewState } from '@admin/shared/types';
+import type {
+  AppPageSchema,
+  AppState,
+  AppStore,
+  AppStoreActions,
+  AppViewState,
+  SettingsUpdates,
+} from '@admin/shared/types';
 import { ListView, ListTab } from '@admin/shared/constants';
 import { UserSchema } from '@admin/models/user';
+import { createDraft } from '@admin/models/settings';
 
 export const appStore: AppStore & AppStoreActions = {
 
   state: proxy<AppState>({
+    settings: SettingsSchema.create(),
+    settingsUpdates: SettingsSchema.create(),
     productCategories: [],
     currentPage: { title: EMPTY_STRING },
     currentUser: UserSchema.create(),
@@ -23,6 +35,26 @@ export const appStore: AppStore & AppStoreActions = {
       listAction: [],
     },
   }),
+
+  settingsDraft: createDraft(),
+
+  setSettings(settings: BaseSettingsSchema): void {
+    appStore.state.settings = SettingsSchema.create(settings);
+    appStore.state.settingsUpdates = SettingsSchema.create(settings);
+    appStore.settingsDraft = createDraft(appStore.state.settingsUpdates);
+  },
+
+  hasSettingsUpdates(): boolean {
+    const { id, ...updates } = this.getSettingsUpdates();
+
+    return !!Object.keys(updates).length;
+  },
+
+  getSettingsUpdates(): SettingsUpdates {
+    const { settings, settingsUpdates } = appStore.state;
+
+    return getUpdates(settings, settingsUpdates);
+  },
 
   setProductCategories(productCategories: ProductCategory[]): void {
     appStore.state.productCategories = [...productCategories];

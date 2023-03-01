@@ -24,6 +24,11 @@ export enum PaymentMethodType {
   MISC = 'MISC',
 }
 
+export enum Currency {
+  USD = 'USD',
+  EUR = 'EUR',
+}
+
 export enum ErrorName {
   APP_ERROR = 'AppError',
   AUTH_ERROR = 'AuthError',

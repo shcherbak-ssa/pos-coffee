@@ -48,24 +48,24 @@ export const notifications: {
     type: 'process',
     severity: 'info',
     heading: 'Updating...',
-    message: `A new ${entity.toLowerCase()} is being updated`,
+    message: `${entity} is being updated`,
   }),
   archiveProcess: (entity: EntityName) => ({
     type: 'process',
     severity: 'info',
     heading: 'Archiving...',
-    message: `A new ${entity.toLowerCase()} is being archived`,
+    message: `${entity} is being archived`,
   }),
   restoreProcess: (entity: EntityName) => ({
     type: 'process',
     severity: 'info',
     heading: 'Restoring...',
-    message: `A new ${entity.toLowerCase()} is being restored`,
+    message: `${entity} is being restored`,
   }),
   deleteProcess: (entity: EntityName) => ({
     type: 'process',
     severity: 'info',
     heading: 'Deleting...',
-    message: `A new ${entity.toLowerCase()} is being deleted`,
+    message: `${entity} is being deleted`,
   }),
 };

@@ -27,7 +27,7 @@ function Page() {
       ...pages[PageTitle.USERS],
       headerMenuItem: headerMenuItems.products,
     },
-    addButton: {
+    buttonProps: {
       label: 'Create new product',
       to: PagePath.PRODUCTS_INFO,
     },

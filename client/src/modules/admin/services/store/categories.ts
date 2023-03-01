@@ -50,7 +50,7 @@ export const categoriesStore: CategoriesStore & CategoriesStoreActions = {
     },
 
     hadUpdates(): boolean {
-      const { id, createdAt, updatedAt, archivedAt, ...updates } = this.getUpdates();
+      const { id, createdAt, updatedAt, ...updates } = this.getUpdates();
 
       return !!Object.keys(updates).length;
     },

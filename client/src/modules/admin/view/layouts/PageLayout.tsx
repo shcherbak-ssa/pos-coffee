@@ -12,13 +12,13 @@ export type Props = {
   showSubHeader?: boolean;
   controlGroups?: ControlGroup[];
   showTabs?: boolean;
-  addButton?: PageAddButtonProps;
+  buttonProps?: PageAddButtonProps;
 }
 
 export function PageLayout({
   page,
   children,
-  addButton,
+  buttonProps,
   showSubHeader = true,
   showTabs = true,
   controlGroups = [ ControlGroup.ACTIONS, ControlGroup.VIEWS ],
@@ -53,7 +53,7 @@ export function PageLayout({
     <PageWrapper>
       <PageHeaderHeadingContainer
         showTabs={showTabs}
-        addButton={addButton}
+        addButton={buttonProps}
       />
 
       { drawSubHeader() }

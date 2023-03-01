@@ -1,4 +1,11 @@
-import type { ApiService, ProductCategory, UserSchema } from 'shared/types';
+import type {
+  ApiService,
+  NotificationService,
+  ProductCategory,
+  SettingsSchema,
+  UserSchema,
+  ValidationService,
+} from 'shared/types';
 import { EntityName } from 'shared/constants';
 import { BaseController } from 'lib/base-controller';
 
@@ -8,13 +15,68 @@ import type {
   AppStore,
   AppStoreActions,
   AppViewState,
+  SettingsUpdates,
 } from '@admin/shared/types';
-import { ApiEndpoint, StoreName } from '@admin/shared/constants';
+import { ApiEndpoint, StoreName, ValidationName } from '@admin/shared/constants';
 
 export class AppController extends BaseController implements BaseAppController {
 
   public static create(): AppController {
     return new AppController(StoreName.APP, EntityName.ANY);
+  }
+
+  public async loadSettings(): Promise<void> {
+    try {
+      const apiService: ApiService = await this.getApiService();
+      const settings: SettingsSchema = await apiService.get(ApiEndpoint.APP_SETTINGS);
+
+      const appStore = await this.getStore() as AppStoreActions;
+      appStore.setSettings(settings);
+    } catch (e: any) {
+      this.parseError(e);
+    }
+  }
+
+  public async updateSettings(): Promise<boolean> {
+    try {
+      const store = await this.getStore() as (AppStore & AppStoreActions);
+
+      if (!store.hasSettingsUpdates()) {
+        return true;
+      }
+
+      const notificationService: NotificationService = await this.getNotificationService();
+
+      notificationService.addNotification({
+        type: 'process',
+        severity: 'info',
+        heading: 'Updating...',
+        message: `Settings is being updated`,
+      });
+
+      const settingsToUpdate: SettingsSchema = store.state.settingsUpdates;
+
+      const validationService: ValidationService = await this.getValidationService();
+      await validationService.validateToUpdate(ValidationName.SETTINGS, settingsToUpdate);
+
+      const updates: SettingsUpdates = store.getSettingsUpdates();
+
+      const apiService: ApiService = await this.getApiService();
+      apiService.addBody(updates).put(ApiEndpoint.APP_SETTINGS);
+
+      store.setSettings(settingsToUpdate);
+
+      notificationService.addNotification({
+        severity: 'success',
+        heading: 'Updated',
+        message: `Settings updated successfully`,
+      });
+
+      return true;
+    } catch (e: any) {
+      await this.parseError(e);
+      return false;
+    }
   }
 
   public async loadProductCategories(): Promise<void> {

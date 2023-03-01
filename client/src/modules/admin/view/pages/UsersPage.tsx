@@ -24,7 +24,7 @@ function Page() {
 
   const pageLayoutProps: Omit<PageLayoutProps, 'children'> = {
     page: pages[PageTitle.USERS],
-    addButton: {
+    buttonProps: {
       label: 'Create new user',
       to: PagePath.USERS_INFO,
     },

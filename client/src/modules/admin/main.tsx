@@ -30,4 +30,5 @@ async function setup(currentUser: UserSchema): Promise<void> {
 
   const appController = Context.getController(ControllerName.APP) as AppController;
   await appController.setCurrentUser(currentUser);
+  await appController.loadSettings();
 }

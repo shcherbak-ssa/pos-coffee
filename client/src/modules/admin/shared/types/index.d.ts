@@ -14,8 +14,9 @@ import type {
   ProductVariantSchema,
   OrderSchema,
   Entity,
+  SettingsSchema,
 } from 'shared/types';
-import type { UserType } from 'shared/constants';
+import type { Currency, UserType } from 'shared/constants';
 
 import type { Action, ListView, ListAction, ListTab, PagePath } from '@admin/shared/constants';
 import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-menu-items';
@@ -56,6 +57,7 @@ export type ActionMenuItem = {
 
 export type PageAddButtonProps = {
   label: string;
+  icon?: string;
   to?: PagePath;
   command?: EmptyFunction;
 }
@@ -85,7 +87,7 @@ export type CardWithInputsProps<T, D> = {
 /**
  * App
  *
- * + (ProductCategory)
+ * + (Settings, ProductCategory)
  */
 
 export type AppPageSchema = {
@@ -107,7 +109,11 @@ export type AppViewState = {
   listTab: ListTab;
 }
 
+export type SettingsUpdates = Partial<SettingsSchema>;
+
 export type AppState = {
+  settings: SettingsSchema;
+  settingsUpdates: SettingsSchema;
   productCategories: ProductCategory[];
   currentPage: AppPageSchema;
   currentUser: UserSchema;
@@ -117,9 +123,19 @@ export type AppState = {
   view: AppViewState;
 }
 
-export interface AppStore extends StoreState<AppState> {}
+export interface SettingsDraft {
+  set currency(currency: Currency);
+  set taxes(taxes: number);
+}
+
+export interface AppStore extends StoreState<AppState> {
+  settingsDraft: SettingsDraft;
+}
 
 export interface AppStoreActions extends AppStore {
+  setSettings(settings: SettingsSchema): void;
+  hasSettingsUpdates(): boolean;
+  getSettingsUpdates(): SettingsUpdates;
   setProductCategories(productCategories: ProductCategory[]): void;
   setCurrentPage(page: AppPageSchema): void;
   setCurrentUser(user: UserSchema): void;
@@ -130,6 +146,8 @@ export interface AppStoreActions extends AppStore {
 }
 
 export interface AppController {
+  loadSettings(): Promise<void>;
+  updateSettings(): Promise<boolean>;
   loadProductCategories(): Promise<void>;
   setCurrentPage(page: AppPageSchema): Promise<void>;
   setCurrentUser(user: UserSchema): Promise<void>;

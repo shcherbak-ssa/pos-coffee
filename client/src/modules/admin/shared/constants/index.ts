@@ -6,6 +6,7 @@ export const PARAM_NULL_LABELS: string = 'nullLabels';
 export const PARAM_NULL_LABELS_SAPARATOR: string = ',';
 
 export enum ApiEndpoint {
+  APP_SETTINGS = '/api/admin/app/settings',
   APP_PRODUCT_CATEGORIES = '/api/admin/app/productCategories',
   USERS = '/api/admin/users',
   USERS_ID = '/api/admin/users/:id',
@@ -42,6 +43,7 @@ export enum StoreName {
 }
 
 export enum ValidationName {
+  SETTINGS = 'SETTINGS',
   USERS = 'USERS',
   PRODUCTS = 'PRODUCTS',
   CATEGORIES = 'CATEGORIES',

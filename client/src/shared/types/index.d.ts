@@ -1,4 +1,4 @@
-import type { EntityName, ErrorType, PaymentMethodType, UserType } from 'shared/constants';
+import type { Currency, EntityName, ErrorType, PaymentMethodType, UserType } from 'shared/constants';
 
 /**
  * Helpers
@@ -52,6 +52,12 @@ export type ValidationSchema<T> = {
 export type Token = {
   token: string;
   type: string;
+}
+
+export type SettingsSchema = {
+  id: number;
+  currency: Currency;
+  taxes: number;
 }
 
 export type UserSchema = BaseSchema & {
