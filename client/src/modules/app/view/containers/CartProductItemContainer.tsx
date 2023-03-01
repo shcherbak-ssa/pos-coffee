@@ -10,11 +10,11 @@ import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 import { ProductsImage } from 'view/components/ProductsImage';
 import { BasePrice } from 'view/components/BasePrice';
+import { CardWrapper } from 'view/components/CardWrapper';
 
 import type { AppStore, CartController, CartProductSchema, CartStockAlert, CartStore } from '@app/shared/types';
 import { ControllerName, StoreName } from '@app/shared/constants';
 import { CartProductItemVariantsContainer } from '@app/view/containers/CartProductItemVariantsContainer';
-import { CardWrapper } from '@app/view/components/CardWrapper';
 
 export type Props = {
   product: CartProductSchema;

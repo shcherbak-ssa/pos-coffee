@@ -6,7 +6,7 @@ import type { Currency } from 'shared/constants';
 import { InputWrapper } from 'view/components/InputWrapper';
 import { CardHeading } from 'view/components/CardHeading';
 
-import { CardWrapper } from '@admin/view/components/CardWrapper';
+import { CardWrapper } from 'view/components/CardWrapper';
 
 export type Props = {
   order: OrderSchema;

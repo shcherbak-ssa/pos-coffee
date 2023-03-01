@@ -28,6 +28,10 @@
   }
 }
 
+:root {
+  --wrapper-color: #F7F8FA;
+}
+
 body {
   color: var(--text-color);
   min-width: 768px;
@@ -84,5 +88,26 @@ body {
 
   &.p-dialog .p-dialog-footer button {
     @apply m-0;
+  }
+}
+
+.card {
+  &:hover {
+    .card-menu {
+      @apply opacity-100;
+    }
+  }
+
+  &-menu {
+    @apply opacity-0 duration-200;
+  }
+
+  &-wrapper {
+    background-color: var(--wrapper-color, --surface-ground);
+  }
+
+  &-active &-wrapper {
+    background: #D8DEE9;
+    color: #2E3440;
   }
 }

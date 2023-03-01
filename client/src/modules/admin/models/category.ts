@@ -1,7 +1,7 @@
 import type { CategorySchema as BaseCategorySchema } from 'shared/types';
 import { EMPTY_STRING, ZERO } from 'shared/constants';
 
-import type { CategoriesFilter, CategoryDraft, CategoryUpdates } from '@admin/shared/types';
+import type { CategoryDraft, CategoryUpdates } from '@admin/shared/types';
 
 export class CategorySchema implements BaseCategorySchema {
   public id: number;

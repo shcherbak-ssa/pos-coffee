@@ -1,5 +1,5 @@
 import type { ApiService, Token, ValidationService } from 'shared/types';
-import { EntityName, LocalStorageKey, ROOT_PAGE_PATH } from 'shared/constants';
+import { EMPTY_STRING, EntityName, LocalStorageKey, ROOT_PAGE_PATH } from 'shared/constants';
 import { replaceLocation } from 'shared/utils/replace-location';
 import { LocalStorage } from 'shared/helpers/local-storage';
 import { BaseController } from 'lib/base-controller';
@@ -10,7 +10,7 @@ import { LOGIN_API_ENDPOINT, LOGIN_VALIDATION } from '@login/shared/constants';
 export class LoginController extends BaseController implements BaseLoginController {
 
   public static create(): LoginController {
-    return new LoginController(EntityName.ANY);
+    return new LoginController(EMPTY_STRING, EntityName.ANY);
   }
 
   public async processLogin(schema: LoginSchema): Promise<void> {

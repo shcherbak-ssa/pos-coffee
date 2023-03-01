@@ -3,17 +3,19 @@ import { type Location, type NavigateFunction, useLocation, useNavigate } from '
 import classnames from 'classnames';
 import { ScrollPanel } from 'primereact/scrollpanel';
 
-import type { AppMenuItem as AppMenuItemType, AppComponentProps } from '@admin/shared/types';
-import { PagePath } from '@admin/shared/constants';
+import { useStore } from 'view/hooks/store';
+import { useController } from 'view/hooks/controller';
+
+import type { AppController, AppMenuItem as AppMenuItemType, AppStore } from '@admin/shared/types';
+import { ControllerName, PagePath, StoreName } from '@admin/shared/constants';
 import { appMenuItems } from '@admin/shared/configs/app-menu';
 import { AppMenuItem } from '@admin/view/components/AppMenuItem';
 import { AppHeaderLogo } from '@admin/view/components/AppHeaderLogo';
 
-export type Props = AppComponentProps;
+export function AppMenuContainer() {
 
-export function AppMenuContainer({ appStore, appController }: Props) {
-
-  const { isAppMenuOpen } = appStore.state;
+  const { state: { isAppMenuOpen } } = useStore(StoreName.APP) as AppStore;
+  const appController = useController(ControllerName.APP) as AppController;
 
   const { pathname }: Location = useLocation();
   const navigate: NavigateFunction = useNavigate();

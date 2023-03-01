@@ -6,7 +6,7 @@ import type { Currency } from 'shared/constants';
 import { BasePrice } from 'view/components/BasePrice';
 import { CardHeading } from 'view/components/CardHeading';
 
-import { CardWrapper } from '@admin/view/components/CardWrapper';
+import { CardWrapper } from 'view/components/CardWrapper';
 import { OrdersLineProduct } from '@admin/view/components/OrdersLineProduct';
 
 export type Props = {

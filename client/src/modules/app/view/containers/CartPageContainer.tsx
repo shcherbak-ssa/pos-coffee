@@ -1,4 +1,5 @@
 import { useStore } from 'view/hooks/store';
+import { CardWrapper } from 'view/components/CardWrapper';
 
 import type { AppStore } from '@app/shared/types';
 import { StoreName } from '@app/shared/constants';
@@ -6,7 +7,6 @@ import { AppCashierContainer } from '@app/view/containers/AppCashierContainer';
 import { CartCategoriesContainer } from '@app/view/containers/CartCategoriesContainer';
 import { CartProductsContainer } from '@app/view/containers/CartProductsContainer';
 import { CartOrderContainer } from '@app/view/containers/CartOrderContainer';
-import { CardWrapper } from '@app/view/components/CardWrapper';
 
 export function CartPageContainer() {
 

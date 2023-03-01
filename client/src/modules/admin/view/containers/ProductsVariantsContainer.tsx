@@ -20,7 +20,7 @@ import { ControllerName, StoreName } from '@admin/shared/constants';
 import { confirmDialogConfig } from '@admin/shared/configs/confirm-dialog';
 import { ProductsVariantsPopupFooter } from '@admin/view/components/ProductsVariantsPopupFooter';
 import { ProductsVariantsPopup } from '@admin/view/components/ProductsVariantsPopup';
-import { CardWrapper } from '@admin/view/components/CardWrapper';
+import { CardWrapper } from 'view/components/CardWrapper';
 import { ProductVariantMenu } from '@admin/view/components/ProductVariantMenu';
 import { ProductsStockLabel } from '@admin/view/components/ProductsStockLabel';
 

@@ -4,13 +4,12 @@ import classnames from 'classnames';
 import { ScrollPanel } from 'primereact/scrollpanel';
 
 import { useStore } from 'view/hooks/store';
-import { useController } from 'view/hooks/controller';
 import { NotificationContainer } from 'view/containers/NotificationContainer';
 import { AppLoader } from 'view/components/AppLoader';
 import { ConfimComponents } from 'view/components/ConfimComponents';
 
-import type { AppStore, AppController, AppComponentProps } from '@admin/shared/types';
-import { ControllerName, PagePath, StoreName } from '@admin/shared/constants';
+import type { AppStore } from '@admin/shared/types';
+import { PagePath, StoreName } from '@admin/shared/constants';
 import { AppHeaderContainer } from '@admin/view/containers/AppHeaderContainer';
 import { AppMenuContainer } from '@admin/view/containers/AppMenuContainer';
 
@@ -26,22 +25,19 @@ const SettingsPage = lazy(() => import('@admin/view/pages/SettingsPage'));
 
 export function AppLayout() {
 
-  const appStore = useStore(StoreName.APP) as AppStore;
-  const appController = useController(ControllerName.APP) as AppController;
-
-  const appProps: AppComponentProps = { appStore, appController };
+  const { state: { isAppMenuOpen } } = useStore(StoreName.APP) as AppStore;
 
   return (
     <div className="app-container full relative">
       <BrowserRouter>
-        <AppHeaderContainer {...appProps} />
-        <AppMenuContainer {...appProps} />
+        <AppHeaderContainer />
+        <AppMenuContainer />
 
         <ScrollPanel style={{ width: '100%', height: 'calc(100% - 6rem)' }}>
           <div
             className={classnames('p-12 duration-200', {
-              'lg:pl-72': appStore.state.isAppMenuOpen,
-              'lg:pl-36': !appStore.state.isAppMenuOpen,
+              'lg:pl-72': isAppMenuOpen,
+              'lg:pl-36': !isAppMenuOpen,
             })}
           >
             <Suspense fallback={<AppLoader />} >

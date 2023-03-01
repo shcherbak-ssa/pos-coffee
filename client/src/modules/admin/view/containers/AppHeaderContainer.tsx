@@ -7,23 +7,24 @@ import { PrimeIcons } from 'primereact/api';
 
 import { logout } from 'shared/helpers/logout';
 import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/navigate';
+import { useStore } from 'view/hooks/store';
+import { useController } from 'view/hooks/controller';
 import { IconButton } from 'view/components/IconButton';
 import { UsersImage } from 'view/components/UsersImage';
 
-import type { AppComponentProps } from '@admin/shared/types';
-import { PagePath } from '@admin/shared/constants';
+import type { AppStore, AppController } from '@admin/shared/types';
+import { ControllerName, PagePath, StoreName } from '@admin/shared/constants';
 import { AppHeaderLogo } from '@admin/view/components/AppHeaderLogo';
 
-export type Props = AppComponentProps;
-
-export function AppHeaderContainer({ appStore, appController }: Props) {
-
-  const { isAppMenuOpen, currentPage, currentUser } = appStore.state;
+export function AppHeaderContainer() {
 
   const userMenu = useRef<Menu>(null);
 
   const location: Location = useLocation();
   const navigate: NavigateFunction = useNavigate();
+
+  const { state: { isAppMenuOpen, currentPage, currentUser } } = useStore(StoreName.APP) as AppStore;
+  const appController = useController(ControllerName.APP) as AppController;
 
   const [ headerMenuItems, setHeaderMenuItems ] = useState<MenuItem[]>([]);
   const toInfoPage: NavigateFunctionHook = useNavigateWithParams(PagePath.USERS_INFO);

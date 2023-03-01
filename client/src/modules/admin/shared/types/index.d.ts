@@ -62,11 +62,6 @@ export type PageAddButtonProps = {
   command?: EmptyFunction;
 }
 
-export type AppComponentProps = {
-  appStore: AppStore;
-  appController: AppController;
-}
-
 export type EntityViewComponentProps<T extends Entity> = {
   entities: T[];
   selectEntity: (entity: T) => void;

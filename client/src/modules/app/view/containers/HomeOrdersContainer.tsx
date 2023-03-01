@@ -5,9 +5,9 @@ import type { OrderSchema } from 'shared/types';
 import { useStore } from 'view/hooks/store';
 import { CardHeading } from 'view/components/CardHeading';
 import { BasePrice } from 'view/components/BasePrice';
+import { CardWrapper } from 'view/components/CardWrapper';
 
 import type { AppStore } from "@app/shared/types";
-import { CardWrapper } from '@app/view/components/CardWrapper';
 import { StoreName } from "@app/shared/constants";
 
 export function HomeOrdersContainer() {
