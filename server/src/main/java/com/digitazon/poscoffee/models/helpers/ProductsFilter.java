@@ -7,14 +7,16 @@ import com.digitazon.poscoffee.models.helpers.client.ClientCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
 
 @Data
 @AllArgsConstructor
-@Builder
-public class ProductsFilter {
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+public class ProductsFilter extends BasePageFilter {
 
   private Boolean isArchived;
-  private Boolean isAvailable;
   private String[] nullLabels;
 
   @Builder.Default

@@ -1,11 +1,10 @@
-import type { ProductSchema as BaseProductSchema } from 'shared/types';
+import type { PageUpdates, ProductSchema as BaseProductSchema } from 'shared/types';
 import { EntityName, ZERO } from 'shared/constants';
 import { CrudController } from 'lib/crud-controller';
 
 import type { ProductsController as BaseProductsController, ProductsFilter } from '@admin/shared/types';
 import { ApiEndpoint, StoreName, ValidationName } from '@admin/shared/constants';
 import { updateSelectedEntityTitle } from '@admin/shared/helpers/selected-entity-title';
-import { createFilter } from '@admin/models/product';
 
 export class ProductsController extends CrudController<BaseProductSchema> implements BaseProductsController {
 
@@ -23,7 +22,7 @@ export class ProductsController extends CrudController<BaseProductSchema> implem
   public async loadAll(filter?: ProductsFilter): Promise<boolean> {
     return await this.tryToLoadAll({
       endpoint: ApiEndpoint.PRODUCTS,
-      filter: createFilter(filter || {}),
+      filter: { ...filter },
     });
   }
 
@@ -60,6 +59,10 @@ export class ProductsController extends CrudController<BaseProductSchema> implem
     await this.tryToSelect(productId);
 
     this.updateSelectedEntityTitle();
+  }
+
+  public async updatePage(page: PageUpdates<BaseProductSchema>): Promise<void> {
+    await this.tryToUpdatePage(page);
   }
 
   private updateSelectedEntityTitle(): void {

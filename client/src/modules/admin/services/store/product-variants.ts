@@ -1,8 +1,14 @@
 import { proxy } from 'valtio';
 
-import type { ProductVariantSchema as BaseProductVariantSchema, StoreService as BaseStoreService } from 'shared/types';
+import type {
+  ProductVariantSchema as BaseProductVariantSchema,
+  StoreService as BaseStoreService,
+  Page as BasePage,
+  PageUpdates,
+} from 'shared/types';
 import { EntityName } from 'shared/constants';
 import { StoreService } from 'services/store';
+import { Page } from 'lib/page-model';
 
 import type {
   ProductVariantDraft,
@@ -18,17 +24,18 @@ export const productVariantsStore: ProductVariantsStore & ProductVariantsStoreAc
   state: proxy({
     list: [],
     selected: ProductVariantSchema.create(),
+    page: Page.create<BaseProductVariantSchema>(),
   }),
 
   draft: createDraft(),
 
-  /**
-   * CrudStore implementation
-   */
-
   add(variants: BaseProductVariantSchema[]): void {
     createStoreService().add(variants);
   },
+
+  setPage(page: BasePage<BaseProductVariantSchema>): void {},
+
+  updatePage(page: PageUpdates<BaseProductVariantSchema>): void {},
 
   save(variant: BaseProductVariantSchema): void {
     createStoreService().save(variant);

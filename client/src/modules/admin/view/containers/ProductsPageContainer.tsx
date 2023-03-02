@@ -5,7 +5,7 @@ import { useStore } from 'view/hooks/store';
 import { BasePrice } from 'view/components/BasePrice';
 
 import type { AppStore } from '@admin/shared/types';
-import { PagePath, StoreName } from '@admin/shared/constants';
+import { ControllerName, PagePath, StoreName } from '@admin/shared/constants';
 import { actionsMenuItemsProps } from '@admin/shared/configs/pages';
 import { PageDefaultContentContainer } from '@admin/view/containers/PageDefaultContentContainer';
 import { ProductsImage } from 'view/components/ProductsImage';
@@ -61,6 +61,7 @@ export function ProductsPageContainer() {
   return (
     <PageDefaultContentContainer
       storeName={StoreName.PRODUCTS}
+      controllerName={ControllerName.PRODUCTS}
       infoPagePath={PagePath.PRODUCTS_INFO}
       tableColumns={productsTableColumns}
       actionsMenuItemsProps={actionsMenuItemsProps.products}

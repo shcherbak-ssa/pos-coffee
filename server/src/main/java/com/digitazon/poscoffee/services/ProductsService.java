@@ -12,12 +12,15 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.Category;
 import com.digitazon.poscoffee.models.Product;
+import com.digitazon.poscoffee.models.helpers.PageResponse;
 import com.digitazon.poscoffee.models.helpers.ProductsFilter;
 import com.digitazon.poscoffee.models.helpers.client.ClientCategory;
 import com.digitazon.poscoffee.models.helpers.client.ClientProduct;
@@ -75,6 +78,19 @@ public class ProductsService {
       .stream()
       .map(this::convertToClientProduct)
       .collect(Collectors.toList());
+  }
+
+  public PageResponse<ClientProduct> getProductsByPage(ProductsFilter filter) {
+    final Page<Product> productsPage = this.repository.findAll(
+      ProductsService.filter(filter),
+      PageRequest.of(filter.getPage(), filter.getPageSize())
+    );
+
+    if (productsPage.hasContent()) {
+      return this.convertToPageResponse(productsPage, productsPage.getContent());
+    }
+
+    return this.convertToPageResponse(productsPage, new ArrayList<Product>());
   }
 
   public void countProductsByCategories(List<ClientCategory> categories) {
@@ -143,6 +159,15 @@ public class ProductsService {
 
   private Product convertToProduct(ClientProduct product) {
     return (Product) this.context.getBean("product", product);
+  }
+
+  private PageResponse<ClientProduct> convertToPageResponse(Page<Product> page, List<Product> products) {
+    final List<ClientProduct> clientProducts = products
+      .stream()
+      .map(this::convertToClientProduct)
+      .collect(Collectors.toList());
+
+    return (PageResponse<ClientProduct>) this.context.getBean("pageResponse", page, clientProducts);
   }
 
   private void mergeWithUpdates(Product product, ClientProduct updates) {

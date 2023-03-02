@@ -10,6 +10,8 @@ import type {
   PayloadToChangeArchiveState,
   StoreEntityState,
   PayloadToDelete,
+  PageUpdates,
+  Page,
 } from 'shared/types';
 import { ZERO } from 'shared/constants';
 import { notifications } from 'shared/configs/notifications';
@@ -39,12 +41,17 @@ export class CrudController<T extends Entity> extends BaseController {
     try {
       const apiService: ApiService = await this.getApiService();
 
-      const entities: T[] = await apiService
+      const result: T[] | Page<T> = await apiService
         .addQuery(filter)
         .get(endpoint);
 
       const store = await this.getStore() as StoreCrud<T>;
-      store.add(entities);
+
+      if (Array.isArray(result)) {
+        store.add(result);
+      } else {
+        store.setPage(result);
+      }
 
       return true;
     } catch (e: any) {
@@ -172,6 +179,15 @@ export class CrudController<T extends Entity> extends BaseController {
     try {
       const store = await this.getStore() as StoreCrud & StoreEntityState<{}, T>;
       store.selected.set(entityId);
+    } catch (e: any) {
+      await this.parseError(e);
+    }
+  }
+
+  public async tryToUpdatePage(page: PageUpdates<T>): Promise<void> {
+    try {
+      const store = await this.getStore() as StoreCrud & StoreEntityState<{}, T>;
+      store.updatePage(page);
     } catch (e: any) {
       await this.parseError(e);
     }

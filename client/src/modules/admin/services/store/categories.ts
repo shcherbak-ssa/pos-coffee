@@ -1,8 +1,14 @@
 import { proxy } from 'valtio';
 
-import type { CategorySchema as BaseCategorySchema, StoreService as BaseStoreService } from 'shared/types';
+import type {
+  CategorySchema as BaseCategorySchema,
+  StoreService as BaseStoreService,
+  Page as BasePage,
+  PageUpdates,
+} from 'shared/types';
 import { EntityName } from 'shared/constants';
 import { StoreService } from 'services/store';
+import { Page } from 'lib/page-model';
 
 import type {
   CategoriesState,
@@ -19,6 +25,7 @@ export const categoriesStore: CategoriesStore & CategoriesStoreActions = {
     list: [],
     selected: CategorySchema.create(),
     isPopupOpen: false,
+    page: Page.create<BaseCategorySchema>(),
   }),
 
   draft: createDraft(),
@@ -30,6 +37,10 @@ export const categoriesStore: CategoriesStore & CategoriesStoreActions = {
   add(categories: BaseCategorySchema[]): void {
     createStoreService().add(categories)
   },
+
+  setPage(page: BasePage<BaseCategorySchema>): void {},
+
+  updatePage(page: PageUpdates<BaseCategorySchema>): void {},
 
   save(category: BaseCategorySchema): void {
     createStoreService().save(category);

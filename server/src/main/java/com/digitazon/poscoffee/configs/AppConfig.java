@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -23,6 +24,7 @@ import com.digitazon.poscoffee.models.constants.Currency;
 import com.digitazon.poscoffee.models.constants.PaymentMethod;
 import com.digitazon.poscoffee.models.constants.UserType;
 import com.digitazon.poscoffee.models.helpers.ErrorResponse;
+import com.digitazon.poscoffee.models.helpers.PageResponse;
 import com.digitazon.poscoffee.models.helpers.client.ClientCategory;
 import com.digitazon.poscoffee.models.helpers.client.ClientOrder;
 import com.digitazon.poscoffee.models.helpers.client.ClientOrderLine;
@@ -65,6 +67,18 @@ public class AppConfig {
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
   public BaseServiceHelpers serviceHelpers(String entityName) {
     return new ServiceHelpers(entityName);
+  }
+
+  @Bean
+  @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+  public <T, C extends Object> PageResponse<C> pageResponse(Page<T> page, List<C> clientEntities) {
+    return PageResponse.<C>builder()
+      .entities(clientEntities)
+      .page(page.getNumber())
+      .size(page.getSize())
+      .total(page.getTotalElements())
+      .totalPages(page.getTotalPages())
+      .build();
   }
 
   /**

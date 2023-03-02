@@ -33,12 +33,6 @@ export class ProductSchema extends BaseSchema<ProductUpdates> implements BasePro
   }
 }
 
-export function createFilter({ isArchived: onlyArchived = false }: ProductsFilter): ProductsFilter {
-  return {
-    isArchived: onlyArchived,
-  };
-}
-
 export function createDraft(schema: BaseProductSchema = ProductSchema.create()): ProductDraft {
 
   return {

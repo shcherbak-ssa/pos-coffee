@@ -15,6 +15,7 @@ import type {
   OrderSchema,
   Entity,
   SettingsSchema,
+  PageFilter,
 } from 'shared/types';
 import type { Currency, UserType } from 'shared/constants';
 
@@ -274,8 +275,10 @@ export interface ProductVariantsController {
  * Orders
  */
 
+export type OrdersFilter = PageFilter;
+
 export interface OrdersStore extends StoreEntityState<{}, OrderSchema, {}> {}
 
 export interface OrdersStoreActions extends StoreCrud<OrderSchema> {}
 
-export interface OrdersController extends CrudController<{}> {}
+export interface OrdersController extends CrudController<OrdersFilter, OrderSchema> {}

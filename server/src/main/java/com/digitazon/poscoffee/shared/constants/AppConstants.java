@@ -10,6 +10,7 @@ public class AppConstants {
 
   public static final String EMPTY_STRING = "";
   public static final String PASSWORD_GENERATOR_HELPER_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  public static final String ID_FIELD = "id";
 
   public static final String POSCOFFEE_CONFIG_FILENAME = "poscoffee/poscoffee.config.json";
   public static final String POSCOFFEE_PROPS_FILENAME = "classpath:poscoffee/poscoffee.properties";
@@ -27,6 +28,8 @@ public class AppConstants {
   public static final String ACCESS_DENIED_ERROR = "AccessDeniedException";
 
   public static final String PARAM_IS_ARCHIVED = "isArchived";
+  public static final String PARAM_PAGE = "page";
+  public static final String PARAM_PAGE_SIZE = "pageSize";
 
   public static final class Entity {
     public static final String SETTINGS = "Settings";

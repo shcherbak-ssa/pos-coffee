@@ -1,8 +1,14 @@
 import { proxy } from 'valtio';
 
-import type { UserSchema as BaseUserSchema, StoreService as BaseStoreService } from 'shared/types';
+import type {
+  UserSchema as BaseUserSchema,
+  StoreService as BaseStoreService,
+  Page as BasePage,
+  PageUpdates,
+} from 'shared/types';
 import { EntityName } from 'shared/constants';
 import { StoreService } from 'services/store';
+import { Page } from 'lib/page-model';
 
 import type { UserDraft, UsersState, UsersStore, UsersStoreActions, UserUpdates } from '@admin/shared/types';
 import { createDraft, UserSchema } from '@admin/models/user';
@@ -12,12 +18,21 @@ export const usersStore: UsersStore & UsersStoreActions = {
   state: proxy({
     list: [],
     selected: UserSchema.create(),
+    page: Page.create<BaseUserSchema>(),
   }),
 
   draft: createDraft(),
 
   add(users: BaseUserSchema[]): void {
     createStoreService().add(users);
+  },
+
+  setPage(page: BasePage<BaseUserSchema>): void {
+    createStoreService().setPage(page);
+  },
+
+  updatePage(page: PageUpdates<BaseUserSchema>): void {
+    createStoreService().updatePage(page);
   },
 
   save(user: BaseUserSchema): void {

@@ -256,14 +256,18 @@ function generateOrderLine(products: Product[], variants: ProductVariant[]): Ord
     variant: null,
   };
 
-  const productId: number = getRandomNumber(0, products.length - 1) + 1;
+  const productId: number = getRandomNumber(1, products.length);
   line.product = productId;
 
-  const productVariants: ProductVariant[] = variants.filter(({ product }) => product === productId);
+  const productVariants: { variant: ProductVariant, index: number }[] = variants
+    .map((variant, index) => ({ variant, index: index + 1 }))
+    .filter(({ variant }) => variant.product === productId);
 
   if (productVariants.length) {
-    const variantId: number = getRandomNumber(0, productVariants.length - 1) + 1;
-    line.variant = variantId;
+    const variantId: number = getRandomNumber(0, productVariants.length - 1);
+    const { index } = productVariants[variantId];
+
+    line.variant = index;
   }
 
   return line;

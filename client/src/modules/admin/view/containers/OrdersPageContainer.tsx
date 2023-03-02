@@ -5,7 +5,7 @@ import { useStore } from 'view/hooks/store';
 import { BasePrice } from 'view/components/BasePrice';
 
 import type { AppStore } from '@admin/shared/types';
-import { StoreName, PagePath } from '@admin/shared/constants';
+import { StoreName, PagePath, ControllerName } from '@admin/shared/constants';
 import { PageDefaultContentContainer } from '@admin/view/containers/PageDefaultContentContainer';
 
 export function OrdersPageContainer() {
@@ -50,6 +50,7 @@ export function OrdersPageContainer() {
   return (
     <PageDefaultContentContainer
       storeName={StoreName.ORDERS}
+      controllerName={ControllerName.ORDERS}
       infoPagePath={PagePath.ORDERS_INFO}
       tableColumns={ordersTableColumns}
     />

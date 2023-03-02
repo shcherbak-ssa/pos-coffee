@@ -16,8 +16,13 @@ export type Props = {
   controllerName: ControllerName;
 }
 
+export type ContainerProps = {
+  page: number;
+  pageSize: number;
+}
+
 export function pageContainer<T extends Entity>(
-  ContentComponent: React.ComponentType,
+  Container: React.ComponentType,
   { entityName, storeName, controllerName }: Props,
 ): () => JSX.Element {
 
@@ -25,19 +30,23 @@ export function pageContainer<T extends Entity>(
 
     const [ isLoading, setIsLoading ] = useState<boolean>(true);
 
-    const { state: { list } } = useStore(storeName) as StoreEntityState<T, T>;
+    const { state: { page, list } } = useStore(storeName) as StoreEntityState<T, T>;
     const { state: { view } } = useStore(StoreName.APP) as AppStore;
 
     const controller = useController(controllerName) as CrudController;
 
     useEffect(() => {
       loadEntities(view.listTab === ListTab.ARCHIVED);
-    }, [view.listTab]);
+    }, [view.listTab, page.page]);
 
     function loadEntities(isArchived: boolean): void {
       setIsLoading(true);
 
-      controller.loadAll({ isArchived })
+      controller.loadAll({
+        page: page.page,
+        pageSize: page.size,
+        isArchived,
+      })
         .then((success: boolean) => {
           if (success) {
             setIsLoading(false);
@@ -58,7 +67,7 @@ export function pageContainer<T extends Entity>(
       );
     }
 
-    return <ContentComponent />;
+    return <Container />;
 
   }
 
