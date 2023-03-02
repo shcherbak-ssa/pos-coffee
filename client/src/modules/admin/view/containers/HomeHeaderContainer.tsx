@@ -9,7 +9,7 @@ export function HomeHeaderContainer() {
   const { state: { currentUser } } = useStore(StoreName.APP) as AppStore;
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between mb-6">
       <div>
         <HomeWelcome user={currentUser} />
       </div>

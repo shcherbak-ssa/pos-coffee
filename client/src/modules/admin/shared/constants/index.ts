@@ -6,6 +6,7 @@ export const PARAM_NULL_LABELS: string = 'nullLabels';
 export const PARAM_NULL_LABELS_SAPARATOR: string = ',';
 
 export enum ApiEndpoint {
+  APP_STATISTICS = '/api/admin/app/statistics',
   APP_SETTINGS = '/api/admin/app/settings',
   APP_PRODUCT_CATEGORIES = '/api/admin/app/productCategories',
   USERS = '/api/admin/users',

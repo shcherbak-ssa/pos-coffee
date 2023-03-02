@@ -8,6 +8,7 @@ import { SettingsSchema } from 'lib/settings-model';
 import type {
   AppPageSchema,
   AppState,
+  AppStatistics,
   AppStore,
   AppStoreActions,
   AppViewState,
@@ -16,6 +17,7 @@ import type {
 import { ListView, ListTab } from '@admin/shared/constants';
 import { UserSchema } from '@admin/models/user';
 import { createDraft } from '@admin/models/settings';
+import { Statistics } from '@admin/models/statistics';
 
 export const appStore: AppStore & AppStoreActions = {
 
@@ -23,6 +25,7 @@ export const appStore: AppStore & AppStoreActions = {
     settings: SettingsSchema.create(),
     settingsUpdates: SettingsSchema.create(),
     productCategories: [],
+    statistics: Statistics.create(),
     currentPage: { title: EMPTY_STRING },
     currentUser: UserSchema.create(),
     selectedEntityTitle: EMPTY_STRING,
@@ -58,6 +61,10 @@ export const appStore: AppStore & AppStoreActions = {
 
   setProductCategories(productCategories: ProductCategory[]): void {
     appStore.state.productCategories = [...productCategories];
+  },
+
+  setStatistics(statistics: AppStatistics): void {
+    appStore.state.statistics = Statistics.create(statistics);
   },
 
   setCurrentPage(page: AppPageSchema): void {

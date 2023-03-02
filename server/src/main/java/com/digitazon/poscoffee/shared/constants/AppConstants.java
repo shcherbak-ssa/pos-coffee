@@ -9,11 +9,16 @@ public class AppConstants {
   public static final int MIN_UPDATE_LENGTH = 1;
 
   public static final String EMPTY_STRING = "";
+  public static final String SQL_CONTENT_JOIN = "\n";
   public static final String PASSWORD_GENERATOR_HELPER_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   public static final String ID_FIELD = "id";
 
   public static final String POSCOFFEE_CONFIG_FILENAME = "poscoffee/poscoffee.config.json";
   public static final String POSCOFFEE_PROPS_FILENAME = "classpath:poscoffee/poscoffee.properties";
+
+  public static final String SQL_ORDERS_TOTAL_FILENAME = "sql/orders-total.sql";
+  public static final String SQL_AVERAGE_INCOME_FILENAME = "sql/average-income.sql";
+  public static final String SQL_AVERAGE_ORDERS_FILENAME = "sql/average-orders.sql";
 
   public static final String AUTHORIZATION_HEADER = "Authorization";
   public static final String AUTHORIZATION_TYPE = "Bearer";
@@ -43,6 +48,7 @@ public class AppConstants {
     public static final String USERS = "/api/users";
 
     public static final class Admin {
+      public static final String APP_STATISTICS = "/api/admin/app/statistics";
       public static final String APP_SETTINGS = "/api/admin/app/settings";
       public static final String APP_PRODUCT_CATEGORIES = "/api/admin/app/productCategories";
       public static final String USERS = "/api/admin/users";

@@ -1,6 +1,8 @@
 package com.digitazon.poscoffee.controllers.api.admin;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,8 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.digitazon.poscoffee.models.helpers.client.ClientProductCategory;
 import com.digitazon.poscoffee.models.helpers.client.ClientSettings;
+import com.digitazon.poscoffee.models.helpers.statistics.Statistics;
 import com.digitazon.poscoffee.services.CategoriesService;
 import com.digitazon.poscoffee.services.SettingsService;
+import com.digitazon.poscoffee.services.StatisticsService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.exceptions.ProgerException;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
@@ -31,6 +35,9 @@ public class AdminAppController {
 
   @Autowired
   private SettingsService settingsService;
+
+  @Autowired
+  private StatisticsService statisticsService;
 
   @GetMapping(path = AppConstants.ApiEndpoint.Admin.APP_SETTINGS)
   @ResponseStatus(HttpStatus.OK)
@@ -51,6 +58,13 @@ public class AdminAppController {
   @PreAuthorize("hasAuthority('ADMIN')")
   public List<ClientProductCategory> getProductCategories() {
     return this.categoriesService.getProductCategories();
+  }
+
+  @GetMapping(path = AppConstants.ApiEndpoint.Admin.APP_STATISTICS)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public Statistics getAppStatistics() throws IOException, InterruptedException, ExecutionException {
+    return this.statisticsService.getStatistics();
   }
 
 }

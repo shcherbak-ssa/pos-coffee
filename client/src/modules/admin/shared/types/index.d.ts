@@ -83,7 +83,7 @@ export type CardWithInputsProps<T, D> = {
 /**
  * App
  *
- * + (Settings, ProductCategory)
+ * + (Settings, ProductCategory, Statistics)
  */
 
 export type AppPageSchema = {
@@ -99,6 +99,17 @@ export type AppHeaderMenuItem = {
   to: PagePath;
 }
 
+export type AppStatistics = {
+  total: AppTotalStatistics;
+  averageIncome: number;
+  averageOrders: number;
+}
+
+export type AppTotalStatistics = {
+  orders: number;
+  income: number;
+}
+
 export type AppViewState = {
   listView: ListView;
   listAction: ListAction[];
@@ -111,6 +122,7 @@ export type AppState = {
   settings: SettingsSchema;
   settingsUpdates: SettingsSchema;
   productCategories: ProductCategory[];
+  statistics: AppStatistics;
   currentPage: AppPageSchema;
   currentUser: UserSchema;
   selectedEntityTitle: string;
@@ -133,6 +145,7 @@ export interface AppStoreActions extends AppStore {
   hasSettingsUpdates(): boolean;
   getSettingsUpdates(): SettingsUpdates;
   setProductCategories(productCategories: ProductCategory[]): void;
+  setStatistics(statistics: AppStatistics): void;
   setCurrentPage(page: AppPageSchema): void;
   setCurrentUser(user: UserSchema): void;
   setSelectedEntityTitle(title: string): void;
@@ -145,6 +158,7 @@ export interface AppController {
   loadSettings(): Promise<void>;
   updateSettings(): Promise<boolean>;
   loadProductCategories(): Promise<void>;
+  loadStatistics(): Promise<void>;
   setCurrentPage(page: AppPageSchema): Promise<void>;
   setCurrentUser(user: UserSchema): Promise<void>;
   setSelectedEntityTitle(title: string): Promise<void>;
