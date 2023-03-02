@@ -30,10 +30,10 @@ public class ApplicationStartupRunner implements CommandLineRunner {
       .loadJSONResource(AppConstants.POSCOFFEE_CONFIG_FILENAME, Config.class);
 
     this.dataLoader.loadConstants();
-    this.log("# Constants loaded");
+    this.log("");
 
     this.dataLoader.loadConfigData(config);
-    this.log("# Config loaded");
+    this.log("");
 
     this.logStartedMessage();
 

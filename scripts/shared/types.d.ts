@@ -68,7 +68,7 @@ export type Order = {
   lines: number[];
   taxes: number;
   paymentMethod: PaymentMethod;
-  createdAt: number;
+  createdAt: Date;
 }
 
 export type OrderLine = {

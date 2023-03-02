@@ -2,8 +2,19 @@ import fs from 'fs';
 import { faker } from '@faker-js/faker';
 
 import type { Address, Category, Config, Order, OrderLine, Product, ProductVariant, User } from './shared/types';
-import { Currency, EMPTY_STRING, PaymentMethod, SERVER_CONFIG_FILENAME, UserType } from './shared/constants';
-import { generatePrice, generateRundomAvatar, getRandomNumber, getSku } from './shared/utils';
+import { Currency, DAYS, DAY_MILLISECONDS, EMPTY_STRING, SERVER_CONFIG_FILENAME, UserType } from './shared/constants';
+import {
+  createArray,
+  generateOrderLineCount,
+  generatePrice,
+  generateRandomAvatar,
+  getNextOrderMilliseconds,
+  getPaymentMethod,
+  getRandomNumber,
+  getSku,
+  getUserOrdersCountAndId,
+  getWorkStartDate,
+} from './shared/utils';
 
 const adminUser: User = {
   name: 'Admin',
@@ -12,7 +23,7 @@ const adminUser: User = {
   phone: '375333081037',
   password: 'qwerty1234',
   type: UserType.ADMIN,
-  image: generateRundomAvatar(),
+  image: generateRandomAvatar(),
   address: generateAddress(),
   isArchived: false,
 };
@@ -24,13 +35,9 @@ const managerUser: User = {
   phone: '375333081037',
   password: 'qwerty1234',
   type: UserType.MANAGER,
-  image: generateRundomAvatar(),
+  image: generateRandomAvatar(),
   address: generateAddress(),
   isArchived: false,
-};
-
-const products = {
-
 };
 
 run();
@@ -63,6 +70,8 @@ function generateConfig(): Config {
       /* 10 */generateUser('female', { type: UserType.WAITER, }),
       generateUser('female', { type: UserType.WAITER }),
       generateUser('male', { type: UserType.WAITER, isArchived: true }),
+      generateUser('male', { type: UserType.WAITER, }),
+      generateUser('female', { type: UserType.WAITER }),
     ],
     categories: [
       generateCategory({ name: 'DEFAULT' }),
@@ -137,16 +146,16 @@ function generateConfig(): Config {
     orderLines: [],
   };
 
-  const orderLines: OrderLine[] = generateOrderLines(config.products, config.productVariants);
+  const [ orderLines, orderLinesCountPerDay ] = generateOrderLines(config.products, config.productVariants);
   config.orderLines = [ ...orderLines ];
-  config.orders = generateOrders();
+  config.orders = generateOrders(orderLinesCountPerDay);
 
   return config;
 }
 
 function generateUser(
   gender: 'male' | 'female',
-  { type = UserType.ADMIN, isArchived = false, image: photo = generateRundomAvatar() }: Partial<User>,
+  { type = UserType.ADMIN, isArchived = false, image: photo = generateRandomAvatar() }: Partial<User>,
 ): User {
   const name: string = faker.name.firstName(gender);
   const surname: string = faker.name.lastName(gender);
@@ -222,36 +231,90 @@ function generateProductVariant({
   };
 }
 
-function generateOrders(): Order[] {
-  return new Array(50).fill(null).map((_, index) => generateOrder(index));
+function generateOrders(orderLinesCountPerDay: number[]): Order[] {
+  const orders: Order[] = [];
+  const today: Date = getWorkStartDate();
+  const users: number[] = [ 6, 7, 10, 11, 13, 14 ];
+
+  let idCounter: number = 0;
+  let daysCounter: number = DAYS;
+
+  for (const linesCountPerDay of orderLinesCountPerDay) {
+    let orderDate: number = Number(new Date(Number(today) - DAY_MILLISECONDS * daysCounter));
+    let usedLines: number = 0;
+
+    let [ userOrdersCount, userId ] = getUserOrdersCountAndId(users, 0);
+
+    while (usedLines !== linesCountPerDay) {
+      let linesCount: number = getRandomNumber(1, 3);
+
+      if (usedLines + linesCount > linesCountPerDay) {
+        linesCount = linesCountPerDay - usedLines;
+      }
+
+      const lineIds: number[] = [];
+
+      for (let i = 0; i < linesCount; i += 1) {
+        idCounter += 1;
+        lineIds.push(idCounter);
+      }
+
+      const nextOrderStartMilliseconds: number = getNextOrderMilliseconds();
+      orderDate += nextOrderStartMilliseconds;
+
+      const generatedOrder: Order = generateOrder(lineIds, new Date(orderDate), userId);
+      orders.push(generatedOrder);
+
+      usedLines += linesCount;
+
+      userOrdersCount -= 1;
+
+      if (userOrdersCount === 0) {
+        const [ newUserOrdersCount, newUserId ] = getUserOrdersCountAndId(users, userId);
+        userOrdersCount = newUserOrdersCount;
+        userId = newUserId;
+      }
+    }
+
+    daysCounter -= 1;
+  }
+
+  return orders;
 }
 
-function generateOrder(index: number): Order {
+function generateOrder(
+  lineIds: number[],
+  createdAt: Date,
+  user: number,
+): Order {
   return {
+    createdAt,
+    user,
+    lines: [ ...lineIds ],
     taxes: 5,
-    lines: [ index + 1 ],
-    user: 2,
-    paymentMethod: PaymentMethod.CARD,
-    createdAt: Number(new Date()),
+    paymentMethod: getPaymentMethod(),
   };
 }
 
-function generateOrderLines(products: Product[], variants: ProductVariant[]): OrderLine[] {
+function generateOrderLines(products: Product[], variants: ProductVariant[]): [ OrderLine[], number[] ] {
   const orderLines: OrderLine[] = [];
+  const orderLinesCountPerDay: number[] = [];
 
-  new Array(14).fill(null).forEach(() => {
-    const lines = new Array(100 + Number(faker.random.numeric(2))).fill(null)
-      .map(() => generateOrderLine(products, variants));
+  createArray(DAYS).forEach(() => {
+    const linesCount: number = generateOrderLineCount();
+    const lines = createArray(linesCount).map(() => generateOrderLine(products, variants));
 
+    orderLinesCountPerDay.push(linesCount);
     orderLines.push(...lines);
   });
 
-  return orderLines;
+  return [ orderLines, orderLinesCountPerDay ];
 }
 
 function generateOrderLine(products: Product[], variants: ProductVariant[]): OrderLine {
+  const count: number = Number(faker.random.numeric(1));
   const line: OrderLine = {
-    count: Number(faker.random.numeric(1)),
+    count: count > 6 ? count - 5 : count,
     product: 0,
     variant: null,
   };

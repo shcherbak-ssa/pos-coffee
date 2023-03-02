@@ -91,6 +91,7 @@ export function PageDefaultContentContainer<T extends Entity>({
           rows={page.size}
           totalRecords={page.total}
           onPageChange={changePage}
+          template={{ layout: 'FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport' }}
         />
       </div>
     </>

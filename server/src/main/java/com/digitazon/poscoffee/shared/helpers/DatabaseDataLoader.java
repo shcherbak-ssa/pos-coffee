@@ -78,12 +78,23 @@ public class DatabaseDataLoader {
   private OrdersService ordersService;
 
   public void loadConstants() {
+    this.log("# Load constants [START]");
+
     this.userTypesService.loadTypes();
+    this.log("  - loaded user types");
+
     this.paymentMethodsService.loadMethods();
+    this.log("  - loaded payment methods");
+
     this.currenciesService.loadCurrencies();
+    this.log("  - loaded currencies");
+
+    this.log("# Load constants [END]");
   }
 
   public void loadConfigData(Config config) throws ProgerException, ResourceNotFoundException, AlreadyExistException {
+    this.log("# Load config [START]");
+
     this.loadSettings(config.getSettings());
     this.loadUsers(config.getUsers());
     this.loadCategories(config.getCategories());
@@ -91,6 +102,8 @@ public class DatabaseDataLoader {
     this.loadProductVariants(config.getProductVariants());
     this.loadOrderLines(config.getOrderLines());
     this.loadOrders(config.getOrders());
+
+    this.log("# Load config [END]");
   }
 
   private void loadSettings(ConfigSettings configSettings) {
@@ -100,6 +113,7 @@ public class DatabaseDataLoader {
     settings.setCurrency(currency);
 
     this.settingsService.createSettings(settings);
+    this.log("  - loaded settings");
   }
 
   private void loadUsers(List<ConfigUser> users) throws AlreadyExistException {
@@ -114,6 +128,8 @@ public class DatabaseDataLoader {
 
       this.usersService.createUser(user);
     }
+
+    this.log(String.format("  - loaded users (%o)", users.size()));
   }
 
   private void loadCategories(List<ConfigCategory> categories) throws AlreadyExistException {
@@ -122,6 +138,8 @@ public class DatabaseDataLoader {
 
       this.categoriesService.createCategory(category);
     }
+
+    this.log(String.format("  - loaded categories (%o)", categories.size()));
   }
 
   private void loadProducts(List<ConfigProduct> products) throws AlreadyExistException {
@@ -135,6 +153,8 @@ public class DatabaseDataLoader {
 
       this.productsService.createProduct(product);
     }
+
+    this.log(String.format("  - loaded products (%o)", products.size()));
   }
 
   private void loadProductVariants(List<ConfigProductVariant> variants) throws AlreadyExistException {
@@ -148,6 +168,8 @@ public class DatabaseDataLoader {
 
       this.productVariantsService.createVariant(productVariant);
     }
+
+    this.log(String.format("  - loaded product variants (%o)", variants.size()));
   }
 
   private void loadOrderLines(List<ConfigOrderLine> lines) throws ResourceNotFoundException {
@@ -162,6 +184,8 @@ public class DatabaseDataLoader {
 
       this.ordersService.createOrderLine(line);
     }
+
+    this.log(String.format("  - loaded order lines (%o)", lines.size()));
   }
 
   private void loadOrders(List<ConfigOrder> orders) throws ProgerException {
@@ -173,6 +197,12 @@ public class DatabaseDataLoader {
 
       this.ordersService.createOrder(order);
     }
+
+    this.log(String.format("  - loaded orders (%o)", orders.size()));
+  }
+
+  private void log(String message) {
+    System.out.println(message);
   }
 
 }
