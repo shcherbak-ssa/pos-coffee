@@ -3,11 +3,11 @@ import { PrimeIcons } from 'primereact/api';
 import type { SettingsSchema } from 'shared/types';
 import { BasePrice } from 'view/components/BasePrice';
 
-import type { AppStatistics } from '@admin/shared/types';
+import type { Statistics } from '@admin/shared/types';
 import { HomeStatWidget } from '@admin/view/components/HomeStatWidget';
 
 export type Props = {
-  statistics: AppStatistics;
+  statistics: Statistics;
   settings: SettingsSchema;
 }
 

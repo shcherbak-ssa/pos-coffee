@@ -8,7 +8,7 @@ import { SettingsSchema } from 'lib/settings-model';
 import type {
   AppPageSchema,
   AppState,
-  AppStatistics,
+  Statistics as BaseStatistics,
   AppStore,
   AppStoreActions,
   AppViewState,
@@ -63,7 +63,7 @@ export const appStore: AppStore & AppStoreActions = {
     appStore.state.productCategories = [...productCategories];
   },
 
-  setStatistics(statistics: AppStatistics): void {
+  setStatistics(statistics: BaseStatistics): void {
     appStore.state.statistics = Statistics.create(statistics);
   },
 

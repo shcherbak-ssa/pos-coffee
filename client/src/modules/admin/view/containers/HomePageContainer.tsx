@@ -7,6 +7,7 @@ import { AppLoader } from 'view/components/AppLoader';
 import type { AppStore, AppController } from '@admin/shared/types';
 import { StoreName, ControllerName } from '@admin/shared/constants';
 import { HomeHeaderContainer } from '@admin/view/containers/HomeHeaderContainer';
+import { HomePageChartContainer } from '@admin/view/containers/HomePageChartContainer';
 import { PageWrapper } from '@admin/view/components/PageWrapper';
 import { HomeStatWidgetList } from '@admin/view/components/HomeStatWidgetList';
 
@@ -32,10 +33,14 @@ export function HomePageContainer() {
         <HomeHeaderContainer />
 
         <PageWrapper>
-          <div className="grid grid-cols-1 p-6 full">
+          <div className="grid grid-cols-1 gap-6 p-6 full">
             <HomeStatWidgetList statistics={statistics} settings={settings} />
 
-            <div className="grid grid-cols-1"></div>
+            <div className="grid grid-cols-3">
+              <div className="col-span-2">
+                <HomePageChartContainer />
+              </div>
+            </div>
           </div>
         </PageWrapper>
       </div>

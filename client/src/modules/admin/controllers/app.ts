@@ -12,7 +12,7 @@ import { BaseController } from 'lib/base-controller';
 import type {
   AppController as BaseAppController,
   AppPageSchema,
-  AppStatistics,
+  Statistics,
   AppStore,
   AppStoreActions,
   AppViewState,
@@ -95,7 +95,7 @@ export class AppController extends BaseController implements BaseAppController {
   public async loadStatistics(): Promise<void> {
     try {
       const apiService: ApiService = await this.getApiService();
-      const statistics: AppStatistics = await apiService.get(ApiEndpoint.APP_STATISTICS);
+      const statistics: Statistics = await apiService.get(ApiEndpoint.APP_STATISTICS);
 
       const appStore = await this.getStore() as AppStoreActions;
       appStore.setStatistics(statistics);

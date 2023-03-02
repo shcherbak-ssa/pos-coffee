@@ -19,6 +19,7 @@ public class AppConstants {
   public static final String SQL_ORDERS_TOTAL_FILENAME = "sql/orders-total.sql";
   public static final String SQL_AVERAGE_INCOME_FILENAME = "sql/average-income.sql";
   public static final String SQL_AVERAGE_ORDERS_FILENAME = "sql/average-orders.sql";
+  public static final String SQL_COUNTS_PER_DAY = "sql/counts-per-day.sql";
 
   public static final String AUTHORIZATION_HEADER = "Authorization";
   public static final String AUTHORIZATION_TYPE = "Bearer";

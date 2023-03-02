@@ -10,9 +10,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import com.digitazon.poscoffee.models.helpers.statistics.CountPerDay;
 import com.digitazon.poscoffee.models.helpers.statistics.Statistics;
 import com.digitazon.poscoffee.models.helpers.statistics.TotalOrders;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
@@ -34,6 +36,7 @@ public class StatisticsService {
     tasks.add(this.totalOrders(statistics, this));
     tasks.add(this.averageIncome(statistics, this));
     tasks.add(this.averageOrders(statistics, this));
+    tasks.add(this.countsPerDay(statistics, this));
 
     final ExecutorService executor = Executors.newFixedThreadPool(tasks.size());
     final Future<Statistics> result = executor.invokeAll(tasks).get(0);
@@ -77,6 +80,18 @@ public class StatisticsService {
     };
   }
 
+  private Callable<Statistics> countsPerDay(Statistics statistics, StatisticsService service) {
+    return new Callable<Statistics>() {
+
+      @Override
+      public Statistics call() throws Exception {
+        service.loadCountsPerDay(statistics);
+        return statistics;
+      }
+
+    };
+  }
+
   private void loadTotalOrders(Statistics statistics) throws IOException {
     final String sqlScript = this.localResourceLoader.loadSqlScript(AppConstants.SQL_ORDERS_TOTAL_FILENAME);
     final TotalOrders totalStatistics = this.jdbcTemplate.queryForObject(sqlScript, TotalOrders::parse);
@@ -96,6 +111,13 @@ public class StatisticsService {
     final Float average = this.jdbcTemplate.queryForObject(sqlScript, Float.class);
 
     statistics.setAverageOrders(average);
+  }
+
+  private void loadCountsPerDay(Statistics statistics) throws IOException, DataAccessException {
+    final String sqlScript = this.localResourceLoader.loadSqlScript(AppConstants.SQL_COUNTS_PER_DAY);
+    final List<CountPerDay> counsPerDay = this.jdbcTemplate.query(sqlScript, CountPerDay::parse);
+
+    statistics.setCountsPerDay(counsPerDay);
   }
 
 }

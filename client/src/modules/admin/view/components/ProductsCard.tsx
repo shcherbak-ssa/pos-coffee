@@ -1,9 +1,10 @@
-import type { EntityComponentProps, UserSchema } from 'shared/types';
+import type { EntityComponentProps, ProductSchema } from 'shared/types';
 import { ProductsImage } from 'view/components/ProductsImage';
 
 import { CardWrapper } from 'view/components/CardWrapper';
+import { CategoryLabel } from './CategoryLabel';
 
-export function ProductsCard({ entity: product, className }: EntityComponentProps<UserSchema>) {
+export function ProductsCard({ entity: product, className }: EntityComponentProps<ProductSchema>) {
 
   return (
     <CardWrapper className={className}>
@@ -15,6 +16,8 @@ export function ProductsCard({ entity: product, className }: EntityComponentProp
         />
 
         <h3 className="mb-3">{ product.name }</h3>
+
+        <CategoryLabel category={product.category} />
       </div>
     </CardWrapper>
   );

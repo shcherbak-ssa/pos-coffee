@@ -16,6 +16,7 @@ import type {
   Entity,
   SettingsSchema,
   PageFilter,
+  AnyType,
 } from 'shared/types';
 import type { Currency, UserType } from 'shared/constants';
 
@@ -81,6 +82,28 @@ export type CardWithInputsProps<T, D> = {
 }
 
 /**
+ * Statistics
+ */
+
+export type Statistics = {
+  total: TotalOrdersStatistics;
+  averageIncome: number;
+  averageOrders: number;
+  countsPerDay: StatisticsCountPerDay[];
+}
+
+export type StatisticsCountPerDay = {
+  workDay: Date;
+  income: number;
+  orders: number;
+}
+
+export type TotalOrdersStatistics = {
+  orders: number;
+  income: number;
+}
+
+/**
  * App
  *
  * + (Settings, ProductCategory, Statistics)
@@ -99,17 +122,6 @@ export type AppHeaderMenuItem = {
   to: PagePath;
 }
 
-export type AppStatistics = {
-  total: AppTotalStatistics;
-  averageIncome: number;
-  averageOrders: number;
-}
-
-export type AppTotalStatistics = {
-  orders: number;
-  income: number;
-}
-
 export type AppViewState = {
   listView: ListView;
   listAction: ListAction[];
@@ -122,7 +134,7 @@ export type AppState = {
   settings: SettingsSchema;
   settingsUpdates: SettingsSchema;
   productCategories: ProductCategory[];
-  statistics: AppStatistics;
+  statistics: Statistics;
   currentPage: AppPageSchema;
   currentUser: UserSchema;
   selectedEntityTitle: string;
@@ -145,7 +157,7 @@ export interface AppStoreActions extends AppStore {
   hasSettingsUpdates(): boolean;
   getSettingsUpdates(): SettingsUpdates;
   setProductCategories(productCategories: ProductCategory[]): void;
-  setStatistics(statistics: AppStatistics): void;
+  setStatistics(statistics: Statistics): void;
   setCurrentPage(page: AppPageSchema): void;
   setCurrentUser(user: UserSchema): void;
   setSelectedEntityTitle(title: string): void;

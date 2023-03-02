@@ -100,7 +100,7 @@ export function EntityCardsContainer<T extends Entity>({
   }
 
   return (
-    <div className="full p-6 grid grid-cols-4 gap-4">
+    <div className="full p-6 grid grid-cols-4 gap-6">
       {
         entities.map((entity) => (
           <div className="card relative" key={entity.id}>
