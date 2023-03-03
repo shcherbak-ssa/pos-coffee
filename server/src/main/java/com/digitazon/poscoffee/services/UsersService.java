@@ -24,8 +24,8 @@ import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.User;
 import com.digitazon.poscoffee.models.constants.UserType;
 import com.digitazon.poscoffee.models.helpers.PageResponse;
-import com.digitazon.poscoffee.models.helpers.UsersFilter;
 import com.digitazon.poscoffee.models.helpers.client.ClientUser;
+import com.digitazon.poscoffee.models.helpers.filters.UsersFilter;
 import com.digitazon.poscoffee.repositories.UsersRepository;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.UsersConstants;
@@ -105,13 +105,21 @@ public class UsersService {
     return this.convertToPageResponse(usersPage, new ArrayList<User>());
   }
 
+  public List<ClientUser> searchUsers(String searchString) {
+    final List<User> users = this.repository.search(searchString);
+
+    return users
+      .stream()
+      .map((user) -> this.convertToClientUser(user, false))
+      .collect(Collectors.toList());
+  }
+
   public ClientUser createUser(ClientUser userToCreate) throws AlreadyExistException {
     final User user = this.convertToUser(userToCreate);
     final String password = Helpers.generatePassword();
     user.setPassword(password);
 
     final User createdUser = this.createUser(user);
-    // @TODO: add email notification
 
     return this.convertToClientUser(createdUser, true);
   }

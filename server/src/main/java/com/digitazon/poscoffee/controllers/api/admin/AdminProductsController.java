@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digitazon.poscoffee.models.helpers.PageResponse;
-import com.digitazon.poscoffee.models.helpers.ProductsFilter;
 import com.digitazon.poscoffee.models.helpers.client.ClientProduct;
+import com.digitazon.poscoffee.models.helpers.filters.ProductsFilter;
 import com.digitazon.poscoffee.services.ProductsService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;

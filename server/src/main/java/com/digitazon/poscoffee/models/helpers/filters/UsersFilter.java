@@ -1,4 +1,4 @@
-package com.digitazon.poscoffee.models.helpers;
+package com.digitazon.poscoffee.models.helpers.filters;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +10,9 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
-public class OrdersFilter extends BasePageFilter {
+public class UsersFilter extends PageFilter {
+
+  private Boolean isArchived;
 
   @Builder.Default
   private Boolean forApp = false;

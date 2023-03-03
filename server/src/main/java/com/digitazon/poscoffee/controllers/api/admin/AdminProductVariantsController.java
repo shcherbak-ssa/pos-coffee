@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digitazon.poscoffee.models.Product;
-import com.digitazon.poscoffee.models.helpers.ProductsFilter;
 import com.digitazon.poscoffee.models.helpers.client.ClientProductVariant;
+import com.digitazon.poscoffee.models.helpers.filters.ProductsFilter;
 import com.digitazon.poscoffee.services.ProductVariantsService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.ProductsConstants;

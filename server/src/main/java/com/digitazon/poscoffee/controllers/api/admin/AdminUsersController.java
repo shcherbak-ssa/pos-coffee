@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.digitazon.poscoffee.models.Address;
 import com.digitazon.poscoffee.models.helpers.PageResponse;
-import com.digitazon.poscoffee.models.helpers.UsersFilter;
 import com.digitazon.poscoffee.models.helpers.client.ClientUser;
+import com.digitazon.poscoffee.models.helpers.filters.UsersFilter;
 import com.digitazon.poscoffee.services.AddressService;
 import com.digitazon.poscoffee.services.UsersService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;

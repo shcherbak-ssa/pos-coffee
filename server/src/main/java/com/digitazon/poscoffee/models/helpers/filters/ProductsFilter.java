@@ -1,4 +1,4 @@
-package com.digitazon.poscoffee.models.helpers;
+package com.digitazon.poscoffee.models.helpers.filters;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
-public class ProductsFilter extends BasePageFilter {
+public class ProductsFilter extends PageFilter {
 
   private Boolean isArchived;
   private String[] nullLabels;

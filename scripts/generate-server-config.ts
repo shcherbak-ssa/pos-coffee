@@ -17,8 +17,8 @@ import {
 } from './shared/utils';
 
 const adminUser: User = {
-  name: 'Admin',
-  surname: 'Adminovic',
+  name: 'Stanislav',
+  surname: 'Shcherbakov',
   email: 'admin@gmail.com',
   phone: '375333081037',
   password: 'qwerty1234',
@@ -29,8 +29,8 @@ const adminUser: User = {
 };
 
 const managerUser: User = {
-  name: 'Manager',
-  surname: 'Managerkov',
+  name: 'Stanislav',
+  surname: 'Shcherbakov',
   email: 'manager@gmail.com',
   phone: '375333081037',
   password: 'qwerty1234',

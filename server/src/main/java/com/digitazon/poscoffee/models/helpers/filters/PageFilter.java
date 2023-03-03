@@ -1,4 +1,4 @@
-package com.digitazon.poscoffee.models.helpers;
+package com.digitazon.poscoffee.models.helpers.filters;
 
 import javax.persistence.MappedSuperclass;
 
@@ -12,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 @MappedSuperclass
-public class BasePageFilter {
+public class PageFilter {
 
   private Integer page;
   private Integer pageSize;

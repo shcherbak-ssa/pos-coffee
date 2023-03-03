@@ -22,6 +22,7 @@ public class AppConstants {
   public static final String SQL_AVERAGE_ORDERS_FILENAME = "sql/average-orders.sql";
   public static final String SQL_COUNTS_PER_DAY = "sql/counts-per-day.sql";
   public static final String SQL_PRODUCTS_COUNT = "sql/products_count.sql";
+  public static final String SQL_SEARCH_PRODUCTS = "sql/search-products.sql";
 
   public static final String AUTHORIZATION_HEADER = "Authorization";
   public static final String AUTHORIZATION_TYPE = "Bearer";
@@ -38,6 +39,7 @@ public class AppConstants {
   public static final String PARAM_IS_ARCHIVED = "isArchived";
   public static final String PARAM_PAGE = "page";
   public static final String PARAM_PAGE_SIZE = "pageSize";
+  public static final String PARAM_SEARCH_STRING = "searchString";
 
   public static final class Entity {
     public static final String SETTINGS = "Settings";
@@ -54,6 +56,7 @@ public class AppConstants {
       public static final String APP_STATISTICS = "/api/admin/app/statistics";
       public static final String APP_SETTINGS = "/api/admin/app/settings";
       public static final String APP_PRODUCT_CATEGORIES = "/api/admin/app/productCategories";
+      public static final String APP_SEARCH = "/api/admin/app/search";
       public static final String USERS = "/api/admin/users";
       public static final String USERS_ID = "/api/admin/users/{id}";
       public static final String USERS_ARCHIVE = "/api/admin/users/{id}/archive";
