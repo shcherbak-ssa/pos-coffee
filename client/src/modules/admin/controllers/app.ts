@@ -17,6 +17,7 @@ import type {
   AppStoreActions,
   AppViewState,
   SettingsUpdates,
+  SearchResults,
 } from '@admin/shared/types';
 import { ApiEndpoint, StoreName, ValidationName } from '@admin/shared/constants';
 
@@ -85,8 +86,8 @@ export class AppController extends BaseController implements BaseAppController {
       const apiService: ApiService = await this.getApiService();
       const productCategories: ProductCategory[] = await apiService.get(ApiEndpoint.APP_PRODUCT_CATEGORIES);
 
-      const appStore = await this.getStore() as AppStoreActions;
-      appStore.setProductCategories(productCategories);
+      const store = await this.getStore() as AppStoreActions;
+      store.setProductCategories(productCategories);
     } catch (e: any) {
       this.parseError(e);
     }
@@ -97,11 +98,30 @@ export class AppController extends BaseController implements BaseAppController {
       const apiService: ApiService = await this.getApiService();
       const statistics: Statistics = await apiService.get(ApiEndpoint.APP_STATISTICS);
 
-      const appStore = await this.getStore() as AppStoreActions;
-      appStore.setStatistics(statistics);
+      const store = await this.getStore() as AppStoreActions;
+      store.setStatistics(statistics);
     } catch (e: any) {
       this.parseError(e);
     }
+  }
+
+  public async search(searchString: string): Promise<void> {
+    try {
+      const apiService: ApiService = await this.getApiService();
+      const searchResult: SearchResults = await apiService
+        .addQuery({ searchString })
+        .get(ApiEndpoint.APP_SEARCH);
+
+      const store = await this.getStore() as AppStoreActions;
+      store.setSearchResults(searchResult);
+    } catch (e: any) {
+      this.parseError(e);
+    }
+  }
+
+  public async resetSearch(): Promise<void> {
+    const store = await this.getStore() as AppStoreActions;
+    store.setSearchResults(null);
   }
 
   public async getCurrentUser(): Promise<UserSchema> {

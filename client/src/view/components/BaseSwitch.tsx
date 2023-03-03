@@ -1,11 +1,11 @@
 import classnames from 'classnames';
-import { Checkbox, type CheckboxProps } from 'primereact/checkbox';
+import { InputSwitch, type InputSwitchProps } from 'primereact/inputswitch';
 
-export type Props = CheckboxProps & {
+export type Props = InputSwitchProps & {
   label: string;
 };
 
-export function BaseCheckbox({
+export function BaseSwitch({
   className,
   inputId,
   checked,
@@ -16,7 +16,7 @@ export function BaseCheckbox({
 
   return (
     <div className={classnames('flex items-center', className)}>
-      <Checkbox
+      <InputSwitch
         inputId={inputId}
         disabled={disabled}
         checked={checked}

@@ -104,16 +104,17 @@ function generateConfig(): Config {
       generateProduct({ name: 'Cognac', category: 5, price: 5.00, stock: 3200, stockPerTime: 40, stockAlert: 400, image: 'https://images.unsplash.com/photo-1548002697-53588109e668?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }),
       generateProduct({ name: 'Vodka', category: 5, price: 5.00, stock: 4000, stockPerTime: 40, stockAlert: 400, image: 'https://images.unsplash.com/photo-1539606494565-02e568638d91?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=327&q=80' }),
       // Food
-      generateProduct({ name: 'Cake', category: 6, price: 7.00, stockAlert: 20, image: 'https://images.unsplash.com/photo-1552691562-ca24c2d53fda?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }),
-      generateProduct({ name: 'Toast', category: 6, price: 7.00, stockAlert: 20, image: 'https://images.unsplash.com/photo-1581771556488-da02d801966c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }),
-      generateProduct({ name: 'Focaccia', category: 6, price: 7.00, stockAlert: 20, image: 'https://images.unsplash.com/photo-1605466237823-49122fcaf198?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1332&q=80' }),
-      generateProduct({ name: 'Hot Dog', category: 6, price: 7.00, stockAlert: 20, image: 'https://images.unsplash.com/photo-1638368593249-7cadb261e8b3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fGhvdCUyMGRvZ3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60' }),
-      generateProduct({ name: 'Hamburger', category: 6, price: 7.00, stockAlert: 20, image: 'https://images.unsplash.com/photo-1607013251379-e6eecfffe234?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }),
-      generateProduct({ name: 'Fried Potatoes', category: 6, price: 5.00, stockAlert: 20, image: 'https://images.unsplash.com/photo-1623238912680-26fc5ffb57e4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80' }),
+      generateProduct({ name: 'Cake', category: 6, price: 4.00, stockAlert: 20, image: 'https://images.unsplash.com/photo-1552691562-ca24c2d53fda?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }),
+      generateProduct({ name: 'Toast', category: 6, price: 4.00, stockAlert: 20, image: 'https://images.unsplash.com/photo-1581771556488-da02d801966c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }),
+      generateProduct({ name: 'Focaccia', category: 6, price: 5.00, stockAlert: 20, image: 'https://images.unsplash.com/photo-1605466237823-49122fcaf198?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1332&q=80' }),
+      generateProduct({ name: 'Hot Dog', category: 6, price: 4.00, stockAlert: 20, image: 'https://images.unsplash.com/photo-1638368593249-7cadb261e8b3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fGhvdCUyMGRvZ3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60' }),
+      generateProduct({ name: 'Hamburger', category: 6, price: 4.00, stockAlert: 20, image: 'https://images.unsplash.com/photo-1607013251379-e6eecfffe234?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }),
+      generateProduct({ name: 'Fried Potatoes', category: 6, price: 4.00, stockAlert: 20, image: 'https://images.unsplash.com/photo-1623238912680-26fc5ffb57e4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80' }),
     ],
     productVariants: [
       // Caffee
       generateProductVariant({ name: 'Expresso', product: 1, price: 1.00, stockPerTime: 7 }),
+      generateProductVariant({ name: 'With milk', product: 1, price: 1.00, stockPerTime: 7 }),
       generateProductVariant({ name: 'Double', product: 1, price: 2.00, stockPerTime: 14 }),
       generateProductVariant({ name: 'American', product: 1, price: 2.50, stockPerTime: 7 }),
       // Hot chocolate

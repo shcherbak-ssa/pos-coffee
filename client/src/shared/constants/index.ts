@@ -13,6 +13,7 @@ export const AUTHORIZATION_HEADER: string = 'Authorization';
 export const ROOT_PAGE_PATH: string = '/';
 export const CURRENT_USER_API_ENDPOINT: string = '/api/users';
 export const PRICE_WHOLE_DECIMAL_SPLITTER: string = '.';
+export const IS_ACTIVE_CLASSNAME: string = 'is-active';
 
 export enum UserType {
   ADMIN = 'ADMIN',

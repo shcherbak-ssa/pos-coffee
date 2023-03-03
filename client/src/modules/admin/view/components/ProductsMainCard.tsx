@@ -8,7 +8,7 @@ import { InputWrapper } from 'view/components/InputWrapper';
 import { CardHeading } from 'view/components/CardHeading';
 
 import type { CardWithInputsProps, ProductDraft } from '@admin/shared/types';
-import { AvailableCheckbox } from '@admin/view/components/AvailableCheckbox';
+import { AvailableSwitch } from '@admin/view/components/AvailableSwitch';
 import { CardWrapper } from 'view/components/CardWrapper';
 
 export type Props = CardWithInputsProps<ProductSchema, ProductDraft> & {
@@ -31,7 +31,7 @@ export function ProductsMainCard({
     <CardWrapper className="col-span-2">
       <CardHeading heading="Main" />
 
-      <AvailableCheckbox
+      <AvailableSwitch
         className="mb-10"
         entityName={EntityName.PRODUCT}
         isEditMode={isEditMode}

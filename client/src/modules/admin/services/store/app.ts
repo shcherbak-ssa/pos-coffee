@@ -13,6 +13,7 @@ import type {
   AppStoreActions,
   AppViewState,
   SettingsUpdates,
+  SearchResults,
 } from '@admin/shared/types';
 import { ListView, ListTab } from '@admin/shared/constants';
 import { UserSchema } from '@admin/models/user';
@@ -26,6 +27,7 @@ export const appStore: AppStore & AppStoreActions = {
     settingsUpdates: SettingsSchema.create(),
     productCategories: [],
     statistics: Statistics.create(),
+    searchResults: null,
     currentPage: { title: EMPTY_STRING },
     currentUser: UserSchema.create(),
     selectedEntityTitle: EMPTY_STRING,
@@ -65,6 +67,10 @@ export const appStore: AppStore & AppStoreActions = {
 
   setStatistics(statistics: BaseStatistics): void {
     appStore.state.statistics = Statistics.create(statistics);
+  },
+
+  setSearchResults(results: SearchResults | null): void {
+    appStore.state.searchResults = results ? { ...results } : null;
   },
 
   setCurrentPage(page: AppPageSchema): void {

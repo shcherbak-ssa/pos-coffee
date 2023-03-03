@@ -8,7 +8,7 @@ export function HomeWelcome({ user }: Props) {
 
   return (
     <div>
-      <h2 className="text-3xl">Good morning, { user.name }!</h2>
+      <h2 className="text-3xl">Good Day, { user.name }!</h2>
     </div>
   );
 

@@ -1,4 +1,5 @@
 export const NAVIGATE_BACK: number = -1;
+export const DEBOUNCE_TIMEOUT: number = 300;
 
 export const DEFAULT_CATEGORY_NAME: string = 'DEFAULT';
 export const NEW_ENTITY_LABEL: string = 'new';
@@ -9,6 +10,7 @@ export enum ApiEndpoint {
   APP_STATISTICS = '/api/admin/app/statistics',
   APP_SETTINGS = '/api/admin/app/settings',
   APP_PRODUCT_CATEGORIES = '/api/admin/app/productCategories',
+  APP_SEARCH = '/api/admin/app/search',
   USERS = '/api/admin/users',
   USERS_ID = '/api/admin/users/:id',
   USERS_ARCHIVE = '/api/admin/users/:id/archive',

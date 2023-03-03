@@ -110,9 +110,26 @@ export type ProductsCountStatistics = {
 }
 
 /**
+ * Search
+ */
+
+export type SearchResults = {
+  users: UserSchema[];
+  products: SearchProducts[];
+  categories: CategorySchema[];
+}
+
+export type SearchProducts = {
+  id: number;
+  name: string;
+  image: string;
+  category: string;
+}
+
+/**
  * App
  *
- * + (Settings, ProductCategory, Statistics)
+ * + (Settings, ProductCategory, Statistics, Search)
  */
 
 export type AppPageSchema = {
@@ -141,6 +158,7 @@ export type AppState = {
   settingsUpdates: SettingsSchema;
   productCategories: ProductCategory[];
   statistics: Statistics;
+  searchResults: SearchResults | null;
   currentPage: AppPageSchema;
   currentUser: UserSchema;
   selectedEntityTitle: string;
@@ -164,6 +182,7 @@ export interface AppStoreActions extends AppStore {
   getSettingsUpdates(): SettingsUpdates;
   setProductCategories(productCategories: ProductCategory[]): void;
   setStatistics(statistics: Statistics): void;
+  setSearchResults(results: SearchResults | null): void;
   setCurrentPage(page: AppPageSchema): void;
   setCurrentUser(user: UserSchema): void;
   setSelectedEntityTitle(title: string): void;
@@ -177,6 +196,8 @@ export interface AppController {
   updateSettings(): Promise<boolean>;
   loadProductCategories(): Promise<void>;
   loadStatistics(): Promise<void>;
+  search(searchString: string): Promise<void>;
+  resetSearch(): Promise<void>;
   setCurrentPage(page: AppPageSchema): Promise<void>;
   setCurrentUser(user: UserSchema): Promise<void>;
   setSelectedEntityTitle(title: string): Promise<void>;

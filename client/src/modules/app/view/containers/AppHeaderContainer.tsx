@@ -7,12 +7,12 @@ import { OverlayPanel } from 'primereact/overlaypanel';
 import { Divider } from 'primereact/divider';
 import { Menu } from 'primereact/menu';
 
-import { EMPTY_STRING } from 'shared/constants';
+import { EMPTY_STRING, IS_ACTIVE_CLASSNAME } from 'shared/constants';
 import { logout } from 'shared/helpers/logout';
 import { AppLogo } from 'view/components/AppLogo';
 import { type Props as IconButtonProps, IconButton } from 'view/components/IconButton';
 
-import { IS_ACTIVE_CLASSNAME, PagePath } from '@app/shared/constants';
+import { PagePath } from '@app/shared/constants';
 import { AppCashierContainer } from '@app/view/containers/AppCashierContainer';
 
 export function AppHeaderContainer() {

@@ -1,10 +1,10 @@
 import classnames from 'classnames';
-import type { CheckboxChangeEvent } from 'primereact/checkbox';
+import type { InputSwitchChangeEvent } from 'primereact/inputswitch';
 import { PrimeIcons } from 'primereact/api';
 import { Tooltip } from 'primereact/tooltip';
 
 import type { EntityName } from 'shared/constants';
-import { BaseCheckbox } from 'view/components/BaseCheckbox';
+import { BaseSwitch } from 'view/components/BaseSwitch';
 import { SimpleIcon } from 'view/components/SimpleIcon';
 
 export type Props = {
@@ -15,17 +15,17 @@ export type Props = {
   className?: string;
 }
 
-export function AvailableCheckbox({ entityName, className, isEditMode, checked, change }: Props) {
+export function AvailableSwitch({ entityName, className, isEditMode, checked, change }: Props) {
 
-  function handleChange(e: CheckboxChangeEvent) {
+  function handleChange(e: InputSwitchChangeEvent) {
     e.preventDefault();
 
-    change(e.checked || false)
+    change(e.value || false);
   }
 
   return (
     <div className={classnames('flex items-center gap-2', className)}>
-      <BaseCheckbox
+      <BaseSwitch
         inputId="available"
         label="Available"
         disabled={!isEditMode}

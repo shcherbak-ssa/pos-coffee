@@ -5,15 +5,16 @@ import { Menu } from 'primereact/menu';
 import { Menubar } from 'primereact/menubar';
 import { PrimeIcons } from 'primereact/api';
 
+import { IS_ACTIVE_CLASSNAME } from 'shared/constants';
 import { logout } from 'shared/helpers/logout';
 import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/navigate';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
-import { IconButton } from 'view/components/IconButton';
 import { UsersImage } from 'view/components/UsersImage';
 
 import type { AppStore, AppController } from '@admin/shared/types';
 import { ControllerName, PagePath, StoreName } from '@admin/shared/constants';
+import { AppSearchContainer } from '@admin/view/containers/AppSearchContainer';
 import { AppHeaderLogo } from '@admin/view/components/AppHeaderLogo';
 
 export function AppHeaderContainer() {
@@ -53,7 +54,7 @@ export function AppHeaderContainer() {
         currentPage.headerMenuItem
           .map(({ label, to }) => ({
             label,
-            className: location.pathname === to ? 'is-active' : '',
+            className: location.pathname === to ? IS_ACTIVE_CLASSNAME : '',
             command: () => {
               navigate(to);
             },
@@ -96,10 +97,7 @@ export function AppHeaderContainer() {
       </div>
 
       <div className="flex items-center gap-6">
-        <IconButton
-          icon={PrimeIcons.SEARCH}
-          click={() => {}}
-        />
+        <AppSearchContainer />
 
         <div className="flex items-center click" onClick={toggleUserMenu}>
           <UsersImage
