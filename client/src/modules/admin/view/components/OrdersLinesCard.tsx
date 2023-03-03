@@ -12,9 +12,10 @@ import { OrdersLineProduct } from '@admin/view/components/OrdersLineProduct';
 export type Props = {
   order: OrderSchema;
   currency: Currency;
+  toInfoPage: (id: number) => void;
 }
 
-export function OrdersLinesCard({ order, currency }: Props) {
+export function OrdersLinesCard({ order, currency, toInfoPage }: Props) {
 
   return (
     <CardWrapper className="col-span-3">
@@ -30,7 +31,7 @@ export function OrdersLinesCard({ order, currency }: Props) {
             header="Product"
             field="product"
             body={(line: OrderLineSchema) => (
-              <OrdersLineProduct line={line} />
+              <OrdersLineProduct line={line} toInfoPage={toInfoPage} />
             )}
           />
 

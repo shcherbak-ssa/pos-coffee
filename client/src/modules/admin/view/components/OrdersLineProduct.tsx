@@ -1,12 +1,20 @@
+import type { MouseEvent } from 'react';
 import type { OrderLineSchema } from 'shared/types';
 
 import { ProductsImage } from 'view/components/ProductsImage';
 
 export type Props = {
   line: OrderLineSchema;
+  toInfoPage: (id: number) => void;
 }
 
-export function OrdersLineProduct({ line }: Props) {
+export function OrdersLineProduct({ line, toInfoPage }: Props) {
+
+  function handleClick(e: MouseEvent): void {
+    e.preventDefault();
+
+    toInfoPage(line.productId);
+  }
 
   function renderVariantName(): React.ReactNode {
     if (line.variantName) {
@@ -21,7 +29,7 @@ export function OrdersLineProduct({ line }: Props) {
         image={line.image}
       />
 
-      <div>
+      <div className="hover:underline click" onClick={handleClick}>
         <span>{ line.productName }</span>
 
         { renderVariantName() }

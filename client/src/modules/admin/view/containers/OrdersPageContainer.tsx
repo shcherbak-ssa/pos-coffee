@@ -1,6 +1,7 @@
 import type { ColumnProps } from 'primereact/column';
 
-import type { OrderSchema } from 'shared/types';
+import type { OrderLineSchema, OrderSchema } from 'shared/types';
+import { ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { BasePrice } from 'view/components/BasePrice';
 
@@ -28,7 +29,11 @@ export function OrdersPageContainer() {
       field: 'products',
       header: 'Products',
       body: ({ lines }: OrderSchema) => (
-        <div>{ lines.length }</div>
+        <div>
+          <span>{ lines.length } </span>
+          <span>{ lines.length === 1 ? 'product' : 'products' } </span>
+          <span>({ calculateTotalCount(lines) } qty)</span>
+        </div>
       ),
     },
     {
@@ -46,6 +51,10 @@ export function OrdersPageContainer() {
       ),
     },
   ];
+
+  function calculateTotalCount(lines: OrderLineSchema[]): number {
+    return lines.reduce((total, line) => total + line.count, ZERO);
+  }
 
   return (
     <PageDefaultContentContainer

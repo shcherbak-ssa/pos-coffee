@@ -44,7 +44,7 @@ export function generatePrice(): number {
 }
 
 export function generateOrderLineCount(): number {
-  return /* 200 + */ Number(faker.random.numeric(2));
+  return 200 + Number(faker.random.numeric(2));
 }
 
 export function getPaymentMethod(): PaymentMethod {
