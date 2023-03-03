@@ -35,7 +35,7 @@ export function InputWrapper<T>({ label, description, children, className, valid
     return !!getErrorMessage();
   }
 
-  function drawErrorMessage(): React.ReactNode {
+  function renderErrorMessage(): React.ReactNode {
     const errorMessage: string | undefined = getErrorMessage();
 
     if (errorMessage) {
@@ -43,7 +43,7 @@ export function InputWrapper<T>({ label, description, children, className, valid
     }
   }
 
-  function drawDescription(): React.ReactNode {
+  function renderDescription(): React.ReactNode {
     const errorMessage: string | undefined = getErrorMessage();
 
     if (description && !errorMessage) {
@@ -59,9 +59,9 @@ export function InputWrapper<T>({ label, description, children, className, valid
     >
       { inputComponent }
 
-      { drawErrorMessage() }
+      { renderErrorMessage() }
 
-      { drawDescription() }
+      { renderDescription() }
 
       <label htmlFor={ childrenProps.id || childrenProps.inputId }>
         { label }

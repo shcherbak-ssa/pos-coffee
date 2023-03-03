@@ -1,16 +1,33 @@
 import { proxy } from 'valtio';
 
-import type { ProductCategory } from 'shared/types';
+import type { ProductCategory, SettingsSchema as BaseSettingsSchema } from 'shared/types';
 import { EMPTY_STRING } from 'shared/constants';
+import { getUpdates } from 'shared/helpers/get-updates';
+import { SettingsSchema } from 'lib/settings-model';
 
-import type { AppPageSchema, AppState, AppStore, AppStoreActions, AppViewState } from '@admin/shared/types';
+import type {
+  AppPageSchema,
+  AppState,
+  Statistics as BaseStatistics,
+  AppStore,
+  AppStoreActions,
+  AppViewState,
+  SettingsUpdates,
+  SearchResults,
+} from '@admin/shared/types';
 import { ListView, ListTab } from '@admin/shared/constants';
 import { UserSchema } from '@admin/models/user';
+import { createDraft } from '@admin/models/settings';
+import { Statistics } from '@admin/models/statistics';
 
 export const appStore: AppStore & AppStoreActions = {
 
   state: proxy<AppState>({
+    settings: SettingsSchema.create(),
+    settingsUpdates: SettingsSchema.create(),
     productCategories: [],
+    statistics: Statistics.create(),
+    searchResults: null,
     currentPage: { title: EMPTY_STRING },
     currentUser: UserSchema.create(),
     selectedEntityTitle: EMPTY_STRING,
@@ -24,8 +41,36 @@ export const appStore: AppStore & AppStoreActions = {
     },
   }),
 
+  settingsDraft: createDraft(),
+
+  setSettings(settings: BaseSettingsSchema): void {
+    appStore.state.settings = SettingsSchema.create(settings);
+    appStore.state.settingsUpdates = SettingsSchema.create(settings);
+    appStore.settingsDraft = createDraft(appStore.state.settingsUpdates);
+  },
+
+  hasSettingsUpdates(): boolean {
+    const { id, ...updates } = this.getSettingsUpdates();
+
+    return !!Object.keys(updates).length;
+  },
+
+  getSettingsUpdates(): SettingsUpdates {
+    const { settings, settingsUpdates } = appStore.state;
+
+    return getUpdates(settings, settingsUpdates);
+  },
+
   setProductCategories(productCategories: ProductCategory[]): void {
     appStore.state.productCategories = [...productCategories];
+  },
+
+  setStatistics(statistics: BaseStatistics): void {
+    appStore.state.statistics = Statistics.create(statistics);
+  },
+
+  setSearchResults(results: SearchResults | null): void {
+    appStore.state.searchResults = results ? { ...results } : null;
   },
 
   setCurrentPage(page: AppPageSchema): void {

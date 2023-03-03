@@ -16,14 +16,28 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class LocalResourceLoader {
 
   public <T> T loadJSONResource(String filename, Class<T> resourceClass) throws IOException {
-    ClassPathResource resource = new ClassPathResource(filename);
-    InputStream resourceInputStream = resource.getInputStream();
+    final ClassPathResource resource = new ClassPathResource(filename);
+    final InputStream resourceInputStream = resource.getInputStream();
 
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(resourceInputStream))) {
-      String content = reader.lines().collect(Collectors.joining(AppConstants.EMPTY_STRING));
-      ObjectMapper objectMapper = new ObjectMapper();
+      final String content = reader
+        .lines()
+        .collect(Collectors.joining(AppConstants.EMPTY_STRING));
+
+      final ObjectMapper objectMapper = new ObjectMapper();
 
       return objectMapper.readValue(content, resourceClass);
+    }
+  }
+
+  public String loadSqlScript(String filename) throws IOException {
+    final ClassPathResource resource = new ClassPathResource(filename);
+    final InputStream resourceInputStream = resource.getInputStream();
+
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(resourceInputStream))) {
+      return reader
+        .lines()
+        .collect(Collectors.joining(AppConstants.SQL_CONTENT_JOIN));
     }
   }
 

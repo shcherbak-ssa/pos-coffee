@@ -1,7 +1,5 @@
 package com.digitazon.poscoffee.controllers.api.admin;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,8 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.digitazon.poscoffee.models.helpers.ProductsFilter;
+import com.digitazon.poscoffee.models.helpers.PageResponse;
 import com.digitazon.poscoffee.models.helpers.client.ClientProduct;
+import com.digitazon.poscoffee.models.helpers.filters.ProductsFilter;
 import com.digitazon.poscoffee.services.ProductsService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
@@ -34,12 +33,18 @@ public class AdminProductsController {
   @GetMapping(path = AppConstants.ApiEndpoint.Admin.PRODUCTS)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('ADMIN')")
-  public List<ClientProduct> getProducts(@RequestParam(AppConstants.PARAM_IS_ARCHIVED) boolean isArchived) {
+  public PageResponse<ClientProduct> getProducts(
+    @RequestParam(AppConstants.PARAM_IS_ARCHIVED) boolean isArchived,
+    @RequestParam(AppConstants.PARAM_PAGE) int page,
+    @RequestParam(AppConstants.PARAM_PAGE_SIZE) int pageSize
+  ) {
     final ProductsFilter filter = ProductsFilter.builder()
       .isArchived(isArchived)
+      .page(page)
+      .pageSize(pageSize)
       .build();
 
-    return this.service.getProducts(filter);
+    return this.service.getProductsByPage(filter);
   }
 
   @GetMapping(path = AppConstants.ApiEndpoint.Admin.PRODUCTS_ID)

@@ -34,7 +34,7 @@ function Page() {
       ...pages[PageTitle.CATEGORIES],
       headerMenuItem: headerMenuItems.categories,
     },
-    addButton: {
+    buttonProps: {
       label: 'Create new category',
       command: () => {
         categoriesController.setIsPopupOpen(true)

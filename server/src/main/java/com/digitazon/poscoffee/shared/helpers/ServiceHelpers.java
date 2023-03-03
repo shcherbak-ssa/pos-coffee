@@ -3,9 +3,9 @@ package com.digitazon.poscoffee.shared.helpers;
 import java.util.Date;
 import java.util.Optional;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-import com.digitazon.poscoffee.models.helpers.base.BaseEntityDates;
+import com.digitazon.poscoffee.models.helpers.BaseEntityDates;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
 import com.digitazon.poscoffee.shared.types.BaseServiceHelpers;
 
@@ -18,7 +18,7 @@ public class ServiceHelpers implements BaseServiceHelpers {
   }
 
   public <T> void update(
-    Long id, JpaRepository<T, Long> repository, BaseServiceHelpers.MergeWithUpdates<T> merge
+    Long id, PagingAndSortingRepository<T, Long> repository, BaseServiceHelpers.MergeWithUpdates<T> merge
   ) throws ResourceNotFoundException {
     final Optional<T> foundEntity = repository.findById(id);
 
@@ -35,7 +35,7 @@ public class ServiceHelpers implements BaseServiceHelpers {
   }
 
   public <T extends BaseEntityDates> void archiveById(
-    Long id, JpaRepository<T, Long> repository
+    Long id, PagingAndSortingRepository<T, Long> repository
   ) throws ResourceNotFoundException {
     final Optional<T> foundEntity = repository.findById(id);
 
@@ -53,7 +53,7 @@ public class ServiceHelpers implements BaseServiceHelpers {
   }
 
   public <T extends BaseEntityDates> void restoreById(
-    Long id, JpaRepository<T, Long> repository
+    Long id, PagingAndSortingRepository<T, Long> repository
   ) throws ResourceNotFoundException {
     final Optional<T> foundEntity = repository.findById(id);
 

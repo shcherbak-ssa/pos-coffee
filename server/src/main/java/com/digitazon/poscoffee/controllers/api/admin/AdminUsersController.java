@@ -1,7 +1,5 @@
 package com.digitazon.poscoffee.controllers.api.admin;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,13 +15,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digitazon.poscoffee.models.Address;
-import com.digitazon.poscoffee.models.helpers.UsersFilter;
+import com.digitazon.poscoffee.models.helpers.PageResponse;
 import com.digitazon.poscoffee.models.helpers.client.ClientUser;
+import com.digitazon.poscoffee.models.helpers.filters.UsersFilter;
 import com.digitazon.poscoffee.services.AddressService;
 import com.digitazon.poscoffee.services.UsersService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
-import com.digitazon.poscoffee.shared.exceptions.ProgerException;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
 
 @RestController
@@ -40,12 +38,18 @@ public class AdminUsersController {
   @GetMapping(path = AppConstants.ApiEndpoint.Admin.USERS)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('ADMIN')")
-  public List<ClientUser> getUsers(@RequestParam(AppConstants.PARAM_IS_ARCHIVED) boolean isArchived) {
+  public PageResponse<ClientUser> getUsers(
+    @RequestParam(AppConstants.PARAM_IS_ARCHIVED) boolean isArchived,
+    @RequestParam(AppConstants.PARAM_PAGE) int page,
+    @RequestParam(AppConstants.PARAM_PAGE_SIZE) int pageSize
+  ) {
     final UsersFilter filter = UsersFilter.builder()
       .isArchived(isArchived)
+      .page(page)
+      .pageSize(pageSize)
       .build();
 
-    return this.service.getUsers(filter);
+    return this.service.getUsersByPage(filter);
   }
 
   @GetMapping(path = AppConstants.ApiEndpoint.Admin.USERS_ID)
@@ -60,7 +64,7 @@ public class AdminUsersController {
   @PreAuthorize("hasAuthority('ADMIN')")
   public ClientUser createUser(
     @RequestBody @Validated(AppConstants.ValidationGroups.ToCreate.class) ClientUser userToCreate
-  ) throws ProgerException, AlreadyExistException {
+  ) throws AlreadyExistException {
     final Address createdAdress = this.addressService.createAddress(userToCreate.getAddress());
     userToCreate.setAddress(createdAdress);
 

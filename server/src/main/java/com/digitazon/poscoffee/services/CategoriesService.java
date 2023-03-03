@@ -63,6 +63,15 @@ public class CategoriesService {
       .collect(Collectors.toList());
   }
 
+  public List<ClientCategory> searchCategories(String searchString) {
+    final List<Category> categories = this.repository.search(searchString);
+
+    return categories
+      .stream()
+      .map(this::convertToClientCategory)
+      .collect(Collectors.toList());
+  }
+
   public ClientCategory createCategory(ClientCategory categoryToCreate) throws AlreadyExistException {
     final Category category = this.convertToCategory(categoryToCreate);
     final Category createdCategory = this.createCategory(category);

@@ -4,14 +4,15 @@ import { Column } from 'primereact/column';
 import type { OrderSchema } from 'shared/types';
 import { useStore } from 'view/hooks/store';
 import { CardHeading } from 'view/components/CardHeading';
+import { BasePrice } from 'view/components/BasePrice';
+import { CardWrapper } from 'view/components/CardWrapper';
 
 import type { AppStore } from "@app/shared/types";
-import { CardWrapper } from '@app/view/components/CardWrapper';
 import { StoreName } from "@app/shared/constants";
 
 export function HomeOrdersContainer() {
 
-  const { orders } = useStore(StoreName.APP) as AppStore;
+  const { state: { settings }, orders } = useStore(StoreName.APP) as AppStore;
 
   return (
     <div style={{ height: 'calc(100% - 88px)' }}>
@@ -44,7 +45,13 @@ export function HomeOrdersContainer() {
               )}
             />
 
-            <Column header="Total" field="total" />
+            <Column
+              header="Total"
+              field="total"
+              body={({ total }: OrderSchema) => (
+                <BasePrice price={total} currency={settings.currency} />
+              )}
+            />
 
             <Column
               header="Created"

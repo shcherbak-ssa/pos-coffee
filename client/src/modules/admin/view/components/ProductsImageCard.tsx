@@ -4,7 +4,7 @@ import type { ProductSchema } from 'shared/types';
 import { ProductsImage } from 'view/components/ProductsImage';
 import { CardHeading } from 'view/components/CardHeading';
 
-import { CardWrapper } from '@admin/view/components/CardWrapper';
+import { CardWrapper } from 'view/components/CardWrapper';
 
 export type Props = {
   product: ProductSchema;

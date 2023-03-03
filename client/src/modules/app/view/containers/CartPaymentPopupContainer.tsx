@@ -3,18 +3,22 @@ import { Dialog } from 'primereact/dialog';
 import { SelectButton, type SelectButtonChangeEvent } from 'primereact/selectbutton';
 import { ScrollPanel } from 'primereact/scrollpanel';
 import { Button } from 'primereact/button';
+import { Divider } from 'primereact/divider';
 
 import type { EmptyFunction, PaymentMethod } from 'shared/types';
 import { ZERO } from 'shared/constants';
 import { paymentMethods } from 'shared/configs/payment-methods';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
+import { BasePrice } from 'view/components/BasePrice';
 
-import type { CartStore, CartController } from '@app/shared/types';
-import { ControllerName, StoreName } from '@app/shared/constants';
+import type { CartStore, CartController, AppStore } from '@app/shared/types';
+import { ControllerName, ONE_HUNDRED_PERCENT, StoreName } from '@app/shared/constants';
 import { CardListWrapper } from '@app/view/components/CardListWrapper';
 import { CartOrderLine } from '@app/view/components/CartOrderLine';
 import { CartPaymentMethod } from '@app/view/components/CartPaymentMethod';
+import { CartOrderSum } from '../components/CartOrderSum';
+import { calculateTotal } from '@app/shared/helpers/calculate-total';
 
 export type Props = {
   isOpen: boolean;
@@ -23,11 +27,18 @@ export type Props = {
 
 export function CartPaymentPopupContainer({ isOpen, hide }: Props) {
 
+  const { state: { settings } } = useStore(StoreName.APP) as AppStore;
   const { state: { order } } = useStore(StoreName.CART) as CartStore;
   const cartController = useController(ControllerName.CART) as CartController;
 
   const [ isPaymentProcessing, setIsPaymentProcessing ] = useState<boolean>(false);
   const [ selectedPaymentMethod, setSelectedPaymentMethod ] = useState<PaymentMethod>();
+
+  function getTotal(): number {
+    const [ subtotal, taxes ] = calculateTotal(order.lines, settings.taxes);
+
+    return taxes === ZERO ? subtotal : subtotal + taxes;
+  }
 
   function processPayment(e: MouseEvent): void {
     e.preventDefault();
@@ -57,6 +68,30 @@ export function CartPaymentPopupContainer({ isOpen, hide }: Props) {
     hide();
   }
 
+  function renderSubtotalAndTaxes(): React.ReactNode {
+    if (settings.taxes !== ZERO) {
+      const [ subtotal, taxes ] = calculateTotal(order.lines, settings.taxes);
+
+      return (
+        <>
+          <CartOrderSum
+            heading="Subtotal"
+            price={subtotal}
+            currency={settings.currency}
+          />
+
+          <CartOrderSum
+            heading="Taxes"
+            price={taxes}
+            currency={settings.currency}
+          />
+
+          <Divider />
+        </>
+      );
+    }
+  }
+
   return (
     <Dialog
       className="popup"
@@ -73,18 +108,21 @@ export function CartPaymentPopupContainer({ isOpen, hide }: Props) {
                   key={`${line.product.id}-${line.variant?.id || ZERO}`}
                   line={line}
                   editable={false}
+                  currency={settings.currency}
                 />
               ))
             }
           </CardListWrapper>
         </ScrollPanel>
 
-        <div className="mt-4 rounded flex items-center justify-between p-2 bg-gray-50">
-          <h3>Total</h3>
+        <div className="mt-4 rounded flex flex-col gap-1 p-2 bg-gray-50">
+          { renderSubtotalAndTaxes() }
 
-          <strong>
-            { order.lines.reduce((total, { price, count }) => total + (price * count), ZERO) }
-          </strong>
+          <CartOrderSum
+            heading="Total"
+            price={getTotal()}
+            currency={settings.currency}
+          />
         </div>
 
         <div className="mt-4">

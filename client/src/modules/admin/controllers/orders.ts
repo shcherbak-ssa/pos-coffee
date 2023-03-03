@@ -1,9 +1,9 @@
-import type { OrderSchema as BaseOrderSchema } from 'shared/types';
+import type { OrderSchema as BaseOrderSchema, PageUpdates } from 'shared/types';
 import { EntityName } from 'shared/constants';
 import { ProgerError } from 'shared/errors';
 import { CrudController } from 'lib/crud-controller';
 
-import type { OrdersController as BaseOrdersController } from '@admin/shared/types';
+import type { OrdersController as BaseOrdersController, OrdersFilter } from '@admin/shared/types';
 import { ApiEndpoint, StoreName } from '@admin/shared/constants';
 import { updateSelectedEntityTitle } from '@admin/shared/helpers/selected-entity-title';
 
@@ -20,10 +20,10 @@ export class OrdersController extends CrudController<BaseOrderSchema> implements
     });
   }
 
-  public async loadAll(): Promise<boolean> {
+  public async loadAll(filter: OrdersFilter): Promise<boolean> {
     return await this.tryToLoadAll({
       endpoint: ApiEndpoint.ORDERS,
-      filter: {},
+      filter: { ...filter },
     });
   }
 
@@ -31,6 +31,10 @@ export class OrdersController extends CrudController<BaseOrderSchema> implements
     await this.tryToSelect(orderId);
 
     this.updateSelectedEntityTitle();
+  }
+
+  public async updatePage(page: PageUpdates<BaseOrderSchema>): Promise<void> {
+    await this.tryToUpdatePage(page);
   }
 
   public async save(): Promise<boolean> {
@@ -48,7 +52,7 @@ export class OrdersController extends CrudController<BaseOrderSchema> implements
   private updateSelectedEntityTitle(): void {
     updateSelectedEntityTitle<BaseOrderSchema>(
       StoreName.ORDERS,
-      (order: BaseOrderSchema) => order.number,
+      (order: BaseOrderSchema) => `Order ${order.number}`,
     );
   }
 

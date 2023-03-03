@@ -15,20 +15,22 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digitazon.poscoffee.models.Product;
-import com.digitazon.poscoffee.models.helpers.OrdersFilter;
-import com.digitazon.poscoffee.models.helpers.ProductsFilter;
-import com.digitazon.poscoffee.models.helpers.UsersFilter;
-import com.digitazon.poscoffee.models.helpers.app.AppHome;
-import com.digitazon.poscoffee.models.helpers.app.AppMenu;
+import com.digitazon.poscoffee.models.helpers.AppHome;
+import com.digitazon.poscoffee.models.helpers.AppMenu;
 import com.digitazon.poscoffee.models.helpers.client.ClientCategory;
 import com.digitazon.poscoffee.models.helpers.client.ClientOrder;
 import com.digitazon.poscoffee.models.helpers.client.ClientProduct;
 import com.digitazon.poscoffee.models.helpers.client.ClientProductVariant;
+import com.digitazon.poscoffee.models.helpers.client.ClientSettings;
 import com.digitazon.poscoffee.models.helpers.client.ClientUser;
+import com.digitazon.poscoffee.models.helpers.filters.OrdersFilter;
+import com.digitazon.poscoffee.models.helpers.filters.ProductsFilter;
+import com.digitazon.poscoffee.models.helpers.filters.UsersFilter;
 import com.digitazon.poscoffee.services.CategoriesService;
 import com.digitazon.poscoffee.services.OrdersService;
 import com.digitazon.poscoffee.services.ProductVariantsService;
 import com.digitazon.poscoffee.services.ProductsService;
+import com.digitazon.poscoffee.services.SettingsService;
 import com.digitazon.poscoffee.services.StockService;
 import com.digitazon.poscoffee.services.UsersService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
@@ -59,10 +61,20 @@ public class AppController {
   @Autowired
   private StockService stockService;
 
+  @Autowired
+  private SettingsService settingsService;
+
+  @GetMapping(path = AppConstants.ApiEndpoint.App.APP_SETTINGS)
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAuthority('MANAGER')")
+  public ClientSettings getSettings() throws ProgerException {
+    return this.settingsService.getSettings();
+  }
+
   @GetMapping(path = AppConstants.ApiEndpoint.App.APP_HOME)
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('MANAGER')")
-  public AppHome getAppHome() throws ProgerException {
+  public AppHome getAppHome() {
     final UsersFilter usersFilter = UsersFilter.builder()
       .forApp(true)
       .build();
@@ -120,8 +132,8 @@ public class AppController {
   @ResponseStatus(HttpStatus.CREATED)
   @PreAuthorize("hasAuthority('MANAGER')")
   public ClientOrder createOrder(
-    @RequestBody @Validated ClientOrder orderToCreate
-  ) throws AlreadyExistException, ResourceNotFoundException, ProgerException {
+    @RequestBody @Validated(AppConstants.ValidationGroups.ToCreate.class) ClientOrder orderToCreate
+  ) throws AlreadyExistException, ResourceNotFoundException {
     final ClientOrder createdOrder = this.ordersService.createOrder(orderToCreate);
     this.stockService.takeStock(createdOrder.getLines());
 

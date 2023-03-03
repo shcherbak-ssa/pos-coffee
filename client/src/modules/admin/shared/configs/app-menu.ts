@@ -10,11 +10,6 @@ export const appMenuItems: AppMenuItem[] = [
     to: PagePath.HOME,
   },
   {
-    label: PageTitle.DASHBOARD,
-    icon: PrimeIcons.CHART_BAR,
-    to: PagePath.DASHBOARD,
-  },
-  {
     label: PageTitle.PRODUCTS,
     icon: PrimeIcons.BOX,
     to: PagePath.PRODUCTS,

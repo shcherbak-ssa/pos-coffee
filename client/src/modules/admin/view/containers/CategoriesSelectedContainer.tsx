@@ -20,7 +20,7 @@ import { Action, ControllerName, DEFAULT_CATEGORY_NAME, StoreName } from '@admin
 import { confirmDialogConfig } from '@admin/shared/configs/confirm-dialog';
 import { useActionsMenuItems } from '@admin/view/hooks/actions-menu-items';
 import { SaveButton } from '@admin/view/components/SaveButton';
-import { AvailableCheckbox } from '@admin/view/components/AvailableCheckbox';
+import { AvailableSwitch } from '@admin/view/components/AvailableSwitch';
 import { CategoriesSelectedWrapper } from '@admin/view/components/CategoriesSelectedWrapper';
 import { actionsMenuItemsProps } from '@admin/shared/configs/pages';
 import { CategoriesDeleteMessage } from '@admin/view/components/CategoriesDeleteMessage';
@@ -109,7 +109,7 @@ export function CategoriesSelectedContainer({ mode }: Props) {
       });
   }
 
-  function drawHeader(): React.ReactNode {
+  function renderHeader(): React.ReactNode {
     if (isCreateMode()) {
       return;
     }
@@ -118,12 +118,12 @@ export function CategoriesSelectedContainer({ mode }: Props) {
       <div className="flex items-center justify-between mb-5">
         <CardHeading className="mb-0" heading="Category" />
 
-        { drawHeaderButton() }
+        { renderHeaderButton() }
       </div>
     );
   }
 
-  function drawHeaderButton(): React.ReactNode {
+  function renderHeaderButton(): React.ReactNode {
     if (isDefaultCategory()) {
       return;
     }
@@ -155,7 +155,7 @@ export function CategoriesSelectedContainer({ mode }: Props) {
     );
   }
 
-  function drawProductsInput(): React.ReactNode {
+  function renderProductsInput(): React.ReactNode {
     if (!isEditMode) {
       return (
         <InputWrapper
@@ -174,7 +174,7 @@ export function CategoriesSelectedContainer({ mode }: Props) {
     }
   }
 
-  function drawDefaultCategoryMessage(): React.ReactNode {
+  function renderDefaultCategoryMessage(): React.ReactNode {
     if (isDefaultCategory()) {
       return (
         <Message
@@ -186,7 +186,7 @@ export function CategoriesSelectedContainer({ mode }: Props) {
     }
   }
 
-  function drawSaveButton(): React.ReactNode {
+  function renderSaveButton(): React.ReactNode {
     if (isEditMode) {
       return (
         <SaveButton
@@ -201,10 +201,10 @@ export function CategoriesSelectedContainer({ mode }: Props) {
   return (
     <CategoriesSelectedWrapper isCreateMode={isCreateMode()}>
       <div className="full">
-        { drawHeader() }
+        { renderHeader() }
 
         <div className="py-2">
-          <AvailableCheckbox
+          <AvailableSwitch
             className="mb-10"
             entityName={EntityName.CATEGORY}
             isEditMode={isEditMode}
@@ -227,12 +227,12 @@ export function CategoriesSelectedContainer({ mode }: Props) {
             />
           </InputWrapper>
 
-          { drawProductsInput() }
+          { renderProductsInput() }
         </div>
 
-        { drawDefaultCategoryMessage() }
+        { renderDefaultCategoryMessage() }
 
-        { drawSaveButton() }
+        { renderSaveButton() }
       </div>
     </CategoriesSelectedWrapper>
   );

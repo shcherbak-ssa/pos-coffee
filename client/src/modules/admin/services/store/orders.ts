@@ -1,10 +1,16 @@
 import { proxy } from 'valtio';
 
-import type { OrderSchema as BaseOrderSchema, StoreService as BaseStoreService } from 'shared/types';
+import type {
+  OrderSchema as BaseOrderSchema,
+  StoreService as BaseStoreService,
+  Page as BasePage,
+  PageUpdates,
+} from 'shared/types';
 import { EntityName } from 'shared/constants';
 import { ProgerError } from 'shared/errors';
 import { StoreService } from 'services/store';
 import { OrderSchema } from 'lib/order-models';
+import { Page } from 'lib/page-model';
 
 import type { OrdersStore, OrdersStoreActions } from '@admin/shared/types';
 
@@ -13,16 +19,21 @@ export const ordersStore: OrdersStore & OrdersStoreActions = {
   state: proxy({
     list: [],
     selected: OrderSchema.create(),
+    page: Page.create<BaseOrderSchema>(),
   }),
 
   draft: {},
 
-  /**
-   * CrudStore implementation
-   */
-
   add(orders: BaseOrderSchema[]): void {
     createStoreService().add(orders);
+  },
+
+  setPage(page: BasePage<BaseOrderSchema>): void {
+    createStoreService().setPage(page);
+  },
+
+  updatePage(page: PageUpdates<BaseOrderSchema>): void {
+    createStoreService().updatePage(page);
   },
 
   save(order: BaseOrderSchema): void {
@@ -63,4 +74,3 @@ function createStoreService(): BaseStoreService<BaseOrderSchema> {
     (order?: BaseOrderSchema) => OrderSchema.create(order),
   );
 }
-

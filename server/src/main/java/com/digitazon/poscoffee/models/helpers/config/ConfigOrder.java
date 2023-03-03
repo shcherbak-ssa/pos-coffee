@@ -1,5 +1,6 @@
 package com.digitazon.poscoffee.models.helpers.config;
 
+import java.util.Date;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -14,5 +15,7 @@ public class ConfigOrder {
   private Long user;
   private List<Long> lines;
   private String paymentMethod;
+  private Byte taxes;
+  private Date createdAt;
 
 }

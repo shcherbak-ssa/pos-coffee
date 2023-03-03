@@ -2,7 +2,7 @@ import type { ColumnProps } from 'primereact/column';
 
 import { UsersImage } from 'view/components/UsersImage';
 
-import { PagePath, StoreName } from '@admin/shared/constants';
+import { ControllerName, PagePath, StoreName } from '@admin/shared/constants';
 import { useUsersActionsMenuItemsProps } from '@admin/view/hooks/users-actions-menu-items';
 import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-menu-items';
 import { UsersCard } from '@admin/view/components/UsersCard';
@@ -14,11 +14,6 @@ export function UsersPageContainer() {
   const actionsMenuItemsProps: ActionsMenuItemsProps = useUsersActionsMenuItemsProps();
 
   const usersTableColumns: ColumnProps[] = [
-    {
-      field: 'type',
-      header: 'Type',
-      body: UsersTypeLabel,
-    },
     {
       field: 'image',
       header: 'Image',
@@ -33,6 +28,11 @@ export function UsersPageContainer() {
       header: 'Surname',
     },
     {
+      field: 'type',
+      header: 'Type',
+      body: UsersTypeLabel,
+    },
+    {
       field: 'email',
       header: 'Email',
     },
@@ -45,6 +45,7 @@ export function UsersPageContainer() {
   return (
     <PageDefaultContentContainer
       storeName={StoreName.USERS}
+      controllerName={ControllerName.USERS}
       infoPagePath={PagePath.USERS_INFO}
       tableColumns={usersTableColumns}
       actionsMenuItemsProps={actionsMenuItemsProps}

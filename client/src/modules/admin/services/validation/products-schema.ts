@@ -13,9 +13,8 @@ const baseSchema: Schema = Joi.object({
   name: Joi.string().messages({
     'string.empty': 'Name cannot be empty',
   }),
-  price: Joi.number().min(ZERO).max(200).messages({
-    'string.min': 'Price must be between 0 and 127',
-    'string.max': 'Price must be between 0 and 127',
+  price: Joi.number().min(ZERO).messages({
+    'string.min': 'Price be zero or positive number',
     'string.empty': 'Price cannot be empty',
   }),
   stock: Joi.number().min(ZERO).messages({

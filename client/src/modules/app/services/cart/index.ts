@@ -31,7 +31,7 @@ export class CartService implements BaseCartService {
     const foundLine: BaseCartOrderLineSchema | undefined = this.findLine(line);
     const count: number = foundLine?.count || ZERO;
 
-    return Math.floor((stock - count * stockPerTime) / stockPerTime);
+    return Math.floor(stock - count * stockPerTime);
   }
 
   public findLine(line: BaseCartOrderLineSchema): BaseCartOrderLineSchema | undefined {
@@ -56,8 +56,9 @@ export class CartService implements BaseCartService {
     }
   }
 
-  public parseOrder(order: CartOrderSchema, user: UserSchema): CartOrderUpdates {
+  public parseOrder(order: CartOrderSchema, user: UserSchema, taxes: number): CartOrderUpdates {
     return {
+      taxes,
       user: { id: user.id },
       lines: order.lines.map(({ count, price, product, variant }) => ({
         count,

@@ -12,13 +12,13 @@ export type Props = {
   showSubHeader?: boolean;
   controlGroups?: ControlGroup[];
   showTabs?: boolean;
-  addButton?: PageAddButtonProps;
+  buttonProps?: PageAddButtonProps;
 }
 
 export function PageLayout({
   page,
   children,
-  addButton,
+  buttonProps,
   showSubHeader = true,
   showTabs = true,
   controlGroups = [ ControlGroup.ACTIONS, ControlGroup.VIEWS ],
@@ -26,24 +26,24 @@ export function PageLayout({
 
   useCurrentPage(page);
 
-  function drawSubHeader(): React.ReactNode {
+  function renderSubHeader(): React.ReactNode {
     if (showSubHeader) {
       return (
         <div className="border-b-2 px-6 py-4 flex items-center justify-between">
-          { drawSubHeaderActions() }
-          { drawSubHeaderViews() }
+          { renderSubHeaderActions() }
+          { renderSubHeaderViews() }
         </div>
       );
     }
   }
 
-  function drawSubHeaderActions(): React.ReactNode {
+  function renderSubHeaderActions(): React.ReactNode {
     if (controlGroups.includes(ControlGroup.ACTIONS)) {
       return <PageSubHeaderActionsContainer />;
     }
   }
 
-  function drawSubHeaderViews(): React.ReactNode {
+  function renderSubHeaderViews(): React.ReactNode {
     if (controlGroups.includes(ControlGroup.VIEWS)) {
       return <PageSubHeaderViewsContainer />;
     }
@@ -53,10 +53,10 @@ export function PageLayout({
     <PageWrapper>
       <PageHeaderHeadingContainer
         showTabs={showTabs}
-        addButton={addButton}
+        addButton={buttonProps}
       />
 
-      { drawSubHeader() }
+      { renderSubHeader() }
 
       { children }
     </PageWrapper>

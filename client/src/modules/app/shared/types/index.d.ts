@@ -7,6 +7,7 @@ import type {
   OrderSchema,
   OrderLineSchema,
   OrderUserSchema,
+  SettingsSchema,
 } from 'shared/types';
 import type { PaymentMethodType } from 'shared/constants';
 
@@ -36,6 +37,7 @@ export type AppMenu = {
  */
 
 export type AppState = {
+  settings: SettingsSchema;
   users: AppUsersState;
 }
 
@@ -51,20 +53,22 @@ export interface AppStore extends StoreState<AppState> {
 }
 
 export interface AppStoreActions extends AppStore {
+  setSettings(settings: SettingsSchema): void;
+  setUsers(users: UserSchema[]): void;
+  setOrders(orders: OrderSchema[]): void;
   setManager(user: UserSchema): void;
   setCashier(user: UserSchema | null): void;
   addLoggedUser(user: UserSchema): void;
   removeLoggedUser(user: UserSchema): void;
-  setUsers(users: UserSchema[]): void;
-  setOrders(orders: OrderSchema[]): void;
 }
 
 export interface AppController {
+  loadSettings(): Promise<void>;
+  loadData(): Promise<void>;
   setManager(user: UserSchema): Promise<void>;
   setCashier(user: UserSchema | null): Promise<void>;
   addLoggedUser(user: UserSchema): Promise<void>;
   removeLoggedUser(user: UserSchema): Promise<void>;
-  loadData(): Promise<void>;
 }
 
 /**
@@ -117,12 +121,13 @@ export interface CartService extends CartStockAlert {
   findLine(line: CartOrderLineSchema): CartOrderLineSchema | undefined;
   isSameOrderLine(line: CartOrderLineSchema, lineToCompare: CartOrderLineSchema): boolean;
   checkStock(line: CartOrderLineSchema, count: number): void;
-  parseOrder(order: CartOrderSchema, user: UserSchema): CartOrderUpdates;
+  parseOrder(order: CartOrderSchema, user: UserSchema, taxes: number): CartOrderUpdates;
 }
 
 export type CartState = {
   order: CartOrderSchema;
   activeCategoryId: number;
+  searchString: string;
 }
 
 export interface CartStore extends StoreState<CartState> {
@@ -139,6 +144,7 @@ export interface CartStoreActions extends CartStore {
   updateOrderLineCount(line: CartOrderLineSchema, count: number): void;
   setOrderPaymentMethod(type: PaymentMethodType): void;
   setActiveCategoryId(categoryId: number): void;
+  setSearchString(searchString: string): void;
   setCategories(categories: CategorySchema[]): void;
   setProducts(products: CartProductSchema[]): void;
 }
@@ -151,5 +157,6 @@ export interface CartController {
   updateOrderLineCount(line: CartOrderLineSchema, count: number): Promise<void>;
   setOrderPaymentMethod(type: PaymentMethodType): Promise<void>;
   setActiveCategoryId(categoryId?: number): Promise<void>;
+  setSearchString(searchString: string): Promise<void>;
   loadMenu(): Promise<void>;
 }

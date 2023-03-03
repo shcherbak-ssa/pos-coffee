@@ -42,7 +42,7 @@ export class CartOrderLineSchema implements BaseCartOrderLineSchema {
   }
 
   private static getPrice(product: CartProductSchema, variant?: ProductVariantSchema): number {
-    return typeof(variant?.price) === 'number'
+    return variant && variant.price !== ZERO
       ? variant.price
       : product.price;
   }

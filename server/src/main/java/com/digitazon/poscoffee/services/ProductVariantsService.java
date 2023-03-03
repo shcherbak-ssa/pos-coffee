@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.Product;
 import com.digitazon.poscoffee.models.ProductVariant;
-import com.digitazon.poscoffee.models.helpers.ProductsFilter;
 import com.digitazon.poscoffee.models.helpers.client.ClientProductVariant;
+import com.digitazon.poscoffee.models.helpers.filters.ProductsFilter;
 import com.digitazon.poscoffee.repositories.ProductVariantsRepository;
 import com.digitazon.poscoffee.shared.constants.ProductsConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
@@ -104,10 +104,6 @@ public class ProductVariantsService {
 
     if (filter.getNullLabels() != null) {
       final List<String> nullLabels = Arrays.asList(filter.getNullLabels());
-
-      if (nullLabels.contains(ProductsConstants.PRICE_LABEL)) {
-        variant.setPrice(updates.getPrice());
-      }
 
       if (nullLabels.contains(ProductsConstants.STOCK_LABEL)) {
         variant.setStock(updates.getStock());

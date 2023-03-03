@@ -7,13 +7,14 @@ import { OverlayPanel } from 'primereact/overlaypanel';
 import { Divider } from 'primereact/divider';
 import { Menu } from 'primereact/menu';
 
-import { EMPTY_STRING } from 'shared/constants';
+import { EMPTY_STRING, IS_ACTIVE_CLASSNAME } from 'shared/constants';
 import { logout } from 'shared/helpers/logout';
 import { AppLogo } from 'view/components/AppLogo';
 import { type Props as IconButtonProps, IconButton } from 'view/components/IconButton';
 
-import { IS_ACTIVE_CLASSNAME, PagePath } from '@app/shared/constants';
+import { PagePath } from '@app/shared/constants';
 import { AppCashierContainer } from '@app/view/containers/AppCashierContainer';
+import { CartSearchContainer } from '@app/view/containers/CartSearchContainer';
 
 export function AppHeaderContainer() {
 
@@ -57,10 +58,20 @@ export function AppHeaderContainer() {
     }
   }
 
+  function renderSearch(): React.ReactNode {
+    if (location.pathname === PagePath.CART) {
+      return <CartSearchContainer />;
+    }
+  }
+
   return (
     <header className="flex items-center justify-between p-4 pb-0">
       <div className="flex items-center">
         <AppLogo />
+
+        <div className="ml-6">
+          { renderSearch() }
+        </div>
       </div>
 
       <div className="flex items-center">

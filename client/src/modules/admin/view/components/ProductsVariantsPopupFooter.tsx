@@ -31,7 +31,7 @@ export function ProductsVariantsPopupFooter({ isEditMode, isLoading, hide, save,
     edit();
   }
 
-  function drawPrimaryButton(): React.ReactNode {
+  function renderPrimaryButton(): React.ReactNode {
     if (isEditMode) {
       return (
         <Button
@@ -58,7 +58,7 @@ export function ProductsVariantsPopupFooter({ isEditMode, isLoading, hide, save,
         onClick={handleCancelButtonClick}
       />
 
-      { drawPrimaryButton() }
+      { renderPrimaryButton() }
     </div>
   );
 

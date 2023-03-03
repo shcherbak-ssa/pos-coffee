@@ -19,7 +19,7 @@ export type Props = {
 
 export function ProductsInfoPageContainer({ validationError }: Props) {
 
-  const { state: { productCategories, isEditMode } } = useStore(StoreName.APP) as AppStore;
+  const { state: { productCategories, isEditMode, settings } } = useStore(StoreName.APP) as AppStore;
   const { state: { selected: selectedProduct }, draft: draftProduct } = useStore(StoreName.PRODUCTS) as ProductsStore;
 
   const [ selectedProductCategory, setSelectedProductCategory ] = useState<ProductCategory>(productCategories[ZERO]);
@@ -52,6 +52,7 @@ export function ProductsInfoPageContainer({ validationError }: Props) {
         entityDraft={draftProduct}
         validationError={validationError}
         isEditMode={isEditMode}
+        currency={settings.currency}
       />
 
       <ProductsStockCard

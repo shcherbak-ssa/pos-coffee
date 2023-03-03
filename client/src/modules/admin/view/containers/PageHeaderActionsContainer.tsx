@@ -63,7 +63,7 @@ export function PageHeaderActionsContainer({
     }
   }
 
-  function drawSaveButton(): React.ReactNode {
+  function renderSaveButton(): React.ReactNode {
     if (isEditMode) {
       return (
         <SaveButton
@@ -74,7 +74,7 @@ export function PageHeaderActionsContainer({
     }
   }
 
-  function drawArchivedLabel(): React.ReactNode {
+  function renderArchivedLabel(): React.ReactNode {
     if (store.state.selected.isArchived) {
       return (
         <Button
@@ -86,7 +86,7 @@ export function PageHeaderActionsContainer({
     }
   }
 
-  function drawMenuButton(): React.ReactNode {
+  function renderMenuButton(): React.ReactNode {
     if (isEditMode) {
       return (
         <Button
@@ -110,11 +110,11 @@ export function PageHeaderActionsContainer({
 
   return (
     <div className="flex gap-4">
-      { drawSaveButton() }
+      { renderSaveButton() }
 
-      { drawArchivedLabel() }
+      { renderArchivedLabel() }
 
-      { drawMenuButton() }
+      { renderMenuButton() }
     </div>
   );
 

@@ -1,4 +1,4 @@
-import { CardWrapper } from '@admin/view/components/CardWrapper';
+import { CardWrapper } from 'view/components/CardWrapper';
 
 export type Props = {
   isCreateMode: boolean;

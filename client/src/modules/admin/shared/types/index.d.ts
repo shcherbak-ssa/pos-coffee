@@ -14,8 +14,10 @@ import type {
   ProductVariantSchema,
   OrderSchema,
   Entity,
+  SettingsSchema,
+  PageFilter,
 } from 'shared/types';
-import type { UserType } from 'shared/constants';
+import type { Currency, UserType } from 'shared/constants';
 
 import type { Action, ListView, ListAction, ListTab, PagePath } from '@admin/shared/constants';
 import type { Props as ActionsMenuItemsProps } from '@admin/view/hooks/actions-menu-items';
@@ -56,13 +58,9 @@ export type ActionMenuItem = {
 
 export type PageAddButtonProps = {
   label: string;
+  icon?: string;
   to?: PagePath;
   command?: EmptyFunction;
-}
-
-export type AppComponentProps = {
-  appStore: AppStore;
-  appController: AppController;
 }
 
 export type EntityViewComponentProps<T extends Entity> = {
@@ -83,9 +81,55 @@ export type CardWithInputsProps<T, D> = {
 }
 
 /**
+ * Statistics
+ */
+
+export type Statistics = {
+  total: TotalOrdersStatistics;
+  averageIncome: number;
+  averageOrders: number;
+  countsPerDay: StatisticsCountPerDay[];
+  bestsellers: ProductsCountStatistics[];
+  topIgnored: ProductsCountStatistics[];
+}
+
+export type StatisticsCountPerDay = {
+  workDay: Date;
+  income: number;
+  orders: number;
+}
+
+export type TotalOrdersStatistics = {
+  orders: number;
+  income: number;
+}
+
+export type ProductsCountStatistics = {
+  count: number;
+  name: string;
+}
+
+/**
+ * Search
+ */
+
+export type SearchResults = {
+  users: UserSchema[];
+  products: SearchProducts[];
+  categories: CategorySchema[];
+}
+
+export type SearchProducts = {
+  id: number;
+  name: string;
+  image: string;
+  category: string;
+}
+
+/**
  * App
  *
- * + (ProductCategory)
+ * + (Settings, ProductCategory, Statistics, Search)
  */
 
 export type AppPageSchema = {
@@ -107,8 +151,14 @@ export type AppViewState = {
   listTab: ListTab;
 }
 
+export type SettingsUpdates = Partial<SettingsSchema>;
+
 export type AppState = {
+  settings: SettingsSchema;
+  settingsUpdates: SettingsSchema;
   productCategories: ProductCategory[];
+  statistics: Statistics;
+  searchResults: SearchResults | null;
   currentPage: AppPageSchema;
   currentUser: UserSchema;
   selectedEntityTitle: string;
@@ -117,10 +167,22 @@ export type AppState = {
   view: AppViewState;
 }
 
-export interface AppStore extends StoreState<AppState> {}
+export interface SettingsDraft {
+  set currency(currency: Currency);
+  set taxes(taxes: number);
+}
+
+export interface AppStore extends StoreState<AppState> {
+  settingsDraft: SettingsDraft;
+}
 
 export interface AppStoreActions extends AppStore {
+  setSettings(settings: SettingsSchema): void;
+  hasSettingsUpdates(): boolean;
+  getSettingsUpdates(): SettingsUpdates;
   setProductCategories(productCategories: ProductCategory[]): void;
+  setStatistics(statistics: Statistics): void;
+  setSearchResults(results: SearchResults | null): void;
   setCurrentPage(page: AppPageSchema): void;
   setCurrentUser(user: UserSchema): void;
   setSelectedEntityTitle(title: string): void;
@@ -130,7 +192,12 @@ export interface AppStoreActions extends AppStore {
 }
 
 export interface AppController {
+  loadSettings(): Promise<void>;
+  updateSettings(): Promise<boolean>;
   loadProductCategories(): Promise<void>;
+  loadStatistics(): Promise<void>;
+  search(searchString: string): Promise<void>;
+  resetSearch(): Promise<void>;
   setCurrentPage(page: AppPageSchema): Promise<void>;
   setCurrentUser(user: UserSchema): Promise<void>;
   setSelectedEntityTitle(title: string): Promise<void>;
@@ -237,7 +304,7 @@ export type ProductVariantsFilter = Partial<{
 export type ProductVariantDraft = {
   set sku(sku: string);
   set name(name: string);
-  set price(price: number | null);
+  set price(price: number);
   set stock(stock: number | null);
   set stockPerTime(stockPerTime: number | null);
   set stockAlert(stockAlert: number | null);
@@ -261,8 +328,10 @@ export interface ProductVariantsController {
  * Orders
  */
 
+export type OrdersFilter = PageFilter;
+
 export interface OrdersStore extends StoreEntityState<{}, OrderSchema, {}> {}
 
 export interface OrdersStoreActions extends StoreCrud<OrderSchema> {}
 
-export interface OrdersController extends CrudController<{}> {}
+export interface OrdersController extends CrudController<OrdersFilter, OrderSchema> {}

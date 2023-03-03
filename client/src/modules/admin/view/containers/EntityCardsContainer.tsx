@@ -76,7 +76,7 @@ export function EntityCardsContainer<T extends Entity>({
     }
   }
 
-  function drawActionsMenu(entity: T): React.ReactNode {
+  function renderActionsMenu(entity: T): React.ReactNode {
     if (actionsMenuItemsProps) {
       return (
         <EntityActionsMenuContainer
@@ -88,7 +88,7 @@ export function EntityCardsContainer<T extends Entity>({
     }
   }
 
-  function drawCheckbox(entity: T): React.ReactNode {
+  function renderCheckbox(entity: T): React.ReactNode {
     if (isSelectEnable) {
       return (
         <Checkbox
@@ -100,7 +100,7 @@ export function EntityCardsContainer<T extends Entity>({
   }
 
   return (
-    <div className="full p-6 grid grid-cols-4 gap-4">
+    <div className="full p-6 grid grid-cols-4 gap-6">
       {
         entities.map((entity) => (
           <div className="card relative" key={entity.id}>
@@ -114,11 +114,11 @@ export function EntityCardsContainer<T extends Entity>({
             </div>
 
             <div className="card-menu absolute top-4 right-4">
-              { drawActionsMenu(entity) }
+              { renderActionsMenu(entity) }
             </div>
 
             <div className="absolute top-4 left-4">
-              { drawCheckbox(entity) }
+              { renderCheckbox(entity) }
             </div>
           </div>
         ))

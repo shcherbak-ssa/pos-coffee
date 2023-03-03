@@ -1,8 +1,8 @@
 export const PRODUCT_COUNT_STEP: number = 1;
-
-export const IS_ACTIVE_CLASSNAME: string = 'is-active';
+export const ONE_HUNDRED_PERCENT: number = 100;
 
 export enum ApiEndpoint {
+  APP_SETTINGS = '/api/app/settings',
   APP_HOME = '/api/app/home',
   APP_MENU = '/api/app/menu',
   APP_ORDERS = '/api/app/orders',

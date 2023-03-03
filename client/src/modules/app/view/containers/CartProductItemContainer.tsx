@@ -9,11 +9,12 @@ import { ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 import { ProductsImage } from 'view/components/ProductsImage';
+import { BasePrice } from 'view/components/BasePrice';
+import { CardWrapper } from 'view/components/CardWrapper';
 
-import type { CartController, CartProductSchema, CartStockAlert, CartStore } from '@app/shared/types';
+import type { AppStore, CartController, CartProductSchema, CartStockAlert, CartStore } from '@app/shared/types';
 import { ControllerName, StoreName } from '@app/shared/constants';
 import { CartProductItemVariantsContainer } from '@app/view/containers/CartProductItemVariantsContainer';
-import { CardWrapper } from '@app/view/components/CardWrapper';
 
 export type Props = {
   product: CartProductSchema;
@@ -23,6 +24,7 @@ export function CartProductItemContainer({ product }: Props) {
 
   const stockPanel = useRef<OverlayPanel>(null);
 
+  const { state: { settings } } = useStore(StoreName.APP) as AppStore;
   const { getStockAlert } = useStore(StoreName.CART) as CartStore;
   const cartController = useController(ControllerName.CART) as CartController;
 
@@ -48,7 +50,7 @@ export function CartProductItemContainer({ product }: Props) {
       return;
     }
 
-    const name: string = variant ? variant.name : 'Product';
+    const name: string = variant ? `"${variant.name}"` : 'Product';
 
     return (
       <Message
@@ -56,8 +58,8 @@ export function CartProductItemContainer({ product }: Props) {
         severity="warn"
         text={
           remainStock === ZERO
-            ? `"${name}" out of stock`
-            : `"${name}" left for ${remainStock} times`
+            ? `${name} out of stock`
+            : `${name} left for ${remainStock} times`
         }
       />
     );
@@ -114,9 +116,14 @@ export function CartProductItemContainer({ product }: Props) {
           size="xlarge"
         />
 
-        <h3 className="flex items-center justify-between mt-2 font-semibold tracking-wide">
-          <span>{ product.name }</span>
-          <span>{ product.price }</span>
+        <h3 className="flex items-center justify-between gap-1 mt-2 font-semibold tracking-wide">
+          <div>{ product.name }</div>
+
+          <BasePrice
+            price={product.price}
+            currency={settings.currency}
+            useSymbol
+          />
         </h3>
       </div>
 

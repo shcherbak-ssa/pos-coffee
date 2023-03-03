@@ -10,10 +10,6 @@ export const pages: { [key in PageTitle]: AppPageSchema } = {
     title: PageTitle.HOME,
     icon: PrimeIcons.HOME,
   },
-  [PageTitle.DASHBOARD]: {
-    title: PageTitle.DASHBOARD,
-    icon: PrimeIcons.CHART_BAR,
-  },
   [PageTitle.PRODUCTS]: {
     title: PageTitle.PRODUCTS,
     icon: PrimeIcons.BOX,

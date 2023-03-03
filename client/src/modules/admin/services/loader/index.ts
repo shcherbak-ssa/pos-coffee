@@ -88,6 +88,11 @@ export class LoaderService implements BaseLoaderService {
 
   public async loadValidationSchema<T>(name: ValidationName): Promise<ValidationSchema<T>> {
     switch (name) {
+      case ValidationName.SETTINGS: {
+        const { schema } = await import('@admin/services/validation/settings-schema');
+
+        return schema as ValidationSchema<T>;
+      }
       case ValidationName.USERS: {
         const { schema } = await import('@admin/services/validation/users-schema');
 

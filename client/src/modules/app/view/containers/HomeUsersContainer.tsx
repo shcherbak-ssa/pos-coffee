@@ -7,12 +7,12 @@ import { ScrollPanel } from 'primereact/scrollpanel';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 import { CardHeading } from 'view/components/CardHeading';
+import { CardWrapper } from 'view/components/CardWrapper';
 
 import type { AppController, AppStore, UserSchema } from '@app/shared/types';
 import { ControllerName, StoreName } from '@app/shared/constants';
 import { AppCashierContainer } from '@app/view/containers/AppCashierContainer';
 import { AppUserSelectPopupContainer } from '@app/view/containers/AppUserSelectPopupContainer';
-import { CardWrapper } from '@app/view/components/CardWrapper';
 import { AppUser } from '@app/view/components/AppUser';
 import { CardListWrapper } from '@app/view/components/CardListWrapper';
 

@@ -1,8 +1,9 @@
-import type { Entity, JoinedStore, StoreService as BaseStoreService } from 'shared/types';
+import type { Entity, JoinedStore, Page as BasePage, StoreService as BaseStoreService } from 'shared/types';
 import { EntityName, ZERO } from 'shared/constants';
 import { ProgerError } from 'shared/errors';
 import { filterById, findById, replaceById } from 'shared/utils/by-id';
 import { getUpdates } from 'shared/helpers/get-updates';
+import { Page } from 'lib/page-model';
 
 export class StoreService<S, E extends Entity, D> implements BaseStoreService<E> {
 
@@ -29,6 +30,18 @@ export class StoreService<S, E extends Entity, D> implements BaseStoreService<E>
 
   public add(entities: E[]): void {
     this.store.state.list = entities.map(this.createEntitySchema);
+  }
+
+  public setPage(page: BasePage<E>): void {
+    this.store.state.page = Page.create(page);
+    this.add(this.store.state.page.entities);
+  }
+
+  public updatePage(page: Partial<BasePage<E>>): void {
+    this.store.state.page = Page.create({
+      ...this.store.state.page,
+      ...page,
+    });
   }
 
   public save(entity: E): void {

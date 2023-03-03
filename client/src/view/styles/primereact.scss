@@ -11,6 +11,10 @@
   }
 }
 
+.p-inputgroup .p-inputtext {
+  @apply w-full;
+}
+
 .p-inputnumber {
   &-input {
     @apply w-full;

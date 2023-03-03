@@ -45,6 +45,10 @@ export class CategoriesController extends CrudController<BaseCategorySchema> imp
     });
   }
 
+  public async select(categoryId: number = ZERO): Promise<void> {
+    await this.tryToSelect(categoryId);
+  }
+
   public async archive(categoryId: number): Promise<boolean> {
     throw new ProgerError('This method cannot be called');
   }
@@ -53,8 +57,8 @@ export class CategoriesController extends CrudController<BaseCategorySchema> imp
     throw new ProgerError('This method cannot be called');
   }
 
-  public async select(categoryId: number = ZERO): Promise<void> {
-    await this.tryToSelect(categoryId);
+  public async updatePage(): Promise<void> {
+    throw new ProgerError('This method cannot be called');
   }
 
 }

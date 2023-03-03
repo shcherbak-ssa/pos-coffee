@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import type { MenuItem } from 'primereact/menuitem';
 import { Menubar } from 'primereact/menubar';
 
-import { EMPTY_STRING, ZERO } from 'shared/constants';
+import { EMPTY_STRING, IS_ACTIVE_CLASSNAME, ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 
 import type { CartController, CartStore } from '@app/shared/types';
-import { ControllerName, IS_ACTIVE_CLASSNAME, StoreName } from '@app/shared/constants';
+import { ControllerName, StoreName } from '@app/shared/constants';
 import { ScrollPanel } from 'primereact/scrollpanel';
 
 export function CartCategoriesContainer() {

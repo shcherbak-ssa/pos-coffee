@@ -9,18 +9,22 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.digitazon.poscoffee.models.Category;
 import com.digitazon.poscoffee.models.Order;
 import com.digitazon.poscoffee.models.OrderLine;
-import com.digitazon.poscoffee.models.PaymentMethod;
 import com.digitazon.poscoffee.models.Product;
 import com.digitazon.poscoffee.models.ProductVariant;
+import com.digitazon.poscoffee.models.Settings;
 import com.digitazon.poscoffee.models.User;
-import com.digitazon.poscoffee.models.UserType;
+import com.digitazon.poscoffee.models.constants.Currency;
+import com.digitazon.poscoffee.models.constants.PaymentMethod;
+import com.digitazon.poscoffee.models.constants.UserType;
 import com.digitazon.poscoffee.models.helpers.ErrorResponse;
+import com.digitazon.poscoffee.models.helpers.PageResponse;
 import com.digitazon.poscoffee.models.helpers.client.ClientCategory;
 import com.digitazon.poscoffee.models.helpers.client.ClientOrder;
 import com.digitazon.poscoffee.models.helpers.client.ClientOrderLine;
@@ -28,12 +32,14 @@ import com.digitazon.poscoffee.models.helpers.client.ClientOrderUser;
 import com.digitazon.poscoffee.models.helpers.client.ClientProduct;
 import com.digitazon.poscoffee.models.helpers.client.ClientProductCategory;
 import com.digitazon.poscoffee.models.helpers.client.ClientProductVariant;
+import com.digitazon.poscoffee.models.helpers.client.ClientSettings;
 import com.digitazon.poscoffee.models.helpers.client.ClientUser;
 import com.digitazon.poscoffee.models.helpers.config.ConfigCategory;
 import com.digitazon.poscoffee.models.helpers.config.ConfigOrder;
 import com.digitazon.poscoffee.models.helpers.config.ConfigOrderLine;
 import com.digitazon.poscoffee.models.helpers.config.ConfigProduct;
 import com.digitazon.poscoffee.models.helpers.config.ConfigProductVariant;
+import com.digitazon.poscoffee.models.helpers.config.ConfigSettings;
 import com.digitazon.poscoffee.models.helpers.config.ConfigUser;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.OrdersConstants;
@@ -63,9 +69,31 @@ public class AppConfig {
     return new ServiceHelpers(entityName);
   }
 
+  @Bean
+  @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+  public <T, C extends Object> PageResponse<C> pageResponse(Page<T> page, List<C> clientEntities) {
+    return PageResponse.<C>builder()
+      .entities(clientEntities)
+      .page(page.getNumber())
+      .size(page.getSize())
+      .total(page.getTotalElements())
+      .totalPages(page.getTotalPages())
+      .build();
+  }
+
   /**
    * Entity to Client
    */
+
+  @Bean
+  @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+  public ClientSettings clientSettings(Settings settings) {
+    return ClientSettings.builder()
+      .id(settings.getId())
+      .currency(settings.getCurrency().getName().name())
+      .taxes(settings.getTaxes())
+      .build();
+  }
 
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -173,6 +201,7 @@ public class AppConfig {
       .id(orderId)
       .number(number)
       .total(total)
+      .taxes(order.getTaxes())
       .lines(lines)
       .user(clientOrderUser)
       .createdAt(order.getCreatedAt())
@@ -207,6 +236,16 @@ public class AppConfig {
   /**
    * Client to Entity
    */
+
+  @Bean
+  @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+  public Settings settings(ClientSettings clientSettings, Currency currency) {
+    return Settings.builder()
+      .id(clientSettings.getId())
+      .currency(currency)
+      .taxes(clientSettings.getTaxes())
+      .build();
+  }
 
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -282,6 +321,7 @@ public class AppConfig {
 
     return Order.builder()
       .id(clientOrder.getId())
+      .taxes(clientOrder.getTaxes())
       .user(user)
       .lines(lines)
       .paymentMethod(paymentMethod)
@@ -314,6 +354,14 @@ public class AppConfig {
   /**
    * Config to Model
    */
+
+  @Bean
+  @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+  public Settings settingsFromConfigSettings(ConfigSettings configSettings) {
+    return Settings.builder()
+      .taxes(configSettings.getTaxes())
+      .build();
+  }
 
   @Bean
   @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -388,8 +436,10 @@ public class AppConfig {
       .collect(Collectors.toList());
 
     return Order.builder()
+      .taxes(order.getTaxes())
       .lines(lines)
       .user(user)
+      .createdAt(order.getCreatedAt())
       .build();
   }
 

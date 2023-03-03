@@ -25,9 +25,12 @@ async function setup(currentUser: UserSchema): Promise<void> {
   Context.setLoader(LoaderService.create());
 
   await Context.loadController(ControllerName.APP);
+  await Context.loadController(ControllerName.CART);
   await Context.loadStore(StoreName.APP);
+  await Context.loadStore(StoreName.CART);
 
   const appController = Context.getController(ControllerName.APP) as AppController;
   await appController.setManager(currentUser);
   await appController.loadData();
+  await appController.loadSettings();
 }

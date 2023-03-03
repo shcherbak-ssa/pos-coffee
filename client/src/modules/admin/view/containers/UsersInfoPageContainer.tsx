@@ -17,7 +17,7 @@ export function UsersInfoPageContainer({ validationError }: Props) {
   const { state: { isEditMode } } = useStore(StoreName.APP) as AppStore;
   const { state: { selected: selectedUser }, draft: draftUser } = useStore(StoreName.USERS) as UsersStore;
 
-  function drawAddressCard(): React.ReactNode {
+  function renderAddressCard(): React.ReactNode {
     if (selectedUser.address) {
       return (
         <AddressCard
@@ -43,7 +43,7 @@ export function UsersInfoPageContainer({ validationError }: Props) {
         isEditMode={isEditMode}
       />
 
-      { drawAddressCard() }
+      { renderAddressCard() }
     </InfoPageWrapper>
   );
 

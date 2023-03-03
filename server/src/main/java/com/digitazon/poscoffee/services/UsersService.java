@@ -14,20 +14,22 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.User;
-import com.digitazon.poscoffee.models.UserType;
-import com.digitazon.poscoffee.models.helpers.UsersFilter;
+import com.digitazon.poscoffee.models.constants.UserType;
+import com.digitazon.poscoffee.models.helpers.PageResponse;
 import com.digitazon.poscoffee.models.helpers.client.ClientUser;
+import com.digitazon.poscoffee.models.helpers.filters.UsersFilter;
 import com.digitazon.poscoffee.repositories.UsersRepository;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.UsersConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
-import com.digitazon.poscoffee.shared.exceptions.ProgerException;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
 import com.digitazon.poscoffee.shared.helpers.Helpers;
 import com.digitazon.poscoffee.shared.types.BaseServiceHelpers;
@@ -90,13 +92,34 @@ public class UsersService {
       .collect(Collectors.toList());
   }
 
-  public ClientUser createUser(ClientUser userToCreate) throws ProgerException, AlreadyExistException {
+  public PageResponse<ClientUser> getUsersByPage(UsersFilter filter) {
+    final Page<User> usersPage = this.repository.findAll(
+      UsersService.filter(filter, this.userTypesService),
+      PageRequest.of(filter.getPage(), filter.getPageSize())
+    );
+
+    if (usersPage.hasContent()) {
+      return this.convertToPageResponse(usersPage, usersPage.getContent());
+    }
+
+    return this.convertToPageResponse(usersPage, new ArrayList<User>());
+  }
+
+  public List<ClientUser> searchUsers(String searchString) {
+    final List<User> users = this.repository.search(searchString);
+
+    return users
+      .stream()
+      .map((user) -> this.convertToClientUser(user, false))
+      .collect(Collectors.toList());
+  }
+
+  public ClientUser createUser(ClientUser userToCreate) throws AlreadyExistException {
     final User user = this.convertToUser(userToCreate);
     final String password = Helpers.generatePassword();
     user.setPassword(password);
 
     final User createdUser = this.createUser(user);
-    // @TODO: add email notification
 
     return this.convertToClientUser(createdUser, true);
   }
@@ -108,6 +131,7 @@ public class UsersService {
     password = this.encoder.encode(password);
 
     userToCreate.setPassword(password);
+    userToCreate.setIsArchived(false);
 
     return this.repository.save(userToCreate);
   }
@@ -140,10 +164,19 @@ public class UsersService {
     return (ClientUser) this.context.getBean("clientUser", user, loadAddress);
   }
 
-  private User convertToUser(ClientUser user) throws ProgerException {
+  private User convertToUser(ClientUser user) {
     final UserType userType = this.userTypesService.getByName(user.getType());
 
     return (User) this.context.getBean("user", user, userType);
+  }
+
+  private PageResponse<ClientUser> convertToPageResponse(Page<User> page, List<User> users) {
+    final List<ClientUser> clientUsers = users
+      .stream()
+      .map((user) -> this.convertToClientUser(user, false))
+      .collect(Collectors.toList());
+
+    return (PageResponse<ClientUser>) this.context.getBean("pageResponse", page, clientUsers);
   }
 
   private void mergeWithUpdates(User user, ClientUser updates) {

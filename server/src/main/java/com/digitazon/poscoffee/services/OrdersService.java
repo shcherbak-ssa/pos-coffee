@@ -13,6 +13,8 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -20,14 +22,14 @@ import org.springframework.stereotype.Service;
 import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.Order;
 import com.digitazon.poscoffee.models.OrderLine;
-import com.digitazon.poscoffee.models.PaymentMethod;
-import com.digitazon.poscoffee.models.helpers.OrdersFilter;
+import com.digitazon.poscoffee.models.constants.PaymentMethod;
+import com.digitazon.poscoffee.models.helpers.PageResponse;
 import com.digitazon.poscoffee.models.helpers.client.ClientOrder;
+import com.digitazon.poscoffee.models.helpers.filters.OrdersFilter;
 import com.digitazon.poscoffee.repositories.OrderLinesRepository;
 import com.digitazon.poscoffee.repositories.OrdersRepository;
-import com.digitazon.poscoffee.shared.exceptions.ProgerException;
+import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
-import com.digitazon.poscoffee.shared.helpers.Helpers;
 
 @Service
 public class OrdersService {
@@ -57,7 +59,9 @@ public class OrdersService {
 
   public List<ClientOrder> getOrders(OrdersFilter filter) {
     final List<Order> orders = this.repository.findAll(
-      OrdersService.filter(filter), Sort.by(Sort.Direction.DESC, "id"));
+      OrdersService.filter(filter),
+      Sort.by(Sort.Direction.DESC, AppConstants.ID_FIELD)
+    );
 
     return orders
       .stream()
@@ -65,7 +69,20 @@ public class OrdersService {
       .collect(Collectors.toList());
   }
 
-  public ClientOrder createOrder(ClientOrder clientOrder) throws ProgerException {
+  public PageResponse<ClientOrder> getOrdersByPage(OrdersFilter filter) {
+    final Page<Order> ordersPage = this.repository.findAll(
+      OrdersService.filter(filter),
+      PageRequest.of(filter.getPage(), filter.getPageSize(), Sort.by(Sort.Direction.DESC, AppConstants.ID_FIELD))
+    );
+
+    if (ordersPage.hasContent()) {
+      return this.convertToPageResponse(ordersPage, ordersPage.getContent());
+    }
+
+    return this.convertToPageResponse(ordersPage, new ArrayList<Order>());
+  }
+
+  public ClientOrder createOrder(ClientOrder clientOrder) {
     final Order order = this.convertToOrder(clientOrder);
     final List<OrderLine> lines = new ArrayList<OrderLine>();
 
@@ -82,6 +99,10 @@ public class OrdersService {
   }
 
   public Order createOrder(Order order) {
+    if (order.getCreatedAt() == null) {
+      order.setCreatedAt(new Date());
+    }
+
     return this.repository.save(order);
   }
 
@@ -93,11 +114,19 @@ public class OrdersService {
     return (ClientOrder) this.context.getBean("clientOrder", order);
   }
 
-  private Order convertToOrder(ClientOrder clientOrder) throws ProgerException {
-    final PaymentMethod paymentMethod
-      = Helpers.converPaymentMethodToEnumValue(this.paymentMethodsService, clientOrder.getPaymentMethod());
+  private Order convertToOrder(ClientOrder clientOrder) {
+    final PaymentMethod paymentMethod = this.paymentMethodsService.getByName(clientOrder.getPaymentMethod());
 
     return (Order) this.context.getBean("order", clientOrder, paymentMethod);
+  }
+
+  private PageResponse<ClientOrder> convertToPageResponse(Page<Order> page, List<Order> orders) {
+    final List<ClientOrder> clientOrders = orders
+      .stream()
+      .map(this::convertToClientOrder)
+      .collect(Collectors.toList());
+
+    return (PageResponse<ClientOrder>) this.context.getBean("pageResponse", page, clientOrders);
   }
 
   private static Specification<Order> filter(OrdersFilter filter) {

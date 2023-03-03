@@ -1,4 +1,4 @@
-import type { ApiService, CategorySchema, NotificationService } from 'shared/types';
+import type { ApiService, NotificationService } from 'shared/types';
 import { EntityName, PaymentMethodType, ZERO } from 'shared/constants';
 import { AppError } from 'shared/errors';
 import { BaseController } from 'lib/base-controller';
@@ -9,14 +9,10 @@ import type {
   AppStoreActions,
   CartController as BaseCartController,
   CartOrderLineSchema as BaseCartOrderLineSchema,
-  CartOrderSchema,
-  CartOrderUpdates,
   CartPayload,
-  CartProductSchema,
   CartService as BaseCartService,
   CartStore,
   CartStoreActions,
-  UserSchema,
 } from '@app/shared/types';
 import { ApiEndpoint, PRODUCT_COUNT_STEP, StoreName } from '@app/shared/constants';
 import { CartOrderLineSchema } from '@app/models/cart';
@@ -57,7 +53,7 @@ export class CartController extends BaseController implements BaseCartController
 
       const apiService: ApiService = await this.getApiService();
       await apiService
-        .addBody(this.service.parseOrder(order, cashier))
+        .addBody(this.service.parseOrder(order, cashier, appStore.state.settings.taxes))
         .post(ApiEndpoint.APP_ORDERS);
 
       await this.loadMenu();
@@ -130,6 +126,11 @@ export class CartController extends BaseController implements BaseCartController
   public async setActiveCategoryId(categoryId: number = ZERO): Promise<void> {
     const store = await this.getStore() as CartStoreActions;
     store.setActiveCategoryId(categoryId);
+  }
+
+  public async setSearchString(searchString: string): Promise<void> {
+    const store = await this.getStore() as CartStoreActions;
+    store.setSearchString(searchString);
   }
 
   public async loadMenu(): Promise<void> {

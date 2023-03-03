@@ -1,5 +1,6 @@
 package com.digitazon.poscoffee.services;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -12,20 +13,26 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.digitazon.poscoffee.configs.AppConfig;
 import com.digitazon.poscoffee.models.Category;
 import com.digitazon.poscoffee.models.Product;
-import com.digitazon.poscoffee.models.helpers.ProductsFilter;
+import com.digitazon.poscoffee.models.helpers.PageResponse;
+import com.digitazon.poscoffee.models.helpers.SearchProductsResult;
 import com.digitazon.poscoffee.models.helpers.client.ClientCategory;
 import com.digitazon.poscoffee.models.helpers.client.ClientProduct;
+import com.digitazon.poscoffee.models.helpers.filters.ProductsFilter;
 import com.digitazon.poscoffee.repositories.ProductsRepository;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.ProductsConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
+import com.digitazon.poscoffee.shared.helpers.LocalResourceLoader;
 import com.digitazon.poscoffee.shared.types.BaseServiceHelpers;
 
 @Service
@@ -38,10 +45,15 @@ public class ProductsService {
   @Autowired
   private ProductsRepository repository;
 
-  private BaseServiceHelpers helpers;
+  @Autowired
+  private JdbcTemplate jdbcTemplate;
 
-  public ProductsService() {
+  private BaseServiceHelpers helpers;
+  private String searchProductsSql;
+
+  public ProductsService(@Autowired LocalResourceLoader localResourceLoader) throws IOException {
     this.helpers = (BaseServiceHelpers) this.context.getBean("serviceHelpers", AppConstants.Entity.PRODUCT);
+    this.searchProductsSql = localResourceLoader.loadSqlScript(AppConstants.SQL_SEARCH_PRODUCTS);
   }
 
   public boolean isProductExist(String sku) {
@@ -75,6 +87,25 @@ public class ProductsService {
       .stream()
       .map(this::convertToClientProduct)
       .collect(Collectors.toList());
+  }
+
+  public PageResponse<ClientProduct> getProductsByPage(ProductsFilter filter) {
+    final Page<Product> productsPage = this.repository.findAll(
+      ProductsService.filter(filter),
+      PageRequest.of(filter.getPage(), filter.getPageSize())
+    );
+
+    if (productsPage.hasContent()) {
+      return this.convertToPageResponse(productsPage, productsPage.getContent());
+    }
+
+    return this.convertToPageResponse(productsPage, new ArrayList<Product>());
+  }
+
+  public List<SearchProductsResult> searchProducts(String searchString) throws IOException {
+    final String searchSql = this.searchProductsSql.replace(AppConstants.SQL_REPLACE_SYMBOL, searchString);
+
+    return this.jdbcTemplate.query(searchSql, SearchProductsResult::parse);
   }
 
   public void countProductsByCategories(List<ClientCategory> categories) {
@@ -143,6 +174,15 @@ public class ProductsService {
 
   private Product convertToProduct(ClientProduct product) {
     return (Product) this.context.getBean("product", product);
+  }
+
+  private PageResponse<ClientProduct> convertToPageResponse(Page<Product> page, List<Product> products) {
+    final List<ClientProduct> clientProducts = products
+      .stream()
+      .map(this::convertToClientProduct)
+      .collect(Collectors.toList());
+
+    return (PageResponse<ClientProduct>) this.context.getBean("pageResponse", page, clientProducts);
   }
 
   private void mergeWithUpdates(Product product, ClientProduct updates) {

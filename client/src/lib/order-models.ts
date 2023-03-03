@@ -9,6 +9,7 @@ export class OrderSchema implements BaseOrderSchema {
   public id: number;
   public number: string;
   public total: number;
+  public taxes: number;
   public lines: BaseOrderLineSchema[];
   public user: BaseOrderUserSchema;
   public paymentMethod: PaymentMethodType;
@@ -18,6 +19,7 @@ export class OrderSchema implements BaseOrderSchema {
     this.id = schema?.id || ZERO;
     this.number = schema?.number || EMPTY_STRING;
     this.total = schema?.total || ZERO;
+    this.taxes = schema?.taxes || ZERO;
     this.lines = schema?.lines ? schema.lines.map(OrderLineSchema.create) : [];
     this.user = OrderUserSchema.create(schema?.user);
     this.paymentMethod = schema?.paymentMethod || PaymentMethodType.CARD;

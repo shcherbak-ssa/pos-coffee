@@ -1,8 +1,14 @@
 import { proxy } from 'valtio';
 
-import type { ProductSchema as BaseProductSchema, StoreService as BaseStoreService } from 'shared/types';
+import type {
+  ProductSchema as BaseProductSchema,
+  StoreService as BaseStoreService,
+  Page as BasePage,
+  PageUpdates,
+} from 'shared/types';
 import { EntityName } from 'shared/constants';
 import { StoreService } from 'services/store';
+import { Page } from 'lib/page-model';
 
 import type {
   ProductDraft,
@@ -18,12 +24,21 @@ export const productsStore: ProductsStore & ProductsStoreActions = {
   state: proxy({
     list: [],
     selected: ProductSchema.create(),
+    page: Page.create<BaseProductSchema>(),
   }),
 
   draft: createDraft(),
 
   add(products: BaseProductSchema[]): void {
     createStoreService().add(products);
+  },
+
+  setPage(page: BasePage<BaseProductSchema>): void {
+    createStoreService().setPage(page);
+  },
+
+  updatePage(page: PageUpdates<BaseProductSchema>): void {
+    createStoreService().updatePage(page);
   },
 
   save(product: BaseProductSchema): void {

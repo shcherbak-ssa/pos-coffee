@@ -5,7 +5,7 @@ import { InputWrapper } from 'view/components/InputWrapper';
 import { CardHeading } from 'view/components/CardHeading';
 
 import type { CardWithInputsProps, ProductDraft } from '@admin/shared/types';
-import { CardWrapper } from '@admin/view/components/CardWrapper';
+import { CardWrapper } from 'view/components/CardWrapper';
 
 export type Props = CardWithInputsProps<ProductSchema, ProductDraft>;
 

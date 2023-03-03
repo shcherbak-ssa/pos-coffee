@@ -6,7 +6,7 @@ import { ZERO } from 'shared/constants';
 import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 
-import type { CartController, CartOrderLineSchema, CartStore } from '@app/shared/types';
+import type { AppStore, CartController, CartOrderLineSchema, CartStore } from '@app/shared/types';
 import { ControllerName, PRODUCT_COUNT_STEP, StoreName } from '@app/shared/constants';
 import { CartPaymentPopupContainer } from '@app/view/containers/CartPaymentPopupContainer';
 import { CartOrderLine } from '@app/view/components/CartOrderLine';
@@ -14,6 +14,7 @@ import { CardListWrapper } from '@app/view/components/CardListWrapper';
 
 export function CartOrderContainer() {
 
+  const { state: { settings } } = useStore(StoreName.APP) as AppStore;
   const { state: { order } } = useStore(StoreName.CART) as CartStore;
   const cartController = useController(ControllerName.CART) as CartController;
 
@@ -50,6 +51,7 @@ export function CartOrderContainer() {
                 line={line}
                 addLine={addLine}
                 subtractLine={subtractLine}
+                currency={settings.currency}
                 editable
               />
             ))

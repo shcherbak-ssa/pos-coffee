@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,9 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
+import com.digitazon.poscoffee.models.constants.PaymentMethod;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
 import com.digitazon.poscoffee.shared.constants.OrdersConstants;
 
@@ -30,7 +27,6 @@ import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = AppConstants.DatabaseTable.ORDERS)
-@EntityListeners(AuditingEntityListener.class)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -41,9 +37,7 @@ public class Order {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @OneToMany(
-    fetch = FetchType.EAGER
-  )
+  @OneToMany(fetch = FetchType.EAGER)
   @JoinTable(
     name = AppConstants.DatabaseTable.ORDER_LINE_JOIN,
     joinColumns = @JoinColumn(name = OrdersConstants.ORDER_JOIN_COLUMN),
@@ -54,7 +48,7 @@ public class Order {
   @OneToOne
   private User user;
 
-  @CreatedDate
+  private Byte taxes;
   private Date createdAt;
 
   @ManyToOne

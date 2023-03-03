@@ -5,25 +5,27 @@ import { Menu } from 'primereact/menu';
 import { Menubar } from 'primereact/menubar';
 import { PrimeIcons } from 'primereact/api';
 
+import { IS_ACTIVE_CLASSNAME } from 'shared/constants';
 import { logout } from 'shared/helpers/logout';
 import { type NavigateFunctionHook, useNavigateWithParams } from 'view/hooks/navigate';
-import { IconButton } from 'view/components/IconButton';
+import { useStore } from 'view/hooks/store';
+import { useController } from 'view/hooks/controller';
 import { UsersImage } from 'view/components/UsersImage';
 
-import type { AppComponentProps } from '@admin/shared/types';
-import { PagePath } from '@admin/shared/constants';
+import type { AppStore, AppController } from '@admin/shared/types';
+import { ControllerName, PagePath, StoreName } from '@admin/shared/constants';
+import { AppSearchContainer } from '@admin/view/containers/AppSearchContainer';
 import { AppHeaderLogo } from '@admin/view/components/AppHeaderLogo';
 
-export type Props = AppComponentProps;
-
-export function AppHeaderContainer({ appStore, appController }: Props) {
-
-  const { isAppMenuOpen, currentPage, currentUser } = appStore.state;
+export function AppHeaderContainer() {
 
   const userMenu = useRef<Menu>(null);
 
   const location: Location = useLocation();
   const navigate: NavigateFunction = useNavigate();
+
+  const { state: { isAppMenuOpen, currentPage, currentUser } } = useStore(StoreName.APP) as AppStore;
+  const appController = useController(ControllerName.APP) as AppController;
 
   const [ headerMenuItems, setHeaderMenuItems ] = useState<MenuItem[]>([]);
   const toInfoPage: NavigateFunctionHook = useNavigateWithParams(PagePath.USERS_INFO);
@@ -52,7 +54,7 @@ export function AppHeaderContainer({ appStore, appController }: Props) {
         currentPage.headerMenuItem
           .map(({ label, to }) => ({
             label,
-            className: location.pathname === to ? 'is-active' : '',
+            className: location.pathname === to ? IS_ACTIVE_CLASSNAME : '',
             command: () => {
               navigate(to);
             },
@@ -95,10 +97,7 @@ export function AppHeaderContainer({ appStore, appController }: Props) {
       </div>
 
       <div className="flex items-center gap-6">
-        <IconButton
-          icon={PrimeIcons.SEARCH}
-          click={() => {}}
-        />
+        <AppSearchContainer />
 
         <div className="flex items-center click" onClick={toggleUserMenu}>
           <UsersImage

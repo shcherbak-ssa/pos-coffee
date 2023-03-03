@@ -79,8 +79,6 @@ export function EntityTableContainer<T extends Entity>({
       >
         { columnsProps.map((props) => <Column key={props.field} {...props} />) }
       </DataTable>
-
-      {/* @TODO: implement pagination */}
     </div>
   );
 

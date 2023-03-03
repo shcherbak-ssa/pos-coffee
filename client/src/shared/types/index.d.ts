@@ -1,4 +1,4 @@
-import type { EntityName, ErrorType, PaymentMethodType, UserType } from 'shared/constants';
+import type { Currency, EntityName, ErrorType, PaymentMethodType, UserType } from 'shared/constants';
 
 /**
  * Helpers
@@ -33,6 +33,21 @@ export type PaymentMethod = {
   icon: string;
 }
 
+export type PageFilter = {
+  page: number;
+  pageSize: number;
+}
+
+export type Page<T> = {
+  entities: T[];
+  page: number;
+  size: number;
+  total: number;
+  totalPages: number;
+}
+
+export type PageUpdates<T> = Partial<Page<T>>;
+
 /**
  * Entities
  */
@@ -52,6 +67,12 @@ export type ValidationSchema<T> = {
 export type Token = {
   token: string;
   type: string;
+}
+
+export type SettingsSchema = {
+  id: number;
+  currency: Currency;
+  taxes: number;
 }
 
 export type UserSchema = BaseSchema & {
@@ -115,7 +136,7 @@ export type ProductVariantSchema = {
   id: number;
   sku: string;
   name: string;
-  price: number | null;
+  price: number;
   stock: number | null;
   stockPerTime: number | null;
   stockAlert: number | null;
@@ -125,6 +146,7 @@ export type OrderSchema = {
   id: number;
   number: string;
   total: number;
+  taxes: number;
   lines: OrderLineSchema[];
   user: OrderUserSchema;
   paymentMethod: PaymentMethodType;
@@ -184,13 +206,14 @@ export type ErrorObject<T> = {
 export type Controller = {}
 export type ControllerList = Map<string, Controller>;
 
-export interface CrudController<F = {}> extends Controller {
+export interface CrudController<F = {}, T = {}> extends Controller {
   loadById(entityId: number): Promise<boolean>;
   loadAll(filter?: F): Promise<boolean>;
   save(): Promise<boolean>;
   archive(entityId: number): Promise<boolean>;
   restore(entityId: number): Promise<boolean>;
   select(entityId?: number): Promise<void>;
+  updatePage(page: PageUpdates<T>): Promise<void>;
 }
 
 export type PayloadToGetById = {
@@ -237,6 +260,7 @@ export interface StoreEntityState<S = AnyType, E = AnyType, D = AnyType> extends
   readonly state: S & {
     list: E[];
     selected: E;
+    page: Page<E>;
   };
 
   draft: D;
@@ -244,6 +268,8 @@ export interface StoreEntityState<S = AnyType, E = AnyType, D = AnyType> extends
 
 export interface StoreCrud<T = AnyType> extends Store {
   add(entities: T[]): void;
+  setPage(page: Page<T>): void;
+  updatePage(page: PageUpdates<T>): void;
   save(entity: T): void;
   remove(entityId: number): void;
   selected: StoreSelected<T>;
@@ -287,6 +313,8 @@ export interface LoaderService {
 
 export interface StoreService<E> {
   add(entities: E[]): void;
+  setPage(page: Page<E>): void;
+  updatePage(page: PageUpdates<E>): void
   save(entity: E): void;
   remove(entityId: number): void;
   setSelected(entityId: number): void;

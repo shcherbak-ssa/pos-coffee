@@ -1,6 +1,7 @@
 export const APP_NAME: string = 'POS`Coffee';
 
 export const ZERO: number = 0;
+export const DEFAULT_PAGE_SIZE: number = 12;
 export const NOTIFICATION_LIFE: number = 7000;
 export const DOUBLE_STOCK_ALERT: number = 2;
 
@@ -11,6 +12,8 @@ export const QUERY_URL_SEPARATOR: string = '?';
 export const AUTHORIZATION_HEADER: string = 'Authorization';
 export const ROOT_PAGE_PATH: string = '/';
 export const CURRENT_USER_API_ENDPOINT: string = '/api/users';
+export const PRICE_WHOLE_DECIMAL_SPLITTER: string = '.';
+export const IS_ACTIVE_CLASSNAME: string = 'is-active';
 
 export enum UserType {
   ADMIN = 'ADMIN',
@@ -22,6 +25,11 @@ export enum PaymentMethodType {
   CASH = 'CASH',
   CARD = 'CARD',
   MISC = 'MISC',
+}
+
+export enum Currency {
+  USD = 'USD',
+  EUR = 'EUR',
 }
 
 export enum ErrorName {

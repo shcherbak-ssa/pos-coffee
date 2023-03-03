@@ -11,24 +11,29 @@ import com.digitazon.poscoffee.models.Address;
 import com.digitazon.poscoffee.models.Category;
 import com.digitazon.poscoffee.models.Order;
 import com.digitazon.poscoffee.models.OrderLine;
-import com.digitazon.poscoffee.models.PaymentMethod;
 import com.digitazon.poscoffee.models.Product;
 import com.digitazon.poscoffee.models.ProductVariant;
+import com.digitazon.poscoffee.models.Settings;
 import com.digitazon.poscoffee.models.User;
-import com.digitazon.poscoffee.models.UserType;
+import com.digitazon.poscoffee.models.constants.Currency;
+import com.digitazon.poscoffee.models.constants.PaymentMethod;
+import com.digitazon.poscoffee.models.constants.UserType;
 import com.digitazon.poscoffee.models.helpers.config.Config;
 import com.digitazon.poscoffee.models.helpers.config.ConfigCategory;
 import com.digitazon.poscoffee.models.helpers.config.ConfigOrder;
 import com.digitazon.poscoffee.models.helpers.config.ConfigOrderLine;
 import com.digitazon.poscoffee.models.helpers.config.ConfigProduct;
 import com.digitazon.poscoffee.models.helpers.config.ConfigProductVariant;
+import com.digitazon.poscoffee.models.helpers.config.ConfigSettings;
 import com.digitazon.poscoffee.models.helpers.config.ConfigUser;
 import com.digitazon.poscoffee.services.AddressService;
 import com.digitazon.poscoffee.services.CategoriesService;
+import com.digitazon.poscoffee.services.CurrenciesService;
 import com.digitazon.poscoffee.services.OrdersService;
 import com.digitazon.poscoffee.services.PaymentMethodsService;
 import com.digitazon.poscoffee.services.ProductVariantsService;
 import com.digitazon.poscoffee.services.ProductsService;
+import com.digitazon.poscoffee.services.SettingsService;
 import com.digitazon.poscoffee.services.UserTypesService;
 import com.digitazon.poscoffee.services.UsersService;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
@@ -43,13 +48,19 @@ public class DatabaseDataLoader {
     = new AnnotationConfigApplicationContext(AppConfig.class);
 
   @Autowired
-  private UsersService usersService;
-
-  @Autowired
   private UserTypesService userTypesService;
 
   @Autowired
   private PaymentMethodsService paymentMethodsService;
+
+  @Autowired
+  private CurrenciesService currenciesService;
+
+  @Autowired
+  private SettingsService settingsService;
+
+  @Autowired
+  private UsersService usersService;
 
   @Autowired
   private AddressService addressService;
@@ -67,20 +78,45 @@ public class DatabaseDataLoader {
   private OrdersService ordersService;
 
   public void loadConstants() {
+    this.log("# Load constants [START]");
+
     this.userTypesService.loadTypes();
+    this.log("  - loaded user types");
+
     this.paymentMethodsService.loadMethods();
+    this.log("  - loaded payment methods");
+
+    this.currenciesService.loadCurrencies();
+    this.log("  - loaded currencies");
+
+    this.log("# Load constants [END]");
   }
 
   public void loadConfigData(Config config) throws ProgerException, ResourceNotFoundException, AlreadyExistException {
+    this.log("# Load config [START]");
+
+    this.loadSettings(config.getSettings());
     this.loadUsers(config.getUsers());
     this.loadCategories(config.getCategories());
     this.loadProducts(config.getProducts());
     this.loadProductVariants(config.getProductVariants());
     this.loadOrderLines(config.getOrderLines());
     this.loadOrders(config.getOrders());
+
+    this.log("# Load config [END]");
   }
 
-  private void loadUsers(List<ConfigUser> users) throws ProgerException, AlreadyExistException {
+  private void loadSettings(ConfigSettings configSettings) {
+    final Settings settings = (Settings) this.context.getBean("settingsFromConfigSettings", configSettings);
+
+    final Currency currency = this.currenciesService.getByName(configSettings.getCurrency());
+    settings.setCurrency(currency);
+
+    this.settingsService.createSettings(settings);
+    this.log("  - loaded settings");
+  }
+
+  private void loadUsers(List<ConfigUser> users) throws AlreadyExistException {
     for (ConfigUser configUser : users) {
       final User user = (User) this.context.getBean("userFromConfigUser", configUser);
 
@@ -92,6 +128,8 @@ public class DatabaseDataLoader {
 
       this.usersService.createUser(user);
     }
+
+    this.log(String.format("  - loaded users (%o)", users.size()));
   }
 
   private void loadCategories(List<ConfigCategory> categories) throws AlreadyExistException {
@@ -100,6 +138,8 @@ public class DatabaseDataLoader {
 
       this.categoriesService.createCategory(category);
     }
+
+    this.log(String.format("  - loaded categories (%o)", categories.size()));
   }
 
   private void loadProducts(List<ConfigProduct> products) throws AlreadyExistException {
@@ -113,6 +153,8 @@ public class DatabaseDataLoader {
 
       this.productsService.createProduct(product);
     }
+
+    this.log(String.format("  - loaded products (%o)", products.size()));
   }
 
   private void loadProductVariants(List<ConfigProductVariant> variants) throws AlreadyExistException {
@@ -126,30 +168,41 @@ public class DatabaseDataLoader {
 
       this.productVariantsService.createVariant(productVariant);
     }
+
+    this.log(String.format("  - loaded product variants (%o)", variants.size()));
   }
 
   private void loadOrderLines(List<ConfigOrderLine> lines) throws ResourceNotFoundException {
     for (ConfigOrderLine configLine : lines) {
       final Product product = this.productsService.findProductById(configLine.getProduct());
-      final ProductVariant variant = this.productVariantsService.findVariantById(configLine.getVariant());
+      final ProductVariant variant = configLine.getVariant() == null
+        ? null
+        : this.productVariantsService.findVariantById(configLine.getVariant());
 
       final OrderLine line = (OrderLine)
         this.context.getBean("orderLineFromConfigOrderLine", configLine, product, variant);
 
       this.ordersService.createOrderLine(line);
     }
+
+    this.log(String.format("  - loaded order lines (%o)", lines.size()));
   }
 
   private void loadOrders(List<ConfigOrder> orders) throws ProgerException {
     for (ConfigOrder configOrder : orders) {
       final Order order = (Order) this.context.getBean("orderFromConfigOrder", configOrder);
 
-      final PaymentMethod paymentMethod
-        = Helpers.converPaymentMethodToEnumValue(this.paymentMethodsService, configOrder.getPaymentMethod());
+      final PaymentMethod paymentMethod = this.paymentMethodsService.getByName(configOrder.getPaymentMethod());
       order.setPaymentMethod(paymentMethod);
 
       this.ordersService.createOrder(order);
     }
+
+    this.log(String.format("  - loaded orders (%o)", orders.size()));
+  }
+
+  private void log(String message) {
+    System.out.println(message);
   }
 
 }

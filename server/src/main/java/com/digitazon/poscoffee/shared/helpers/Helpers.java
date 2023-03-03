@@ -5,42 +5,12 @@ import java.util.Random;
 
 import com.digitazon.poscoffee.models.Order;
 import com.digitazon.poscoffee.models.OrderLine;
-import com.digitazon.poscoffee.models.PaymentMethod;
 import com.digitazon.poscoffee.models.Product;
 import com.digitazon.poscoffee.models.ProductVariant;
-import com.digitazon.poscoffee.services.PaymentMethodsService;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
-import com.digitazon.poscoffee.shared.constants.OrdersConstants;
 import com.digitazon.poscoffee.shared.constants.UsersConstants;
-import com.digitazon.poscoffee.shared.exceptions.ProgerException;
 
 public class Helpers {
-
-  public static final PaymentMethod converPaymentMethodToEnumValue(
-    PaymentMethodsService paymentMethodsService,
-    String paymentMethod
-  ) throws ProgerException {
-
-    OrdersConstants.PaymentMethod method = null;
-
-    switch (paymentMethod) {
-      case OrdersConstants.ConfigPaymentMethod.CASH:
-        method = OrdersConstants.PaymentMethod.CASH;
-        break;
-      case OrdersConstants.ConfigPaymentMethod.CARD:
-        method = OrdersConstants.PaymentMethod.CARD;
-        break;
-      case OrdersConstants.ConfigPaymentMethod.MISC:
-        method = OrdersConstants.PaymentMethod.MISC;
-        break;
-    }
-
-    if (method == null) {
-      throw new ProgerException(String.format("Unknown payment method %s", paymentMethod));
-    }
-
-    return paymentMethodsService.getByName(method);
-  }
 
   public static String generatePassword() {
     final int passwordLength = UsersConstants.MIN_PASSWORD_LENGTH;
@@ -59,7 +29,7 @@ public class Helpers {
   }
 
   public static float getOrderLinePrice(Product product, ProductVariant variant) {
-    return variant.getPrice() == null
+    return variant == null || variant.getPrice() == AppConstants.ZERO
       ? product.getPrice()
       : variant.getPrice();
   }
@@ -72,7 +42,13 @@ public class Helpers {
       total += line.getCount() * line.getPrice();
     }
 
-    return total;
+    return total + Helpers.calculateTaxes(order, total);
+  }
+
+  public static float calculateTaxes(Order order, float total) {
+    return (float) Math.round(
+      (total * order.getTaxes() / AppConstants.ONE_HUNDRED) * AppConstants.ONE_HUNDRED
+    ) / AppConstants.ONE_HUNDRED;
   }
 
 }

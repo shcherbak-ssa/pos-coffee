@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 
 import com.digitazon.poscoffee.models.Product;
 import com.digitazon.poscoffee.models.ProductVariant;
-import com.digitazon.poscoffee.models.helpers.ProductsFilter;
 import com.digitazon.poscoffee.models.helpers.client.ClientOrderLine;
 import com.digitazon.poscoffee.models.helpers.client.ClientProduct;
 import com.digitazon.poscoffee.models.helpers.client.ClientProductVariant;
+import com.digitazon.poscoffee.models.helpers.filters.ProductsFilter;
 import com.digitazon.poscoffee.shared.constants.ProductsConstants;
 import com.digitazon.poscoffee.shared.exceptions.AlreadyExistException;
 import com.digitazon.poscoffee.shared.exceptions.ResourceNotFoundException;
