@@ -146,7 +146,11 @@ function generateConfig(): Config {
     orderLines: [],
   };
 
-  const [ orderLines, orderLinesCountPerDay ] = generateOrderLines(config.products, config.productVariants);
+  const [ orderLines, orderLinesCountPerDay ] = generateOrderLines(
+    config.products.filter(({ isAvailable, isArchived }) => isAvailable && !isArchived),
+    config.productVariants,
+  );
+
   config.orderLines = [ ...orderLines ];
   config.orders = generateOrders(orderLinesCountPerDay);
 

@@ -10,6 +10,7 @@ public class AppConstants {
 
   public static final String EMPTY_STRING = "";
   public static final String SQL_CONTENT_JOIN = "\n";
+  public static final String SQL_REPLACE_SYMBOL = "?";
   public static final String PASSWORD_GENERATOR_HELPER_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   public static final String ID_FIELD = "id";
 
@@ -20,6 +21,7 @@ public class AppConstants {
   public static final String SQL_AVERAGE_INCOME_FILENAME = "sql/average-income.sql";
   public static final String SQL_AVERAGE_ORDERS_FILENAME = "sql/average-orders.sql";
   public static final String SQL_COUNTS_PER_DAY = "sql/counts-per-day.sql";
+  public static final String SQL_PRODUCTS_COUNT = "sql/products_count.sql";
 
   public static final String AUTHORIZATION_HEADER = "Authorization";
   public static final String AUTHORIZATION_TYPE = "Bearer";
@@ -99,6 +101,10 @@ public class AppConstants {
     SERVER,
     CLIENT,
     VALIDATION
+  }
+
+  public static enum Sort {
+    ASC, DESC
   }
 
   public static interface ValidationGroups {

@@ -4,12 +4,13 @@ import { Chart } from 'primereact/chart';
 
 import { useStore } from 'view/hooks/store';
 import { CardWrapper } from 'view/components/CardWrapper';
+import { CardHeading } from 'view/components/CardHeading';
 
 import type { AppStore } from '@admin/shared/types';
 import { StoreName } from '@admin/shared/constants';
 import { getChartData, getChartOptions } from '@admin/shared/helpers/chart';
 
-export function HomePageChartContainer() {
+export function HomeChartContainer() {
 
   const [ chartData, setChartData ] = useState<ChartData>();
   const [ chartOptions, setChartOptions ] = useState<ChartOptions>();
@@ -23,6 +24,7 @@ export function HomePageChartContainer() {
     const { countsPerDay } = statistics;
 
     setChartOptions(options);
+
     setChartData({
       labels: countsPerDay.map(({ workDay }) => new Date(workDay).toLocaleDateString()),
       datasets: [
@@ -40,7 +42,13 @@ export function HomePageChartContainer() {
 
   return (
     <CardWrapper className="full">
-      <Chart type="line" data={chartData} options={chartOptions} />
+      <CardHeading heading="Income & Orders" />
+
+      <Chart
+        type="line"
+        data={chartData}
+        options={chartOptions}
+      />
     </CardWrapper>
   );
 

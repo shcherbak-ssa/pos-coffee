@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.digitazon.poscoffee.models.helpers.statistics.CountPerDay;
+import com.digitazon.poscoffee.models.helpers.statistics.ProductsCount;
 import com.digitazon.poscoffee.models.helpers.statistics.Statistics;
 import com.digitazon.poscoffee.models.helpers.statistics.TotalOrders;
 import com.digitazon.poscoffee.shared.constants.AppConstants;
@@ -37,6 +38,7 @@ public class StatisticsService {
     tasks.add(this.averageIncome(statistics, this));
     tasks.add(this.averageOrders(statistics, this));
     tasks.add(this.countsPerDay(statistics, this));
+    tasks.add(this.productsCounts(statistics, this));
 
     final ExecutorService executor = Executors.newFixedThreadPool(tasks.size());
     final Future<Statistics> result = executor.invokeAll(tasks).get(0);
@@ -92,6 +94,18 @@ public class StatisticsService {
     };
   }
 
+  private Callable<Statistics> productsCounts(Statistics statistics, StatisticsService service) {
+    return new Callable<Statistics>() {
+
+      @Override
+      public Statistics call() throws Exception {
+        service.loadProductsCounts(statistics);
+        return statistics;
+      }
+
+    };
+  }
+
   private void loadTotalOrders(Statistics statistics) throws IOException {
     final String sqlScript = this.localResourceLoader.loadSqlScript(AppConstants.SQL_ORDERS_TOTAL_FILENAME);
     final TotalOrders totalStatistics = this.jdbcTemplate.queryForObject(sqlScript, TotalOrders::parse);
@@ -118,6 +132,19 @@ public class StatisticsService {
     final List<CountPerDay> counsPerDay = this.jdbcTemplate.query(sqlScript, CountPerDay::parse);
 
     statistics.setCountsPerDay(counsPerDay);
+  }
+
+  private void loadProductsCounts(Statistics statistics) throws IOException, DataAccessException {
+    final String sqlScript = this.localResourceLoader.loadSqlScript(AppConstants.SQL_PRODUCTS_COUNT);
+
+    final String sqlAsc = sqlScript.replace(AppConstants.SQL_REPLACE_SYMBOL, AppConstants.Sort.ASC.name());
+    final List<ProductsCount> topIgnored = this.jdbcTemplate.query(sqlAsc, ProductsCount::parse);
+
+    final String sqlDesc = sqlScript.replace(AppConstants.SQL_REPLACE_SYMBOL, AppConstants.Sort.DESC.name());
+    final List<ProductsCount> bestsellers = this.jdbcTemplate.query(sqlDesc, ProductsCount::parse);
+
+    statistics.setTopIgnored(topIgnored);
+    statistics.setBestsellers(bestsellers);
   }
 
 }

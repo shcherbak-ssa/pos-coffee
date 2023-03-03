@@ -16,7 +16,6 @@ import type {
   Entity,
   SettingsSchema,
   PageFilter,
-  AnyType,
 } from 'shared/types';
 import type { Currency, UserType } from 'shared/constants';
 
@@ -90,6 +89,8 @@ export type Statistics = {
   averageIncome: number;
   averageOrders: number;
   countsPerDay: StatisticsCountPerDay[];
+  bestsellers: ProductsCountStatistics[];
+  topIgnored: ProductsCountStatistics[];
 }
 
 export type StatisticsCountPerDay = {
@@ -101,6 +102,11 @@ export type StatisticsCountPerDay = {
 export type TotalOrdersStatistics = {
   orders: number;
   income: number;
+}
+
+export type ProductsCountStatistics = {
+  count: number;
+  name: string;
 }
 
 /**

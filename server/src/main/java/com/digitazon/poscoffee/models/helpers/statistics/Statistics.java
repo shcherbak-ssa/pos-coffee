@@ -17,5 +17,7 @@ public class Statistics {
   private Float averageIncome;
   private Float averageOrders;
   private List<CountPerDay> countsPerDay;
+  private List<ProductsCount> bestsellers;
+  private List<ProductsCount> topIgnored;
 
 }
