@@ -10,17 +10,31 @@ import { CartProductItemContainer } from '@app/view/containers/CartProductItemCo
 
 export function CartProductsContainer() {
 
-  const { state: { activeCategoryId }, products } = useStore(StoreName.CART) as CartStore;
+  const { state: { activeCategoryId, searchString }, products } = useStore(StoreName.CART) as CartStore;
   const [ currentProducts, setCurrentProducts ] = useState<CartProductSchema[]>([]);
 
   useEffect(() => {
-    setCurrentProducts(filterProductsByCategory());
-  }, [activeCategoryId]);
+    setCurrentProducts(filterProducts());
+  }, [activeCategoryId, searchString]);
 
-  function filterProductsByCategory(): CartProductSchema[] {
-    return activeCategoryId === ZERO
+  function filterProducts(): CartProductSchema[] {
+    const filteredProducts: CartProductSchema[] = activeCategoryId === ZERO
       ? products
       : products.filter(({ category }) => category.id === activeCategoryId);
+
+    return filteredProducts.filter(({ name: productName, variants }) => {
+      const regexSearch: RegExp = new RegExp(searchString.toLowerCase(), 'g');
+
+      if (variants.length) {
+        for (const { name: variantName } of variants) {
+          if (regexSearch.test(variantName.toLowerCase())) {
+            return true;
+          }
+        }
+      }
+
+      return regexSearch.test(productName.toLowerCase());
+    });
   }
 
   return (

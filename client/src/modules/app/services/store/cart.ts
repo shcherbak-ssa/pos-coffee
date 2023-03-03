@@ -1,7 +1,7 @@
 import { proxy } from 'valtio';
 
 import type { CategorySchema } from 'shared/types';
-import { PaymentMethodType, ZERO } from 'shared/constants';
+import { EMPTY_STRING, PaymentMethodType, ZERO } from 'shared/constants';
 
 import type {
   CartOrderLineSchema as BaseCartOrderLineSchema,
@@ -19,6 +19,7 @@ export const cartStore: CartStore & CartStoreActions = {
   state: proxy<CartState>({
     order: CartOrderSchema.create(),
     activeCategoryId: ZERO,
+    searchString: EMPTY_STRING,
   }),
 
   categories: [],
@@ -64,6 +65,10 @@ export const cartStore: CartStore & CartStoreActions = {
 
   setActiveCategoryId(categoryId: number): void {
     cartStore.state.activeCategoryId = categoryId;
+  },
+
+  setSearchString(searchString: string): void {
+    cartStore.state.searchString = searchString;
   },
 
   setCategories(categories: CategorySchema[]): void {

@@ -128,6 +128,11 @@ export class CartController extends BaseController implements BaseCartController
     store.setActiveCategoryId(categoryId);
   }
 
+  public async setSearchString(searchString: string): Promise<void> {
+    const store = await this.getStore() as CartStoreActions;
+    store.setSearchString(searchString);
+  }
+
   public async loadMenu(): Promise<void> {
     try {
       const apiService: ApiService = await this.getApiService();

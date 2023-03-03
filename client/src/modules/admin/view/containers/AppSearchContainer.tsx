@@ -40,10 +40,6 @@ export function AppSearchContainer() {
     }
   }, [searchString]);
 
-  useEffect(() => {
-    console.log(searchResult);
-  }, [searchResult]);
-
   function toCategoriesPage(): void {
     navigate(PagePath.CATEGORIES);
 

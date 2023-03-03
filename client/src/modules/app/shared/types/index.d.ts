@@ -127,6 +127,7 @@ export interface CartService extends CartStockAlert {
 export type CartState = {
   order: CartOrderSchema;
   activeCategoryId: number;
+  searchString: string;
 }
 
 export interface CartStore extends StoreState<CartState> {
@@ -143,6 +144,7 @@ export interface CartStoreActions extends CartStore {
   updateOrderLineCount(line: CartOrderLineSchema, count: number): void;
   setOrderPaymentMethod(type: PaymentMethodType): void;
   setActiveCategoryId(categoryId: number): void;
+  setSearchString(searchString: string): void;
   setCategories(categories: CategorySchema[]): void;
   setProducts(products: CartProductSchema[]): void;
 }
@@ -155,5 +157,6 @@ export interface CartController {
   updateOrderLineCount(line: CartOrderLineSchema, count: number): Promise<void>;
   setOrderPaymentMethod(type: PaymentMethodType): Promise<void>;
   setActiveCategoryId(categoryId?: number): Promise<void>;
+  setSearchString(searchString: string): Promise<void>;
   loadMenu(): Promise<void>;
 }

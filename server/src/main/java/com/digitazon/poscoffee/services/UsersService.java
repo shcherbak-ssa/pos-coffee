@@ -131,6 +131,7 @@ public class UsersService {
     password = this.encoder.encode(password);
 
     userToCreate.setPassword(password);
+    userToCreate.setIsArchived(false);
 
     return this.repository.save(userToCreate);
   }
