@@ -27,8 +27,25 @@ public class StatisticsService {
   @Autowired
   private JdbcTemplate jdbcTemplate;
 
-  @Autowired
-  private LocalResourceLoader localResourceLoader;
+  private String ordersTotalSql;
+  private String averageIncomeSql;
+  private String averageOrdersSql;
+  private String countsPerDaySql;
+  private String productsCountAscSql;
+  private String productsCountDescSql;
+
+  public StatisticsService(@Autowired LocalResourceLoader localResourceLoader) throws IOException {
+    this.ordersTotalSql = localResourceLoader.loadSqlScript(AppConstants.SQL_ORDERS_TOTAL_FILENAME);
+    this.averageIncomeSql = localResourceLoader.loadSqlScript(AppConstants.SQL_AVERAGE_INCOME_FILENAME);
+    this.averageOrdersSql = localResourceLoader.loadSqlScript(AppConstants.SQL_AVERAGE_ORDERS_FILENAME);
+    this.countsPerDaySql = localResourceLoader.loadSqlScript(AppConstants.SQL_COUNTS_PER_DAY);
+
+    final String productsCountSql = localResourceLoader.loadSqlScript(AppConstants.SQL_PRODUCTS_COUNT);
+    this.productsCountAscSql
+      = productsCountSql.replace(AppConstants.SQL_REPLACE_SYMBOL, AppConstants.Sort.ASC.name());
+    this.productsCountDescSql
+      = productsCountSql.replace(AppConstants.SQL_REPLACE_SYMBOL, AppConstants.Sort.DESC.name());
+  }
 
   public Statistics getStatistics() throws IOException, InterruptedException, ExecutionException {
     final Statistics statistics = Statistics.builder().build();
@@ -107,41 +124,32 @@ public class StatisticsService {
   }
 
   private void loadTotalOrders(Statistics statistics) throws IOException {
-    final String sqlScript = this.localResourceLoader.loadSqlScript(AppConstants.SQL_ORDERS_TOTAL_FILENAME);
-    final TotalOrders totalStatistics = this.jdbcTemplate.queryForObject(sqlScript, TotalOrders::parse);
+    final TotalOrders totalStatistics = this.jdbcTemplate.queryForObject(this.ordersTotalSql, TotalOrders::parse);
 
     statistics.setTotal(totalStatistics);
   }
 
   private void loadAverageIncome(Statistics statistics) throws IOException {
-    final String sqlScript = this.localResourceLoader.loadSqlScript(AppConstants.SQL_AVERAGE_INCOME_FILENAME);
-    final Float average = this.jdbcTemplate.queryForObject(sqlScript, Float.class);
+    final Float average = this.jdbcTemplate.queryForObject(this.averageIncomeSql, Float.class);
 
     statistics.setAverageIncome(average);
   }
 
   private void loadAverageOrders(Statistics statistics) throws IOException {
-    final String sqlScript = this.localResourceLoader.loadSqlScript(AppConstants.SQL_AVERAGE_ORDERS_FILENAME);
-    final Float average = this.jdbcTemplate.queryForObject(sqlScript, Float.class);
+    final Float average = this.jdbcTemplate.queryForObject(this.averageOrdersSql, Float.class);
 
     statistics.setAverageOrders(average);
   }
 
   private void loadCountsPerDay(Statistics statistics) throws IOException, DataAccessException {
-    final String sqlScript = this.localResourceLoader.loadSqlScript(AppConstants.SQL_COUNTS_PER_DAY);
-    final List<CountPerDay> counsPerDay = this.jdbcTemplate.query(sqlScript, CountPerDay::parse);
+    final List<CountPerDay> counsPerDay = this.jdbcTemplate.query(this.countsPerDaySql, CountPerDay::parse);
 
     statistics.setCountsPerDay(counsPerDay);
   }
 
   private void loadProductsCounts(Statistics statistics) throws IOException, DataAccessException {
-    final String sqlScript = this.localResourceLoader.loadSqlScript(AppConstants.SQL_PRODUCTS_COUNT);
-
-    final String sqlAsc = sqlScript.replace(AppConstants.SQL_REPLACE_SYMBOL, AppConstants.Sort.ASC.name());
-    final List<ProductsCount> topIgnored = this.jdbcTemplate.query(sqlAsc, ProductsCount::parse);
-
-    final String sqlDesc = sqlScript.replace(AppConstants.SQL_REPLACE_SYMBOL, AppConstants.Sort.DESC.name());
-    final List<ProductsCount> bestsellers = this.jdbcTemplate.query(sqlDesc, ProductsCount::parse);
+    final List<ProductsCount> topIgnored = this.jdbcTemplate.query(this.productsCountAscSql, ProductsCount::parse);
+    final List<ProductsCount> bestsellers = this.jdbcTemplate.query(this.productsCountDescSql, ProductsCount::parse);
 
     statistics.setTopIgnored(topIgnored);
     statistics.setBestsellers(bestsellers);

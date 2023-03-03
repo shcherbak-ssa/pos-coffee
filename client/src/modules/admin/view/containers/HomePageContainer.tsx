@@ -34,17 +34,20 @@ export function HomePageContainer() {
         <HomeHeaderContainer />
 
         <PageWrapper>
-          <div className="grid grid-cols-1 gap-6 p-6 full">
-            <HomeStatWidgetList statistics={statistics} settings={settings} />
+          <div className="grid grid-cols-3 gap-6 p-6 full">
+            <div className="grid grid-cols-1 gap-6 col-span-2">
+              <HomeStatWidgetList
+                statistics={statistics}
+                settings={settings}
+              />
 
-            <div className="grid grid-cols-3 gap-6">
-              <div className="col-span-2">
+              <div>
                 <HomeChartContainer />
               </div>
+            </div>
 
-              <div className="col-span-1">
-                <HomeTopsContainer />
-              </div>
+            <div className="grid grid-cols-1 gap-6 col-span-1">
+              <HomeTopsContainer />
             </div>
           </div>
         </PageWrapper>

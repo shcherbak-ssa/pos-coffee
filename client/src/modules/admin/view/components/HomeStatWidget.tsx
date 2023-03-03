@@ -18,8 +18,8 @@ export function HomeStatWidget({ icon, label, value }: Props) {
         />
 
         <div>
-          <div className="text-sm">{ label }</div>
-          <h3 className="text-2xl">{ value }</h3>
+          <div className="text-xs">{ label }</div>
+          <h3 className="text-xl">{ value }</h3>
         </div>
       </div>
     </CardWrapper>

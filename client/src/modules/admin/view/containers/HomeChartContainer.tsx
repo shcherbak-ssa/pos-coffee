@@ -8,7 +8,7 @@ import { CardHeading } from 'view/components/CardHeading';
 
 import type { AppStore } from '@admin/shared/types';
 import { StoreName } from '@admin/shared/constants';
-import { getChartData, getChartOptions } from '@admin/shared/helpers/chart';
+import { getChartData, getChartOptions } from '@admin/view/helpers/chart';
 
 export function HomeChartContainer() {
 

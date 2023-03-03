@@ -16,7 +16,7 @@ export function HomeStatWidgetList({ statistics, settings }: Props) {
   return (
     <div className="grid grid-cols-3 gap-6">
       <HomeStatWidget
-        label="Orders / Average orders"
+        label="Orders / Average"
         icon={PrimeIcons.SHOPPING_BAG}
         value={`${statistics.total.orders} / ${statistics.averageOrders}`}
       />
