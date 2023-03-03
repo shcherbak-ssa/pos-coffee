@@ -15,11 +15,6 @@ export function UsersPageContainer() {
 
   const usersTableColumns: ColumnProps[] = [
     {
-      field: 'type',
-      header: 'Type',
-      body: UsersTypeLabel,
-    },
-    {
       field: 'image',
       header: 'Image',
       body: UsersImage,
@@ -31,6 +26,11 @@ export function UsersPageContainer() {
     {
       field: 'surname',
       header: 'Surname',
+    },
+    {
+      field: 'type',
+      header: 'Type',
+      body: UsersTypeLabel,
     },
     {
       field: 'email',
