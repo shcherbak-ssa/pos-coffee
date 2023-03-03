@@ -59,7 +59,7 @@ export function PageDefaultContentContainer<T extends Entity>({
     constroller.updatePage({ page: e.page, size: e.rows });
   }
 
-  function drawContent(): React.ReactNode {
+  function renderContent(): React.ReactNode {
     if (view.listView === ListView.TABLE) {
       return (
         <EntityTableContainer
@@ -83,7 +83,7 @@ export function PageDefaultContentContainer<T extends Entity>({
 
   return (
     <>
-      { drawContent() }
+      { renderContent() }
 
       <div className="p-4">
         <Paginator

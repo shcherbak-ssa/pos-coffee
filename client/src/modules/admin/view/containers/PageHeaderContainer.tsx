@@ -64,13 +64,13 @@ export function PageHeaderHeadingContainer({ showTabs, actionProps, addButton }:
     }
   }
 
-  function drawTabs(): React.ReactNode {
+  function renderTabs(): React.ReactNode {
     if (showTabs) {
       return <PageHeaderTabsContainer />;
     }
   }
 
-  function drawActions(): React.ReactNode {
+  function renderActions(): React.ReactNode {
     if (actionProps) {
       return <PageHeaderActionsContainer {...actionProps} />;
     } else
@@ -93,9 +93,9 @@ export function PageHeaderHeadingContainer({ showTabs, actionProps, addButton }:
         home={convertPageToMenuItem(currentPage)}
       />
 
-      { drawTabs() }
+      { renderTabs() }
 
-      { drawActions() }
+      { renderActions() }
     </div>
   );
 

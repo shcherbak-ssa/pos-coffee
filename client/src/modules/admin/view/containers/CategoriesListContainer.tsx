@@ -61,7 +61,7 @@ export function CategoriesListContainer({}: Props) {
     // cancel();
   }
 
-  function drawSelectedCategory(): React.ReactNode {
+  function renderSelectedCategory(): React.ReactNode {
     if (selectedCategory && selectedCategory.id !== ZERO) {
       return <CategoriesSelectedContainer mode="edit" />;
     }
@@ -84,7 +84,7 @@ export function CategoriesListContainer({}: Props) {
       </DataTable>
 
       <div className="border-l-2 w-96 min-h-full">
-        { drawSelectedCategory() }
+        { renderSelectedCategory() }
       </div>
     </div>
   );

@@ -37,7 +37,7 @@ export function EntityActionsMenuContainer<T extends Entity>({
     }
   }
 
-  function drawButton(): React.ReactNode {
+  function renderButton(): React.ReactNode {
     if (isEntityPage) {
       return (
         <Button
@@ -58,7 +58,7 @@ export function EntityActionsMenuContainer<T extends Entity>({
 
   return (
     <div>
-      { drawButton() }
+      { renderButton() }
 
       <Menu
         model={actionsMenuItems}
