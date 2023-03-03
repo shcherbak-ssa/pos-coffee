@@ -6,8 +6,8 @@ import { useStore } from 'view/hooks/store';
 import { useController } from 'view/hooks/controller';
 import { AppLoader } from 'view/components/AppLoader';
 
-import type { AppStore } from '@admin/shared/types';
-import { ControllerName, ListTab, StoreName } from '@admin/shared/constants';
+import type { AppController, AppStore } from '@admin/shared/types';
+import { ControllerName, ListTab, ListView, StoreName } from '@admin/shared/constants';
 import { PageMessage } from '@admin/view/components/PageMessage';
 
 export type Props = {
@@ -34,10 +34,18 @@ export function pageContainer<T extends Entity>(
     const { state: { view } } = useStore(StoreName.APP) as AppStore;
 
     const controller = useController(controllerName) as CrudController;
+    const appController = useController(ControllerName.APP) as AppController;
 
     useEffect(() => {
       loadEntities(view.listTab === ListTab.ARCHIVED);
     }, [view.listTab, page.page]);
+
+    useEffect(() => {
+      return () => {
+        appController.updateViewState('listView', ListView.TABLE);
+        appController.updateViewState('listTab', ListTab.ACTIVE);
+      };
+    }, []);
 
     function loadEntities(isArchived: boolean): void {
       setIsLoading(true);
